@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1578553344200.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C89006E0",
+    "lastKnownWriteTime" : 1578553368,
+    "last_content_update" : 1578553368665,
+    "path" : "~/GitHub/FCMm/data/datalist",
+    "project_path" : "data/datalist",
+    "properties" : {
+        "cursorPosition" : "5,15",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "text"
+}

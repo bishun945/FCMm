@@ -1,5 +1,0 @@
-"0","p.spec <- plot.spec.from.df(x) + "
-"0","  labs(x='Wavelength (nm)',y=expression(Rrs~(sr^-1))) + "
-"0","  theme_bw() + "
-"0","  theme(legend.position='none', text=element_text(size=18))"
-"0","print(p.spec)"

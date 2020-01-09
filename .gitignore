@@ -1,5 +1,5 @@
-.Rhistory
 .Rproj.user
 .Rhistory
-*.pper
-*.pper
+.RData
+.DS_Store
+*.Rproj

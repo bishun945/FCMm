@@ -35,7 +35,7 @@ produced by FCM with `m=2`.
 # Install the FCMm by typing (Dont RUN it right now):
 install.packages("FCMm")
 # To get bugs fixed version, you can install by (Use this one):
-devtools::install_github("bishun945/FCMm")
+devtools::install_github("bishun945/FCMm", build_vignettes=TRUE)
 ```
 
 ## Usage

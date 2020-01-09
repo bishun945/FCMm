@@ -1,0 +1,27 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1578551386938.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3596886607",
+    "id" : "D45A6265",
+    "lastKnownWriteTime" : 1578551711,
+    "last_content_update" : 1578551711642,
+    "path" : "E:/PHD_PAPER/R_packages/FCMm/vignettes/Fuzzy_cluster_training.Rmd",
+    "project_path" : "vignettes/Fuzzy_cluster_training.Rmd",
+    "properties" : {
+        "cursorPosition" : "171,0",
+        "last_setup_crc32" : "",
+        "scrollLine" : "153",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,9 @@
+pandoc: 2.7.2
+pkgdown: 1.4.1
+pkgdown_sha: ~
+articles:
+  Cluster_number_determination: Cluster_number_determination.html
+  Fuzzy_cluster_training: Fuzzy_cluster_training.html
+  New_Data_Running_FCMm: New_Data_Running_FCMm.html
+  Raster_Running_FCMm: Raster_Running_FCMm.html
+

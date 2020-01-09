@@ -153,8 +153,9 @@ p.cluster.spec.n <- plot_spec_from_df(result$res.FCM$v) +
   scale_color_manual(values=cp) +
   theme(legend.position='right')
 
-pm <- gridExtra::arrangeGrob(grobs=list(p.cluster.spec.n, p.boxplot),nrow=1) %>%
-  gridExtra::arrangeGrob(grobs=list(., p.group.facet),
+library(gridExtra)
+pm <- arrangeGrob(grobs=list(p.cluster.spec.n, p.boxplot),nrow=1) %>%
+  arrangeGrob(grobs=list(., p.group.facet),
                           nrow=2,top='Nechad2015: Normalized cluster result')
 plot(pm)
 

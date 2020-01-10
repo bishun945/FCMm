@@ -1,8 +1,8 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-
-language: r
+language: R
+sudo: false
 cache: packages
 
-<!-- badges: start -->
-[![Travis build status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
-<!-- badges: end -->
+jobs:
+  include:
+  - r: devel
+  - r: release

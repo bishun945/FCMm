@@ -1,8 +1,8 @@
 
 # FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="139" /></a>
 
-[![Build
-Status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org//bishun945/FCMm)
+[![Travis build
+status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
 
 **Author**: Shun Bi  
 **Date**: 2020/01/09  

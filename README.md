@@ -1,5 +1,5 @@
 
-# FCMm <a href='https://github.com/bishun945/FCM-m'><img src='man/figures/logo.png' align='right' height="139" /></a>
+# FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="139" /></a>
 
 **Author**: Shun Bi  
 **Date**: 2020/01/09  

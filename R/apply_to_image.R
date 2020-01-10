@@ -1,4 +1,4 @@
-#' @title apply_to_image
+#' @title Apply FCM_m to raster data
 #' @name apply_to_image
 #' @description
 #'   This function could apply the defined water cluster to corrected image files.

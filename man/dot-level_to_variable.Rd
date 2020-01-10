@@ -2,7 +2,7 @@
 % Please edit documentation in R/tools.R
 \name{.level_to_variable}
 \alias{.level_to_variable}
-\title{.level_to_variable}
+\title{Convert dataframe with factor to character}
 \usage{
 .level_to_variable(dt, warn = F)
 }
@@ -12,5 +12,5 @@
 \item{warn}{warnning option}
 }
 \description{
-.level_to_variable
+Convert dataframe with factor to character
 }

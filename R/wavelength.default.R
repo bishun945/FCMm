@@ -1,4 +1,4 @@
-#' @title wavelength.default
+#' @title Wavelength of built-in clusters
 #' @description A vector contains the wavelength of water optical clusters produced by Bi et al. (2019)
 #' @docType data
 #' @keywords datasets

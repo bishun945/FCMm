@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_spec.R
 \name{plot_spec}
 \alias{plot_spec}
-\title{plot_spec}
+\title{Plot the result of FCM_m}
 \usage{
 plot_spec(res, show.stand=FALSE, HABc=NULL)
 }

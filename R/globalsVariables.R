@@ -2,7 +2,6 @@
 #' @importFrom magrittr %>% %<>%
 #' @import reshape2
 #' @import ggplot2
-#' @import rasterVis
 #' @import raster
 #' @import viridis
 #' @import ggthemes

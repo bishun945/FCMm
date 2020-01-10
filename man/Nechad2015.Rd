@@ -3,7 +3,7 @@
 \docType{data}
 \name{Nechad2015}
 \alias{Nechad2015}
-\title{Nechad2015}
+\title{Collection of in_situ data by Nechad et al. (2015)}
 \format{A dataframe with 336 rows by 18 cols}
 \usage{
 Nechad2015

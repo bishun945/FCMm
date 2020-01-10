@@ -1,4 +1,4 @@
-#' @title AeronetOC2019
+#' @title Collection of coastal AeronetOC water spectra till 2019
 #' @description A dataframe contains AeronetOC data
 #' @docType data
 #' @keywords datasets

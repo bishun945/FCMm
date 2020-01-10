@@ -1,4 +1,4 @@
-#' @title cal.metrics
+#' @title Assess the performance of algorithms
 #' @name cal.metrics
 #' @usage cal.metrics(x,y,name="all")
 #' @param x True value
@@ -111,7 +111,7 @@ cal.metrics <- function(x,y,name="all"){
   return(result)
 }
 
-#' @title .level_to_variable
+#' @title Convert dataframe with factor to character
 #' @name .level_to_variable
 #' @param dt dataframe
 #' @param warn warnning option

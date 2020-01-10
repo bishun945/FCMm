@@ -1,4 +1,4 @@
-#' @title OLCI_TH
+#' @title A test OLCI image raster in Lake Taihu
 #' @description A dataframe contains OLCI_TH data
 #' @docType data
 #' @keywords datasets

@@ -57,6 +57,7 @@ plot_spec_from_df(Rrs) +
 # Applying FCMm
 result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
 plot(result$p.group)
+# plot(result$p.group+facet_wrap(~cluster, ncol=2))
 ```
 
 ## Getting help

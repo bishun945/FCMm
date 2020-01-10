@@ -1,4 +1,4 @@
-#' @title Valente2019
+#' @title Collection of in_situ data by Valente et al. (2019)
 #' @description A dataframe contains Valente2019 data
 #' @docType data
 #' @keywords datasets

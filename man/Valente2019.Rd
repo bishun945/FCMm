@@ -3,7 +3,7 @@
 \docType{data}
 \name{Valente2019}
 \alias{Valente2019}
-\title{Valente2019}
+\title{Collection of in_situ data by Valente et al. (2019)}
 \format{A dataframe with 1205 rows by 14 cols}
 \usage{
 Valente2019

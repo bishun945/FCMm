@@ -1,4 +1,4 @@
-#' @title FCM.new
+#' @title Running the improved FCM by optimizing fuzzifier parameter
 #' @name FCM.new
 #' @description
 #' An improved version of FCM for water spectra data sets.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/apply_FCM_m.R
 \name{apply_FCM_m}
 \alias{apply_FCM_m}
-\title{apply_FCM_m}
+\title{Apply FCM_m to new input Rrs}
 \usage{
 apply_FCM_m(Rrs, wavelength, Rrs_clusters,
   stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=FALSE)

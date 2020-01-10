@@ -2,7 +2,7 @@
 % Please edit documentation in R/FuzzifierDetermination.R
 \name{FuzzifierDetermination}
 \alias{FuzzifierDetermination}
-\title{FuzzifierDetermination}
+\title{Determine the optimized fuzzifier for FCM running}
 \usage{
 FuzzifierDetermination(x, wv, max.m=10, stand=FALSE, dmetric='sqeuclidean')
 }

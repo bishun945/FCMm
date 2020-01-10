@@ -1,4 +1,4 @@
-#' @title FuzzifierDetermination
+#' @title Determine the optimized fuzzifier for FCM running
 #' @name FuzzifierDetermination
 #' @description
 #' To determine the optimized fuzzifier value for FCM running.

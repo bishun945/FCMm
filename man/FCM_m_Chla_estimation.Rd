@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCM_m_Chla_estimation.R
 \name{FCM_m_Chla_estimation}
 \alias{FCM_m_Chla_estimation}
-\title{FCM_m_Chla_estimation}
+\title{Estimate Chla concentration by algorithms blending via membership values}
 \usage{
 FCM_m_Chla_estimation(Rrs, U)
 }

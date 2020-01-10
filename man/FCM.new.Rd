@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCM.new.R
 \name{FCM.new}
 \alias{FCM.new}
-\title{FCM.new}
+\title{Running the improved FCM by optimizing fuzzifier parameter}
 \usage{
 FCM.new(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE, stand=FALSE)
 }

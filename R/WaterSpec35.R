@@ -1,4 +1,4 @@
-#' @title WaterSpec35
+#' @title A test-purpose collection of inland water data
 #' @description A dataframe contains WaterSpec35 data
 #' @docType data
 #' @keywords datasets

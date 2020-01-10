@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Collection of coastal AeronetOC water spectra till 2019 — AeronetOC2019 • FCMm</title>
+<title>Simulation of hyperspectral data by SRF — SRF_simulate • FCMm</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,9 @@
 
 
 
-<meta property="og:title" content="Collection of coastal AeronetOC water spectra till 2019 — AeronetOC2019" />
-<meta property="og:description" content="A dataframe contains AeronetOC data" />
+<meta property="og:title" content="Simulation of hyperspectral data by SRF — SRF_simulate" />
+<meta property="og:description" content="Simulate hyperspectral Rrs to multispectral bands
+  via sensors SRF (Spectral response function)." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -137,43 +138,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Collection of coastal AeronetOC water spectra till 2019</h1>
-    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/AeronetOC2019.R'><code>R/AeronetOC2019.R</code></a></small>
-    <div class="hidden name"><code>AeronetOC2019.Rd</code></div>
+    <h1>Simulation of hyperspectral data by SRF</h1>
+    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/SRF_simulate.R'><code>R/SRF_simulate.R</code></a></small>
+    <div class="hidden name"><code>SRF_simulate.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataframe contains AeronetOC data</p>
+    <p>Simulate hyperspectral Rrs to multispectral bands
+  via sensors SRF (Spectral response function).</p>
     </div>
 
-    <pre class="usage"><span class='no'>AeronetOC2019</span></pre>
+    <pre class="usage"><span class='fu'>SRF_simulate</span>(<span class='no'>Rrs</span>,<span class='kw'>select_sensor</span><span class='kw'>=</span><span class='st'>"All"</span>,<span class='kw'>output_wavelength</span><span class='kw'>=</span><span class='st'>"MED"</span>,
+  <span class='kw'>save_as_csv</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Rrs</th>
+      <td><p>data.frame. Hyperspectral Rrs</p></td>
+    </tr>
+    <tr>
+      <th>select_sensor</th>
+      <td><p>Character. Select sensors. Use <code><a href='show_sensor_names.html'>show_sensor_names()</a></code> to print
+all supported sensors. Default as <code>All</code></p></td>
+    </tr>
+    <tr>
+      <th>output_wavelength</th>
+      <td><p>Character. <code>MED</code> (default) or <code>MAX</code>.
+Define the center wavelength. <code>MED</code> means the center wavelength is 
+middle position of half maximun of max peak. While <code>MAX</code> means the 
+poition at the maximun of SRF peak.</p></td>
+    </tr>
+    <tr>
+      <th>save_as_csv</th>
+      <td><p>Logical. Choose to save the simulation results as single csv for each
+sensor. Default with <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>na.rm</th>
+      <td><p>Logical. Should NA values be removed? Default as <code>TRUE</code></p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>list</code> with names as all selected sensors from parameters <code>select_sensor</code>.
+For each list, including five elements:</p><ul>
+<li><p><strong>sensor</strong> Sensor name</p></li>
+<li><p><strong>srf</strong> Spectral response function of the sensor</p></li>
+<li><p><strong>cw_med</strong> Center wavelength by method <code>MED</code></p></li>
+<li><p><strong>cw_max</strong> Center wavelength by method <code>MAX</code></p></li>
+<li><p><strong>Rrs_simu</strong> The simulation of Rrs by supported SRF</p></li>
+</ul>
 
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>A dataframe with 10667 rows by 14 cols</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>AeronetOC is collected from Level 2 products provided by Aeronet Ocean Color stations located
-  in great inland lakes (i.e., Lake_Erie, Palgrunden) and coastal waters (i.e., COVE_SEAPRISM,
-  Galata_Platform, Gloria, Gustav_Dalen_Tower, Helsinki_Lighthouse, LISCO, MVCO, and Zeebrugge-MOW1)
-   with bands at 410, 440, 490, 530, 550, 667, 869 nm.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>Colnames are "SampleID, X410nm, X440nm, X490nm, X530nm, 
-  X550nm, X667nm, X869nm, X1020nm, Pressure, Wind_Speed, Chlorophyll.a, Sea_Surface_Reflectance, Ozone"</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>All these data are available at https://aeronet.gsfc.nasa.gov.</p>
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>FCMm</span>)
+<span class='no'>nm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>400</span>,<span class='fl'>900</span>)
+<span class='no'>Rrs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>nm</span><span class='kw'>=</span><span class='no'>nm</span>,<span class='kw'>Site1</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='no'>nm</span>/<span class='fl'>1000</span>)+<span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>501</span>))
+<span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'>SRF_simulate</span>(<span class='no'>Rrs</span>,<span class='kw'>select_sensor</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"OLCI"</span>,<span class='st'>"MODIS"</span>))
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#references">References</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

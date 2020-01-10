@@ -1,4 +1,4 @@
-#' @title apply_FCM_m
+#' @title Apply FCM_m to new input Rrs
 #' @name apply_FCM_m
 #' @description
 #' Application of FCM_m method for new Rrs data based on default cluster settings

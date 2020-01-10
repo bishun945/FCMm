@@ -1,4 +1,4 @@
-#' @title plot_spec
+#' @title Plot the result of FCM_m
 #' @name plot_spec
 #' @description
 #' Spectra plot for a FCM.new result

@@ -1,4 +1,4 @@
-#' @title Nechad2015
+#' @title Collection of in_situ data by Nechad et al. (2015)
 #' @description A dataframe contains Nechad2015 data
 #' @docType data
 #' @keywords datasets

@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -117,7 +117,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/bishun945/FCMm">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -132,28 +137,33 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1>Changelog <small></small></h1>
-      
+      <small>Source: <a href='https://github.com/bishun945/FCMm/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="fcmm-040-in-development" class="section level2">
+    <div id="fcmm-040-2020-01-10-development-version" class="section level2">
 <h2 class="hasAnchor">
-<a href="#fcmm-040-in-development" class="anchor"></a>FCMm 0.4.0 (In development)</h2>
+<a href="#fcmm-040-2020-01-10-development-version" class="anchor"></a>FCMm 0.4.0 (2020-01-10 Development version)</h2>
 <ul>
 <li>
 <p>The input of <code><a href="../reference/apply_FCM_m.html">apply_FCM_m()</a></code> with built-in clusters should match OLCI band settings.</p>
 <ul>
 <li>However, the data of users may be <strong>hyperspectral</strong> Rrs. Need a function that convert hyperspectral Rrs into the <strong>multispectral</strong>.</li>
-<li>Should add a function like <code>SRF_simulation()</code> to simulate the Rrs by spectral response function.</li>
-<li>Meanwhile, the <code>SRF.rda</code> as a list with SRF data of many sensers should be added.</li>
+<li>Should add a function like <code><a href="../reference/SRF_simulate.html">SRF_simulate()</a></code> to simulate the Rrs by spectral response function.</li>
+<li>Meanwhile, the <code>SRF_list.rda</code> as a list with SRF data of many sensers should be added.</li>
 </ul>
 </li>
 <li><p>Need another vignette to illustrate how we can bootstrap the training set for optimizing the cluster number or fuzzifier value.</p></li>
-<li><p>Now the result of function <code><a href="../reference/apply_FCM_m.html">apply_FCM_m()</a></code> is plotted on single picture which is hard to read when the number of spectra is large. So I gonna add a new plot function by using <code>facet</code> method from <code>ggplot2</code>.</p></li>
+<li>
+<p>Now the result of function <code><a href="../reference/apply_FCM_m.html">apply_FCM_m()</a></code> is plotted on single picture which is hard to read when the number of spectra is large. So I gonna add a new plot function by using <code>facet</code> method from <code>ggplot2</code>.</p>
+<ul>
+<li>A new result of <code><a href="../reference/apply_FCM_m.html">apply_FCM_m()</a></code> is now added as <code>p.group.facet</code>. You could <code>yourresult$p.group.facet</code> to obtian the spectra with facet.</li>
+</ul>
+</li>
 </ul>
 </div>
-    <div id="fcmm-033-2020-01-09-development-version" class="section level2">
+    <div id="fcmm-033-2020-01-09" class="section level2">
 <h2 class="hasAnchor">
-<a href="#fcmm-033-2020-01-09-development-version" class="anchor"></a>FCMm 0.3.3 (2020-01-09 Development version)</h2>
+<a href="#fcmm-033-2020-01-09" class="anchor"></a>FCMm 0.3.3 (2020-01-09)</h2>
 <ul>
 <li>Add <code>NEWS.md</code> file in the top-level fold so that you could see what changes in each version of <code>FCMm</code>.</li>
 </ul>
@@ -164,8 +174,8 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#fcmm-040-in-development">0.4.0</a></li>
-        <li><a href="#fcmm-033-2020-01-09-development-version">0.3.3</a></li>
+        <li><a href="#fcmm-040-2020-01-10-development-version">0.4.0</a></li>
+        <li><a href="#fcmm-033-2020-01-09">0.3.3</a></li>
       </ul>
     </div>
   </div>

@@ -1,4 +1,4 @@
-#' @title FCM_m_Chla_estimation
+#' @title Estimate Chla concentration by algorithms blending via membership values
 #' @name FCM_m_Chla_estimation
 #' @description
 #' To calculate the Chla concentration via blending remote sensing algorithms.

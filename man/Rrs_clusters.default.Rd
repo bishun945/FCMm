@@ -3,12 +3,16 @@
 \docType{data}
 \name{Rrs_clusters.default}
 \alias{Rrs_clusters.default}
-\title{Rrs_clusters.default}
+\title{Seven built-in clusters}
 \format{dataframe with 7 rows by 15 cols}
 \usage{
 Rrs_clusters.default
 }
 \description{
 A dataframe contains the water optical clusters produced by Bi et al. (2019)
+}
+\note{
+You have to take a look at the description of this built-in cluster (water type) such as
+  thier corresponding water color parameters in Bi et al. (2019).
 }
 \keyword{datasets}

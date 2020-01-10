@@ -3,7 +3,7 @@
 \docType{data}
 \name{WaterSpec35}
 \alias{WaterSpec35}
-\title{WaterSpec35}
+\title{A test-purpose collection of inland water data}
 \format{A dataframe with 35 rows by 17 cols}
 \usage{
 WaterSpec35

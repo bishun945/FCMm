@@ -3,7 +3,7 @@
 \docType{data}
 \name{wavelength.default}
 \alias{wavelength.default}
-\title{wavelength.default}
+\title{Wavelength of built-in clusters}
 \format{a vector with 15 elements}
 \usage{
 wavelength.default

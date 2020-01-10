@@ -2,7 +2,7 @@
 % Please edit documentation in R/tools.R
 \name{cal.metrics}
 \alias{cal.metrics}
-\title{cal.metrics}
+\title{Assess the performance of algorithms}
 \usage{
 cal.metrics(x,y,name="all")
 }
@@ -14,5 +14,5 @@ cal.metrics(x,y,name="all")
 \item{name}{The name of metrics}
 }
 \description{
-cal.metrics
+Assess the performance of algorithms
 }

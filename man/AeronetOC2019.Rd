@@ -3,7 +3,7 @@
 \docType{data}
 \name{AeronetOC2019}
 \alias{AeronetOC2019}
-\title{AeronetOC2019}
+\title{Collection of coastal AeronetOC water spectra till 2019}
 \format{A dataframe with 10667 rows by 14 cols}
 \usage{
 AeronetOC2019

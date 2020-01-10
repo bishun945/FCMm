@@ -2,7 +2,7 @@
 % Please edit documentation in R/apply_to_image.R
 \name{apply_to_image}
 \alias{apply_to_image}
-\title{apply_to_image}
+\title{Apply FCM_m to raster data}
 \usage{
 apply_to_image(input, res,
   output_image=TRUE, output_resultpng=FALSE, output_imRrs.n=FALSE,

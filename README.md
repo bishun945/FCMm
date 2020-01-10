@@ -1,6 +1,9 @@
 
 # FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="139" /></a>
 
+[![Build
+Status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org//bishun945/FCMm)
+
 **Author**: Shun Bi  
 **Date**: 2020/01/09  
 **E-mail**: <bishun1994@foxmail.com>
@@ -28,6 +31,7 @@ produced by FCM with `m=2`.
   - It includes several data sets about water color spectra and
     corresponding water quality parameters and a testing image raster
     (see help documents for details).
+  - Please see [NEWS](./NEWS.md) to get changes in each version.
 
 ## Installation
 

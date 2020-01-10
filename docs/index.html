@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Fuzzy Cluster Method based on the optimized m value (fuzzifier)">
-<meta property="og:description" content="An improved FCM method (FCM-m) for optical classification of inland waters. Water optical clustering based on water color information is important for many ecological and environmental application studies, both regionally and globally. The fuzzy clustering method avoids the sharp boundaries in type-memberships produced by hard clustering methods, and thus presents its advantages. However, to make good use of the fuzzy clustering methods on water color spectra data sets, the determination of the fuzzifier parameter (m) of FCM (fuzzy c-means) is the key factor. Usually, the m is set to 2 by default. Unfortunately, this method assigned some membership degrees to non-belonging water type failing to obtain the unitarity of cluster structure in some cases especially in inland eutrophic water. To overcome this shortcoming, we proposed an improved FCM method (namely FCM-m) for water color spectra classification by optimizing the fuzzifier parameter. We collected an inland data set containing 1280 in situ spectral data and co-measured water quality parameters with a wide range of biogeochemical variability in China. Using FCM-m, seven spectrally distinct water optical clusters on Sentinel-3 OLCI (Ocean and Land Colour Imager) bands were obtained with the optimized fuzzifier (m=1.36), and the well-performed clustering result is assessed by the validated index (Fuzzy Silhouette Index=0.513). Also, the FCM-m-based soft classification framework was successfully applied to the atmospherically corrected OLCI images, which was evaluated by previous case studies. Besides, by testing FCM-m on three coastal and oceanic data sets, we verified that the optimized m should be adjusted based on the data set itself, and in general, the value gradually approaches 1 with the increase of band number (or dimension). Finally, the effect of the improved method was tested by Chlorophyll-a concentration estimation. The results show that the algorithm blending by FCM-m performs better than that by original FCM, which is mainly because the FCM-m reduces the estimation error from non-belonging clusters by a stricter membership value assignation. To sum up, we believe that FCM-m is an adaptive algorithm, whose R codes are available at https://github.com/bishun945, and needs to be tested by more public data sets.">
+<meta property="og:description" content="An improved FCM method (FCM-m) for optical classification of inland waters.">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -74,6 +74,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -89,7 +92,7 @@
   <div class="contents col-md-9">
 <div id="fcmm-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#fcmm-" class="anchor"></a>FCMm <a href="https://github.com/bishun945/FCM-m"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<a href="#fcmm-" class="anchor"></a>FCMm <a href="https://github.com/bishun945/FCMm"><img src="reference/figures/logo.png" align="right" height="139"></a>
 </h1></div>
 <p><strong>Author</strong>: Shun Bi<br><strong>Date</strong>: 2020/01/09<br><strong>E-mail</strong>: <a href="mailto:bishun1994@foxmail.com" class="email">bishun1994@foxmail.com</a></p>
 <div id="overview" class="section level2">
@@ -102,15 +105,15 @@
 </li>
 <li>It supports raster (or called imagery) processing (see more details in help documents or vignettes).</li>
 <li>It includes several data sets about water color spectra and corresponding water quality parameters and a testing image raster (see help documents for details).</li>
+<li>Please see <a href="./NEWS.html">NEWS</a> to get changes in each version.</li>
 </ul>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Install the FCMm by typing (Dont RUN it right now):</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"FCMm"</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="co"># To get bugs fixed version, you can install by (Use this one):</span></a>
-<a class="sourceLine" id="cb1-4" title="4">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"bishun945/FCMm"</span>)</a></code></pre></div>
+<p>The GitHub version requires the package devtools</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>) <span class="co"># install devtools require</span></a>
+<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">'bishun945/FCMm'</span>, <span class="dt">build_vignettes=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -159,7 +162,8 @@
     <div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
-<li>GPL (&gt;= 2)</li>
+<li>GPL (&gt;= 2) + file <a href="LICENSE-text.html">LICENSE</a>
+</li>
 </ul>
 </div>
 <div class="developers">

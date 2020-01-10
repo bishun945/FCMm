@@ -6,6 +6,8 @@
    - Meanwhile, the `SRF.rda` as a list with SRF data of many sensers should be added.
    
  * Need another vignette to illustrate how we can bootstrap the training set for optimizing the cluster number or fuzzifier value.
+ 
+ * Now the result of function `apply_FCM_m()` is plotted on single picture which is hard to read when the number of spectra is large. So I gonna add a new plot function by using `facet` method from `ggplot2`.
 
 ## FCMm 0.3.3 (2020-01-09 Development version)
 

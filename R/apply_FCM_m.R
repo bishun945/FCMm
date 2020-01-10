@@ -31,6 +31,8 @@
 #'     \item \strong{m.used}  The used value of fuzzifier(m)
 #'     \item \strong{K}  Cluster number
 #'     \item \strong{p.group}  A ggplot list for plotting the cluster result
+#'     \item \strong{p.group.facet} \code{p.group} with facet to see each cluster resutls
+#'       more clearly
 #'     \item \strong{dt.plot}  Dataframe used for ggplot
 #'   }
 #' 
@@ -130,12 +132,17 @@ apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
                 size=1, alpha=0.8) +
       scale_color_manual(values=cp.sub) +
       scale_linetype_manual(values=c('solid','longdash')) +
-      labs(x='Wavelength (nm)', y='Rrs (sr^-1)') +
+      labs(x='Wavelength (nm)', y=expression(Rrs~(sr^-1))) +
       theme_bw() +
       theme(text = element_text(face='bold',size=16), legend.position='right')
-
+    
     result$p.group <- p.group
+    result$p.group.facet <- p.group + facet_wrap(~cluster)
     result$dt.plot <- dt.plot
+  }else{
+    result$p.group <- NULL
+    result$p.group.facet <- NULL
+    result$dt.plot <- NULL
   }
 
   return(result)

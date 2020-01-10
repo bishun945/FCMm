@@ -1,13 +1,14 @@
 Package: FCMm
 Type: Package
 Title: Fuzzy Cluster Method based on the optimized m value (fuzzifier)
-Version: 0.3.3
+Version: 0.3.4
 Authors@R: c(person("Shun", "Bi", ,"bishun1994@foxmail.com", c("aut","cre")))
 Author: Shun Bi [aut, cre]
 Maintainer: Shun Bi <bishun1994@foxmail.com>
 Description: An improved FCM method (FCM-m) for optical classification of inland waters.
 Depends: R (>= 3.6)
 License: GPL (>= 2) + file LICENSE
+URL: https://github.com/bishun945/FCMm
 Imports: ggplot2, ggthemes, heatmaply, ppclust, raster, rasterVis, reshape2, viridis, magrittr, inaparc, stringr, fclust, tidyverse
 Encoding: UTF-8
 LazyData: yes

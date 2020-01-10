@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.4</span>
       </span>
     </div>
 
@@ -74,6 +74,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -91,7 +94,7 @@
       <h1>How to apply the default FCMm to new data?</h1>
                         <h4 class="author">Shun Bi</h4>
             
-            <h4 class="date">2020-01-09</h4>
+            <h4 class="date">2020-01-10</h4>
       
       
       <div class="hidden name"><code>New_Data_Running_FCMm.Rmd</code></div>
@@ -156,18 +159,19 @@
 <p>Function <code>apply_FCM_m</code> provides many parameters for users to decide the process for their desired results. In the following case, <code>result &lt;- apply_FCM_m(Rrs=Rrs)</code> is equal to <code><a href="../reference/apply_FCM_m.html">apply_FCM_m(Rrs=Rrs, wavelength=wavelength.default, Rrs_clusters=Rrs_clusters.default, stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=TRUE)</a></code>. You can see more details by typing <code><a href="https://rdrr.io/r/utils/help.html">help(apply_FCM_m)</a></code></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/apply_FCM_m.html">apply_FCM_m</a></span>(<span class="dt">Rrs=</span>Rrs, <span class="dt">option.plot=</span><span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(result)</a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt;         Length Class      Mode     </span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt; x        15    data.frame list     </span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt; x.stand  15    data.frame list     </span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt; d       245    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt; u       245    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt; cluster  35    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt; quality  35    -none-     character</span></a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt; m_used    1    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-11" title="11"><span class="co">#&gt; K         1    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-12" title="12"><span class="co">#&gt; p.group   9    gg         list     </span></a>
-<a class="sourceLine" id="cb5-13" title="13"><span class="co">#&gt; dt.plot   5    data.frame list</span></a>
-<a class="sourceLine" id="cb5-14" title="14">result<span class="op">$</span>p.group</a></code></pre></div>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt;               Length Class      Mode     </span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt; x              15    data.frame list     </span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt; x.stand        15    data.frame list     </span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt; d             245    -none-     numeric  </span></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt; u             245    -none-     numeric  </span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt; cluster        35    -none-     numeric  </span></a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt; quality        35    -none-     character</span></a>
+<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt; m_used          1    -none-     numeric  </span></a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="co">#&gt; K               1    -none-     numeric  </span></a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="co">#&gt; p.group         9    gg         list     </span></a>
+<a class="sourceLine" id="cb5-13" title="13"><span class="co">#&gt; p.group.facet   9    gg         list     </span></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="co">#&gt; dt.plot         5    data.frame list</span></a>
+<a class="sourceLine" id="cb5-15" title="15">result<span class="op">$</span>p.group</a></code></pre></div>
 <p><img src="New_Data_Running_FCMm_files/figure-html/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;"></p>
 <p><code>result</code> list contains several result by <code>apply_FCM_M</code> (partly same to <code>FD</code> list):</p>
 <ul>

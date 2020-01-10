@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>.level_to_variable — .level_to_variable • FCMm</title>
+<title>Changelog • FCMm</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,7 @@
 
 
 
-<meta property="og:title" content=".level_to_variable — .level_to_variable" />
-<meta property="og:description" content=".level_to_variable" />
+<meta property="og:title" content="Changelog" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -64,7 +63,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -132,39 +131,45 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>.level_to_variable</h1>
-    
-    <div class="hidden name"><code>dot-level_to_variable.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      
     </div>
 
-    <div class="ref-description">
-    <p>.level_to_variable</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>.level_to_variable</span>(<span class='no'>dt</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>dt</th>
-      <td><p>dataframe</p></td>
-    </tr>
-    <tr>
-      <th>warn</th>
-      <td><p>warnning option</p></td>
-    </tr>
-    </table>
-
-
+    <div id="fcmm-040-in-development" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fcmm-040-in-development" class="anchor"></a>FCMm 0.4.0 (In development)</h2>
+<ul>
+<li>
+<p>The input of <code><a href="../reference/apply_FCM_m.html">apply_FCM_m()</a></code> with built-in clusters should match OLCI band settings.</p>
+<ul>
+<li>However, the data of users may be <strong>hyperspectral</strong> Rrs. Need a function that convert hyperspectral Rrs into the <strong>multispectral</strong>.</li>
+<li>Should add a function like <code>SRF_simulation()</code> to simulate the Rrs by spectral response function.</li>
+<li>Meanwhile, the <code>SRF.rda</code> as a list with SRF data of many sensers should be added.</li>
+</ul>
+</li>
+<li><p>Need another vignette to illustrate how we can bootstrap the training set for optimizing the cluster number or fuzzifier value.</p></li>
+<li><p>Now the result of function <code><a href="../reference/apply_FCM_m.html">apply_FCM_m()</a></code> is plotted on single picture which is hard to read when the number of spectra is large. So I gonna add a new plot function by using <code>facet</code> method from <code>ggplot2</code>.</p></li>
+</ul>
+</div>
+    <div id="fcmm-033-2020-01-09-development-version" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fcmm-033-2020-01-09-development-version" class="anchor"></a>FCMm 0.3.3 (2020-01-09 Development version)</h2>
+<ul>
+<li>Add <code>NEWS.md</code> file in the top-level fold so that you could see what changes in each version of <code>FCMm</code>.</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-    </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#fcmm-040-in-development">0.4.0</a></li>
+        <li><a href="#fcmm-033-2020-01-09-development-version">0.3.3</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
 

@@ -37,6 +37,8 @@ A \code{list} including several results of function \code{apply_FCM_m()}
     \item \strong{m.used}  The used value of fuzzifier(m)
     \item \strong{K}  Cluster number
     \item \strong{p.group}  A ggplot list for plotting the cluster result
+    \item \strong{p.group.facet} \code{p.group} with facet to see each cluster resutls
+      more clearly
     \item \strong{dt.plot}  Dataframe used for ggplot
   }
 }

@@ -15,6 +15,8 @@ options(tibble.print_min=5, tibble.print_max=5)
 
 # FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="139" /></a>
 
+[![Build Status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org//bishun945/FCMm)
+
 **Author**: Shun Bi  
 **Date**: 2020/01/09  
 **E-mail**: bishun1994@foxmail.com
@@ -27,6 +29,7 @@ options(tibble.print_min=5, tibble.print_max=5)
   - You can also use the built-in cluster of inland waters produced by [Bi *et al.* (2019)][Bi] and can simply obtain the Chlorophyll-a concentration by blending three algorithms with relatively low bias.  
   - It supports raster (or called imagery) processing (see more details in help documents or vignettes).
   - It includes several data sets about water color spectra and corresponding water quality parameters and a testing image raster (see help documents for details).
+  - Please see [NEWS](./NEWS.md) to get changes in each version.
 
 ## Installation
 

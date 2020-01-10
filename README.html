@@ -613,9 +613,9 @@ body {
 <li>It includes several data sets about water color spectra and corresponding water quality parameters and a testing image raster (see help documents for details).</li>
 </ul>
 <h2 id="installation">Installation</h2>
-<p>The GitHub version requires the package devtools.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2">build_vignettes=<span class="ot">TRUE</span><span class="er">)</span></a></code></pre></div>
+<p>The GitHub version requires the package devtools</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>) <span class="co"># install devtools require</span></a>
+<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&#39;bishun945/FCMm&#39;</span>, <span class="dt">build_vignettes=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <h2 id="usage">Usage</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Load testing data</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">library</span>(FCMm)</a>

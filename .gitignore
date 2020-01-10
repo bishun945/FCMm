@@ -3,6 +3,4 @@
 .RData
 .DS_Store
 *.Rproj
-.Rproj.user/8B454E76/sources/prop/52F3D74D
-.Rproj.user/8B454E76/sources/prop/1408499B
-.Rproj.user/8B454E76/sources/prop/INDEX
+.Rproj.user/**

@@ -4,7 +4,7 @@
 #' 
 #' 
 
-file.choose()
+library(FCMm)
 
 fn <- "C:\\Users\\Shun Bi\\Documents\\MATLAB\\SRF.xlsx"
 

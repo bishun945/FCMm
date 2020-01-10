@@ -1,8 +1,3 @@
 language: R
 cache: packages
 os: win
-
-jobs:
-  include:
-  - r: devel
-  - r: release

@@ -31,11 +31,11 @@ produced by FCM with `m=2`.
 
 ## Installation
 
+The GitHub version requires the package devtools.
+
 ``` r
-# Install the FCMm by typing (Dont RUN it right now):
-install.packages("FCMm")
-# To get bugs fixed version, you can install by (Use this one):
-devtools::install_github("bishun945/FCMm", build_vignettes=TRUE)
+install.packages("devtools")
+build_vignettes=TRUE)
 ```
 
 ## Usage

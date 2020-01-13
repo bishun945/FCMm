@@ -1,9 +1,11 @@
 ---
-title: "Untitled"
+title: "This is just a test Rmd"
 author: "Shun Bi"
 date: "2020/1/12"
 output: html_document
 ---
+
+## Data load
 
 ```{r}
 rm(list=ls())
@@ -34,6 +36,18 @@ plot_spec_from_df(x) +
   theme(legend.position='none', text=element_text(size=18))
 ```
 
+## Check whether the Rrs is normally distributed.
+
+```{r}
+require(reshape2)
+cbind(SampleID=Nechad2015$SAMPLE.ID, x) %>%
+  melt(., id='SampleID') %>%
+  ggplot(data=.,aes(x=value)) + 
+  geom_density() + 
+  facet_wrap(~variable)
+```
+
+The `Nechad2015` data set shows that the Rrs is skewed data.
 
 ```{r}
 FD <- FuzzifierDetermination(x, wv, stand=F)
@@ -76,6 +90,25 @@ ggplot(tmp,aes(x=cluster,y=Chla,fill=cluster)) +
   scale_y_log10()
 ```
 
+## Check the `apply_FCM_m` function.
+
+```{r}
+result_ <- apply_FCM_m(Rrs=result$FD$x %>% as.data.frame,
+                       wavelength=result$FD$x %>% colnames %>% as.numeric,
+                       Rrs_clusters=result$res.FCM$v %>% as.data.frame,
+                       stand=F,
+                       default.cluster=F,
+                       m_used=result$FD$m.used,
+                       option.plot=T)
+result_$p.group.facet
+
+table(result_$cluster, result$res.FCM$cluster)
+```
+
+Good news! The `apply_FCM_m` returns the same result which from function `FCM.new`.
+
+## Chla estimation and assessment.
+
 ```{r}
 options(scipen=1000)
 data.frame(result$res.FCM$u %>% round(4)) %>% setNames(., sprintf("M%s",1:nb)) %>%
@@ -96,8 +129,6 @@ assessment
 
 ```
 
-
-
 ```{r}
 names(AeronetOC2019)
 Rrs <- AeronetOC2019[,2:9]
@@ -110,6 +141,3 @@ for(i in 1:50){
 }
 hist(mused)
 ```
-
-
-

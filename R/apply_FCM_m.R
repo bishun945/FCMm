@@ -8,7 +8,7 @@
 #'   stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=FALSE)
 #'
 #' @param Rrs Data.frame, the input Rrs of FCM.
-#' @param wavelength Vector, used for applying FCM.
+#' @param wavelength Numeric vector, used for applying FCM.
 #'   Default use the data from \code{Bi_clusters.rda}
 #' @param Rrs_clusters Data.frame, used for applying FCM.
 #'   Default use the data from \code{Bi_clusters.rda}
@@ -62,6 +62,13 @@ apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
     v <- Rrs_clusters
   }
 
+  if(!is.data.frame(Rrs))
+    stop('The input param Rrs should be a data.frame!')
+  if(!is.data.frame(v))
+    stop('The input param Rrs_clusters should be a data.frame!')
+  if(!is.numeric(wavelength))
+    stop('The input param wavelength should be numeric!')
+  
   if(length(wavelength) != ncol(v))
     stop("The number of wavelength is different from the col of Rrs_clusters, please check them!")
   if(length(wavelength) != ncol(Rrs))

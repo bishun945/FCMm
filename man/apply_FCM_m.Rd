@@ -10,7 +10,7 @@ apply_FCM_m(Rrs, wavelength, Rrs_clusters,
 \arguments{
 \item{Rrs}{Data.frame, the input Rrs of FCM.}
 
-\item{wavelength}{Vector, used for applying FCM.
+\item{wavelength}{Numeric vector, used for applying FCM.
 Default use the data from \code{Bi_clusters.rda}}
 
 \item{Rrs_clusters}{Data.frame, used for applying FCM.

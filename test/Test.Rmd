@@ -1,0 +1,99 @@
+---
+title: "Untitled"
+author: "Shun Bi"
+date: "2020/1/12"
+output: html_document
+---
+
+```{r}
+rm(list=ls())
+library(FCMm)
+library(tidyverse)
+library(magrittr)
+
+# load and clean data
+data("Nechad2015")
+Nechad2015 %<>% subset(., X620 < 0.1 & X412.5 > 1e-04)
+names(Nechad2015)[12] <- 'Chla'
+names(Nechad2015)[13] <- 'TSM'
+Nechad2015$Chla[Nechad2015$Chla >= 999] <- NA
+Nechad2015$TSM[Nechad2015$TSM >= 999] <- NA
+
+w <- Nechad2015 %>% names %>%
+  str_extract(.,pattern="\\d") %>%
+  is.na %>% {!.}
+wv <- w %>% names(Nechad2015)[.] %>%
+  gsub('X','',.) %>% as.numeric
+x <- w %>% Nechad2015[,.]
+names(x) <- wv
+rm(w)
+
+plot_spec_from_df(x) + 
+  labs(x='Wavelength (nm)',y=expression(Rrs~(sr^-1))) + 
+  theme_bw() + 
+  theme(legend.position='none', text=element_text(size=18))
+```
+
+
+```{r}
+FD <- FuzzifierDetermination(x, wv, stand=F)
+(FD$m.used)
+```
+
+
+```{r}
+nb <- 13
+set.seed(54321)
+result <- FCM.new(FD, nb, fast.mode = T)
+
+data.frame(stname=seq(1,nrow(x)),
+                 cluster=result$res.FCM$cluster %>% as.character()) %>%
+      cbind(., FD$x) %>%
+      reshape2::melt(., id=c('stname','cluster')) %>% .level_to_variable() %>%
+  ggplot(.) +
+    geom_line(aes(x=variable,y=value,group=stname,color=cluster)) + 
+    facet_wrap(~cluster, scales='free_y')
+
+data.frame(stname=seq(1,nrow(x)),
+                 cluster=result$res.FCM$cluster %>% as.character()) %>%
+      cbind(., FD$x.stand) %>%
+      reshape2::melt(., id=c('stname','cluster')) %>% .level_to_variable() %>%
+  ggplot(.) +
+    geom_line(aes(x=variable,y=value,group=stname,color=cluster)) + 
+    facet_wrap(~cluster, scales='free_y')
+
+p.list <- plot_spec(result)
+p.list$p.cluster.spec
+
+Nechad2015$cluster <- result$res.FCM$cluster %>% as.character
+
+tmp <- data.frame(cluster=Nechad2015$cluster,Chla=Nechad2015$Chla)
+tmp$Chla[tmp$Chla >= 999] <- NA
+tmp %<>% na.omit()
+tmp$cluster <- reorder(tmp$cluster, tmp$Chla, mean)
+ggplot(tmp,aes(x=cluster,y=Chla,fill=cluster)) + 
+  geom_boxplot() + 
+  scale_y_log10()
+```
+
+```{r}
+data.frame(result$res.FCM$u) %>% setNames(., sprintf("M%s",1:nb)) %>%
+  cbind(Nechad2015, .) -> dt
+dt <- dt[{!is.na(dt$Chla)},]
+
+dt$Chla_OC4 <- OC4_v6(Rrs443=dt$X442.5,Rrs490=dt$X490,
+                      Rrs510=dt$X510,Rrs555=dt$X560)
+dt$Chla_BR_Git11 <- BR_Gil10(Rrs709=dt$X708.75, Rrs665=dt$X665)
+
+assessment <- Assessment_via_cluster(pred=dt[,c('Chla_OC4','Chla_BR_Git11')],
+                                     meas=dt$Chla,
+                                     memb=dt[,sprintf('M%s',1:nb)])
+
+
+```
+
+
+
+
+
+

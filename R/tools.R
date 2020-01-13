@@ -8,6 +8,8 @@
 #' @importFrom stats cor cor.test median na.omit sd
 cal.metrics <- function(x,y,name="all"){
 
+  name <- match.arg(name, cal.metrics.names())
+  
   .cal.rmse <- function(x,y){
     result <- sqrt(sum((x-y)^2,na.rm=T)/length(x))
     return(result)
@@ -109,6 +111,15 @@ cal.metrics <- function(x,y,name="all"){
     )
   }
   return(result)
+}
+
+#' @title List all metrics in function cal.metrics
+#' @name cal.metrics.names
+#' @export
+#' @return strings
+cal.metrics.names <- function(){
+  c('RMSE','CRMSE','MAE2','MAE2','MAPE','MDAPE',
+    'BIAS1','BIAS2','CV','R','R2','eta','chi2','all')
 }
 
 #' @title Convert dataframe with factor to character

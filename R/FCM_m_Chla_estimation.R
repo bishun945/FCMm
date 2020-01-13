@@ -72,9 +72,9 @@ FCM_m_Chla_estimation <- function(Rrs, U){
   Rrs754 <- Rrs[, n[3]]
 
   names(U) <- seq(1,k) %>% as.character
-  bind.Chla <- data.frame(BR=.BR(Rrs709,Rrs665),
-                          TBA=.TBA(Rrs665,Rrs709,Rrs754),
-                          C6=.C6(Rrs665,Rrs754),
+  bind.Chla <- data.frame(BR=BR_Gil10(Rrs709,Rrs665),
+                          TBA=TBA_Gil10(Rrs665,Rrs709,Rrs754),
+                          C6=C6(Rrs665,Rrs754),
                           M=round(U,4))
   # TBA: C1 C2 C5
   # BR: C3 C4 C7
@@ -88,14 +88,113 @@ FCM_m_Chla_estimation <- function(Rrs, U){
   return(bind.Chla)
 }
 
-.BR <- function(Rrs709, Rrs665){
+#' @title BR_Gil10
+#' @export
+BR_Gil10 <- function(Rrs709, Rrs665){
   return(abs(35.75*Rrs709/Rrs665-19.3)^1.124)
 }
 
-.TBA <- function(Rrs665, Rrs709, Rrs754){
+#' @title TBA_Gil10
+#' @export
+TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
   return(abs(113.36*(1/Rrs665-1/Rrs709)*Rrs754+16.45)^1.124)
 }
 
-.C6 <- function(Rrs665, Rrs754){
+#' @title C6
+#' @export
+C6 <- function(Rrs665, Rrs754){
   return(10^( 1/Rrs665*Rrs754 * 0.14 + 2.11))
 }
+
+#' @title OC4_v6
+#' @export
+OC4_v6 <- function(Rrs443, Rrs490, Rrs510, Rrs555){
+  X <- apply(log10(cbind(Rrs443,Rrs490,Rrs510)),1,max)/log10(Rrs555)
+  return(10^(0.327-2.994*X+2.721*X^2-1.225*X^3-0.568*X^4))
+}
+
+#' @title TBA_Git11
+#' @export
+TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
+  return(243.86*(1/Rrs665-1/Rrs709)*Rrs754+23.17)
+}
+
+#' @title NDCI_Mi12
+#' @export
+NDCI_Mi12 <- function(Rrs665,Rrs708){
+  ind <- (Rrs708-Rrs665)/(Rrs708+Rrs665)
+  return(14.039+86.115*ind+194.325*ind^2)
+}
+
+#' @title Assessment each algorithm for every cluster
+#' @name Assessment_via_cluster
+#' @param Chla_pred prediciton of Chla
+#' @param Chla_meas in-situ measurement of Chla
+#' @param memb membership value matrix
+#' @param metrics metrics need to be calculated
+#' @export
+#' @return List
+Assessment_via_cluster <- function(pred, meas, memb,
+                                   metrics = c('MAE2','MAPE'),
+                                   total = TRUE,
+                                   hard.mode= TRUE){
+  if(nrow(pred) != length(meas) | nrow(pred) != nrow(memb))
+    stop('Rows of input are different!')
+  if(anyNA(pred) | anyNA(meas) | anyNA(memb))
+    stop('Including NA values!')
+  
+  for(i in 1:length(metrics))
+    metrics[i] <- match.arg(metrics[i], cal.metrics.names())
+  
+  # generate the output dataframe  
+  model_names <- colnames(pred)
+  cluster_names <- colnames(memb)
+  cluster_crisp <- apply(memb,1,which.max) %>% sprintf('M%s',.)
+  
+  validation <- matrix(data=0,
+                   nrow=length(cluster_names), 
+                   ncol=length(model_names)) %>% as.data.frame()
+  colnames(validation) <- model_names
+  rownames(validation) <- cluster_names
+  
+  # output is a list
+  result <- list()
+  for(i in 1:length(metrics))
+    result[[metrics[i]]] <- validation
+  
+  # strat loop via model and cluster
+  for(model in model_names){
+    for(cluster in cluster_names){
+      
+      x <- meas[cluster_crisp %in% cluster] # true
+      y <- pred[cluster_crisp %in% cluster, model] # pred
+      
+      for(metric in names(result)){
+        result[[metric]][which(cluster_names == cluster),
+                         which(model_names == model)] <- cal.metrics(x,y,metric)
+      }
+    }
+    if(total == TRUE){
+      
+      x <- meas
+      y <- pred[, model]
+      
+      for(metric in names(result)){
+        
+        if(rownames(result[[metric]])[nrow(result[[metric]])] != 'SUM'){
+          result[[metric]] %<>% rbind(.,NA)
+          rownames(result[[metric]])[nrow(result[[metric]])] <- 'SUM'
+        }
+        result[[metric]]['SUM',
+                         which(model_names == model)] <- cal.metrics(x,y,metric)  
+      }
+    }
+  }
+  return(result)
+}
+
+
+
+
+
+

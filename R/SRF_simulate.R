@@ -151,6 +151,5 @@ find_center_wavelength_max <- function(dt){
 #' @export
 
 show_sensor_names <- function(){
-  data("SRF_LIST")
   return(names(SRF_LIST))
 }

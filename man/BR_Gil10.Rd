@@ -6,6 +6,11 @@
 \usage{
 BR_Gil10(Rrs709, Rrs665)
 }
+\arguments{
+\item{Rrs709}{Rrs709}
+
+\item{Rrs665}{Rrs665}
+}
 \description{
 BR_Gil10
 }

@@ -6,6 +6,11 @@
 \usage{
 NDCI_Mi12(Rrs665, Rrs708)
 }
+\arguments{
+\item{Rrs665}{Rrs665}
+
+\item{Rrs708}{Rrs708}
+}
 \description{
 NDCI_Mi12
 }

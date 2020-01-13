@@ -14,13 +14,17 @@ Assessment_via_cluster(
 )
 }
 \arguments{
+\item{pred}{prediciton of Chla}
+
+\item{meas}{in-situ measurement of Chla}
+
 \item{memb}{membership value matrix}
 
 \item{metrics}{metrics need to be calculated}
 
-\item{Chla_pred}{prediciton of Chla}
+\item{total}{logical}
 
-\item{Chla_meas}{in-situ measurement of Chla}
+\item{hard.mode}{hard.mode}
 }
 \value{
 List

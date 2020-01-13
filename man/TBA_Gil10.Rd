@@ -6,6 +6,13 @@
 \usage{
 TBA_Gil10(Rrs665, Rrs709, Rrs754)
 }
+\arguments{
+\item{Rrs665}{Rrs665}
+
+\item{Rrs709}{Rrs709}
+
+\item{Rrs754}{Rrs754}
+}
 \description{
 TBA_Gil10
 }

@@ -89,37 +89,53 @@ FCM_m_Chla_estimation <- function(Rrs, U){
 }
 
 #' @title BR_Gil10
+#' @param Rrs709 Rrs709
+#' @param Rrs665 Rrs665
 #' @export
 BR_Gil10 <- function(Rrs709, Rrs665){
   return(abs(35.75*Rrs709/Rrs665-19.3)^1.124)
 }
 
 #' @title TBA_Gil10
+#' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
+#' @param Rrs754 Rrs754
 #' @export
 TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
   return(abs(113.36*(1/Rrs665-1/Rrs709)*Rrs754+16.45)^1.124)
 }
 
 #' @title C6
+#' @param Rrs665 Rrs665
+#' @param Rrs754 Rrs754
 #' @export
 C6 <- function(Rrs665, Rrs754){
   return(10^( 1/Rrs665*Rrs754 * 0.14 + 2.11))
 }
 
-#' @title OC4_v6
+#' @title OC4E
+#' @param Rrs443 Rrs443
+#' @param Rrs490 Rrs490
+#' @param Rrs510 Rrs510
+#' @param Rrs555 Rrs555
 #' @export
-OC4_v6 <- function(Rrs443, Rrs490, Rrs510, Rrs555){
-  X <- apply(log10(cbind(Rrs443,Rrs490,Rrs510)),1,max)/log10(Rrs555)
-  return(10^(0.327-2.994*X+2.721*X^2-1.225*X^3-0.568*X^4))
+OC4E <- function(Rrs443, Rrs490, Rrs510, Rrs555){
+  X <- apply(cbind(Rrs443,Rrs490,Rrs510),1,max)/Rrs555 %>% log10
+  return(10^(0.3255-2.7677*X+2.4409*X^2-1.1288*X^3-0.4990*X^4))
 }
 
 #' @title TBA_Git11
+#' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
+#' @param Rrs754 Rrs754
 #' @export
 TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
   return(243.86*(1/Rrs665-1/Rrs709)*Rrs754+23.17)
 }
 
 #' @title NDCI_Mi12
+#' @param Rrs665 Rrs665
+#' @param Rrs708 Rrs708
 #' @export
 NDCI_Mi12 <- function(Rrs665,Rrs708){
   ind <- (Rrs708-Rrs665)/(Rrs708+Rrs665)
@@ -128,10 +144,12 @@ NDCI_Mi12 <- function(Rrs665,Rrs708){
 
 #' @title Assessment each algorithm for every cluster
 #' @name Assessment_via_cluster
-#' @param Chla_pred prediciton of Chla
-#' @param Chla_meas in-situ measurement of Chla
+#' @param pred prediciton of Chla
+#' @param meas in-situ measurement of Chla
 #' @param memb membership value matrix
 #' @param metrics metrics need to be calculated
+#' @param total logical
+#' @param hard.mode hard.mode
 #' @export
 #' @return List
 Assessment_via_cluster <- function(pred, meas, memb,

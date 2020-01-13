@@ -68,13 +68,18 @@ plot(result$p.group)
 
 <img src="man/figures/README-unnamed-chunk-2-2.png" width="60%" style="display: block; margin: auto;" />
 
+``` r
+# plot(result$p.group+facet_wrap(~cluster, ncol=2))
+```
+
 ## Getting help
 
   - About this package, I have written four vignettes to present the
     usage of `FCMm`. Please read them carefully if you want to use this
     package for your research. Also, e-mail me via
     [bishun1994@foxmail.com](bishun1994@foxmail.com) without hesitation
-    if you have any questions or find any bug about it. They are:
+    if you have any questions or find any bug about it. They
+        are:
       - [Cluster\_number\_determination](./doc/Cluster_number_determination.html)
       - [Fuzzy\_cluster\_training](./doc/Fuzzy_cluster_training.html)
       - [New\_Data\_Running\_FCMm](./doc/New_Data_Running_FCMm.html)

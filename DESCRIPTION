@@ -1,7 +1,7 @@
 Package: FCMm
 Type: Package
 Title: Fuzzy Cluster Method based on the optimized m value (fuzzifier)
-Version: 0.4.0
+Version: 0.4.1
 Authors@R: c(person("Shun", "Bi", ,"bishun1994@foxmail.com", c("aut","cre")))
 Author: Shun Bi [aut, cre]
 Maintainer: Shun Bi <bishun1994@foxmail.com>
@@ -11,7 +11,7 @@ License: GPL (>= 2) + file LICENSE
 URL: https://github.com/bishun945/FCMm
 Imports: ggplot2, ggthemes, heatmaply, ppclust, raster,
          reshape2, viridis, magrittr, inaparc, stringr, 
-         fclust, tidyverse
+         fclust, tidyverse, gridExtra, utils, readxl
 Encoding: UTF-8
 LazyData: yes
 Suggests: knitr, rmarkdown

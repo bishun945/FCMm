@@ -6,6 +6,11 @@
 \usage{
 C6(Rrs665, Rrs754)
 }
+\arguments{
+\item{Rrs665}{Rrs665}
+
+\item{Rrs754}{Rrs754}
+}
 \description{
 C6
 }

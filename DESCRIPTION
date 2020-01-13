@@ -7,7 +7,7 @@ Author: Shun Bi [aut, cre]
 Maintainer: Shun Bi <bishun1994@foxmail.com>
 Description: An improved FCM method (FCM-m) for optical classification of inland waters.
 Depends: R (>= 3.6)
-License: GPL (>= 2) + file LICENSE
+License: MIT
 URL: https://github.com/bishun945/FCMm
 Imports: ggplot2, ggthemes, heatmaply, ppclust, raster,
          reshape2, viridis, magrittr, inaparc, stringr, 

@@ -124,6 +124,14 @@ OC4E <- function(Rrs443, Rrs490, Rrs510, Rrs555){
   return(10^(0.3255-2.7677*X+2.4409*X^2-1.1288*X^3-0.4990*X^4))
 }
 
+#' @title BR_Git11
+#' @param Rrs709 Rrs709
+#' @param Rrs665 Rrs665
+#' @export
+BR_Git11 <- function(Rrs709, Rrs665){
+  return(72.66*Rrs709/Rrs665-46.535)
+}
+
 #' @title TBA_Git11
 #' @param Rrs665 Rrs665
 #' @param Rrs709 Rrs709
@@ -140,6 +148,58 @@ TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
 NDCI_Mi12 <- function(Rrs665,Rrs708){
   ind <- (Rrs708-Rrs665)/(Rrs708+Rrs665)
   return(14.039+86.115*ind+194.325*ind^2)
+}
+
+#' @title FBA_Le13
+#' @param Rrs665 Rrs665
+#' @param Rrs682 Rrs682
+#' @param Rrs709 Rrs709
+#' @param Rrs754 Rrs754
+#' @export
+FBA_Le13 <- function(Rrs665, Rrs682, Rrs709){
+  return(18.492*(1/Rrs665-1/Rrs682)/(1/Rrs709-1/Rrs682)+6.1302)
+}
+
+#' @title FBA_Yang10
+#' @param Rrs665 Rrs665
+#' @param Rrs708 Rrs708
+#' @param Rrs753 Rrs753
+#' @export
+FBA_Yang10 <- function(Rrs665, Rrs708, Rrs753){
+  return(161.24*(1/Rrs665-1/Rrs708)/(1/Rrs753-1/Rrs708)+28.04)
+}
+
+#' @title SCI_Shen10
+#' @param Rrs560 Rrs560
+#' @param Rrs620 Rrs620
+#' @param Rrs665 Rrs665
+#' @param Rrs681 Rrs681
+#' @export
+SCI_Shen10 <- function(Rrs560, Rrs620, Rrs665, Rrs681){
+  H_Chl <- (Rrs681+(681-665)/(681-620)*(Rrs620-Rrs681)) - Rrs665
+  H_deta <- Rrs620 - (Rrs681+(681-620)/(681-560)*(Rrs560-Rrs681))
+  SCI <- H_Chl - H_deta
+  return(0.057*SCI^(-0.6327))
+}
+
+#' @title Gons08
+#' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
+#' @param Rrs779 Rrs779
+#' @export
+Gons08 <- function(Rrs665, Rrs709, Rrs779){
+  bbp <- 1.61 * Rrs779 / (0.082 - 0.6*Rrs779)
+  return((Rrs709/Rrs665*(0.7+bbp)-0.4-bbp^1.06)/0.016)
+}
+
+#' @title Chla_algorithms_name
+#' @export
+Chla_algorithms_name <- function(){
+  return(c('BR_Gil10','BR_Git11',
+           'TBA_Gil10','TBA_Git11',
+           'C6','OC4E','NDCI_Mi12', 'Gons08',
+           'FBA_Le13','FBA_Yang10',
+           'SCI_Shen10'))
 }
 
 #' @title Assessment each algorithm for every cluster

@@ -11,3 +11,6 @@ Meta
 *.pper
 .Rhistory
 .Rproj.user/shared/notebooks/paths
+*.pper
+.Rhistory
+.Rhistory

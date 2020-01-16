@@ -12,8 +12,6 @@ FBA_Le13(Rrs665, Rrs682, Rrs709)
 \item{Rrs682}{Rrs682}
 
 \item{Rrs709}{Rrs709}
-
-\item{Rrs754}{Rrs754}
 }
 \description{
 FBA_Le13

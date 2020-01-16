@@ -154,7 +154,6 @@ NDCI_Mi12 <- function(Rrs665,Rrs708){
 #' @param Rrs665 Rrs665
 #' @param Rrs682 Rrs682
 #' @param Rrs709 Rrs709
-#' @param Rrs754 Rrs754
 #' @export
 FBA_Le13 <- function(Rrs665, Rrs682, Rrs709){
   return(18.492*(1/Rrs665-1/Rrs682)/(1/Rrs709-1/Rrs682)+6.1302)

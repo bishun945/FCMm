@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
       <h1>How to train the fuzzy cluster?</h1>
                         <h4 class="author">Shun Bi</h4>
             
-            <h4 class="date">2020-01-10</h4>
+            <h4 class="date">2020-01-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bishun945/FCMm/blob/master/vignettes/Fuzzy_cluster_training.Rmd"><code>vignettes/Fuzzy_cluster_training.Rmd</code></a></small>
       <div class="hidden name"><code>Fuzzy_cluster_training.Rmd</code></div>
@@ -130,61 +130,61 @@
 <div id="dataframe-process" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dataframe-process" class="anchor"></a>Dataframe process</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(<span class="dt">list=</span><span class="kw"><a href="https://rdrr.io/r/base/ls.html">ls</a></span>())</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(FCMm)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="co">#&gt; Registered S3 method overwritten by 'seriation':</span></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="co">#&gt;   method         from </span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co">#&gt;   reorder.hclust gclus</span></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="co">#&gt; ── Attaching packages ────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt; &lt;U+2713&gt; ggplot2 3.2.1     &lt;U+2713&gt; purrr   0.3.3</span></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt; &lt;U+2713&gt; tibble  2.1.3     &lt;U+2713&gt; dplyr   0.8.3</span></a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt; &lt;U+2713&gt; tidyr   1.0.0     &lt;U+2713&gt; stringr 1.4.0</span></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt; &lt;U+2713&gt; readr   1.3.1     &lt;U+2713&gt; forcats 0.4.0</span></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt; ── Conflicts ───────────────────────────────────────────────────────────────── tidyverse_conflicts() ──</span></a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="co">#&gt; x dplyr::filter() masks stats::filter()</span></a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span></a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"Nechad2015"</span>)</a>
-<a class="sourceLine" id="cb1-16" title="16">w &lt;-<span class="st"> </span>Nechad2015 <span class="op">%&gt;%</span><span class="st"> </span>names <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-17" title="17"><span class="st">  </span><span class="kw">str_extract</span>(.,<span class="dt">pattern=</span><span class="st">"</span><span class="ch">\\</span><span class="st">d"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-18" title="18"><span class="st">  </span>is.na <span class="op">%&gt;%</span><span class="st"> </span>{<span class="op">!</span>.}</a>
-<a class="sourceLine" id="cb1-19" title="19">wv &lt;-<span class="st"> </span>w <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(Nechad2015)[.] <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-20" title="20"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">'X'</span>,<span class="st">''</span>,.) <span class="op">%&gt;%</span><span class="st"> </span>as.numeric</a>
-<a class="sourceLine" id="cb1-21" title="21">x &lt;-<span class="st"> </span>w <span class="op">%&gt;%</span><span class="st"> </span>Nechad2015[,.]</a>
-<a class="sourceLine" id="cb1-22" title="22"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(x) &lt;-<span class="st"> </span>wv</a>
-<a class="sourceLine" id="cb1-23" title="23"><span class="kw"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(w)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(<span class="dt">list=</span><span class="kw"><a href="https://rdrr.io/r/base/ls.html">ls</a></span>())</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(FCMm)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#&gt; Registered S3 method overwritten by 'seriation':</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt;   method         from </span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt;   reorder.hclust gclus</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt; ── Attaching packages ──────────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; ✓ ggplot2 3.2.1     ✓ purrr   0.3.3</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; ✓ tibble  2.1.3     ✓ dplyr   0.8.3</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; ✓ tidyr   1.0.0     ✓ stringr 1.4.0</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt; ✓ readr   1.3.1     ✓ forcats 0.4.0</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt; ── Conflicts ─────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt; x dplyr::filter() masks stats::filter()</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"Nechad2015"</span>)</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">w &lt;-<span class="st"> </span>Nechad2015 <span class="op">%&gt;%</span><span class="st"> </span>names <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="st">  </span><span class="kw">str_extract</span>(.,<span class="dt">pattern=</span><span class="st">"</span><span class="ch">\\</span><span class="st">d"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="st">  </span>is.na <span class="op">%&gt;%</span><span class="st"> </span>{<span class="op">!</span>.}</a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">wv &lt;-<span class="st"> </span>w <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(Nechad2015)[.] <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">'X'</span>,<span class="st">''</span>,.) <span class="op">%&gt;%</span><span class="st"> </span>as.numeric</a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">x &lt;-<span class="st"> </span>w <span class="op">%&gt;%</span><span class="st"> </span>Nechad2015[,.]</a>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(x) &lt;-<span class="st"> </span>wv</a>
+<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="kw"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(w)</a></code></pre></div>
 </div>
 <div id="spectra-plot" class="section level2">
 <h2 class="hasAnchor">
 <a href="#spectra-plot" class="anchor"></a>Spectra plot</h2>
 <p>After that, we subset Rrs dataframe (named <code>x</code>) and wavelength vector (named <code>wv</code>). It is time to plot the spectra of this set by using function <code>plot_spec_from_df</code>.</p>
 <p><strong>Note</strong>: The input of <code>plot_spec_from_df</code> should be a matrix or data.frame with colnames that could be transformed into the numeric — as the x-axis of the plot. Since the return of <code>plot_spec_from_df</code> is a <code>ggplot</code> list, you could modify or add it for your purpose (such as add labs or themes).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">p.spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/plot_spec_from_df.html">plot_spec_from_df</a></span>(x) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">18</span>))</a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(p.spec)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">p.spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/plot_spec_from_df.html">plot_spec_from_df</a></span>(x) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">18</span>))</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(p.spec)</a></code></pre></div>
 <p><img src="Fuzzy_cluster_training_files/figure-html/unnamed-chunk-2-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="fcm-running" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fcm-running" class="anchor"></a>FCM running</h2>
 <p>Before optimizing the best cluster number, we have to obtain an FD list produced by function <code>FuzzifierDetermination</code> just as follows.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">FD &lt;-<span class="st"> </span><span class="kw"><a href="../reference/FuzzifierDetermination.html">FuzzifierDetermination</a></span>(x, wv, <span class="dt">stand=</span>F)</a>
-<a class="sourceLine" id="cb3-2" title="2">(FD<span class="op">$</span>m.used)</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; [1] 1.63</span></a>
-<a class="sourceLine" id="cb3-4" title="4">nb &lt;-<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">54321</span>) <span class="co"># I just set this seed so that you can re-produce them</span></a>
-<a class="sourceLine" id="cb3-6" title="6">result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/FCM.new.html">FCM.new</a></span>(FD, nb)</a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(result)</a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt;             Length Class   Mode   </span></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; FD           9     -none-  list   </span></a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; res.FCM     17     ppclust list   </span></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; p.jitter     9     gg      list   </span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; K            1     -none-  numeric</span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; plot.jitter  1     -none-  logical</span></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; fast.mode    1     -none-  logical</span></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(result<span class="op">$</span>p.jitter)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">FD &lt;-<span class="st"> </span><span class="kw"><a href="../reference/FuzzifierDetermination.html">FuzzifierDetermination</a></span>(x, wv, <span class="dt">stand=</span>F)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">(FD<span class="op">$</span>m.used)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [1] 1.63</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">nb &lt;-<span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">54321</span>) <span class="co"># I just set this seed so that you can re-produce them</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/FCM.new.html">FCM.new</a></span>(FD, nb)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(result)</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;             Length Class   Mode   </span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; FD           9     -none-  list   </span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; res.FCM     17     ppclust list   </span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; p.jitter     9     gg      list   </span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; K            1     -none-  numeric</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; plot.jitter  1     -none-  logical</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; fast.mode    1     -none-  logical</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(result<span class="op">$</span>p.jitter)</a></code></pre></div>
 <p><img src="Fuzzy_cluster_training_files/figure-html/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>The used m value is 1.63 which is less than the default 2. The reason and its benefits should be a view from the reference of package <code>FCMm</code>, i.e., Bi <em>et al.</em> (2019).</p>
 <p><code>result</code> list contains several result by <code>FCM.new</code>:</p>
@@ -210,73 +210,73 @@
 <a href="#fcm-plotting-basic-version" class="anchor"></a>FCM plotting — basic version</h2>
 <p>This part shows how to obtain the visualization results in the package <code>FCMm</code>.</p>
 <p>Function <code>plot_spec</code> is used for spectrally plotting the related FCM-m result.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">p.spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/plot_spec.html">plot_spec</a></span>(result, <span class="dt">show.stand=</span>F, <span class="dt">HABc=</span><span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt; Scale for 'colour' is already present. Adding another scale for 'colour',</span></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; which will replace the existing scale.</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; Scale for 'colour' is already present. Adding another scale for 'colour',</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; which will replace the existing scale.</span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; Scale for 'colour' is already present. Adding another scale for 'colour',</span></a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; which will replace the existing scale.</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co"># print(p.spec$p.all.spec)</span></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="co"># print(p.spec$p.cluster.spec)</span></a>
-<a class="sourceLine" id="cb4-10" title="10"><span class="co"># print(p.spec$p.group.spec.2)</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">p.spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/plot_spec.html">plot_spec</a></span>(result, <span class="dt">show.stand=</span>F, <span class="dt">HABc=</span><span class="ot">NULL</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; Scale for 'colour' is already present. Adding another scale for 'colour',</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; which will replace the existing scale.</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; Scale for 'colour' is already present. Adding another scale for 'colour',</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; which will replace the existing scale.</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; Scale for 'colour' is already present. Adding another scale for 'colour',</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; which will replace the existing scale.</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co"># print(p.spec$p.all.spec)</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co"># print(p.spec$p.cluster.spec)</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co"># print(p.spec$p.group.spec.2)</span></a></code></pre></div>
 </div>
 <div id="fcm-plotting-external-version" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fcm-plotting-external-version" class="anchor"></a>FCM plotting — external version</h2>
 <p>This part gives several examples of how to plot cool grid plots. Please learn something about packages <code>dplyr</code> and <code>reshape2</code> before trying this chunk.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(magrittr)</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="co"># melt data</span></a>
-<a class="sourceLine" id="cb5-3" title="3">tmp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">cluster =</span> result<span class="op">$</span>res.FCM<span class="op">$</span>cluster <span class="op">%&gt;%</span><span class="st"> </span>as.character,</a>
-<a class="sourceLine" id="cb5-4" title="4">                  <span class="dt">X =</span> FD<span class="op">$</span>x.stand)</a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(tmp)[<span class="dv">2</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(tmp)] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(wv)</a>
-<a class="sourceLine" id="cb5-6" title="6">tmp.p &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(tmp, <span class="dt">id=</span><span class="st">'cluster'</span>, <span class="dt">variable.name=</span><span class="st">'band'</span>, <span class="dt">value.name=</span><span class="st">'value'</span>)</a>
-<a class="sourceLine" id="cb5-7" title="7">tmp.p<span class="op">$</span>cluster <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(.)[.]</a>
-<a class="sourceLine" id="cb5-8" title="8">tmp.p<span class="op">$</span>band <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(.)[.] <span class="op">%&gt;%</span><span class="st"> </span>as.numeric</a>
-<a class="sourceLine" id="cb5-9" title="9"></a>
-<a class="sourceLine" id="cb5-10" title="10">tmp2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">name =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span>,<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(tmp)) <span class="op">%&gt;%</span><span class="st"> </span>as.character,</a>
-<a class="sourceLine" id="cb5-11" title="11">                   tmp[,<span class="dv">2</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(tmp)])</a>
-<a class="sourceLine" id="cb5-12" title="12"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(tmp2)[<span class="dv">2</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(tmp2)] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(wv)</a>
-<a class="sourceLine" id="cb5-13" title="13">tmp2.p &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(tmp2, <span class="dt">id=</span><span class="st">'name'</span>, <span class="dt">variable.name=</span><span class="st">'band'</span>, <span class="dt">value.name=</span><span class="st">'value'</span>)</a>
-<a class="sourceLine" id="cb5-14" title="14">tmp2.p<span class="op">$</span>name <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(.)[.]</a>
-<a class="sourceLine" id="cb5-15" title="15">tmp2.p<span class="op">$</span>band <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(.)[.] <span class="op">%&gt;%</span><span class="st"> </span>as.numeric</a>
-<a class="sourceLine" id="cb5-16" title="16">tmp.p<span class="op">$</span>name &lt;-<span class="st"> </span>tmp2.p<span class="op">$</span>name  </a>
-<a class="sourceLine" id="cb5-17" title="17">tmp.p<span class="op">$</span>cluster &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'Cluster '</span>,tmp.p<span class="op">$</span>cluster)</a>
-<a class="sourceLine" id="cb5-18" title="18"></a>
-<a class="sourceLine" id="cb5-19" title="19"><span class="co"># plot</span></a>
-<a class="sourceLine" id="cb5-20" title="20">cp2 &lt;-<span class="st"> </span>cp &lt;-<span class="st"> </span>heatmaply<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/heatmaply/man/RColorBrewer_colors.html">RdYlBu</a></span>(result<span class="op">$</span>K)</a>
-<a class="sourceLine" id="cb5-21" title="21"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(cp) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span>,result<span class="op">$</span>K)</a>
-<a class="sourceLine" id="cb5-22" title="22"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(cp2) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'Cluster '</span>,<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span>,result<span class="op">$</span>K))</a>
-<a class="sourceLine" id="cb5-23" title="23">p.group.facet &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>tmp.p) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-24" title="24"><span class="st">  </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">x=</span>band, <span class="dt">y=</span>value, <span class="dt">group=</span>name, <span class="dt">color=</span>cluster), <span class="dt">alpha=</span><span class="fl">0.9</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-25" title="25"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span>cp2,</a>
-<a class="sourceLine" id="cb5-26" title="26">                     <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'Cluster '</span>,<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(result<span class="op">$</span>K))) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-27" title="27"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">color=</span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'Cluster '</span>,<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(result<span class="op">$</span>K)),<span class="dt">y=</span><span class="st">'Normalized_scale'</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-28" title="28"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>cluster, <span class="dt">nrow=</span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-29" title="29"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-30" title="30"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'none'</span>)</a>
-<a class="sourceLine" id="cb5-31" title="31"><span class="co"># plot(p.group.facet)</span></a>
-<a class="sourceLine" id="cb5-32" title="32"></a>
-<a class="sourceLine" id="cb5-33" title="33">Nechad2015<span class="op">$</span>cluster &lt;-<span class="st"> </span>result<span class="op">$</span>res.FCM<span class="op">$</span>cluster <span class="op">%&gt;%</span><span class="st"> </span>as.character</a>
-<a class="sourceLine" id="cb5-34" title="34"></a>
-<a class="sourceLine" id="cb5-35" title="35">tmp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">cluster=</span>Nechad2015<span class="op">$</span>cluster,<span class="dt">Chla=</span>Nechad2015<span class="op">$</span><span class="st">`</span><span class="dt">X.Chl_a..ug.L.</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>na.omit</a>
-<a class="sourceLine" id="cb5-36" title="36">tmp<span class="op">$</span>cluster &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span>(tmp<span class="op">$</span>cluster, tmp<span class="op">$</span>Chla, mean)</a>
-<a class="sourceLine" id="cb5-37" title="37"></a>
-<a class="sourceLine" id="cb5-38" title="38">p.boxplot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>tmp, <span class="kw">aes</span>(<span class="dt">x=</span>cluster,<span class="dt">y=</span>Chla,<span class="dt">fill=</span>cluster)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-39" title="39"><span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.color=</span><span class="ot">NA</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_y_log10</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-40" title="40"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>cp) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-41" title="41"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'none'</span>)</a>
-<a class="sourceLine" id="cb5-42" title="42"></a>
-<a class="sourceLine" id="cb5-43" title="43">p.cluster.spec.n &lt;-<span class="st"> </span><span class="kw"><a href="../reference/plot_spec_from_df.html">plot_spec_from_df</a></span>(result<span class="op">$</span>res.FCM<span class="op">$</span>v) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-44" title="44"><span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">size=</span><span class="fl">1.5</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">"Normalized_scale"</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-45" title="45"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span>cp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-46" title="46"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'right'</span>)</a>
-<a class="sourceLine" id="cb5-47" title="47"></a>
-<a class="sourceLine" id="cb5-48" title="48"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gridExtra)</a>
-<a class="sourceLine" id="cb5-49" title="49">pm &lt;-<span class="st"> </span><span class="kw">arrangeGrob</span>(<span class="dt">grobs=</span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(p.cluster.spec.n, p.boxplot),<span class="dt">nrow=</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb5-50" title="50"><span class="st">  </span><span class="kw">arrangeGrob</span>(<span class="dt">grobs=</span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(., p.group.facet),</a>
-<a class="sourceLine" id="cb5-51" title="51">                          <span class="dt">nrow=</span><span class="dv">2</span>,<span class="dt">top=</span><span class="st">'Nechad2015: Normalized cluster result'</span>)</a>
-<a class="sourceLine" id="cb5-52" title="52"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(pm)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(magrittr)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co"># melt data</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">tmp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">cluster =</span> result<span class="op">$</span>res.FCM<span class="op">$</span>cluster <span class="op">%&gt;%</span><span class="st"> </span>as.character,</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                  <span class="dt">X =</span> FD<span class="op">$</span>x.stand)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(tmp)[<span class="dv">2</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(tmp)] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(wv)</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">tmp.p &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(tmp, <span class="dt">id=</span><span class="st">'cluster'</span>, <span class="dt">variable.name=</span><span class="st">'band'</span>, <span class="dt">value.name=</span><span class="st">'value'</span>)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">tmp.p<span class="op">$</span>cluster <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(.)[.]</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">tmp.p<span class="op">$</span>band <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(.)[.] <span class="op">%&gt;%</span><span class="st"> </span>as.numeric</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">tmp2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">name =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span>,<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(tmp)) <span class="op">%&gt;%</span><span class="st"> </span>as.character,</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">                   tmp[,<span class="dv">2</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(tmp)])</a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(tmp2)[<span class="dv">2</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(tmp2)] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(wv)</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">tmp2.p &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(tmp2, <span class="dt">id=</span><span class="st">'name'</span>, <span class="dt">variable.name=</span><span class="st">'band'</span>, <span class="dt">value.name=</span><span class="st">'value'</span>)</a>
+<a class="sourceLine" id="cb5-14" data-line-number="14">tmp2.p<span class="op">$</span>name <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(.)[.]</a>
+<a class="sourceLine" id="cb5-15" data-line-number="15">tmp2.p<span class="op">$</span>band <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(.)[.] <span class="op">%&gt;%</span><span class="st"> </span>as.numeric</a>
+<a class="sourceLine" id="cb5-16" data-line-number="16">tmp.p<span class="op">$</span>name &lt;-<span class="st"> </span>tmp2.p<span class="op">$</span>name  </a>
+<a class="sourceLine" id="cb5-17" data-line-number="17">tmp.p<span class="op">$</span>cluster &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'Cluster '</span>,tmp.p<span class="op">$</span>cluster)</a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co"># plot</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20">cp2 &lt;-<span class="st"> </span>cp &lt;-<span class="st"> </span>heatmaply<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/heatmaply/man/RColorBrewer_colors.html">RdYlBu</a></span>(result<span class="op">$</span>K)</a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(cp) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span>,result<span class="op">$</span>K)</a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(cp2) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'Cluster '</span>,<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span>,result<span class="op">$</span>K))</a>
+<a class="sourceLine" id="cb5-23" data-line-number="23">p.group.facet &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>tmp.p) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">x=</span>band, <span class="dt">y=</span>value, <span class="dt">group=</span>name, <span class="dt">color=</span>cluster), <span class="dt">alpha=</span><span class="fl">0.9</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span>cp2,</a>
+<a class="sourceLine" id="cb5-26" data-line-number="26">                     <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'Cluster '</span>,<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(result<span class="op">$</span>K))) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">color=</span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'Cluster '</span>,<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(result<span class="op">$</span>K)),<span class="dt">y=</span><span class="st">'Normalized_scale'</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-28" data-line-number="28"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>cluster, <span class="dt">nrow=</span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-29" data-line-number="29"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-30" data-line-number="30"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'none'</span>)</a>
+<a class="sourceLine" id="cb5-31" data-line-number="31"><span class="co"># plot(p.group.facet)</span></a>
+<a class="sourceLine" id="cb5-32" data-line-number="32"></a>
+<a class="sourceLine" id="cb5-33" data-line-number="33">Nechad2015<span class="op">$</span>cluster &lt;-<span class="st"> </span>result<span class="op">$</span>res.FCM<span class="op">$</span>cluster <span class="op">%&gt;%</span><span class="st"> </span>as.character</a>
+<a class="sourceLine" id="cb5-34" data-line-number="34"></a>
+<a class="sourceLine" id="cb5-35" data-line-number="35">tmp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">cluster=</span>Nechad2015<span class="op">$</span>cluster,<span class="dt">Chla=</span>Nechad2015<span class="op">$</span><span class="st">`</span><span class="dt">X.Chl_a..ug.L.</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>na.omit</a>
+<a class="sourceLine" id="cb5-36" data-line-number="36">tmp<span class="op">$</span>cluster &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span>(tmp<span class="op">$</span>cluster, tmp<span class="op">$</span>Chla, mean)</a>
+<a class="sourceLine" id="cb5-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb5-38" data-line-number="38">p.boxplot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span>tmp, <span class="kw">aes</span>(<span class="dt">x=</span>cluster,<span class="dt">y=</span>Chla,<span class="dt">fill=</span>cluster)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-39" data-line-number="39"><span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.color=</span><span class="ot">NA</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_y_log10</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-40" data-line-number="40"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>cp) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-41" data-line-number="41"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'none'</span>)</a>
+<a class="sourceLine" id="cb5-42" data-line-number="42"></a>
+<a class="sourceLine" id="cb5-43" data-line-number="43">p.cluster.spec.n &lt;-<span class="st"> </span><span class="kw"><a href="../reference/plot_spec_from_df.html">plot_spec_from_df</a></span>(result<span class="op">$</span>res.FCM<span class="op">$</span>v) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-44" data-line-number="44"><span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">size=</span><span class="fl">1.5</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">"Normalized_scale"</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-45" data-line-number="45"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span>cp) <span class="op">+</span></a>
+<a class="sourceLine" id="cb5-46" data-line-number="46"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'right'</span>)</a>
+<a class="sourceLine" id="cb5-47" data-line-number="47"></a>
+<a class="sourceLine" id="cb5-48" data-line-number="48"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gridExtra)</a>
+<a class="sourceLine" id="cb5-49" data-line-number="49">pm &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">arrangeGrob</a></span>(<span class="dt">grobs=</span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(p.cluster.spec.n, p.boxplot),<span class="dt">nrow=</span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-50" data-line-number="50"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">arrangeGrob</a></span>(<span class="dt">grobs=</span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(., p.group.facet),</a>
+<a class="sourceLine" id="cb5-51" data-line-number="51">                          <span class="dt">nrow=</span><span class="dv">2</span>,<span class="dt">top=</span><span class="st">'Nechad2015: Normalized cluster result'</span>)</a>
+<a class="sourceLine" id="cb5-52" data-line-number="52"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(pm)</a></code></pre></div>
 <p><img src="Fuzzy_cluster_training_files/figure-html/unnamed-chunk-5-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="short-result-analysis" class="section level2">

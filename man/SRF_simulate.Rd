@@ -4,11 +4,17 @@
 \alias{SRF_simulate}
 \title{Simulation of hyperspectral data by SRF}
 \usage{
-SRF_simulate(Rrs,select_sensor="All",output_wavelength="MED",
-  save_as_csv=FALSE, na.rm=TRUE)
+SRF_simulate(
+  Rrs,
+  select_sensor = "All",
+  output_wavelength = "MED",
+  save_as_csv = FALSE,
+  na.rm = TRUE,
+  wv_as_column = TRUE
+)
 }
 \arguments{
-\item{Rrs}{data.frame. Hyperspectral Rrs}
+\item{Rrs}{A data.frame with colnames as Wavelength + SampleName, the first column is wavelength.}
 
 \item{select_sensor}{Character. Select sensors. Use \code{show_sensor_names()} to print
 all supported sensors. Default as \code{All}}
@@ -22,6 +28,9 @@ poition at the maximun of SRF peak.}
 sensor. Default with \code{FALSE}}
 
 \item{na.rm}{Logical. Should NA values be removed? Default as \code{TRUE}}
+
+\item{wv_as_column}{Logical. If \code{TRUE} (default), the output result is a dataframe
+with wavelength as column names.}
 }
 \value{
 A \code{list} with names as all selected sensors from parameters \code{select_sensor}.

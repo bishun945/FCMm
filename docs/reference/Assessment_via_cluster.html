@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • FCMm</title>
+<title>Assessment each algorithm for every cluster — Assessment_via_cluster • FCMm</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,7 +42,8 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Assessment each algorithm for every cluster — Assessment_via_cluster" />
+<meta property="og:description" content="Assessment each algorithm for every cluster" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -63,7 +64,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -136,20 +137,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Assessment each algorithm for every cluster</h1>
+    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/FCM_m_Chla_estimation.R'><code>R/FCM_m_Chla_estimation.R</code></a></small>
+    <div class="hidden name"><code>Assessment_via_cluster.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="Cluster_number_determination.html">How to determine the cluster number?</a></li>
-        <li><a href="Fuzzy_cluster_training.html">How to train the fuzzy cluster?</a></li>
-        <li><a href="New_Data_Running_FCMm.html">How to apply the default FCMm to new data?</a></li>
-        <li><a href="Raster_Running_FCMm.html">The application of FCMm to imagery data</a></li>
-      </ul>
+    <div class="ref-description">
+    <p>Assessment each algorithm for every cluster</p>
     </div>
+
+    <pre class="usage"><span class='fu'>Assessment_via_cluster</span>(
+  <span class='no'>pred</span>,
+  <span class='no'>meas</span>,
+  <span class='no'>memb</span>,
+  <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"MAE2"</span>, <span class='st'>"MAPE"</span>),
+  <span class='kw'>total</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>hard.mode</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>pred</th>
+      <td><p>prediciton of Chla</p></td>
+    </tr>
+    <tr>
+      <th>meas</th>
+      <td><p>in-situ measurement of Chla</p></td>
+    </tr>
+    <tr>
+      <th>memb</th>
+      <td><p>membership value matrix</p></td>
+    </tr>
+    <tr>
+      <th>metrics</th>
+      <td><p>metrics need to be calculated</p></td>
+    </tr>
+    <tr>
+      <th>total</th>
+      <td><p>logical</p></td>
+    </tr>
+    <tr>
+      <th>hard.mode</th>
+      <td><p>hard.mode</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>List</p>
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+    </ul>
+
   </div>
 </div>
 

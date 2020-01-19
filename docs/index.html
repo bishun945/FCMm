@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -97,9 +97,9 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="fcmm-" class="section level1">
+<div id="fcmm" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#fcmm-" class="anchor"></a>FCMm <a href="https://github.com/bishun945/FCMm"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<a href="#fcmm" class="anchor"></a>FCMm <a href="https://github.com/bishun945/FCMm"><img src="reference/figures/logo.png" align="right" height="139"></a>
 </h1></div>
 
 <p><strong>Author</strong>: Shun Bi<br><strong>Date</strong>: 2020/01/09<br><strong>E-mail</strong>: <a href="mailto:bishun1994@foxmail.com" class="email">bishun1994@foxmail.com</a></p>
@@ -120,28 +120,29 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>The GitHub version requires the package devtools</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>) <span class="co"># install devtools require</span></a>
-<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">'bishun945/FCMm'</span>, <span class="dt">build_vignettes=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>) <span class="co"># install devtools require</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">'bishun945/FCMm'</span>, <span class="dt">build_vignettes=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Load testing data</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(FCMm)</a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"WaterSpec35"</span>)</a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"Bi_clusters"</span>)</a>
-<a class="sourceLine" id="cb2-6" title="6">Rrs &lt;-<span class="st"> </span>WaterSpec35[,<span class="dv">3</span><span class="op">:</span><span class="dv">17</span>]</a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co"># Plot the spectra</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="kw"><a href="reference/plot_spec_from_df.html">plot_spec_from_df</a></span>(Rrs) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-11" title="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">18</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># Load testing data</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(FCMm)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"WaterSpec35"</span>)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"Bi_clusters"</span>)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">Rrs &lt;-<span class="st"> </span>WaterSpec35[,<span class="dv">3</span><span class="op">:</span><span class="dv">17</span>]</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co"># Plot the spectra</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw"><a href="reference/plot_spec_from_df.html">plot_spec_from_df</a></span>(Rrs) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="dt">size=</span><span class="dv">18</span>))</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="60%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Applying FCMm</span></a>
-<a class="sourceLine" id="cb3-2" title="2">result &lt;-<span class="st"> </span><span class="kw"><a href="reference/apply_FCM_m.html">apply_FCM_m</a></span>(<span class="dt">Rrs=</span>Rrs, <span class="dt">option.plot=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(result<span class="op">$</span>p.group)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Applying FCMm</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">result &lt;-<span class="st"> </span><span class="kw"><a href="reference/apply_FCM_m.html">apply_FCM_m</a></span>(<span class="dt">Rrs=</span>Rrs, <span class="dt">option.plot=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(result<span class="op">$</span>p.group)</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-2-2.png" width="60%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># plot(result$p.group+facet_wrap(~cluster, ncol=2))</span></a></code></pre></div>
 </div>
 <div id="getting-help" class="section level2">
 <h2 class="hasAnchor">
@@ -177,8 +178,7 @@
 <div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
-<li>GPL (&gt;= 2) + file <a href="LICENSE-text.html">LICENSE</a>
-</li>
+<li><a href="https://opensource.org/licenses/mit-license.php">MIT</a></li>
 </ul>
 </div>
 <div class="developers">

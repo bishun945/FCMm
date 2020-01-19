@@ -78,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -148,15 +148,21 @@
   via sensors SRF (Spectral response function).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>SRF_simulate</span>(<span class='no'>Rrs</span>,<span class='kw'>select_sensor</span><span class='kw'>=</span><span class='st'>"All"</span>,<span class='kw'>output_wavelength</span><span class='kw'>=</span><span class='st'>"MED"</span>,
-  <span class='kw'>save_as_csv</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>na.rm</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>SRF_simulate</span>(
+  <span class='no'>Rrs</span>,
+  <span class='kw'>select_sensor</span> <span class='kw'>=</span> <span class='st'>"All"</span>,
+  <span class='kw'>output_wavelength</span> <span class='kw'>=</span> <span class='st'>"MED"</span>,
+  <span class='kw'>save_as_csv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>wv_as_column</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Rrs</th>
-      <td><p>data.frame. Hyperspectral Rrs</p></td>
+      <td><p>A data.frame with colnames as Wavelength + SampleName, the first column is wavelength.</p></td>
     </tr>
     <tr>
       <th>select_sensor</th>
@@ -178,6 +184,11 @@ sensor. Default with <code>FALSE</code></p></td>
     <tr>
       <th>na.rm</th>
       <td><p>Logical. Should NA values be removed? Default as <code>TRUE</code></p></td>
+    </tr>
+    <tr>
+      <th>wv_as_column</th>
+      <td><p>Logical. If <code>TRUE</code> (default), the output result is a dataframe
+with wavelength as column names.</p></td>
     </tr>
     </table>
 

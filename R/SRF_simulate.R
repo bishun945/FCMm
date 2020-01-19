@@ -3,10 +3,7 @@
 #' @description 
 #' Simulate hyperspectral Rrs to multispectral bands
 #'   via sensors SRF (Spectral response function).
-#' @usage 
-#' SRF_simulate(Rrs,select_sensor="All",output_wavelength="MED",
-#'   save_as_csv=FALSE, na.rm=TRUE)
-#' @param Rrs data.frame. Hyperspectral Rrs
+#' @param Rrs A data.frame with colnames as Wavelength + SampleName, the first column is wavelength.
 #' @param select_sensor Character. Select sensors. Use \code{show_sensor_names()} to print
 #'   all supported sensors. Default as \code{All}
 #' @param output_wavelength Character. \code{MED} (default) or \code{MAX}.
@@ -16,6 +13,8 @@
 #' @param save_as_csv Logical. Choose to save the simulation results as single csv for each
 #'   sensor. Default with \code{FALSE}
 #' @param na.rm Logical. Should NA values be removed? Default as \code{TRUE}
+#' @param wv_as_column Logical. If \code{TRUE} (default), the output result is a dataframe
+#'   with wavelength as column names.
 #' 
 #' @export
 #' @return 
@@ -37,12 +36,14 @@
 #' result <- SRF_simulate(Rrs,select_sensor=c("OLCI","MODIS"))
 #' }
 #' 
+#' @importFrom stats setNames
 
 SRF_simulate <- function(Rrs,
                          select_sensor="All",
                          output_wavelength="MED",
                          save_as_csv=FALSE,
-                         na.rm=TRUE){
+                         na.rm=TRUE,
+                         wv_as_column=TRUE){
   
   if(select_sensor[1] == "All" & length(select_sensor) == 1){
     sensors <- show_sensor_names()
@@ -82,6 +83,11 @@ SRF_simulate <- function(Rrs,
     }else{
       SRF$Rrs_simu <- Rrs_simu
     }
+    
+    if(wv_as_column){
+      SRF$Rrs_simu <- t(SRF$Rrs_simu)[-1,] %>% as.data.frame %>% setNames(., SRF$Rrs_simu[,1])
+    }
+    
     result[[sensor]] <- SRF
   }
   if(save_as_csv){
@@ -97,7 +103,7 @@ SRF_simulate <- function(Rrs,
 cal_SRF <- function(Rrs_single, srf){
   result <- matrix(nrow=ncol(srf)-1, data=0) %>% as.data.frame()
   for(i in 2:(ncol(srf))){
-    result[i-1,] <- sum(Rrs_single * srf[,i]) / sum(srf[,i])
+    result[i-1,] <- sum(Rrs_single * srf[,i], na.rm=T) / sum(srf[,i], na.rm=T)
   }
   return(result)
 }

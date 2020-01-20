@@ -40,6 +40,7 @@
 #' }
 #' 
 #' 
+#' @family Algorithms: Chla concentration
 
 FCM_m_Chla_estimation <- function(Rrs, U){
   if(missing(Rrs)|missing(U))
@@ -89,10 +90,11 @@ FCM_m_Chla_estimation <- function(Rrs, U){
 }
 
 #' @title BR_Gil10
-#' @param Rrs709 Rrs709
 #' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
 #' @export
-BR_Gil10 <- function(Rrs709, Rrs665){
+#' @family Algorithms: Chla concentration
+BR_Gil10 <- function(Rrs665, Rrs709){
   return(abs(35.75*Rrs709/Rrs665-19.3)^1.124)
 }
 
@@ -101,6 +103,7 @@ BR_Gil10 <- function(Rrs709, Rrs665){
 #' @param Rrs709 Rrs709
 #' @param Rrs754 Rrs754
 #' @export
+#' @family Algorithms: Chla concentration
 TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
   return(abs(113.36*(1/Rrs665-1/Rrs709)*Rrs754+16.45)^1.124)
 }
@@ -109,6 +112,7 @@ TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
 #' @param Rrs665 Rrs665
 #' @param Rrs754 Rrs754
 #' @export
+#' @family Algorithms: Chla concentration
 C6 <- function(Rrs665, Rrs754){
   return(10^( 1/Rrs665*Rrs754 * 0.14 + 2.11))
 }
@@ -117,18 +121,20 @@ C6 <- function(Rrs665, Rrs754){
 #' @param Rrs443 Rrs443
 #' @param Rrs490 Rrs490
 #' @param Rrs510 Rrs510
-#' @param Rrs555 Rrs555
+#' @param Rrs560 Rrs560
 #' @export
-OC4E <- function(Rrs443, Rrs490, Rrs510, Rrs555){
-  X <- apply(cbind(Rrs443,Rrs490,Rrs510),1,max)/Rrs555 %>% log10
+#' @family Algorithms: Chla concentration
+OC4E <- function(Rrs443, Rrs490, Rrs510, Rrs560){
+  X <- apply(cbind(Rrs443,Rrs490,Rrs510),1,max)/Rrs560 %>% log10
   return(10^(0.3255-2.7677*X+2.4409*X^2-1.1288*X^3-0.4990*X^4))
 }
 
 #' @title BR_Git11
-#' @param Rrs709 Rrs709
 #' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
 #' @export
-BR_Git11 <- function(Rrs709, Rrs665){
+#' @family Algorithms: Chla concentration
+BR_Git11 <- function(Rrs665, Rrs709){
   return(72.66*Rrs709/Rrs665-46.535)
 }
 
@@ -137,35 +143,39 @@ BR_Git11 <- function(Rrs709, Rrs665){
 #' @param Rrs709 Rrs709
 #' @param Rrs754 Rrs754
 #' @export
+#' @family Algorithms: Chla concentration
 TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
   return(243.86*(1/Rrs665-1/Rrs709)*Rrs754+23.17)
 }
 
 #' @title NDCI_Mi12
 #' @param Rrs665 Rrs665
-#' @param Rrs708 Rrs708
+#' @param Rrs709 Rrs709
 #' @export
-NDCI_Mi12 <- function(Rrs665,Rrs708){
-  ind <- (Rrs708-Rrs665)/(Rrs708+Rrs665)
+#' @family Algorithms: Chla concentration
+NDCI_Mi12 <- function(Rrs665, Rrs709){
+  ind <- (Rrs709-Rrs665)/(Rrs709+Rrs665)
   return(14.039+86.115*ind+194.325*ind^2)
 }
 
 #' @title FBA_Le13
 #' @param Rrs665 Rrs665
-#' @param Rrs682 Rrs682
+#' @param Rrs681 Rrs681
 #' @param Rrs709 Rrs709
 #' @export
-FBA_Le13 <- function(Rrs665, Rrs682, Rrs709){
-  return(18.492*(1/Rrs665-1/Rrs682)/(1/Rrs709-1/Rrs682)+6.1302)
+#' @family Algorithms: Chla concentration
+FBA_Le13 <- function(Rrs665, Rrs681, Rrs709){
+  return(18.492*(1/Rrs665-1/Rrs681)/(1/Rrs709-1/Rrs681)+6.1302)
 }
 
 #' @title FBA_Yang10
 #' @param Rrs665 Rrs665
-#' @param Rrs708 Rrs708
-#' @param Rrs753 Rrs753
+#' @param Rrs709 Rrs709
+#' @param Rrs754 Rrs754
 #' @export
-FBA_Yang10 <- function(Rrs665, Rrs708, Rrs753){
-  return(161.24*(1/Rrs665-1/Rrs708)/(1/Rrs753-1/Rrs708)+28.04)
+#' @family Algorithms: Chla concentration
+FBA_Yang10 <- function(Rrs665, Rrs709, Rrs754){
+  return(161.24*(1/Rrs665-1/Rrs709)/(1/Rrs754-1/Rrs709)+28.04)
 }
 
 #' @title SCI_Shen10
@@ -174,6 +184,7 @@ FBA_Yang10 <- function(Rrs665, Rrs708, Rrs753){
 #' @param Rrs665 Rrs665
 #' @param Rrs681 Rrs681
 #' @export
+#' @family Algorithms: Chla concentration
 SCI_Shen10 <- function(Rrs560, Rrs620, Rrs665, Rrs681){
   H_Chl <- (Rrs681+(681-665)/(681-620)*(Rrs620-Rrs681)) - Rrs665
   H_deta <- Rrs620 - (Rrs681+(681-620)/(681-560)*(Rrs560-Rrs681))
@@ -186,19 +197,142 @@ SCI_Shen10 <- function(Rrs560, Rrs620, Rrs665, Rrs681){
 #' @param Rrs709 Rrs709
 #' @param Rrs779 Rrs779
 #' @export
+#' @family Algorithms: Chla concentration
 Gons08 <- function(Rrs665, Rrs709, Rrs779){
   bbp <- 1.61 * Rrs779 / (0.082 - 0.6*Rrs779)
   return((Rrs709/Rrs665*(0.7+bbp)-0.4-bbp^1.06)/0.016)
 }
 
+#' @title TC2
+#' @param Rrs443 Rrs443
+#' @param Rrs560 Rrs560
+#' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
+#' @param Rrs754 Rrs754
+#' @export
+#' @return A list with names as Chla_final, Chla_clean, Chla_turbid, and flag
+#' @family Algorithms: Chla concentration
+TC2 <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
+
+  Chla_final <- Chla_clean <- TC2_clean(Rrs443, Rrs560, Rrs665, Rrs709)
+  flag <- rep('Clean',length(Chla_final))
+  Chla_turbid <- TC2_turbid(Rrs443, Rrs560, Rrs665, Rrs754)
+  MCI <- Rrs709 - Rrs665 - (Rrs754-Rrs665) * (709-665) / (754-665)
+  w <- which(MCI > 0.0016)
+  Chla_final[w] <- Chla_turbid[w]
+  flag[w] <- 'Turbid'
+  return(list(Chla_final=Chla_final,
+              Chla_clean=Chla_clean,
+              Chla_turbid=Chla_turbid,
+              flag=flag))
+}  
+
+#' @title TC2_clean
+#' @param Rrs443 Rrs443
+#' @param Rrs560 Rrs560
+#' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
+#' @export
+#' @family Algorithms: Chla concentration
+TC2_clean <- function(Rrs443, Rrs560, Rrs665, Rrs709){
+  g0 = 0.084
+  g1 = 0.170
+  lambda_0 <- 709
+  yita <- 0.17
+  aChla_star <- 0.017
+  Rrs <- cbind(Rrs443, Rrs560, Rrs665, Rrs709)
+  rrs <- Rrs / (0.52 + 1.7 * Rrs)
+  u <- (-g0 + sqrt(4 * g1 * rrs)) / (2 * g1)
+  bbp_0 <- u[,4] * dt_water$aw[dt_water$nm == lambda_0] / (1-u[,4]) -
+    dt_water$bbw[dt_water$nm == lambda_0]
+  Y <- 2.0 * (1 - 1.2 * exp(-0.9 * rrs[,1] / rrs[,2]))
+  bb560 <- bbp_0 * (lambda_0/560)^Y + dt_water$bbw[dt_water$nm == 560]
+  bb665 <- bbp_0 * (lambda_0/665)^Y + dt_water$bbw[dt_water$nm == 665]
+  anw560 <- (1-u[,2])*bb560 / u[,2] - dt_water$aw[dt_water$nm == 560]
+  anw665 <- (1-u[,3])*bb665 / u[,3] - dt_water$aw[dt_water$nm == 665]
+  aph665 <- yita * anw560 + (1-yita) * anw665
+  Chla <- aph665 / aChla_star
+  return(Chla)
+}
+
+
+#' @title TC2_turbid
+#' @param Rrs443 Rrs443
+#' @param Rrs560 Rrs560
+#' @param Rrs665 Rrs665
+#' @param Rrs754 Rrs754
+#' @export
+#' @family Algorithms: Chla concentration 
+TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs754){
+  g0 = 0.084
+  g1 = 0.170
+  lambda_0 <- 754
+  yita <- 0.17
+  aChla_star <- 0.017
+  Rrs <- cbind(Rrs443, Rrs560, Rrs665, Rrs754)
+  rrs <- Rrs / (0.52 + 1.7 * Rrs)
+  u <- (-g0 + sqrt(4 * g1 * rrs)) / (2 * g1)
+  bbp_0 <- u[,4] * dt_water$aw[dt_water$nm == lambda_0] / (1-u[,4]) -
+    dt_water$bbw[dt_water$nm == lambda_0]
+  Y <- 2.0 * (1 - 1.2 * exp(-0.9 * rrs[,1] / rrs[,2]))
+  bb560 <- bbp_0 * (lambda_0/560)^Y + dt_water$bbw[dt_water$nm == 560]
+  bb665 <- bbp_0 * (lambda_0/665)^Y + dt_water$bbw[dt_water$nm == 665]
+  anw560 <- (1-u[,2])*bb560 / u[,2] - dt_water$aw[dt_water$nm == 560]
+  anw665 <- (1-u[,3])*bb665 / u[,3] - dt_water$aw[dt_water$nm == 665]
+  aph665 <- yita * anw560 + (1-yita) * anw665
+  Chla <- aph665 / aChla_star
+  return(Chla)
+}
+
+
 #' @title Chla_algorithms_name
 #' @export
+#' @family Algorithms: Chla concentration
 Chla_algorithms_name <- function(){
   return(c('BR_Gil10','BR_Git11',
            'TBA_Gil10','TBA_Git11',
            'C6','OC4E','NDCI_Mi12', 'Gons08',
            'FBA_Le13','FBA_Yang10',
-           'SCI_Shen10'))
+           'SCI_Shen10', 'TC2','TC2_turbid','TC2_clean'))
+}
+
+#' @title run_all_Chla_algorithms
+#' @param Rrs Dataframe that should with required colnames
+#' @param wv_range Number that used to define the range of wavelength to capture
+#'   the center wavelength of required band
+#' @details Please type \code{Chal_algorithm_name()} to see all Chla algorithms
+#' @export
+#' @return A list
+#' @family Algorithms: Chla concentration
+#' 
+run_all_Chla_algorithms <- function(Rrs, wv_range=3){
+  wv <- str_subset(names(Rrs), '\\d') %>% as.numeric
+  wv_need <- c(443, 490, 510, 560, 620, 665, 681, 709, 754, 779)
+  for(i in wv_need){
+    text <- sprintf('Rrs%s <- Rrs[,which(abs(wv-%s) <= wv_range)]',i,i)
+    # print(text)
+    eval(parse(text=text))
+  }
+  result <- list(
+    BR_Gil10 = BR_Gil10(Rrs709, Rrs665),
+    TBA_Gil10 = TBA_Gil10(Rrs665, Rrs709, Rrs754),
+    C6 = C6(Rrs665, Rrs754),
+    OC4E = OC4E(Rrs443, Rrs490, Rrs510, Rrs560),
+    BR_Git11 = BR_Git11(Rrs665, Rrs709),
+    TBA_Git11 = TBA_Git11(Rrs665, Rrs709, Rrs754),
+    NDCI_Mi12 = NDCI_Mi12(Rrs665, Rrs709),
+    FBA_Le13 = FBA_Le13(Rrs665, Rrs681, Rrs709),
+    FBA_Yang10 = FBA_Yang10(Rrs665, Rrs709, Rrs754),
+    SCI_Shen10 = SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681),
+    Gons08 = Gons08(Rrs665, Rrs709, Rrs779),
+    TC2_final = TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)$Chla_final,
+    TC2_clean = TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)$Chla_clean,
+    TC2_turbid = TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)$Chla_turbid)
+  w_zero <- lapply(result, length) %>% as.matrix %>% {which(. == 0)}
+  for(i in w_zero){
+    result[[i]] <- NA
+  }
+  return(result)
 }
 
 #' @title Assessment each algorithm for every cluster
@@ -211,6 +345,7 @@ Chla_algorithms_name <- function(){
 #' @param hard.mode hard.mode
 #' @export
 #' @return List
+#' @family Algorithm assessment
 Assessment_via_cluster <- function(pred, meas, memb,
                                    metrics = c('MAE2','MAPE'),
                                    total = TRUE,

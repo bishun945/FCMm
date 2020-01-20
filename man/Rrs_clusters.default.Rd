@@ -15,4 +15,15 @@ A dataframe contains the water optical clusters produced by Bi et al. (2019)
 You have to take a look at the description of this built-in cluster (water type) such as
   thier corresponding water color parameters in Bi et al. (2019).
 }
+\seealso{
+Other Datasets: 
+\code{\link{Nechad2015}},
+\code{\link{OLCI_TH}},
+\code{\link{SRF_LIST}},
+\code{\link{Valente2019}},
+\code{\link{WaterSpec35}},
+\code{\link{dt_water}},
+\code{\link{wavelength.default}}
+}
+\concept{Datasets}
 \keyword{datasets}

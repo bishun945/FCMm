@@ -14,3 +14,10 @@
 \description{
 Convert dataframe with factor to character
 }
+\seealso{
+Other Utils: 
+\code{\link{SRF_simulate}()},
+\code{\link{cal.metrics.names}()},
+\code{\link{cal.metrics}()}
+}
+\concept{Utils}

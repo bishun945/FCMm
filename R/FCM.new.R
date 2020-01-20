@@ -49,7 +49,8 @@
 #'     expression data[J]. Advances in Data Analysis and Classification, 2008, 2(3):
 #'     211-225.
 #' }
-#' 
+#'
+#' @family Fuzzy cluster functions
 
 
 FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){

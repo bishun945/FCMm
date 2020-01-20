@@ -7,4 +7,5 @@
 #' @format dataframe with 7 rows by 15 cols
 #' @note You have to take a look at the description of this built-in cluster (water type) such as
 #'   thier corresponding water color parameters in Bi et al. (2019).
+#' @family Datasets
 NULL

@@ -11,4 +11,15 @@ wavelength.default
 \description{
 A vector contains the wavelength of water optical clusters produced by Bi et al. (2019)
 }
+\seealso{
+Other Datasets: 
+\code{\link{Nechad2015}},
+\code{\link{OLCI_TH}},
+\code{\link{Rrs_clusters.default}},
+\code{\link{SRF_LIST}},
+\code{\link{Valente2019}},
+\code{\link{WaterSpec35}},
+\code{\link{dt_water}}
+}
+\concept{Datasets}
 \keyword{datasets}

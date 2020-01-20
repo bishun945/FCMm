@@ -12,4 +12,5 @@
 #'   D. Antoine, R. Arnone, W. M. Balch, and K. Barker, "A compilation of global bio-optical
 #'   in situ data for ocean-colour satellite applications," Earth System Science Data 8, 235-252 (2016).
 #'   (https://doi.org/10.1594/PANGAEA.898197)
+#' @family Datasets
 NULL

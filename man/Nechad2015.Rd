@@ -25,4 +25,15 @@ B. Nechad, K. Ruddick, T. Schroeder, K. Oubelkheir, D. Blondeau-Patissier, N. Ch
   evaluate the performance of algorithms for the retrieval of water quality parameters in coastal waters,"
   Earth system science data 7, 319-348 (2015). (https://doi.pangaea.de/10.1594/PANGAEA.841950)
 }
+\seealso{
+Other Datasets: 
+\code{\link{OLCI_TH}},
+\code{\link{Rrs_clusters.default}},
+\code{\link{SRF_LIST}},
+\code{\link{Valente2019}},
+\code{\link{WaterSpec35}},
+\code{\link{dt_water}},
+\code{\link{wavelength.default}}
+}
+\concept{Datasets}
 \keyword{datasets}

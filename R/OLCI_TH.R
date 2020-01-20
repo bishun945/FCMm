@@ -15,4 +15,5 @@
 #' * Liu G, Li Y, Lyu H, et al. An improved land target-based atmospheric correction method 
 #'   for Lake Taihu[J]. IEEE Journal of Selected Topics in Applied Earth Observations and
 #'   Remote Sensing, 2015, 9(2): 793-803.
+#' @family Datasets
 NULL

@@ -1,3 +1,8 @@
+## FCMm 0.4.4 (2020-01-20)
+
+ * Add new function `run_all_Chla_algorithms` to obtain the Chla concentration if required Rrs bands are get.
+ * Group the function list by adding the `@family` tag using package `roxygen2`.
+
 ## FCMm 0.4.3 (2020-01-19)
 
  * Supply the help documents of function `SRF_simulate`.

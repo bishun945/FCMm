@@ -6,6 +6,7 @@
 #' @param name The name of metrics
 #' @export
 #' @importFrom stats cor cor.test median na.omit sd
+#' @family Utils
 cal.metrics <- function(x,y,name="all"){
 
   name <- match.arg(name, cal.metrics.names())
@@ -117,6 +118,7 @@ cal.metrics <- function(x,y,name="all"){
 #' @name cal.metrics.names
 #' @export
 #' @return strings
+#' @family Utils
 cal.metrics.names <- function(){
   c('RMSE','CRMSE','MAE2','MAE2','MAPE','MDAPE',
     'BIAS1','BIAS2','CV','R','R2','eta','chi2','all')
@@ -127,6 +129,7 @@ cal.metrics.names <- function(){
 #' @param dt dataframe
 #' @param warn warnning option
 #' @export
+#' @family Utils
 .level_to_variable <- function(dt, warn=F){
   if(!is.data.frame(dt))
     stop('Input must be a data.frame')

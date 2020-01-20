@@ -5,4 +5,5 @@
 #' @name wavelength.default
 #' @usage wavelength.default
 #' @format a vector with 15 elements
+#' @family Datasets
 NULL

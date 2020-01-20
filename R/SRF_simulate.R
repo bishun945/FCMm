@@ -37,6 +37,7 @@
 #' }
 #' 
 #' @importFrom stats setNames
+#' @family Utils
 
 SRF_simulate <- function(Rrs,
                          select_sensor="All",

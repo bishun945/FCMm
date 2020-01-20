@@ -13,4 +13,5 @@
 #'   V. Brando, A. Dekker, L. Clementson, and A. C. Banks, "CoastColour Round Robin data sets: a database to
 #'   evaluate the performance of algorithms for the retrieval of water quality parameters in coastal waters,"
 #'   Earth system science data 7, 319-348 (2015). (https://doi.pangaea.de/10.1594/PANGAEA.841950)
+#' @family Datasets
 NULL

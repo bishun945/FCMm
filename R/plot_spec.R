@@ -57,6 +57,7 @@ plot_spec <- function(res, show.stand=FALSE, HABc=NULL){
 #' @return A ggplot list
 #'
 #' @export
+#' @family Fuzzy cluster functions
 
 plot_spec_from_df <- function(df){
   if(names(df) %>% as.numeric %>% anyNA)

@@ -48,7 +48,8 @@
 #' @references 
 #' Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
 #'   an improved Fuzzy C-Means method[J]. Optics Express, 2019, 27(24): 34838-34856.
-#'  
+#' 
+#' @family Fuzzy cluster functions
 
 
 apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,

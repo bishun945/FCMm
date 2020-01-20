@@ -51,6 +51,7 @@
 #'     211-225.
 #' }
 #'
+#' @family Fuzzy cluster functions
 
 FuzzifierDetermination <- function(x, wv, max.m=10, stand=FALSE, dmetric="sqeuclidean"){
 

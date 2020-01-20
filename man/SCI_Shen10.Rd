@@ -18,3 +18,23 @@ SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681)
 \description{
 SCI_Shen10
 }
+\seealso{
+Other Algorithms: Chla concentration: 
+\code{\link{BR_Gil10}()},
+\code{\link{BR_Git11}()},
+\code{\link{C6}()},
+\code{\link{Chla_algorithms_name}()},
+\code{\link{FBA_Le13}()},
+\code{\link{FBA_Yang10}()},
+\code{\link{FCM_m_Chla_estimation}()},
+\code{\link{Gons08}()},
+\code{\link{NDCI_Mi12}()},
+\code{\link{OC4E}()},
+\code{\link{TBA_Gil10}()},
+\code{\link{TBA_Git11}()},
+\code{\link{TC2_clean}()},
+\code{\link{TC2_turbid}()},
+\code{\link{TC2}()},
+\code{\link{run_all_Chla_algorithms}()}
+}
+\concept{Algorithms: Chla concentration}

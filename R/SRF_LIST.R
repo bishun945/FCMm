@@ -24,5 +24,5 @@
 #'     \item https://oceancolor.gsfc.nasa.gov
 #'     \item https://sentinels.copernicus.eu/web/sentinel/home
 #'   }
-#' 
+#' @family Datasets
 NULL

@@ -12,3 +12,10 @@ strings
 \description{
 List all metrics in function cal.metrics
 }
+\seealso{
+Other Utils: 
+\code{\link{.level_to_variable}()},
+\code{\link{SRF_simulate}()},
+\code{\link{cal.metrics}()}
+}
+\concept{Utils}

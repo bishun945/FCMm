@@ -18,3 +18,11 @@ Spectra plot for a dataframe given numeric colnames
 \note{
 The colnames of input `df` should be numericalize (i.e. names(df) %>% as.numeric)
 }
+\seealso{
+Other Fuzzy cluster functions: 
+\code{\link{FCM.new}()},
+\code{\link{FuzzifierDetermination}()},
+\code{\link{apply_FCM_m}()},
+\code{\link{apply_to_image}()}
+}
+\concept{Fuzzy cluster functions}

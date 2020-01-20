@@ -16,3 +16,10 @@ cal.metrics(x,y,name="all")
 \description{
 Assess the performance of algorithms
 }
+\seealso{
+Other Utils: 
+\code{\link{.level_to_variable}()},
+\code{\link{SRF_simulate}()},
+\code{\link{cal.metrics.names}()}
+}
+\concept{Utils}

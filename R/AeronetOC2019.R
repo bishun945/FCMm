@@ -12,4 +12,5 @@
 #' @note Colnames are "SampleID, X410nm, X440nm, X490nm, X530nm, 
 #'   X550nm, X667nm, X869nm, X1020nm, Pressure, Wind_Speed, Chlorophyll.a, Sea_Surface_Reflectance, Ozone"
 #' @references  All these data are available at https://aeronet.gsfc.nasa.gov.
+#' @family Datesets
 NULL

@@ -26,4 +26,15 @@ The dataset should be only used in this package test. If any want
   for Lake Taihu[J]. IEEE Journal of Selected Topics in Applied Earth Observations and
   Remote Sensing, 2015, 9(2): 793-803.
 }
+\seealso{
+Other Datasets: 
+\code{\link{Nechad2015}},
+\code{\link{Rrs_clusters.default}},
+\code{\link{SRF_LIST}},
+\code{\link{Valente2019}},
+\code{\link{WaterSpec35}},
+\code{\link{dt_water}},
+\code{\link{wavelength.default}}
+}
+\concept{Datasets}
 \keyword{datasets}

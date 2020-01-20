@@ -101,3 +101,11 @@ im_result <- apply_to_image(input=OLCI_TH, res=res,
 Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
   an improved Fuzzy C-Means method[J]. Optics Express, 2019, 27(24): 34838-34856.
 }
+\seealso{
+Other Fuzzy cluster functions: 
+\code{\link{FCM.new}()},
+\code{\link{FuzzifierDetermination}()},
+\code{\link{apply_FCM_m}()},
+\code{\link{plot_spec_from_df}()}
+}
+\concept{Fuzzy cluster functions}

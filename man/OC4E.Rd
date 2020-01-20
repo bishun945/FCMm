@@ -4,7 +4,7 @@
 \alias{OC4E}
 \title{OC4E}
 \usage{
-OC4E(Rrs443, Rrs490, Rrs510, Rrs555)
+OC4E(Rrs443, Rrs490, Rrs510, Rrs560)
 }
 \arguments{
 \item{Rrs443}{Rrs443}
@@ -13,8 +13,28 @@ OC4E(Rrs443, Rrs490, Rrs510, Rrs555)
 
 \item{Rrs510}{Rrs510}
 
-\item{Rrs555}{Rrs555}
+\item{Rrs560}{Rrs560}
 }
 \description{
 OC4E
 }
+\seealso{
+Other Algorithms: Chla concentration: 
+\code{\link{BR_Gil10}()},
+\code{\link{BR_Git11}()},
+\code{\link{C6}()},
+\code{\link{Chla_algorithms_name}()},
+\code{\link{FBA_Le13}()},
+\code{\link{FBA_Yang10}()},
+\code{\link{FCM_m_Chla_estimation}()},
+\code{\link{Gons08}()},
+\code{\link{NDCI_Mi12}()},
+\code{\link{SCI_Shen10}()},
+\code{\link{TBA_Gil10}()},
+\code{\link{TBA_Git11}()},
+\code{\link{TC2_clean}()},
+\code{\link{TC2_turbid}()},
+\code{\link{TC2}()},
+\code{\link{run_all_Chla_algorithms}()}
+}
+\concept{Algorithms: Chla concentration}

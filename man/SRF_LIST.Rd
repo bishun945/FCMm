@@ -32,4 +32,15 @@ The cw_med and cw_max are different sicne
     \item https://sentinels.copernicus.eu/web/sentinel/home
   }
 }
+\seealso{
+Other Datasets: 
+\code{\link{Nechad2015}},
+\code{\link{OLCI_TH}},
+\code{\link{Rrs_clusters.default}},
+\code{\link{Valente2019}},
+\code{\link{WaterSpec35}},
+\code{\link{dt_water}},
+\code{\link{wavelength.default}}
+}
+\concept{Datasets}
 \keyword{datasets}

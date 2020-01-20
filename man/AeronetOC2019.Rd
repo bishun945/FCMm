@@ -24,4 +24,5 @@ Colnames are "SampleID, X410nm, X440nm, X490nm, X530nm,
 \references{
 All these data are available at https://aeronet.gsfc.nasa.gov.
 }
+\concept{Datesets}
 \keyword{datasets}

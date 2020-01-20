@@ -60,3 +60,11 @@ print(result$p.jitter)
     211-225.
 }
 }
+\seealso{
+Other Fuzzy cluster functions: 
+\code{\link{FuzzifierDetermination}()},
+\code{\link{apply_FCM_m}()},
+\code{\link{apply_to_image}()},
+\code{\link{plot_spec_from_df}()}
+}
+\concept{Fuzzy cluster functions}

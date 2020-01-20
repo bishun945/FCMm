@@ -32,3 +32,4 @@ List
 \description{
 Assessment each algorithm for every cluster
 }
+\concept{Algorithm assessment}

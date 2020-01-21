@@ -1,3 +1,7 @@
+## FCMm 0.4.5 (2020-01-21)
+  
+  * Fix bugs of function `Assessment_via_cluster` to avoid produce NA values.
+
 ## FCMm 0.4.4 (2020-01-20)
 
  * Add new function `run_all_Chla_algorithms` to obtain the Chla concentration if required Rrs bands are get.

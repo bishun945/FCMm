@@ -297,7 +297,7 @@ Chla_algorithms_name <- function(){
 }
 
 #' @title run_all_Chla_algorithms
-#' @param Rrs Dataframe that should with required colnames
+#' @param Rrs Dataframe that should with required colnames 443, 490, 510, 560, 620, 665, 681, 709, 754, 779
 #' @param wv_range Number that used to define the range of wavelength to capture
 #'   the center wavelength of required band
 #' @details Please type \code{Chal_algorithm_name()} to see all Chla algorithms
@@ -378,8 +378,9 @@ Assessment_via_cluster <- function(pred, meas, memb,
   for(model in model_names){
     for(cluster in cluster_names){
       
-      x <- meas[cluster_crisp %in% cluster] # true
-      y <- pred[cluster_crisp %in% cluster, model] # pred
+      w <- str_extract(cluster_crisp,'\\d') %in% str_extract(cluster,"\\d")
+      x <- meas[w] # true
+      y <- pred[w, model] # pred
       
       for(metric in names(result)){
         result[[metric]][which(cluster_names == cluster),

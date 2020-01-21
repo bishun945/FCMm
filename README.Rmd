@@ -18,7 +18,8 @@ options(tibble.print_min=5, tibble.print_max=5)
 [![Travis build status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
 
 **Author**: Shun Bi  
-**Date**: 2020/01/09  
+**Date**: `r Sys.Date()`  
+**Version**: `r gsub("Version: ","",readLines('DESCRIPTION')[stringr::str_which(readLines('DESCRIPTION'), 'Version')])`  
 **E-mail**: bishun1994@foxmail.com
 
 ## Overview

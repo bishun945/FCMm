@@ -7,7 +7,7 @@
 run_all_Chla_algorithms(Rrs, wv_range = 3)
 }
 \arguments{
-\item{Rrs}{Dataframe that should with required colnames}
+\item{Rrs}{Dataframe that should with required colnames 443, 490, 510, 560, 620, 665, 681, 709, 754, 779}
 
 \item{wv_range}{Number that used to define the range of wavelength to capture
 the center wavelength of required band}

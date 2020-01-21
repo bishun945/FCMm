@@ -1,3 +1,8 @@
+## Notes (2020-01-21)
+
+  * Even though the coming **phylogenetic tree method** will offer a good option to post-classify the numerous clusters, we still have to design a better allocation strategy on **cluster number**. That's to say, the nearby cluster name (for instance, `Cluster 1` and `Cluster 2`) should have the similar optical attribution. However, the current `FCM.new` or `FuzzifierDetermiantion` functions return the totally random results. Should be inporved later!
+  * Another **confusing** thing is the parameter `stand` in many functions (for instance, `FCM.new`). The original design of `stand` is making sure the input `x` has been standardized so that the median-process of clustering should not standardize that. Actually, the parameter could be better understood if named as `DoStand`. When `DoStand` is `True`, it means the input `x` have to be standardized in the following process. This change will make numerous source codes different so I will get to do it after other funcitons are gradually imporved.
+
 ## FCMm 0.4.5 (2020-01-21)
   
   * Fix bugs of function `Assessment_via_cluster` to avoid produce NA values.

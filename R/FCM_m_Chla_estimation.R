@@ -379,17 +379,28 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
 #' @param metrics metrics need to be calculated
 #' @param total logical
 #' @param hard.mode hard.mode
+#' @param na.process na.process and choose to statistic na value percent
 #' @export
 #' @return List
 #' @family Algorithm assessment
 Assessment_via_cluster <- function(pred, meas, memb,
                                    metrics = c('MAE2','MAPE'),
                                    total = TRUE,
-                                   hard.mode= TRUE){
+                                   hard.mode= TRUE, 
+                                   na.process = FALSE
+                                   ){
   if(nrow(pred) != length(meas) | nrow(pred) != nrow(memb))
     stop('Rows of input are different!')
-  if(anyNA(pred) | anyNA(meas) | anyNA(memb))
-    stop('Including NA values!')
+  
+  if(!na.process){
+    if(anyNA(pred) | anyNA(meas) | anyNA(memb)){
+      stop('Not choose to process NA values. Predicted, measured or membership values including NA values!')
+    }
+  }else{
+    if(anyNA(meas)){
+      stop('Choose to process NA values. Measured values including NA values!')
+    }
+  }
   
   for(i in 1:length(metrics))
     metrics[i] <- match.arg(metrics[i], cal.metrics.names())
@@ -410,6 +421,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
   for(i in 1:length(metrics))
     result[[metrics[i]]] <- validation
   
+  if(na.process){
+    result[["NA_percent"]] <- validation
+  }
+  
   # strat loop via model and cluster
   for(model in model_names){
     for(cluster in cluster_names){
@@ -417,25 +432,49 @@ Assessment_via_cluster <- function(pred, meas, memb,
       w <- str_extract(cluster_crisp,'\\d') %in% str_extract(cluster,"\\d")
       x <- meas[w] # true
       y <- pred[w, model] # pred
+      num_raw <- length(x)
       
-      for(metric in names(result)){
+      if(na.process){
+        tmp <- cbind(x,y) %>% na.omit
+        x <- tmp[,1]
+        y <- tmp[,2]
+        num_new <- length(x)
+      }
+
+      for(metric in metrics){
         result[[metric]][which(cluster_names == cluster),
                          which(model_names == model)] <- cal.metrics(x,y,metric)
+      }
+      if(na.process){
+        result[["NA_percent"]][which(cluster_names == cluster),
+                               which(model_names == model)] <- num_new / num_raw * 100
       }
     }
     if(total == TRUE){
       
       x <- meas
       y <- pred[, model]
+      num_raw <- length(x)
       
-      for(metric in names(result)){
-        
+      if(na.process){
+        tmp <- cbind(x,y) %>% na.omit
+        x <- tmp[,1]
+        y <- tmp[,2]
+        num_new <- length(x)
+      }
+      
+      for(metric in metrics){
         if(rownames(result[[metric]])[nrow(result[[metric]])] != 'SUM'){
           result[[metric]] %<>% rbind(.,NA)
           rownames(result[[metric]])[nrow(result[[metric]])] <- 'SUM'
         }
         result[[metric]]['SUM',
                          which(model_names == model)] <- cal.metrics(x,y,metric)  
+      }
+      
+      if(na.process){
+        result[["NA_percent"]]['SUM',
+                               which(model_names == model)] <- num_new / num_raw * 100
       }
     }
   }

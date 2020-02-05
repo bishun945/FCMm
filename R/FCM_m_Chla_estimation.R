@@ -94,8 +94,11 @@ FCM_m_Chla_estimation <- function(Rrs, U){
 #' @param Rrs709 Rrs709
 #' @export
 #' @family Algorithms: Chla concentration
+#' @references Gilerson A A, Gitelson A A, Zhou J, et al. Algorithms for remote estimation of 
+#'   chlorophyll-a in coastal and inland waters using red and near infrared bands[J]. 
+#'   Optics Express, 2010, 18(23): 24109-24125.
 BR_Gil10 <- function(Rrs665, Rrs709){
-  return(abs(35.75*Rrs709/Rrs665-19.3)^1.124)
+  return((35.75*Rrs709/Rrs665-19.3)^1.124)
 }
 
 #' @title TBA_Gil10
@@ -104,8 +107,11 @@ BR_Gil10 <- function(Rrs665, Rrs709){
 #' @param Rrs754 Rrs754
 #' @export
 #' @family Algorithms: Chla concentration
+#' @references Gilerson A A, Gitelson A A, Zhou J, et al. Algorithms for remote estimation of 
+#'   chlorophyll-a in coastal and inland waters using red and near infrared bands[J]. 
+#'   Optics Express, 2010, 18(23): 24109-24125.
 TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
-  return(abs(113.36*(1/Rrs665-1/Rrs709)*Rrs754+16.45)^1.124)
+  return((113.36*(1/Rrs665-1/Rrs709)*Rrs754+16.45)^1.124)
 }
 
 #' @title C6
@@ -117,16 +123,32 @@ C6 <- function(Rrs665, Rrs754){
   return(10^( 1/Rrs665*Rrs754 * 0.14 + 2.11))
 }
 
-#' @title OC4E
+#' @title OC4_OLCI
 #' @param Rrs443 Rrs443
 #' @param Rrs490 Rrs490
 #' @param Rrs510 Rrs510
 #' @param Rrs560 Rrs560
 #' @export
 #' @family Algorithms: Chla concentration
-OC4E <- function(Rrs443, Rrs490, Rrs510, Rrs560){
+#' @references O'Reilly J E, Werdell P J. Chlorophyll algorithms for ocean color
+#'   sensors-OC4, OC5 & OC6[J]. Remote sensing of environment, 2019, 229: 32-47.
+OC4_OLCI <- function(Rrs443, Rrs490, Rrs510, Rrs560){
   X <- apply(cbind(Rrs443,Rrs490,Rrs510),1,max)/Rrs560 %>% log10
-  return(10^(0.3255-2.7677*X+2.4409*X^2-1.1288*X^3-0.4990*X^4))
+  return(10^(0.42540-3.21679*X+2.86907*X^2-0.62628*X^3-1.09333*X^4))
+}
+
+#' @title CI_Hu12
+#' @param Rrs443 Rrs443
+#' @param Rrs560 Rrs560
+#' @param Rrs665 Rrs665
+#' @export
+#' @family Algorithms: Chla concentration
+#' @references Hu C, Lee Z, Franz B. Chlorophyll aalgorithms for oligotrophic oceans: 
+#'   A novel approach based on three‐band reflectance difference[J]. Journal of Geophysical 
+#'   Research: Oceans, 2012, 117(C1).
+CI_Hu12 <- function(Rrs443, Rrs560, Rrs665){
+  CI <- Rrs560 - (Rrs443+(560-443)/(665-443)*(Rrs665-Rrs443))
+  return(10^(-0.4909+191.6590*CI))
 }
 
 #' @title BR_Git11
@@ -153,6 +175,9 @@ TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
 #' @param Rrs709 Rrs709
 #' @export
 #' @family Algorithms: Chla concentration
+#' @references Mishra S, Mishra D R. Normalized difference chlorophyll index:
+#'   A novel model for remote estimation of chlorophyll-a concentration in turbid 
+#'   productive waters[J]. Remote Sensing of Environment, 2012, 117: 394-406.
 NDCI_Mi12 <- function(Rrs665, Rrs709){
   ind <- (Rrs709-Rrs665)/(Rrs709+Rrs665)
   return(14.039+86.115*ind+194.325*ind^2)
@@ -164,6 +189,9 @@ NDCI_Mi12 <- function(Rrs665, Rrs709){
 #' @param Rrs709 Rrs709
 #' @export
 #' @family Algorithms: Chla concentration
+#' @references Le C, Hu C, Cannizzaro J, et al. Evaluation of chlorophyll-a remote
+#'   sensing algorithms for an optically complex estuary[J]. Remote Sensing of Environment, 
+#'   2013, 129: 75-89.
 FBA_Le13 <- function(Rrs665, Rrs681, Rrs709){
   return(18.492*(1/Rrs665-1/Rrs681)/(1/Rrs709-1/Rrs681)+6.1302)
 }
@@ -174,6 +202,9 @@ FBA_Le13 <- function(Rrs665, Rrs681, Rrs709){
 #' @param Rrs754 Rrs754
 #' @export
 #' @family Algorithms: Chla concentration
+#' @references Yang W, Matsushita B, Chen J, et al. An enhanced three-band index for estimating 
+#'   chlorophyll-a in turbid case-II waters: case studies of Lake Kasumigaura, Japan, and Lake 
+#'   Dianchi, China[J]. IEEE Geoscience and Remote Sensing Letters, 2010, 7(4): 655-659.
 FBA_Yang10 <- function(Rrs665, Rrs709, Rrs754){
   return(161.24*(1/Rrs665-1/Rrs709)/(1/Rrs754-1/Rrs709)+28.04)
 }
@@ -242,7 +273,7 @@ TC2_clean <- function(Rrs443, Rrs560, Rrs665, Rrs709){
   aChla_star <- 0.017
   Rrs <- cbind(Rrs443, Rrs560, Rrs665, Rrs709)
   rrs <- Rrs / (0.52 + 1.7 * Rrs)
-  u <- (-g0 + sqrt(4 * g1 * rrs)) / (2 * g1)
+  u <- (-g0 + sqrt(g0^2 + 4 * g1 * rrs)) / (2 * g1)
   bbp_0 <- u[,4] * dt_water$aw[dt_water$nm == lambda_0] / (1-u[,4]) -
     dt_water$bbw[dt_water$nm == lambda_0]
   Y <- 2.0 * (1 - 1.2 * exp(-0.9 * rrs[,1] / rrs[,2]))
@@ -250,7 +281,8 @@ TC2_clean <- function(Rrs443, Rrs560, Rrs665, Rrs709){
   bb665 <- bbp_0 * (lambda_0/665)^Y + dt_water$bbw[dt_water$nm == 665]
   anw560 <- (1-u[,2])*bb560 / u[,2] - dt_water$aw[dt_water$nm == 560]
   anw665 <- (1-u[,3])*bb665 / u[,3] - dt_water$aw[dt_water$nm == 665]
-  aph665 <- yita * anw560 + (1-yita) * anw665
+  anw709 <- (1-u[,4])*bb665 / u[,4] - dt_water$aw[dt_water$nm == 709]
+  aph665 <- anw665 - yita * anw560 - (1-yita) * anw709
   Chla <- aph665 / aChla_star
   return(Chla)
 }
@@ -271,7 +303,7 @@ TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs754){
   aChla_star <- 0.017
   Rrs <- cbind(Rrs443, Rrs560, Rrs665, Rrs754)
   rrs <- Rrs / (0.52 + 1.7 * Rrs)
-  u <- (-g0 + sqrt(4 * g1 * rrs)) / (2 * g1)
+  u <- (-g0 + sqrt(g0^2 + 4 * g1 * rrs)) / (2 * g1)
   bbp_0 <- u[,4] * dt_water$aw[dt_water$nm == lambda_0] / (1-u[,4]) -
     dt_water$bbw[dt_water$nm == lambda_0]
   Y <- 2.0 * (1 - 1.2 * exp(-0.9 * rrs[,1] / rrs[,2]))
@@ -279,7 +311,8 @@ TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs754){
   bb665 <- bbp_0 * (lambda_0/665)^Y + dt_water$bbw[dt_water$nm == 665]
   anw560 <- (1-u[,2])*bb560 / u[,2] - dt_water$aw[dt_water$nm == 560]
   anw665 <- (1-u[,3])*bb665 / u[,3] - dt_water$aw[dt_water$nm == 665]
-  aph665 <- yita * anw560 + (1-yita) * anw665
+  anw709 <- (1-u[,4])*bb665 / u[,4] - dt_water$aw[dt_water$nm == 709]
+  aph665 <- anw665 - yita * anw560 - (1-yita) * anw709
   Chla <- aph665 / aChla_star
   return(Chla)
 }
@@ -289,11 +322,13 @@ TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs754){
 #' @export
 #' @family Algorithms: Chla concentration
 Chla_algorithms_name <- function(){
-  return(c('BR_Gil10','BR_Git11',
-           'TBA_Gil10','TBA_Git11',
-           'C6','OC4E','NDCI_Mi12', 'Gons08',
-           'FBA_Le13','FBA_Yang10',
-           'SCI_Shen10', 'TC2','TC2_turbid','TC2_clean'))
+  return(c('BR_Gil10', 'BR_Git11',
+           'TBA_Gil10', 'TBA_Git11',
+           'C6', 'OC4_OLCI', 'CI_Hu12'
+           'NDCI_Mi12', 'Gons08',
+           'FBA_Le13', 'FBA_Yang10',
+           'SCI_Shen10',
+           'TC2', 'TC2_turbid', 'TC2_clean'))
 }
 
 #' @title run_all_Chla_algorithms
@@ -317,7 +352,8 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
     BR_Gil10 = BR_Gil10(Rrs709, Rrs665),
     TBA_Gil10 = TBA_Gil10(Rrs665, Rrs709, Rrs754),
     C6 = C6(Rrs665, Rrs754),
-    OC4E = OC4E(Rrs443, Rrs490, Rrs510, Rrs560),
+    OC4_OLCI = OC4_OLCI(Rrs443, Rrs490, Rrs510, Rrs560),
+    CI_Hu12 = CI_Hu12(Rrs443, Rrs560, Rrs665),
     BR_Git11 = BR_Git11(Rrs665, Rrs709),
     TBA_Git11 = TBA_Git11(Rrs665, Rrs709, Rrs754),
     NDCI_Mi12 = NDCI_Mi12(Rrs665, Rrs709),

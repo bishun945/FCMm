@@ -324,7 +324,7 @@ TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs754){
 Chla_algorithms_name <- function(){
   return(c('BR_Gil10', 'BR_Git11',
            'TBA_Gil10', 'TBA_Git11',
-           'C6', 'OC4_OLCI', 'CI_Hu12'
+           'C6', 'OC4_OLCI', 'CI_Hu12',
            'NDCI_Mi12', 'Gons08',
            'FBA_Le13', 'FBA_Yang10',
            'SCI_Shen10',

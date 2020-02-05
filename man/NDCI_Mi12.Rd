@@ -14,17 +14,23 @@ NDCI_Mi12(Rrs665, Rrs709)
 \description{
 NDCI_Mi12
 }
+\references{
+Mishra S, Mishra D R. Normalized difference chlorophyll index:
+  A novel model for remote estimation of chlorophyll-a concentration in turbid 
+  productive waters[J]. Remote Sensing of Environment, 2012, 117: 394-406.
+}
 \seealso{
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},
 \code{\link{BR_Git11}()},
 \code{\link{C6}()},
+\code{\link{CI_Hu12}()},
 \code{\link{Chla_algorithms_name}()},
 \code{\link{FBA_Le13}()},
 \code{\link{FBA_Yang10}()},
 \code{\link{FCM_m_Chla_estimation}()},
 \code{\link{Gons08}()},
-\code{\link{OC4E}()},
+\code{\link{OC4_OLCI}()},
 \code{\link{SCI_Shen10}()},
 \code{\link{TBA_Gil10}()},
 \code{\link{TBA_Git11}()},

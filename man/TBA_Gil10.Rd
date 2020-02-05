@@ -16,18 +16,24 @@ TBA_Gil10(Rrs665, Rrs709, Rrs754)
 \description{
 TBA_Gil10
 }
+\references{
+Gilerson A A, Gitelson A A, Zhou J, et al. Algorithms for remote estimation of 
+  chlorophyll-a in coastal and inland waters using red and near infrared bands[J]. 
+  Optics Express, 2010, 18(23): 24109-24125.
+}
 \seealso{
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},
 \code{\link{BR_Git11}()},
 \code{\link{C6}()},
+\code{\link{CI_Hu12}()},
 \code{\link{Chla_algorithms_name}()},
 \code{\link{FBA_Le13}()},
 \code{\link{FBA_Yang10}()},
 \code{\link{FCM_m_Chla_estimation}()},
 \code{\link{Gons08}()},
 \code{\link{NDCI_Mi12}()},
-\code{\link{OC4E}()},
+\code{\link{OC4_OLCI}()},
 \code{\link{SCI_Shen10}()},
 \code{\link{TBA_Git11}()},
 \code{\link{TC2_clean}()},

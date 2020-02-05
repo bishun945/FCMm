@@ -16,17 +16,23 @@ FBA_Le13(Rrs665, Rrs681, Rrs709)
 \description{
 FBA_Le13
 }
+\references{
+Le C, Hu C, Cannizzaro J, et al. Evaluation of chlorophyll-a remote
+  sensing algorithms for an optically complex estuary[J]. Remote Sensing of Environment, 
+  2013, 129: 75-89.
+}
 \seealso{
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},
 \code{\link{BR_Git11}()},
 \code{\link{C6}()},
+\code{\link{CI_Hu12}()},
 \code{\link{Chla_algorithms_name}()},
 \code{\link{FBA_Yang10}()},
 \code{\link{FCM_m_Chla_estimation}()},
 \code{\link{Gons08}()},
 \code{\link{NDCI_Mi12}()},
-\code{\link{OC4E}()},
+\code{\link{OC4_OLCI}()},
 \code{\link{SCI_Shen10}()},
 \code{\link{TBA_Gil10}()},
 \code{\link{TBA_Git11}()},

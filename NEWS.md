@@ -1,3 +1,7 @@
+## FCMm 0.4.6 (2020-02-05)
+
+  Update the functions and references in file `FCM_m_Chla_estiamtion`.
+
 ## Notes (2020-01-21)
 
   * Even though the coming **phylogenetic tree method** will offer a good option to post-classify the numerous clusters, we still have to design a better allocation strategy on **cluster number**. That's to say, the nearby cluster name (for instance, `Cluster 1` and `Cluster 2`) should have the similar optical attribution. However, the current `FCM.new` or `FuzzifierDetermiantion` functions return the totally random results. Should be inporved later!

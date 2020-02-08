@@ -10,7 +10,8 @@ Assessment_via_cluster(
   memb,
   metrics = c("MAE2", "MAPE"),
   total = TRUE,
-  hard.mode = TRUE
+  hard.mode = TRUE,
+  na.process = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ Assessment_via_cluster(
 \item{total}{logical}
 
 \item{hard.mode}{hard.mode}
+
+\item{na.process}{na.process and choose to statistic na value percent}
 }
 \value{
 List

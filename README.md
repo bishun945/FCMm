@@ -5,8 +5,8 @@
 status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
 
 **Author**: Shun Bi  
-**Date**: 2020-01-21  
-**Version**: 0.4.5  
+**Date**: 2020-02-07  
+**Version**: 0.4.6  
 **E-mail**: <bishun1994@foxmail.com>
 
 ## Overview

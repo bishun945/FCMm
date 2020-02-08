@@ -133,7 +133,8 @@ C6 <- function(Rrs665, Rrs754){
 #' @references O'Reilly J E, Werdell P J. Chlorophyll algorithms for ocean color
 #'   sensors-OC4, OC5 & OC6[J]. Remote sensing of environment, 2019, 229: 32-47.
 OC4_OLCI <- function(Rrs443, Rrs490, Rrs510, Rrs560){
-  X <- apply(cbind(Rrs443,Rrs490,Rrs510),1,max)/Rrs560 %>% log10
+  X <- apply(cbind(Rrs443,Rrs490,Rrs510),1,max)/Rrs560
+  X <- log10(X)
   return(10^(0.42540-3.21679*X+2.86907*X^2-0.62628*X^3-1.09333*X^4))
 }
 

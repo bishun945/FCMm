@@ -1,3 +1,8 @@
+## FCMm 0.4.7 (2020-02-08)
+
+  * Add `QAA_v5` in file `FCM_m_Chla_estiamtion`.
+  * Some bugs fixed.
+
 ## FCMm 0.4.6 (2020-02-05)
 
   Update the functions and references in file `FCM_m_Chla_estiamtion`.

@@ -34,6 +34,7 @@ Other Algorithms: Chla concentration:
 \code{\link{Gons08}()},
 \code{\link{NDCI_Mi12}()},
 \code{\link{OC4_OLCI}()},
+\code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
 \code{\link{TBA_Gil10}()},
 \code{\link{TBA_Git11}()},

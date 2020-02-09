@@ -221,7 +221,13 @@ SCI_Shen10 <- function(Rrs560, Rrs620, Rrs665, Rrs681){
   H_Chl <- (Rrs681+(681-665)/(681-620)*(Rrs620-Rrs681)) - Rrs665
   H_deta <- Rrs620 - (Rrs681+(681-620)/(681-560)*(Rrs560-Rrs681))
   SCI <- H_Chl - H_deta
-  return(0.057*SCI^(-0.6327))
+  result <- list(
+    H_Chl  = H_Chl,
+    H_deta = H_deta,
+    SCI    = SCI,
+    Chla   = 0.057*SCI^(-0.6327)
+  )
+  return(result)
 }
 
 #' @title Gons08
@@ -494,7 +500,7 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
     NDCI_Mi12 = NDCI_Mi12(Rrs665, Rrs709),
     FBA_Le13 = FBA_Le13(Rrs665, Rrs681, Rrs709),
     FBA_Yang10 = FBA_Yang10(Rrs665, Rrs709, Rrs754),
-    SCI_Shen10 = SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681),
+    SCI_Shen10 = SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681)$Chla,
     Gons08 = Gons08(Rrs665, Rrs709, Rrs779),
     TC2_final = TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)$Chla_final,
     TC2_clean = TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)$Chla_clean,

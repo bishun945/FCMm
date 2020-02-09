@@ -138,8 +138,10 @@ OC4_OLCI <- function(Rrs443, Rrs490, Rrs510, Rrs560){
   return(10^(0.42540-3.21679*X+2.86907*X^2-0.62628*X^3-1.09333*X^4))
 }
 
-#' @title CI_Hu12
+#' @title OCI_Hu12
 #' @param Rrs443 Rrs443
+#' @param Rrs490 Rrs490
+#' @param Rrs510 Rrs510
 #' @param Rrs560 Rrs560
 #' @param Rrs665 Rrs665
 #' @export
@@ -147,9 +149,29 @@ OC4_OLCI <- function(Rrs443, Rrs490, Rrs510, Rrs560){
 #' @references Hu C, Lee Z, Franz B. Chlorophyll aalgorithms for oligotrophic oceans: 
 #'   A novel approach based on three‐band reflectance difference[J]. Journal of Geophysical 
 #'   Research: Oceans, 2012, 117(C1).
-CI_Hu12 <- function(Rrs443, Rrs560, Rrs665){
+OCI_Hu12 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
   CI <- Rrs560 - (Rrs443+(560-443)/(665-443)*(Rrs665-Rrs443))
-  return(10^(-0.4909+191.6590*CI))
+  Chl_CI <- 10^(-0.4909+191.6590*CI)
+  X <- log10(apply(cbind(Rrs443, Rrs490, Rrs510), 1, max)/Rrs560)
+  Chl_OC4 <- 10^(0.3272-2.9940*X+2.7218*X^2-1.2259*X^3-0.5683*X^4)
+  a <- (Chl_CI - 0.25)/(0.3 - 0.25)
+  b <- (0.3 - Chl_CI)/(0.3 - 0.25)
+  Chl_OCI <- Chl_CI
+  Chl_OCI[Chl_CI <= 0.25] <- Chl_CI[Chl_CI <= 0.25]
+  Chl_OCI[Chl_CI >  0.3 ] <- Chl_OC4[Chl_CI >  0.3 ]
+  w <- which(Chl_CI > 0.25 & Chl_CI <= 0.3)
+  tmp <- a*Chl_OC4 + b*Chl_CI
+  Chl_OCI[w] <- tmp[w]
+  
+  result <- list(
+    CI      = CI,
+    X       = X,
+    Chl_CI  = Chl_CI,
+    Chl_OC4 = Chl_OC4,
+    Chl_OCI = Chl_OCI
+  )
+  
+  return(result)
 }
 
 #' @title BR_Git11
@@ -180,8 +202,13 @@ TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
 #'   A novel model for remote estimation of chlorophyll-a concentration in turbid 
 #'   productive waters[J]. Remote Sensing of Environment, 2012, 117: 394-406.
 NDCI_Mi12 <- function(Rrs665, Rrs709){
-  ind <- (Rrs709-Rrs665)/(Rrs709+Rrs665)
-  return(14.039+86.115*ind+194.325*ind^2)
+  NDCI <- (Rrs709-Rrs665)/(Rrs709+Rrs665)
+  Chla <- 14.039+86.115*NDCI+194.325*NDCI^2
+  result <- list(
+    NDCI = NDCI,
+    Chla = Chla
+  )
+  return(result)
 }
 
 #' @title FBA_Le13
@@ -464,7 +491,7 @@ Chla_algorithms_name <- function(){
   message('Please run QAA_v5 alone if required.')
   return(c('BR_Gil10', 'BR_Git11',
            'TBA_Gil10', 'TBA_Git11',
-           'C6', 'OC4_OLCI', 'CI_Hu12',
+           'C6', 'OC4_OLCI', 'OCI_Hu12',
            'NDCI_Mi12', 'Gons08',
            'FBA_Le13', 'FBA_Yang10',
            'SCI_Shen10',
@@ -494,10 +521,10 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
     TBA_Gil10 = TBA_Gil10(Rrs665, Rrs709, Rrs754),
     C6 = C6(Rrs665, Rrs754),
     OC4_OLCI = OC4_OLCI(Rrs443, Rrs490, Rrs510, Rrs560),
-    CI_Hu12 = CI_Hu12(Rrs443, Rrs560, Rrs665),
+    OCI_Hu12 = OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)$Chl_OCI,
     BR_Git11 = BR_Git11(Rrs665, Rrs709),
     TBA_Git11 = TBA_Git11(Rrs665, Rrs709, Rrs754),
-    NDCI_Mi12 = NDCI_Mi12(Rrs665, Rrs709),
+    NDCI_Mi12 = NDCI_Mi12(Rrs665, Rrs709)$Chla,
     FBA_Le13 = FBA_Le13(Rrs665, Rrs681, Rrs709),
     FBA_Yang10 = FBA_Yang10(Rrs665, Rrs709, Rrs754),
     SCI_Shen10 = SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681)$Chla,

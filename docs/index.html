@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.10</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@
 <a href="#fcmm" class="anchor"></a>FCMm <a href="https://github.com/bishun945/FCMm"><img src="reference/figures/logo.png" align="right" height="139"></a>
 </h1></div>
 
-<p><strong>Author</strong>: Shun Bi<br><strong>Date</strong>: 2020/01/09<br><strong>E-mail</strong>: <a href="mailto:bishun1994@foxmail.com" class="email">bishun1994@foxmail.com</a></p>
+<p><strong>Author</strong>: Shun Bi<br><strong>Date</strong>: 2020-02-07<br><strong>Version</strong>: 0.4.6<br><strong>E-mail</strong>: <a href="mailto:bishun1994@foxmail.com" class="email">bishun1994@foxmail.com</a></p>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
@@ -134,9 +134,9 @@
 <a class="sourceLine" id="cb2-6" data-line-number="6">Rrs &lt;-<span class="st"> </span>WaterSpec35[,<span class="dv">3</span><span class="op">:</span><span class="dv">17</span>]</a>
 <a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co"># Plot the spectra</span></a>
 <a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw"><a href="reference/plot_spec_from_df.html">plot_spec_from_df</a></span>(Rrs) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="dt">size=</span><span class="dv">18</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html">labs</a></span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html">theme_bw</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/theme.html">theme</a></span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/element.html">element_text</a></span>(<span class="dt">size=</span><span class="dv">18</span>))</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="60%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Applying FCMm</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">result &lt;-<span class="st"> </span><span class="kw"><a href="reference/apply_FCM_m.html">apply_FCM_m</a></span>(<span class="dt">Rrs=</span>Rrs, <span class="dt">option.plot=</span><span class="ot">TRUE</span>)</a>

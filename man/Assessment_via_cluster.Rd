@@ -8,7 +8,8 @@ Assessment_via_cluster(
   pred,
   meas,
   memb,
-  metrics = c("MAE2", "MAPE"),
+  metrics = c("MAE", "MAPE"),
+  log10 = FALSE,
   total = TRUE,
   hard.mode = TRUE,
   na.process = FALSE
@@ -23,9 +24,11 @@ Assessment_via_cluster(
 
 \item{metrics}{metrics need to be calculated}
 
+\item{log10}{Should pred and meas be log10-transformed? (Default as FALSE)}
+
 \item{total}{logical}
 
-\item{hard.mode}{hard.mode}
+\item{hard.mode}{If \code{FALSE}, the membership values are used to calculate validation metrics}
 
 \item{na.process}{na.process and choose to statistic na value percent}
 }

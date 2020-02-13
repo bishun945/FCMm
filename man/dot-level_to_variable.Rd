@@ -18,6 +18,8 @@ Convert dataframe with factor to character
 Other Utils: 
 \code{\link{SRF_simulate}()},
 \code{\link{cal.metrics.names}()},
+\code{\link{cal.metrics.vector.names}()},
+\code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()}
 }
 \concept{Utils}

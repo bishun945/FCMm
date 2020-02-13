@@ -16,6 +16,8 @@ List all metrics in function cal.metrics
 Other Utils: 
 \code{\link{.level_to_variable}()},
 \code{\link{SRF_simulate}()},
+\code{\link{cal.metrics.vector.names}()},
+\code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()}
 }
 \concept{Utils}

@@ -21,4 +21,5 @@ utils::globalVariables(c('.','band','value','name','wv','variable',
                          'SRF_LIST',
                          'dt_water',
                          "Rrs443","Rrs490","Rrs510","Rrs560","Rrs620","Rrs665",
-                         "Rrs681","Rrs709","Rrs754","Rrs779"))
+                         "Rrs681","Rrs709","Rrs754","Rrs779",
+                         '.cal.mdape'))

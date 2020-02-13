@@ -4,7 +4,7 @@
 \alias{cal.metrics}
 \title{Assess the performance of algorithms}
 \usage{
-cal.metrics(x,y,name="all")
+cal.metrics(x,y,name="all",log10=FALSE)
 }
 \arguments{
 \item{x}{True value}
@@ -12,14 +12,22 @@ cal.metrics(x,y,name="all")
 \item{y}{Estimated value}
 
 \item{name}{The name of metrics}
+
+\item{log10}{Logical. Whether the input x and y should be log10-transformed}
 }
 \description{
 Assess the performance of algorithms
+}
+\note{
+(2020-02-09) All functions used log10 transformation was assgined to the 
+  Key parameter `log10`
 }
 \seealso{
 Other Utils: 
 \code{\link{.level_to_variable}()},
 \code{\link{SRF_simulate}()},
-\code{\link{cal.metrics.names}()}
+\code{\link{cal.metrics.names}()},
+\code{\link{cal.metrics.vector.names}()},
+\code{\link{cal.metrics.vector}()}
 }
 \concept{Utils}

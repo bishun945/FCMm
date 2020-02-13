@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.10</span>
       </span>
     </div>
 
@@ -140,12 +140,64 @@
       <small>Source: <a href='https://github.com/bishun945/FCMm/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="fcmm-0-4-10-2020-02-13" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fcmm-0-4-10-2020-02-13" class="anchor"></a>FCMm 0.4.10 (2020-02-13)</h2>
+<ul>
+<li>Bugs of <code>FCM_m_Chla_estimation</code> fixed.</li>
+</ul>
+</div>
+    <div id="fcmm-0-4-9-2020-02-10" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fcmm-0-4-9-2020-02-10" class="anchor"></a>FCMm 0.4.9 (2020-02-10)</h2>
+<ul>
+<li>Add <code>UMRPE</code> function to calculate unbiased error metric.</li>
+</ul>
+</div>
+    <div id="fcmm-0-4-8-2020-02-09" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fcmm-0-4-8-2020-02-09" class="anchor"></a>FCMm 0.4.8 (2020-02-09)</h2>
+<ul>
+<li>Update the function <code>cal.metrics</code> which remove the double version of <code>.cal.mae</code> or <code>.bias</code>. The log10-transformation is now supported by the logcial parameter <code>log10</code>.</li>
+<li>Add functions <code>cal.metrics.vector</code> and <code>cal.metrics.vector.names</code> which calculate the validation metrics via pairwise way (results are columns).</li>
+<li>Update the function <code>Assessment_via_cluster</code> by adding a fuzzy mode to calculate validation metrics via membership values.</li>
+</ul>
+</div>
+    <div id="fcmm-0-4-7-2020-02-08" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fcmm-0-4-7-2020-02-08" class="anchor"></a>FCMm 0.4.7 (2020-02-08)</h2>
+<ul>
+<li>Add <code>QAA_v5</code> in file <code>FCM_m_Chla_estiamtion</code>.</li>
+<li>Some bugs fixed.</li>
+</ul>
+</div>
+    <div id="fcmm-0-4-6-2020-02-05" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fcmm-0-4-6-2020-02-05" class="anchor"></a>FCMm 0.4.6 (2020-02-05)</h2>
+<p>Update the functions and references in file <code>FCM_m_Chla_estiamtion</code>.</p>
+</div>
+    <div id="fcmm-0-4-5-2020-01-21" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fcmm-0-4-5-2020-01-21" class="anchor"></a>FCMm 0.4.5 (2020-01-21)</h2>
+<ul>
+<li>Fix bugs of function <code>Assessment_via_cluster</code> to avoid produce NA values.</li>
+</ul>
+</div>
+    <div id="fcmm-0-4-4-2020-01-20" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fcmm-0-4-4-2020-01-20" class="anchor"></a>FCMm 0.4.4 (2020-01-20)</h2>
+<ul>
+<li>Add new function <code>run_all_Chla_algorithms</code> to obtain the Chla concentration if required Rrs bands are get.</li>
+<li>Group the function list by adding the <code>@family</code> tag using package <code>roxygen2</code>.</li>
+</ul>
+</div>
     <div id="fcmm-0-4-3-2020-01-19" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fcmm-0-4-3-2020-01-19" class="anchor"></a>FCMm 0.4.3 (2020-01-19)</h2>
 <ul>
 <li>Supply the help documents of function <code>SRF_simulate</code>.</li>
 <li>Add an option of function <code>SRF_simulate</code> — <code>wv_as_column</code> which makes the output as a dataframe with wavelength as column name. Easy to be an input of function <code>apply_FCM_m</code> or so.</li>
+<li>In next version, I gonna add the Chla estimation method proposed by Liu <em>et al.</em> (2020) which has been accepted by RSE.</li>
 </ul>
 </div>
     <div id="fcmm-0-4-1-2020-01-12" class="section level2">
@@ -156,11 +208,19 @@
 <ul>
 <li>I should re-consider the FCM process when input data (here is Rrs spectra) is biased.</li>
 <li>Mahalanobis distance should be under consideration since it eliminate the influence of variable correlation. However, it is questionable to define the covariance when facing new input data.</li>
-<li>Moore et al. (2001) supposes the distribution of Rrs vectors belonging to one class is multivariate normal, and Rrs belongs to that class, the distance metric has a chi-sq distribution with n degrees of free (where n is the dimension of Rrs). Is this evidential in current data sets?</li>
+<li>Moore <em>et al.</em> (2001) supposes the distribution of Rrs vectors belonging to one class is multivariate normal, and Rrs belongs to that class, the distance metric has a chi-sq distribution with n degrees of free (where n is the dimension of Rrs). Is this evidential in current data sets?</li>
 </ul>
 </li>
-<li><p>Phylogenetic tree is an effective method to post-classification (or post-group) of initial cluster results.</p></li>
-<li><p>How to assign new data to an existing clustering?</p></li>
+<li>Phylogenetic tree is an effective method to post-classification (or post-group) of initial cluster results.
+<ul>
+<li>This mode will be added in <strong>version 0.5.X or later</strong> (2020-01-19).</li>
+</ul>
+</li>
+<li>How to assign new data to an existing clustering?
+<ul>
+<li>Still consider this problem … If you guys have some new ideals, please let me know.</li>
+</ul>
+</li>
 </ul>
 </div>
     <div id="fcmm-0-4-0-2020-01-10" class="section level2">
@@ -195,6 +255,13 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#fcmm-0-4-10-2020-02-13">0.4.10</a></li>
+        <li><a href="#fcmm-0-4-9-2020-02-10">0.4.9</a></li>
+        <li><a href="#fcmm-0-4-8-2020-02-09">0.4.8</a></li>
+        <li><a href="#fcmm-0-4-7-2020-02-08">0.4.7</a></li>
+        <li><a href="#fcmm-0-4-6-2020-02-05">0.4.6</a></li>
+        <li><a href="#fcmm-0-4-5-2020-01-21">0.4.5</a></li>
+        <li><a href="#fcmm-0-4-4-2020-01-20">0.4.4</a></li>
         <li><a href="#fcmm-0-4-3-2020-01-19">0.4.3</a></li>
         <li><a href="#fcmm-0-4-1-2020-01-12">0.4.1</a></li>
         <li><a href="#fcmm-0-4-0-2020-01-10">0.4.0</a></li>

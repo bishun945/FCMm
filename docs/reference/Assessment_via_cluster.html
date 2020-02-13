@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.10</span>
       </span>
     </div>
 
@@ -150,9 +150,11 @@
   <span class='no'>pred</span>,
   <span class='no'>meas</span>,
   <span class='no'>memb</span>,
-  <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"MAE2"</span>, <span class='st'>"MAPE"</span>),
+  <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"MAE"</span>, <span class='st'>"MAPE"</span>),
+  <span class='kw'>log10</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>total</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>hard.mode</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>hard.mode</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>na.process</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -175,12 +177,20 @@
       <td><p>metrics need to be calculated</p></td>
     </tr>
     <tr>
+      <th>log10</th>
+      <td><p>Should pred and meas be log10-transformed? (Default as FALSE)</p></td>
+    </tr>
+    <tr>
       <th>total</th>
       <td><p>logical</p></td>
     </tr>
     <tr>
       <th>hard.mode</th>
-      <td><p>hard.mode</p></td>
+      <td><p>If <code>FALSE</code>, the membership values are used to calculate validation metrics</p></td>
+    </tr>
+    <tr>
+      <th>na.process</th>
+      <td><p>na.process and choose to statistic na value percent</p></td>
     </tr>
     </table>
 

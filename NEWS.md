@@ -1,3 +1,17 @@
+## FCMm 0.4.10 (2020-02-13)
+
+  * Bugs of `FCM_m_Chla_estimation` fixed.
+
+## FCMm 0.4.9 (2020-02-10)
+
+  * Add `UMRPE` function to calculate unbiased error metric.
+
+## FCMm 0.4.8 (2020-02-09)
+
+  * Update the function `cal.metrics` which remove the double version of `.cal.mae` or `.bias`. The log10-transformation is now supported by the logcial parameter `log10`. 
+  * Add functions `cal.metrics.vector` and `cal.metrics.vector.names` which calculate the validation metrics via pairwise way (results are columns). 
+  * Update the function `Assessment_via_cluster` by adding a fuzzy mode to calculate validation metrics via membership values.
+
 ## FCMm 0.4.7 (2020-02-08)
 
   * Add `QAA_v5` in file `FCM_m_Chla_estiamtion`.

@@ -138,6 +138,41 @@ OC4_OLCI <- function(Rrs443, Rrs490, Rrs510, Rrs560){
   return(10^(0.42540-3.21679*X+2.86907*X^2-0.62628*X^3-1.09333*X^4))
 }
 
+#' @title OC5_OLCI
+#' @param Rrs412 Rrs412
+#' @param Rrs443 Rrs443
+#' @param Rrs490 Rrs490
+#' @param Rrs510 Rrs510
+#' @param Rrs560 Rrs560
+#' @export
+#' @family Algorithms: Chla concentration
+#' @references O'Reilly J E, Werdell P J. Chlorophyll algorithms for ocean color
+#'   sensors-OC4, OC5 & OC6[J]. Remote sensing of environment, 2019, 229: 32-47.
+OC5_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560){
+  X <- apply(cbind(Rrs412,Rrs443,Rrs490,Rrs510),1,max)/Rrs560
+  X <- log10(X)
+  return(10^(0.43213-3.13001*X+3.05479*X^2-1.45176*X^3-0.24947*X^4))
+}
+
+
+#' @title OC6_OLCI
+#' @param Rrs412 Rrs412
+#' @param Rrs443 Rrs443
+#' @param Rrs490 Rrs490
+#' @param Rrs510 Rrs510
+#' @param Rrs560 Rrs560
+#' @param Rrs665 Rrs665
+#' @export
+#' @family Algorithms: Chla concentration
+#' @references O'Reilly J E, Werdell P J. Chlorophyll algorithms for ocean color
+#'   sensors-OC4, OC5 & OC6[J]. Remote sensing of environment, 2019, 229: 32-47.
+OC6_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
+  X <- apply(cbind(Rrs412,Rrs443,Rrs490,Rrs510),1,max)/apply(cbind(Rrs560,Rrs665),1,mean)
+  X <- log10(X)
+  return(10^(0.95039-3.05404*X+2.17992*X^2-1.12097*X^3-0.15262*X^4))
+}
+
+
 #' @title OCI_Hu12
 #' @param Rrs443 Rrs443
 #' @param Rrs490 Rrs490
@@ -491,7 +526,9 @@ Chla_algorithms_name <- function(){
   message('Please run QAA_v5 alone if required.')
   return(c('BR_Gil10', 'BR_Git11',
            'TBA_Gil10', 'TBA_Git11',
-           'C6', 'OC4_OLCI', 'OCI_Hu12',
+           'C6', 
+           'OC4_OLCI', 'OC5_OCLI', 'OC6_OLCI',
+           'OCI_Hu12',
            'NDCI_Mi12', 'Gons08',
            'FBA_Le13', 'FBA_Yang10',
            'SCI_Shen10',
@@ -545,14 +582,16 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
 #' @param meas in-situ measurement of Chla
 #' @param memb membership value matrix
 #' @param metrics metrics need to be calculated
+#' @param log10 Should pred and meas be log10-transformed? (Default as FALSE)
 #' @param total logical
-#' @param hard.mode hard.mode
+#' @param hard.mode If \code{FALSE}, the membership values are used to calculate validation metrics
 #' @param na.process na.process and choose to statistic na value percent
 #' @export
 #' @return List
 #' @family Algorithm assessment
 Assessment_via_cluster <- function(pred, meas, memb,
-                                   metrics = c('MAE2','MAPE'),
+                                   metrics = c('MAE','MAPE'),
+                                   log10 = FALSE, 
                                    total = TRUE,
                                    hard.mode= TRUE, 
                                    na.process = FALSE
@@ -569,14 +608,19 @@ Assessment_via_cluster <- function(pred, meas, memb,
       stop('Choose to process NA values. Measured values including NA values!')
     }
   }
+  if(hard.mode == TRUE){
+    for(i in 1:length(metrics))
+      metrics[i] <- match.arg(metrics[i], cal.metrics.names())
+  }else{
+    for(i in 1:length(metrics))
+      metrics[i] <- match.arg(metrics[i], cal.metrics.vector.names())
+  }
   
-  for(i in 1:length(metrics))
-    metrics[i] <- match.arg(metrics[i], cal.metrics.names())
   
   # generate the output dataframe  
   model_names <- colnames(pred)
   cluster_names <- colnames(memb)
-  cluster_crisp <- apply(memb,1,which.max) %>% sprintf('M%s',.)
+  cluster_crisp <- apply(memb,1,which.max)
   
   validation <- matrix(data=0,
                    nrow=length(cluster_names), 
@@ -594,10 +638,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
   }
   
   # strat loop via model and cluster
-  for(model in model_names){
-    for(cluster in cluster_names){
+  for(model in 1:ncol(pred)){
+    for(cluster in 1:ncol(memb)){
       
-      w <- str_extract(cluster_crisp,'\\d') %in% str_extract(cluster,"\\d")
+      w <- which(cluster_crisp == cluster)
       x <- meas[w] # true
       y <- pred[w, model] # pred
       num_raw <- length(x)
@@ -610,12 +654,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
       }
 
       for(metric in metrics){
-        result[[metric]][which(cluster_names == cluster),
-                         which(model_names == model)] <- cal.metrics(x,y,metric)
+        result[[metric]][cluster, model] <- cal.metrics(x,y,metric,log10=log10)
       }
       if(na.process){
-        result[["NA_percent"]][which(cluster_names == cluster),
-                               which(model_names == model)] <- num_new / num_raw * 100
+        result[["NA_percent"]][cluster, model] <- num_new / num_raw * 100
       }
     }
     if(total == TRUE){
@@ -636,17 +678,56 @@ Assessment_via_cluster <- function(pred, meas, memb,
           result[[metric]] %<>% rbind(.,NA)
           rownames(result[[metric]])[nrow(result[[metric]])] <- 'SUM'
         }
-        result[[metric]]['SUM',
-                         which(model_names == model)] <- cal.metrics(x,y,metric)  
+        result[[metric]]['SUM', model] <- cal.metrics(x,y,metric,log10=log10)  
       }
       
       if(na.process){
-        result[["NA_percent"]]['SUM',
-                               which(model_names == model)] <- num_new / num_raw * 100
+        result[["NA_percent"]]['SUM', model] <- num_new / num_raw * 100
       }
     }
   }
+  
+  if(hard.mode == FALSE){
+    
+    result_fz <- result
+    
+    for(i in 1:ncol(memb)){
+      for(j in 1:ncol(pred)){
+        for(metric in metrics){
+          
+          x <- meas
+          y <- pred[, j]
+          
+          if(na.process){
+            tmp <- cbind(x,y) %>% na.omit
+            x <- tmp[,1]
+            y <- tmp[,2]
+          }
+          
+          Er <- cal.metrics.vector(x,y,metric,log10)
+          result_fz[[metric]][i,j] <- sum(memb[,i] * Er, na.rm=T)/sum(memb[,i], na.rm=T)
+          
+        }
+      }
+    }
+    
+    result <- result_fz
+    
+  }
+  
+  result$input <- list(
+    pred=pred,
+    meas=meas,
+    memb=memb,
+    metrics=metrics,
+    log10=log10,
+    total=total,
+    hard.mode=hard.mode,
+    na.process=na.process
+  )
+  
   return(result)
+  
 }
 
 

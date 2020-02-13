@@ -124,7 +124,7 @@ i <- 1
 for(model in c('BR','TBA','C6','conc.Blend')){
   MAPEs[i] <- cal.metrics(x=dt_Chla$Chla_true %>% log10,
                           y=dt_Chla[,model]  %>% log10,
-                          name='MAPE')
+                          name='MAPE',log10=TRUE)
   names(MAPEs)[i] <- model
   i <- i + 1
 }
@@ -135,7 +135,7 @@ i <- 1
 for(model in c('BR','TBA','C6','conc.Blend')){
   MAEs[i] <- cal.metrics(x=dt_Chla$Chla_true,
                          y=dt_Chla[,model],
-                         name='MAE2')
+                         name='MAE',log10=TRUE)
   names(MAEs)[i] <- model
   i <- i + 1
 }

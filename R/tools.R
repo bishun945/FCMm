@@ -1,52 +1,51 @@
 #' @title Assess the performance of algorithms
 #' @name cal.metrics
-#' @usage cal.metrics(x,y,name="all")
+#' @usage cal.metrics(x,y,name="all",log10=FALSE)
 #' @param x True value
 #' @param y Estimated value
 #' @param name The name of metrics
+#' @param log10 Logical. Whether the input x and y should be log10-transformed
 #' @export
 #' @importFrom stats cor cor.test median na.omit sd
 #' @family Utils
-cal.metrics <- function(x,y,name="all"){
+#' @note (2020-02-09) All functions used log10 transformation was assgined to the 
+#'   Key parameter `log10`
+#' 
+cal.metrics <- function(x,y,name="all",log10=FALSE){
 
   name <- match.arg(name, cal.metrics.names())
   
+  if(log10){
+    x <- log10(x)
+    y <- log10(y)
+  }
+  
   .cal.rmse <- function(x,y){
-    result <- sqrt(sum((x-y)^2,na.rm=T)/length(x))
-    return(result)
+    return(sqrt(sum((x-y)^2,na.rm=T)/length(x)))
   }
   .cal.crmse<-function(x,y){
-    result<-sqrt(sum((((x-mean(x,na.rm=T))-(y-mean(y,na.rm=T))))^2,na.rm = T)/length(x))
-    return(result)
+    return(sqrt(sum((((x-mean(x,na.rm=T))-(y-mean(y,na.rm=T))))^2,na.rm = T)/length(x)))
   }
-  .cal.mae1<-function(x,y){
-    result<-sum(abs(x-y),na.rm = T)/length(x)
-    return(result)
-  }
-  .cal.mae2<-function(x,y){
-    result<-10^(sum(abs((log10(x))-log10(y)),na.rm = T)/length(x))
-    return(result)
+  .cal.mae<-function(x,y){
+    return(result<-sum(abs(y-x),na.rm = T)/length(x))
   }
   .cal.mape<-function(x,y){
-    result<-sum(abs((x-y)/y),na.rm = T)/length(x)*100
-    return(result)
+    return(result<-sum(abs((y-x)/x),na.rm = T)/length(x)*100)
   }
-  .cal.mdape<-function(x,y){
-    result<-sum(abs((y-median(x,na.rm = T))/x),na.rm = T)/length(x)*100
-    return(result)
+  .cal.mrpe<-function(x,y){
+    return(sum((y-x)/x,na.rm=T)/length(x)*100)
   }
-  .cal.bias1<-function(x,y){
-    result<-sum((y-x),na.rm = T)/length(x)
-    return(result)
+  .cal.umrpe <- function(x,y){
+    return(mean((y-x)/(0.5*x+0.5*y)*100))
   }
-  .cal.bias2<-function(x,y){
-    result<-10^(sum((log10(y)-log10(x)),na.rm = T)/length(x))
-    return(result)
+  .cal.bias<-function(x,y){
+    return(sum((y-x),na.rm = T)/length(x))
+  }
+  .cal.ratio <- function(x,y){
+    return(mean(y/x))
   }
   .cal.cv<-function(x,y){
-    # result<-sqrt(sum(y-mean(y,na.rm = T),na.rm = T)^2/length(x)) / abs(mean(y,na.rm = T))
-    result <- sd(y,na.rm=T) / mean(y, na.rm=T) * 100
-    return(result)
+    return(sd(y,na.rm=T) / mean(y, na.rm=T) * 100)
   }
   .cal.R<-function(x,y){
     result <- cor.test(x,y,method = "pearson")
@@ -54,36 +53,33 @@ cal.metrics <- function(x,y,name="all"){
     return(result)
   }
   .cal.R2<-function(x,y){
-    # result<-1-(sum((y-mean(x,na.rm = T))^2,na.rm = T)/sum((x-mean(x,na.rm = T))^2,na.rm = T))
     result <- cor.test(x,y,method = "pearson")
     result <- as.numeric(result$estimate) ^ 2
     return(result)
   }
   .cal.eta<-function(x,y){
-    result<-length(which(is.na(y) == FALSE)) / length(y)
-    return(result)
+    return(length(which(is.na(y) == FALSE)) / length(y))
   }
   .cal.chi2<-function(x,y){
-    result<-sum((x-y)^2/y,na.rm = T)
-    return(result)
+    return(sum((x-y)^2/y,na.rm = T))
   }
 
   if(name == "RMSE"){
     result <- .cal.rmse(x,y)
   }else if(name == "CRMSE"){
     result <- .cal.crmse(x,y)
-  }else if(name == "MAE1"){
-    result <- .cal.mae1(x,y)
-  }else if(name == "MAE2"){
-    result <- .cal.mae2(x,y)
+  }else if(name == "MAE"){
+    result <- .cal.mae(x,y)
   }else if(name == "MAPE"){
     result <- .cal.mape(x,y)
-  }else if(name == "MDAPE"){
-    result <- .cal.mdape(x,y)
-  }else if(name == "BIAS1"){
-    result <- .cal.bias1(x,y)
-  }else if(name == "BIAS2"){
-    result <- .cal.bias2(x,y)
+  }else if(name == "MRPE"){
+    result <- .cal.mrpe(x,y)
+  }else if(name == "UMRPE"){
+    result <- .cal.umrpe(x,y)
+  }else if(name == "BIAS"){
+    result <- .cal.bias(x,y)
+  }else if(name == "RATIO"){
+    result <- .cal.ratio(x,y)
   }else if(name == "CV"){
     result <- .cal.cv(x,y)
   }else if(name == "R"){
@@ -96,19 +92,18 @@ cal.metrics <- function(x,y,name="all"){
     result <- .cal.chi2(x,y)
   }
   else if(name == "all"){
-    result <- list(RMSE=.cal.rmse(x,y),
-                   CRMSE=.cal.crmse(x,y),
-                   MAE1=.cal.mae1(x,y),
-                   MAE2=.cal.mae2(x,y),
-                   MAPE=.cal.mape(x,y),
-                   MDAPE=.cal.mdape(x,y),
-                   BIAS1=.cal.bias1(x,y),
-                   BIAS2=.cal.bias2(x,y),
-                   CV=.cal.cv(x,y),
-                   R=.cal.R(x,y),
-                   R2=.cal.R2(x,y),
-                   eta=.cal.eta(x,y),
-                   chi2=.cal.chi2(x,y)
+    result <- list(RMSE  = .cal.rmse(x,y),
+                   CRMSE = .cal.crmse(x,y),
+                   MAE   = .cal.mae(x,y),
+                   MAPE  = .cal.mape(x,y),
+                   UMRPE = .cal.umrpe(x,y),
+                   BIAS  = .cal.bias(x,y),
+                   RATIO = .cal.ratio(x,y),
+                   CV    = .cal.cv(x,y),
+                   R     = .cal.R(x,y),
+                   R2    = .cal.R2(x,y),
+                   eta   = .cal.eta(x,y),
+                   chi2  = .cal.chi2(x,y)
     )
   }
   return(result)
@@ -120,8 +115,82 @@ cal.metrics <- function(x,y,name="all"){
 #' @return strings
 #' @family Utils
 cal.metrics.names <- function(){
-  c('RMSE','CRMSE','MAE2','MAE2','MAPE','MDAPE',
-    'BIAS1','BIAS2','CV','R','R2','eta','chi2','all')
+  c('RMSE','CRMSE','MAE','MAPE',"MRPE","UMRPE",
+    'BIAS', 'RATIO', 'CV','R','R2','eta','chi2','all')
+}
+
+#' @title Assess the performance of algorithms as vector
+#' @name cal.metrics.vector
+#' @usage cal.metrics.vector(x,y,name="all",log10=FALSE)
+#' @param x True value
+#' @param y Estimated value
+#' @param name The name of metrics
+#' @param log10 Logical. Whether the input x and y should be log10-transformed
+#' @export
+#' @importFrom stats cor cor.test median na.omit sd
+#' @family Utils
+#' 
+cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
+
+  name <- match.arg(name, cal.metrics.vector.names())
+  
+  if(log10){
+    x <- log10(x)
+    y <- log10(y)
+  }
+  
+  .cal.mae<-function(x,y){
+    return(abs(y-x))
+  }
+  .cal.mape<-function(x,y){
+    return(abs((y-x)/x)*100)
+  }
+  .cal.mrpe<-function(x,y){
+    return((y-x)/x*100)
+  }
+  .cal.umrpe <- function(x,y){
+    return((y-x)/(0.5*x+0.5*y)*100)
+  }
+  .cal.bias<-function(x,y){
+    return(y-x)
+  }
+  .cal.ratio<-function(x,y){
+    return(y/x)
+  }
+
+  if(name == "MAE"){
+    result <- .cal.mae(x,y)
+  }else if(name == "MAPE"){
+    result <- .cal.mape(x,y)
+  }else if(name == "MRPE"){
+    result <- .cal.mrpe(x,y)
+  }else if(name == "UMRPE"){
+    result <- .cal.umrpe(x,y)
+  }else if(name == "BIAS"){
+    result <- .cal.bias(x,y)
+  }else if(name == "RATIO"){
+    result <- .cal.ratio(x,y)
+  }
+  else if(name == "all"){
+    result <- list(MAE   = .cal.mae(x,y),
+                   MAPE  = .cal.mape(x,y),
+                   MRPE  = .cal.mrpe(x,y),
+                   UMRPE = .cal.umrpe(x,y),
+                   BIAS  = .cal.bias(x,y),
+                   RATIO = .cal.ratio(x,y)
+    )
+  }
+  return(result)
+}
+
+#' @title List all metrics in function cal.metrics
+#' @name cal.metrics.vector.names
+#' @export
+#' @return strings
+#' @family Utils
+cal.metrics.vector.names <- function(){
+  c('MAE','MAPE','MRPE', 'UMRPE',
+    'BIAS', 'RATIO', 'all')
 }
 
 #' @title Convert dataframe with factor to character

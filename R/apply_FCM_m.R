@@ -26,6 +26,7 @@
 #'     \item \strong{x.stand}  The standardized Rrs dataframe, if \code{stand=F}
 #'     \item \strong{d}  Distance to each cluster
 #'     \item \strong{u}  Membership values
+#'     \item \strong{Area} Spectral intergration of each sample
 #'     \item \strong{cluster}  Defined by the maximum of membership
 #'     \item \strong{quality}  The quality of the cluster results.
 #'     \item \strong{m.used}  The used value of fuzzifier(m)
@@ -116,6 +117,7 @@ apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
   result$x.stand <- x.stand
   result$d <- d
   result$u <- u
+  result$Area <- Area_x
   result$cluster <- cluster
   result$quality <- quality
   result$m_used <- m_used

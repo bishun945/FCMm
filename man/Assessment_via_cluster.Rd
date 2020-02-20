@@ -12,7 +12,8 @@ Assessment_via_cluster(
   log10 = FALSE,
   total = TRUE,
   hard.mode = TRUE,
-  na.process = FALSE
+  na.process = FALSE,
+  plot.col = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ Assessment_via_cluster(
 \item{hard.mode}{If \code{FALSE}, the membership values are used to calculate validation metrics}
 
 \item{na.process}{na.process and choose to statistic na value percent}
+
+\item{plot.col}{option to plot col result for chosed metrics (Default as FALSE)}
 }
 \value{
 List

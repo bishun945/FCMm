@@ -32,6 +32,7 @@ A \code{list} including several results of function \code{apply_FCM_m()}
     \item \strong{x.stand}  The standardized Rrs dataframe, if \code{stand=F}
     \item \strong{d}  Distance to each cluster
     \item \strong{u}  Membership values
+    \item \strong{Area} Spectral intergration of each sample
     \item \strong{cluster}  Defined by the maximum of membership
     \item \strong{quality}  The quality of the cluster results.
     \item \strong{m.used}  The used value of fuzzifier(m)

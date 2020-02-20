@@ -50,7 +50,12 @@ class(OLCI_TH)
 
 # convert RasterBrick to imdf with NA value removed and xy coordinates recorded
 imdf <- raster::as.data.frame(OLCI_TH, na.rm=T, xy=TRUE)
-names(imdf)[c(-1,-2)] <- c(412.5,442.5,490,510,
+
+x_name <- which(names(imdf) == "x")
+y_name <- which(names(imdf) == "y")
+imdf <- cbind(imdf[,c(x_name, y_name)], imdf[,-c(x_name, y_name)])
+
+names(imdf)[-c(1,2)] <- c(412.5,442.5,490,510,
                            560,620,665,673.75,
                            708.75,753.75,865,885)
 ```
@@ -63,7 +68,7 @@ Function `plot_spec_from_df` suppports a quick look about the spectral dataframe
 
 ```{r fig.height=4, fig.width=6}
 set.seed(54321)
-sample_n(imdf[,c(-1,-2)],50) %>% 
+sample_n(imdf[,-c(1,2)],50) %>% 
   plot_spec_from_df(.) + 
   labs(x='Wavelength (nm)',y=expression(Rrs~(sr^-1))) + 
   theme_bw() + 

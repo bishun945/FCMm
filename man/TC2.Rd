@@ -23,6 +23,11 @@ A list with names as Chla_final, Chla_clean, Chla_turbid, and flag
 \description{
 TC2
 }
+\references{
+Liu G, Li L, Song K, et al. An OLCI-based algorithm for semi-empirically 
+  partitioning absorption coefficient and estimating chlorophyll a concentration in 
+  various turbid case-2 waters[J]. Remote Sensing of Environment, 2020, 239: 111648.
+}
 \seealso{
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},

@@ -19,7 +19,7 @@ A list
 run_all_Chla_algorithms
 }
 \details{
-Please type \code{Chal_algorithm_name()} to see all Chla algorithms
+Please type \code{Chla_algorithm_name()} to see all Chla algorithms
 }
 \seealso{
 Other Algorithms: Chla concentration: 

@@ -118,6 +118,11 @@ apply_to_image <- function(input, res,
   if(im@data@nlayers!=length(res$FD$wv))
     stop("The band number of image file is different from wavelength length!")
   imdf <- as.data.frame(im,na.rm=T,xy=T)
+  
+  x_name <- which(names(imdf) == "x")
+  y_name <- which(names(imdf) == "y")
+  imdf <- cbind(imdf[,c(x_name, y_name)], imdf[,-c(x_name, y_name)])
+  
   imRrs.raw <- imdf[,-c(1,2)]
   names(imRrs.raw) <- paste0("Rrs",wv)
   Rrs <- as.matrix(imRrs.raw)

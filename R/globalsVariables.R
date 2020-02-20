@@ -10,6 +10,7 @@
 #' @import stringr
 #' @import fclust
 #' @import tidyverse
+#' @import lmodel2
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom utils write.csv data
 #' @importFrom readxl read_excel excel_sheets
@@ -22,4 +23,4 @@ utils::globalVariables(c('.','band','value','name','wv','variable',
                          'dt_water',
                          "Rrs443","Rrs490","Rrs510","Rrs560","Rrs620","Rrs665",
                          "Rrs681","Rrs709","Rrs754","Rrs779",
-                         '.cal.mdape'))
+                         '.cal.mdape',"Models"))

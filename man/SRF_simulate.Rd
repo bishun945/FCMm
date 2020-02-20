@@ -62,6 +62,7 @@ Other Utils:
 \code{\link{cal.metrics.names}()},
 \code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
-\code{\link{cal.metrics}()}
+\code{\link{cal.metrics}()},
+\code{\link{lmodel2_}()}
 }
 \concept{Utils}

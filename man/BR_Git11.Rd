@@ -14,6 +14,11 @@ BR_Git11(Rrs665, Rrs709)
 \description{
 BR_Git11
 }
+\references{
+Gitelson A A, Gurlin D, Moses W J, et al. Remote Estimation of 
+  Chlorophyll-a Concentration[J]. Advances in environmental remote sensing: sensors, 
+  algorithms, and applications, 2011: 439.
+}
 \seealso{
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},

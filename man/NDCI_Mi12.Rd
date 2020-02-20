@@ -14,6 +14,9 @@ NDCI_Mi12(Rrs665, Rrs709)
 \description{
 NDCI_Mi12
 }
+\note{
+Chla_test as a test verison of NDCI_Mi12 results parameterized by Bi
+}
 \references{
 Mishra S, Mishra D R. Normalized difference chlorophyll index:
   A novel model for remote estimation of chlorophyll-a concentration in turbid 

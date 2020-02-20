@@ -16,6 +16,11 @@ Gons08(Rrs665, Rrs709, Rrs779)
 \description{
 Gons08
 }
+\references{
+Gons H J, Auer M T, Effler S W. MERIS satellite chlorophyll mapping of 
+  oligotrophic and eutrophic waters in the Laurentian Great Lakes[J]. Remote Sensing 
+  of Environment, 2008, 112(11): 4098-4106.
+}
 \seealso{
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},

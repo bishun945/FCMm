@@ -7,9 +7,9 @@
 cal.metrics(x,y,name="all",log10=FALSE)
 }
 \arguments{
-\item{x}{True value}
+\item{x}{True value OR Actual value}
 
-\item{y}{Estimated value}
+\item{y}{Estimated value OR Predict value}
 
 \item{name}{The name of metrics}
 
@@ -28,6 +28,7 @@ Other Utils:
 \code{\link{SRF_simulate}()},
 \code{\link{cal.metrics.names}()},
 \code{\link{cal.metrics.vector.names}()},
-\code{\link{cal.metrics.vector}()}
+\code{\link{cal.metrics.vector}()},
+\code{\link{lmodel2_}()}
 }
 \concept{Utils}

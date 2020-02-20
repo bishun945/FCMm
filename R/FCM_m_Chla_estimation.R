@@ -73,9 +73,9 @@ FCM_m_Chla_estimation <- function(Rrs, U){
   Rrs754 <- Rrs[, n[3]]
 
   names(U) <- seq(1,k) %>% as.character
-  bind.Chla <- data.frame(BR=BR_Gil10(Rrs709,Rrs665),
-                          TBA=TBA_Gil10(Rrs665,Rrs709,Rrs754),
-                          C6=C6(Rrs665,Rrs754),
+  bind.Chla <- data.frame(BR=BR_Gil10(Rrs709,Rrs665)$Chla,
+                          TBA=TBA_Gil10(Rrs665,Rrs709,Rrs754)$Chla,
+                          C6=C6(Rrs665,Rrs754)$Chla,
                           M=round(U,4))
   # TBA: C1 C2 C5
   # BR: C3 C4 C7
@@ -98,7 +98,11 @@ FCM_m_Chla_estimation <- function(Rrs, U){
 #'   chlorophyll-a in coastal and inland waters using red and near infrared bands[J]. 
 #'   Optics Express, 2010, 18(23): 24109-24125.
 BR_Gil10 <- function(Rrs665, Rrs709){
-  return((35.75*Rrs709/Rrs665-19.3)^1.124)
+  ind = (Rrs709/Rrs665)
+  Chla = (35.75*ind-19.3)^1.124
+  result <- list(ind=ind,
+                 Chla=Chla)
+  return(result)
 }
 
 #' @title TBA_Gil10
@@ -111,7 +115,11 @@ BR_Gil10 <- function(Rrs665, Rrs709){
 #'   chlorophyll-a in coastal and inland waters using red and near infrared bands[J]. 
 #'   Optics Express, 2010, 18(23): 24109-24125.
 TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
-  return((113.36*(1/Rrs665-1/Rrs709)*Rrs754+16.45)^1.124)
+  ind = (1/Rrs665-1/Rrs709)*Rrs754
+  Chla = (113.36*ind+16.45)^1.124
+  result <- list(ind=ind,
+                 Chla=Chla)
+  return(result)
 }
 
 #' @title C6
@@ -120,7 +128,11 @@ TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
 #' @export
 #' @family Algorithms: Chla concentration
 C6 <- function(Rrs665, Rrs754){
-  return(10^( 1/Rrs665*Rrs754 * 0.14 + 2.11))
+  ind <- 1/Rrs665*Rrs754
+  Chla <- 10^( ind * 0.14 + 2.11)
+  result <- list(ind=ind,
+                 Chla=Chla)
+  return(result)
 }
 
 #' @title OC4_OLCI
@@ -135,7 +147,10 @@ C6 <- function(Rrs665, Rrs754){
 OC4_OLCI <- function(Rrs443, Rrs490, Rrs510, Rrs560){
   X <- apply(cbind(Rrs443,Rrs490,Rrs510),1,max)/Rrs560
   X <- log10(X)
-  return(10^(0.42540-3.21679*X+2.86907*X^2-0.62628*X^3-1.09333*X^4))
+  Chla <- 10^(0.42540-3.21679*X+2.86907*X^2-0.62628*X^3-1.09333*X^4)
+  result <- list(X=X,
+                 Chla=Chla)
+  return(result)
 }
 
 #' @title OC5_OLCI
@@ -151,7 +166,10 @@ OC4_OLCI <- function(Rrs443, Rrs490, Rrs510, Rrs560){
 OC5_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560){
   X <- apply(cbind(Rrs412,Rrs443,Rrs490,Rrs510),1,max)/Rrs560
   X <- log10(X)
-  return(10^(0.43213-3.13001*X+3.05479*X^2-1.45176*X^3-0.24947*X^4))
+  Chla <- 10^(0.43213-3.13001*X+3.05479*X^2-1.45176*X^3-0.24947*X^4) 
+  result <- list(X=X,
+                 Chla=Chla)
+  return(result)
 }
 
 
@@ -169,7 +187,10 @@ OC5_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560){
 OC6_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
   X <- apply(cbind(Rrs412,Rrs443,Rrs490,Rrs510),1,max)/apply(cbind(Rrs560,Rrs665),1,mean)
   X <- log10(X)
-  return(10^(0.95039-3.05404*X+2.17992*X^2-1.12097*X^3-0.15262*X^4))
+  Chla <- 10^(0.95039-3.05404*X+2.17992*X^2-1.12097*X^3-0.15262*X^4)
+  result <- list(X=X,
+                 Chla=Chla)
+  return(result)
 }
 
 
@@ -214,8 +235,15 @@ OCI_Hu12 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
 #' @param Rrs709 Rrs709
 #' @export
 #' @family Algorithms: Chla concentration
+#' @references Gitelson A A, Gurlin D, Moses W J, et al. Remote Estimation of 
+#'   Chlorophyll-a Concentration[J]. Advances in environmental remote sensing: sensors, 
+#'   algorithms, and applications, 2011: 439.
 BR_Git11 <- function(Rrs665, Rrs709){
-  return(72.66*Rrs709/Rrs665-46.535)
+  ind = Rrs709/Rrs665
+  Chla = 72.66*ind-46.535
+  result <- list(ind=ind,
+                 Chla=Chla)
+  return(result)
 }
 
 #' @title TBA_Git11
@@ -224,8 +252,15 @@ BR_Git11 <- function(Rrs665, Rrs709){
 #' @param Rrs754 Rrs754
 #' @export
 #' @family Algorithms: Chla concentration
+#' @references Gitelson A A, Gurlin D, Moses W J, et al. Remote Estimation of 
+#'   Chlorophyll-a Concentration[J]. Advances in environmental remote sensing: sensors, 
+#'   algorithms, and applications, 2011: 439.
 TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
-  return(243.86*(1/Rrs665-1/Rrs709)*Rrs754+23.17)
+  ind = (1/Rrs665-1/Rrs709)*Rrs754
+  Chla = 243.86*ind+23.17
+  result <- list(ind=ind,
+                 Chla=Chla)
+  return(result)
 }
 
 #' @title NDCI_Mi12
@@ -233,15 +268,18 @@ TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
 #' @param Rrs709 Rrs709
 #' @export
 #' @family Algorithms: Chla concentration
+#' @note Chla_test as a test verison of NDCI_Mi12 results parameterized by Bi
 #' @references Mishra S, Mishra D R. Normalized difference chlorophyll index:
 #'   A novel model for remote estimation of chlorophyll-a concentration in turbid 
 #'   productive waters[J]. Remote Sensing of Environment, 2012, 117: 394-406.
 NDCI_Mi12 <- function(Rrs665, Rrs709){
   NDCI <- (Rrs709-Rrs665)/(Rrs709+Rrs665)
   Chla <- 14.039+86.115*NDCI+194.325*NDCI^2
+  Chla_test <- 10^(1.3636 + 3.1257*NDCI - 3.0591*NDCI^2 + 3.6429*NDCI^3)
   result <- list(
     NDCI = NDCI,
-    Chla = Chla
+    Chla = Chla,
+    Chla_test = Chla_test
   )
   return(result)
 }
@@ -256,7 +294,11 @@ NDCI_Mi12 <- function(Rrs665, Rrs709){
 #'   sensing algorithms for an optically complex estuary[J]. Remote Sensing of Environment, 
 #'   2013, 129: 75-89.
 FBA_Le13 <- function(Rrs665, Rrs681, Rrs709){
-  return(18.492*(1/Rrs665-1/Rrs681)/(1/Rrs709-1/Rrs681)+6.1302)
+  ind = (1/Rrs665-1/Rrs681)*(1/Rrs709-1/Rrs681)
+  Chla = 18.492*ind+6.1302
+  result <- list(ind=ind,
+                 Chla=Chla)
+  return(result)
 }
 
 #' @title FBA_Yang10
@@ -269,7 +311,11 @@ FBA_Le13 <- function(Rrs665, Rrs681, Rrs709){
 #'   chlorophyll-a in turbid case-II waters: case studies of Lake Kasumigaura, Japan, and Lake 
 #'   Dianchi, China[J]. IEEE Geoscience and Remote Sensing Letters, 2010, 7(4): 655-659.
 FBA_Yang10 <- function(Rrs665, Rrs709, Rrs754){
-  return(161.24*(1/Rrs665-1/Rrs709)/(1/Rrs754-1/Rrs709)+28.04)
+  ind = (1/Rrs665-1/Rrs709)/(1/Rrs754-1/Rrs709)
+  Chla = 161.24*ind+28.04
+  result <- list(ind=ind,
+                 Chla=Chla)
+  return(result)
 }
 
 #' @title SCI_Shen10
@@ -279,15 +325,21 @@ FBA_Yang10 <- function(Rrs665, Rrs709, Rrs754){
 #' @param Rrs681 Rrs681
 #' @export
 #' @family Algorithms: Chla concentration
+#' @references Shen F, Zhou Y X, Li D J, et al. Medium resolution imaging spectrometer 
+#'   (MERIS) estimation of chlorophyll-a concentration in the turbid sediment-laden waters 
+#'   of the Changjiang (Yangtze) Estuary[J]. International Journal of Remote Sensing, 2010, 
+#'   31(17-18): 4635-4650.
 SCI_Shen10 <- function(Rrs560, Rrs620, Rrs665, Rrs681){
   H_Chl <- (Rrs681+(681-665)/(681-620)*(Rrs620-Rrs681)) - Rrs665
   H_deta <- Rrs620 - (Rrs681+(681-620)/(681-560)*(Rrs560-Rrs681))
   SCI <- H_Chl - H_deta
   result <- list(
-    H_Chl  = H_Chl,
-    H_deta = H_deta,
-    SCI    = SCI,
-    Chla   = 0.057*SCI^(-0.6327)
+    H_Chl      = H_Chl,
+    H_deta     = H_deta,
+    SCI        = SCI,
+    Chla_EPCHC = 0.057*SCI^(-0.6327), # EPCHC
+    Chla_SPR   = 179378*SCI^2+92.934*SCI+0.2736*SCI, # Shen in Spring
+    Chla_SUM   = 550383*SCI^2+2769*SCI+4.3866
   )
   return(result)
 }
@@ -298,9 +350,17 @@ SCI_Shen10 <- function(Rrs560, Rrs620, Rrs665, Rrs681){
 #' @param Rrs779 Rrs779
 #' @export
 #' @family Algorithms: Chla concentration
+#' @references Gons H J, Auer M T, Effler S W. MERIS satellite chlorophyll mapping of 
+#'   oligotrophic and eutrophic waters in the Laurentian Great Lakes[J]. Remote Sensing 
+#'   of Environment, 2008, 112(11): 4098-4106.
 Gons08 <- function(Rrs665, Rrs709, Rrs779){
   bbp <- 1.61 * Rrs779 / (0.082 - 0.6*Rrs779)
-  return((Rrs709/Rrs665*(0.7+bbp)-0.4-bbp^1.06)/0.016)
+  Chla <- (Rrs709/Rrs665*(0.7+bbp)-0.4-bbp^1.06)/0.016
+  result <- list(
+    bbp  = bbp,
+    Chla = Chla
+  )
+  return(result)
 }
 
 #' @title TC2
@@ -312,16 +372,20 @@ Gons08 <- function(Rrs665, Rrs709, Rrs779){
 #' @export
 #' @return A list with names as Chla_final, Chla_clean, Chla_turbid, and flag
 #' @family Algorithms: Chla concentration
+#' @references Liu G, Li L, Song K, et al. An OLCI-based algorithm for semi-empirically 
+#'   partitioning absorption coefficient and estimating chlorophyll a concentration in 
+#'   various turbid case-2 waters[J]. Remote Sensing of Environment, 2020, 239: 111648.
 TC2 <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
 
   Chla_final <- Chla_clean <- TC2_clean(Rrs443, Rrs560, Rrs665, Rrs709)
   flag <- rep('Clean',length(Chla_final))
-  Chla_turbid <- TC2_turbid(Rrs443, Rrs560, Rrs665, Rrs754)
+  Chla_turbid <- TC2_turbid(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)
   MCI <- Rrs709 - Rrs665 - (Rrs754-Rrs665) * (709-665) / (754-665)
   w <- which(MCI > 0.0016)
   Chla_final[w] <- Chla_turbid[w]
   flag[w] <- 'Turbid'
-  return(list(Chla_final=Chla_final,
+  return(list(MCI=MCI,
+              Chla_final=Chla_final,
               Chla_clean=Chla_clean,
               Chla_turbid=Chla_turbid,
               flag=flag))
@@ -335,22 +399,26 @@ TC2 <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
 #' @export
 #' @family Algorithms: Chla concentration
 TC2_clean <- function(Rrs443, Rrs560, Rrs665, Rrs709){
-  g0 = 0.084
-  g1 = 0.170
+  g0 = 0.089
+  g1 = 0.125
   lambda_0 <- 709
   yita <- 0.17
   aChla_star <- 0.017
+  aw  = c(0.006963, 0.06209, 0.4285, 0.8013, 2.8666) # 443, 560, 665, 709, 754
+  bbw = c(0.002178, 0.0008057, 0.0003937, 0.0003023, 0.0002343)
+  # aw  = dt_water$aw[dt_water$nm %in% c(443,560,665,709)]
+  # bbw = dt_water$bbw[dt_water$nm %in% c(443,560,665,709)]
   Rrs <- cbind(Rrs443, Rrs560, Rrs665, Rrs709)
   rrs <- Rrs / (0.52 + 1.7 * Rrs)
   u <- (-g0 + sqrt(g0^2 + 4 * g1 * rrs)) / (2 * g1)
-  bbp_0 <- u[,4] * dt_water$aw[dt_water$nm == lambda_0] / (1-u[,4]) -
-    dt_water$bbw[dt_water$nm == lambda_0]
+  bbp_0 <- u[,4] * aw[4] / (1-u[,4]) - bbw[4]
   Y <- 2.0 * (1 - 1.2 * exp(-0.9 * rrs[,1] / rrs[,2]))
-  bb560 <- bbp_0 * (lambda_0/560)^Y + dt_water$bbw[dt_water$nm == 560]
-  bb665 <- bbp_0 * (lambda_0/665)^Y + dt_water$bbw[dt_water$nm == 665]
-  anw560 <- (1-u[,2])*bb560 / u[,2] - dt_water$aw[dt_water$nm == 560]
-  anw665 <- (1-u[,3])*bb665 / u[,3] - dt_water$aw[dt_water$nm == 665]
-  anw709 <- (1-u[,4])*bb665 / u[,4] - dt_water$aw[dt_water$nm == 709]
+  bb560 <- bbp_0 * (lambda_0/560)^Y + bbw[2]
+  bb665 <- bbp_0 * (lambda_0/665)^Y + bbw[3]
+  bb709 <- bbp_0 * (lambda_0/709)^Y + bbw[3]
+  anw560 <- (1-u[,2])*bb560 / u[,2] - aw[2]
+  anw665 <- (1-u[,3])*bb665 / u[,3] - aw[3]
+  anw709 <- (1-u[,4])*bb709 / u[,4] - aw[4]
   aph665 <- anw665 - yita * anw560 - (1-yita) * anw709
   Chla <- aph665 / aChla_star
   return(Chla)
@@ -361,26 +429,31 @@ TC2_clean <- function(Rrs443, Rrs560, Rrs665, Rrs709){
 #' @param Rrs443 Rrs443
 #' @param Rrs560 Rrs560
 #' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
 #' @param Rrs754 Rrs754
 #' @export
 #' @family Algorithms: Chla concentration 
-TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs754){
-  g0 = 0.084
-  g1 = 0.170
+TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
+  g0 = 0.089
+  g1 = 0.125
   lambda_0 <- 754
   yita <- 0.17
   aChla_star <- 0.017
-  Rrs <- cbind(Rrs443, Rrs560, Rrs665, Rrs754)
+  aw  = c(0.006963, 0.06209, 0.4285, 0.8013, 2.8666) # 443, 560, 665, 709, 754
+  bbw = c(0.002178, 0.0008057, 0.0003937, 0.0003023, 0.0002343)
+  # aw  = dt_water$aw[dt_water$nm %in% c(443,560,665,709)]
+  # bbw = dt_water$bbw[dt_water$nm %in% c(443,560,665,709)]
+  Rrs <- cbind(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)
   rrs <- Rrs / (0.52 + 1.7 * Rrs)
   u <- (-g0 + sqrt(g0^2 + 4 * g1 * rrs)) / (2 * g1)
-  bbp_0 <- u[,4] * dt_water$aw[dt_water$nm == lambda_0] / (1-u[,4]) -
-    dt_water$bbw[dt_water$nm == lambda_0]
+  bbp_0 <- u[,5] * aw[5] / (1-u[,5]) - bbw[5]
   Y <- 2.0 * (1 - 1.2 * exp(-0.9 * rrs[,1] / rrs[,2]))
-  bb560 <- bbp_0 * (lambda_0/560)^Y + dt_water$bbw[dt_water$nm == 560]
-  bb665 <- bbp_0 * (lambda_0/665)^Y + dt_water$bbw[dt_water$nm == 665]
-  anw560 <- (1-u[,2])*bb560 / u[,2] - dt_water$aw[dt_water$nm == 560]
-  anw665 <- (1-u[,3])*bb665 / u[,3] - dt_water$aw[dt_water$nm == 665]
-  anw709 <- (1-u[,4])*bb665 / u[,4] - dt_water$aw[dt_water$nm == 709]
+  bb560 <- bbp_0 * (lambda_0/560)^Y + bbw[2]
+  bb665 <- bbp_0 * (lambda_0/665)^Y + bbw[3]
+  bb709 <- bbp_0 * (lambda_0/709)^Y + bbw[4]
+  anw560 <- (1-u[,2])*bb560 / u[,2] - aw[2]
+  anw665 <- (1-u[,3])*bb665 / u[,3] - aw[3]
+  anw709 <- (1-u[,4])*bb709 / u[,4] - aw[4]
   aph665 <- anw665 - yita * anw560 - (1-yita) * anw709
   Chla <- aph665 / aChla_star
   return(Chla)
@@ -400,7 +473,6 @@ TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs754){
 #' @references Lee Z P, Carder K L, Arnone R A. Deriving inherent optical properties from water color: 
 #'   a multiband quasi-analytical algorithm for optically deep waters[J]. Applied optics, 2002, 41(27): 
 #'   5755-5772.
-
 QAA_v5 <- function(wv, Rrs,
                    wv412=NULL, wv443=NULL, wv490=NULL, wv560=NULL, wv667=NULL,
                    verbose=F){
@@ -540,7 +612,7 @@ Chla_algorithms_name <- function(){
 #' @param Rrs Dataframe that should with required colnames 443, 490, 510, 560, 620, 665, 681, 709, 754, 779
 #' @param wv_range Number that used to define the range of wavelength to capture
 #'   the center wavelength of required band
-#' @details Please type \code{Chal_algorithm_name()} to see all Chla algorithms
+#' @details Please type \code{Chla_algorithm_name()} to see all Chla algorithms
 #' @export
 #' @return A list
 #' @family Algorithms: Chla concentration
@@ -554,18 +626,18 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
     eval(parse(text=text))
   }
   result <- list(
-    BR_Gil10 = BR_Gil10(Rrs709, Rrs665),
-    TBA_Gil10 = TBA_Gil10(Rrs665, Rrs709, Rrs754),
-    C6 = C6(Rrs665, Rrs754),
-    OC4_OLCI = OC4_OLCI(Rrs443, Rrs490, Rrs510, Rrs560),
+    BR_Gil10 = BR_Gil10(Rrs665=Rrs665, Rrs709=Rrs709)$Chla,
+    TBA_Gil10 = TBA_Gil10(Rrs665, Rrs709, Rrs754)$Chla,
+    C6 = C6(Rrs665, Rrs754)$Chla,
+    OC4_OLCI = OC4_OLCI(Rrs443, Rrs490, Rrs510, Rrs560)$Chla,
     OCI_Hu12 = OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)$Chl_OCI,
-    BR_Git11 = BR_Git11(Rrs665, Rrs709),
-    TBA_Git11 = TBA_Git11(Rrs665, Rrs709, Rrs754),
+    BR_Git11 = BR_Git11(Rrs665, Rrs709)$Chla,
+    TBA_Git11 = TBA_Git11(Rrs665, Rrs709, Rrs754)$Chla,
     NDCI_Mi12 = NDCI_Mi12(Rrs665, Rrs709)$Chla,
-    FBA_Le13 = FBA_Le13(Rrs665, Rrs681, Rrs709),
-    FBA_Yang10 = FBA_Yang10(Rrs665, Rrs709, Rrs754),
-    SCI_Shen10 = SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681)$Chla,
-    Gons08 = Gons08(Rrs665, Rrs709, Rrs779),
+    FBA_Le13 = FBA_Le13(Rrs665, Rrs681, Rrs709)$Chla,
+    FBA_Yang10 = FBA_Yang10(Rrs665, Rrs709, Rrs754)$Chla,
+    SCI_Shen10 = SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681)$Chla_EPCHC,
+    Gons08 = Gons08(Rrs665, Rrs709, Rrs779)$Chla,
     TC2_final = TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)$Chla_final,
     TC2_clean = TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)$Chla_clean,
     TC2_turbid = TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)$Chla_turbid)
@@ -586,6 +658,7 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
 #' @param total logical
 #' @param hard.mode If \code{FALSE}, the membership values are used to calculate validation metrics
 #' @param na.process na.process and choose to statistic na value percent
+#' @param plot.col option to plot col result for chosed metrics (Default as FALSE)
 #' @export
 #' @return List
 #' @family Algorithm assessment
@@ -594,9 +667,13 @@ Assessment_via_cluster <- function(pred, meas, memb,
                                    log10 = FALSE, 
                                    total = TRUE,
                                    hard.mode= TRUE, 
-                                   na.process = FALSE
+                                   na.process = FALSE,
+                                   plot.col = FALSE
                                    ){
-  if(nrow(pred) != length(meas) | nrow(pred) != nrow(memb))
+  pred <- as.data.frame(pred)
+  meas <- as.data.frame(meas)
+  
+  if(nrow(pred) != nrow(meas) | nrow(pred) != nrow(memb))
     stop('Rows of input are different!')
   
   if(!na.process){
@@ -642,7 +719,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
     for(cluster in 1:ncol(memb)){
       
       w <- which(cluster_crisp == cluster)
-      x <- meas[w] # true
+      x <- meas[w,] # true
       y <- pred[w, model] # pred
       num_raw <- length(x)
       
@@ -651,6 +728,8 @@ Assessment_via_cluster <- function(pred, meas, memb,
         x <- tmp[,1]
         y <- tmp[,2]
         num_new <- length(x)
+        if(num_new > num_raw)
+          stop("Error! The subseted sample number is smaller the raw.")
       }
 
       for(metric in metrics){
@@ -662,7 +741,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
     }
     if(total == TRUE){
       
-      x <- meas
+      x <- meas[, 1]
       y <- pred[, model]
       num_raw <- length(x)
       
@@ -695,17 +774,21 @@ Assessment_via_cluster <- function(pred, meas, memb,
       for(j in 1:ncol(pred)){
         for(metric in metrics){
           
-          x <- meas
+          x <- meas[, 1]
           y <- pred[, j]
           
           if(na.process){
-            tmp <- cbind(x,y) %>% na.omit
-            x <- tmp[,1]
-            y <- tmp[,2]
+            w <- which(is.na(y) == FALSE)
+            x <- x[w]
+            y <- y[w]
+            memb_ <- memb[w,]
           }
           
+          if(dim(memb_)[1] != length(x))
+            stop("The fuzzy metrics are calculated with different rows from memb and pred")
+          
           Er <- cal.metrics.vector(x,y,metric,log10)
-          result_fz[[metric]][i,j] <- sum(memb[,i] * Er, na.rm=T)/sum(memb[,i], na.rm=T)
+          result_fz[[metric]][i,j] <- sum(memb_[,i] * Er, na.rm=T)/sum(memb_[,i], na.rm=T)
           
         }
       }
@@ -715,6 +798,61 @@ Assessment_via_cluster <- function(pred, meas, memb,
     
   }
   
+  if(plot.col == TRUE){
+    
+    res_plot <- list()
+    res_plot_dt <- list()
+    
+    for(metric in names(result)){
+      
+      tmp <- result[[metric]]
+      
+      tmp <- cbind(x=rownames(tmp), tmp)
+      
+      tmp <- melt(tmp, id="x", variable.name='Models')
+      
+      p <- ggplot(tmp) + 
+        geom_col(aes(x=x,y=value,group=Models,fill=Models),
+                 position="dodge") + 
+        labs(y=metric) + 
+        theme_bw()
+      
+      res_plot[[metric]] <- p
+      
+      names(tmp)[3] <- metric
+      res_plot_dt[[metric]] <- tmp
+        
+    }
+    
+    result$res_plot <- res_plot
+    result$res_plot_dt <- res_plot_dt
+    
+    tmp <- data.frame()
+    for(i in 1:length(res_plot_dt)){
+      if(i == 1){
+        tmp = res_plot_dt[[1]]
+      }else{
+        tmp <- data.frame(tmp, res_plot_dt[[i]][,3])
+        names(tmp)[ncol(tmp)] <- names(res_plot_dt[[i]])[3]
+      }
+    }
+    tmpp <- melt(tmp, id=c("x","Models"), variable.name="Metric")
+    
+    result$res_plot_facet <- 
+      ggplot(tmpp) + 
+      geom_col(aes(x=x,y=value,group=Models,fill=Models), position='dodge') + 
+      labs(x=NULL, y=NULL) + 
+      theme_bw() + 
+      facet_wrap(~Metric, scales="free_y")
+      
+  }else{
+    
+    result$res_plot <- NULL
+    result$res_plot_dt <- NULL
+    result$res_plot_facet <- NULL
+    
+  }
+
   result$input <- list(
     pred=pred,
     meas=meas,

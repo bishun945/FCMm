@@ -18,6 +18,12 @@ SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681)
 \description{
 SCI_Shen10
 }
+\references{
+Shen F, Zhou Y X, Li D J, et al. Medium resolution imaging spectrometer 
+  (MERIS) estimation of chlorophyll-a concentration in the turbid sediment-laden waters 
+  of the Changjiang (Yangtze) Estuary[J]. International Journal of Remote Sensing, 2010, 
+  31(17-18): 4635-4650.
+}
 \seealso{
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},

@@ -1,3 +1,33 @@
+## FCMm 0.4.17 (2020-02-20)
+
+  * Modify the constrain of SMA linear regression such as Rsquare value and point number taken part into the calculation.
+  * Next update is a first-point chaning version, 0.5.X since the new assessment system (scoring system) will be load ASAP.
+
+## FCMm 0.4.16 (2020-02-19)
+
+  * Add several new **Error Metrics** into `tools.R`. 
+  * Use `Type-II` regression, namely SMA (Standard Major Axis), to obtain the regression results, such as `Intercept` and `Slope`. The main reason for that is, inputs of regression (for validation) are obtained without fully quality control (still have uncertainties in each variable). This kind of regression, comparing the `Type-I`, cannot be used for prediction (such as using Rrs to predict Chla concentrations), but better to compare two variables on the same scale (units), useful for the error assessment.
+
+## FCMm 0.4.15 (2020-02-17)
+
+  * Add linear regression results (`slope` and `intercept`) to `tool.R` for hard mode assessment.
+
+## FCMm 0.4.14 (2020-02-16)
+
+  * Add new plot option for `Assessment_via_cluster`
+
+## FCMm 0.4.13 (2020-02-15)
+
+  * Result `Area` was added in the return of `apply_FCM_m`.
+
+## FCMm 0.4.12 (2020-02-14)
+
+  * Bugs of `TC2` fixed.
+
+## FCMm 0.4.11 (2020-02-13)
+
+  * Bugs of `BR_Gil10` and `NDCI_Mi12` fixed.
+
 ## FCMm 0.4.10 (2020-02-13)
 
   * Bugs of `FCM_m_Chla_estimation` fixed.

@@ -4,7 +4,7 @@
 \alias{TC2_turbid}
 \title{TC2_turbid}
 \usage{
-TC2_turbid(Rrs443, Rrs560, Rrs665, Rrs754)
+TC2_turbid(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)
 }
 \arguments{
 \item{Rrs443}{Rrs443}
@@ -12,6 +12,8 @@ TC2_turbid(Rrs443, Rrs560, Rrs665, Rrs754)
 \item{Rrs560}{Rrs560}
 
 \item{Rrs665}{Rrs665}
+
+\item{Rrs709}{Rrs709}
 
 \item{Rrs754}{Rrs754}
 }

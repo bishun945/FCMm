@@ -1,3 +1,9 @@
+## FCMm 0.5.1 (2020-02-21)
+
+  * Create the new file `QAA_series.R` to add functions `TC` and `QAA_v5`. The original functions from `FCM_m_Chla_estimation` were removed accordingly.
+  * Create the new file `Algorithms_assessment.R` to add functions `Assessment_via_cluster`, `Score_algorithms`, `Sampling_via_cluster`, `Getting_Asses_result`, and `Scoring_system`. The original function `Assessment_via_cluster` was removed from `Algorithms_assessment.R`.
+  * See more details in help documents of these new functions.
+
 ## FCMm 0.4.17 (2020-02-20)
 
   * Modify the constrain of SMA linear regression such as Rsquare value and point number taken part into the calculation.

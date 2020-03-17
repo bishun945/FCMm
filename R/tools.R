@@ -38,7 +38,7 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
   .cal.mdae<-function(x,y){
     return(median(abs(y-x), na.rm=T))
   }
-  
+
   .cal.nmae_sd <- function(x,y){
     return(mean(abs(y-x), na.rm=T)/sd(y, na.rm=T))
   }
@@ -50,6 +50,22 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
   # MAPE Series (Mean absolute percent error)
   .cal.mape<-function(x,y){
     return(mean(abs((y-x)/x), na.rm=T)*100)
+  }
+  
+  .cal.smape <- function(x,y){
+    return(mean(       abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=T)))       , na.rm=T)*100)
+  }
+  
+  .cal.smdape <- function(x,y){
+    return(median(       abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=T)))       , na.rm=T)*100)
+  }
+  
+  .cal.smrpe <- function(x,y){
+    return(mean(       (2*(y-x))/((x)+(mean(x, na.rm=T)))       , na.rm=T)*100)
+  }
+  
+  .cal.smdrpe <- function(x,y){
+    return(median(       (2*(y-x))/((x)+(mean(x, na.rm=T)))       , na.rm=T)*100)
   }
   
   .cal.mdape<-function(x,y){
@@ -172,6 +188,14 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
     result <- .cal.nmdae_sd(x,y)
   }else if(name == "MAPE"){
     result <- .cal.mape(x,y)
+  }else if(name == "SMAPE"){
+    result <- .cal.smape(x,y)
+  }else if(name == "SMDAPE"){
+    result <- .cal.smdape(x,y)
+  }else if(name == "SMRPE"){
+    result <- .cal.smrpe(x,y)
+  }else if(name == "SMDRPE"){
+    result <- .cal.smdrpe(x,y)
   }else if(name == "MDAPE"){
     result <- .cal.mdape(x,y)
   }else if(name == "MRPE"){
@@ -215,6 +239,10 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
                    NMAE_SD   = .cal.nmae_sd(x,y),
                    NMDAE_SD  = .cal.nmdae_sd(x,y),
                    MAPE      = .cal.mape(x,y),
+                   SMAPE     = .cal.smape(x,y),
+                   SMDAPE    = .cal.smdape(x,y),
+                   SMRPE     = .cal.smrpe(x,y),
+                   SMDRPE    = .cal.smdrpe(x,y),
                    MDAPE     = .cal.mdape(x,y),
                    MRPE      = .cal.mrpe(x,y),
                    MDRPE     = .cal.mdrpe(x,y),
@@ -245,7 +273,8 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
 cal.metrics.names <- function(){
   c('RMSE','CRMSE',
     'MAE','MDAE','NMAE_SD','NMDAE_SD',
-    'MAPE','MDAPE',"MRPE",'MDRPE',"UMRPE",'UMDRPE',
+    'MAPE', 'SMAPE', 'SMRPE', 'MDAPE',"MRPE",'MDRPE',"UMRPE",'UMDRPE',
+    'SMDAPE','SMDRPE',
     'BIAS', 'MD_BIAS', 'RATIO', 'MD_RATIO',
     'CV','R','R2',
     'SLOPE', 'INTERCEPT', 'R2_SMA',
@@ -284,6 +313,14 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
     return(abs((y-x)/x)*100)
   }
   
+  .cal.smape <- function(x,y){
+    return(abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=T)))*100)
+  }
+  
+  .cal.smrpe <- function(x,y){
+    return((2*(y-x))/((x)+(mean(x, na.rm=T)))*100)
+  }
+  
   .cal.nmape<-function(x,y){
     return(abs((y-x)/x) / sd(y, na.rm=T) *100)
   }
@@ -314,6 +351,10 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
     result <- .cal.nmae(x,y)
   }else if(name == "MAPE"){
     result <- .cal.mape(x,y)
+  }else if(name == "SMAPE"){
+    result <- .cal.smape(x,y)
+  }else if(name == "SMRPE"){
+    result <- .cal.smrpe(x,y)
   }else if(name == "NMAPE"){
     result <- .cal.nmape(x,y)
   }else if(name == "MRPE"){
@@ -331,6 +372,8 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
     result <- list(MAE   = .cal.mae(x,y),
                    NMAE  = .cal.nmae(x,y),
                    MAPE  = .cal.mape(x,y),
+                   SMAPE = .cal.smape(x,y),
+                   SMRPE = .cal.smrpe(x,y),
                    NMAPE = .cal.nmape(x,y),
                    MRPE  = .cal.mrpe(x,y),
                    NMRPE = .cal.nmrpe(x,y),
@@ -349,10 +392,42 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
 #' @family Utils
 cal.metrics.vector.names <- function(){
   c('MAE', 'NMAE',
-    'MAPE', 'NMAPE',
-    'MRPE', 'NMRPE', 'UMRPE',
+    'MAPE', 'SMAPE', 'NMAPE',
+    'MRPE', 'SMRPE', 'NMRPE', 'UMRPE',
     'BIAS', 'RATIO', 'all')
 }
+
+#' @title Standard deviation by trimmed values
+#' @name trim_sd
+#' @param x input numeric vector
+#' @param trim percent of length(x) to be trimmed
+#' @param na.rm default as TRUE to remove NA values
+#' @export
+#' @return sd value
+#' @family Utils
+trim_sd <- function(x, trim=0.05, na.rm=T){
+  
+  stopifnot(is.vector(x) & is.numeric(x) & is.numeric(trim))
+  
+  x <- as.numeric(na.omit(x))
+  
+  n_trim <- ceiling(length(x) * trim)
+  
+  head = n_trim + 1
+  tail = length(x) - n_trim
+  
+  x_sort <- sort(x)
+  
+  x_new <- x_sort[head:tail]
+  
+  if(length(x_new) <= 1){
+    return(sd(x))
+  }else{
+    return(sd(x_new))
+  }
+
+}
+
 
 #' @title Convert dataframe with factor to character
 #' @name .level_to_variable

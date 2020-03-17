@@ -14,6 +14,7 @@
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom utils write.csv data
 #' @importFrom readxl read_excel excel_sheets
+#' @importFrom stats runif
 
 utils::globalVariables(c('.','band','value','name','wv','variable',
                          'kmpp', 'imembrand','x','y','r','g','b',

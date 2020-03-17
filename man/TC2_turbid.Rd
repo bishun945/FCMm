@@ -24,6 +24,7 @@ TC2_turbid
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},
 \code{\link{BR_Git11}()},
+\code{\link{Bloom}()},
 \code{\link{C6}()},
 \code{\link{Chla_algorithms_name}()},
 \code{\link{FBA_Le13}()},

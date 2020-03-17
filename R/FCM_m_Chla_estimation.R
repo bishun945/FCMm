@@ -16,6 +16,7 @@
 #'
 #' @note The input of \code{Rrs} must have bands with wavelength at 665, 709 and 754 nm.
 #'   See examples of using this function.
+#'   (2020-02-28) The \code{C6} model was replaced by \code{Bloom} model.
 #'
 #' @export
 #' 
@@ -73,17 +74,21 @@ FCM_m_Chla_estimation <- function(Rrs, U){
   Rrs754 <- Rrs[, n[3]]
 
   names(U) <- seq(1,k) %>% as.character
-  bind.Chla <- data.frame(BR=BR_Gil10(Rrs709,Rrs665)$Chla,
-                          TBA=TBA_Gil10(Rrs665,Rrs709,Rrs754)$Chla,
-                          C6=C6(Rrs665,Rrs754)$Chla,
-                          M=round(U,4))
+  bind.Chla <- data.frame(
+    BR=BR_Gil10(Rrs665,Rrs709)$Chla,
+    TBA=TBA_Gil10(Rrs665,Rrs709,Rrs754)$Chla,
+    # BR=BR_Git11(Rrs709,Rrs665)$Chla,
+    # TBA=TBA_Git11(Rrs665,Rrs709,Rrs754)$Chla,
+    Bloom=Bloom(Rrs665,Rrs754)$Chla,
+    M=round(U,4)
+    )
   # TBA: C1 C2 C5
   # BR: C3 C4 C7
-  # C6: C6
+  # Bloom: C6
   U3 <- data.frame(u.TBA=bind.Chla[,c('M.1','M.2','M.5')] %>% apply(.,1,sum),
                    u.BR =bind.Chla[,c('M.3','M.4','M.7')] %>% apply(.,1,sum),
-                   u.BR =bind.Chla[,c('M.6')])
-  CONC3 <- bind.Chla[,c('TBA','BR','C6')]
+                   u.Bloom =bind.Chla[,c('M.6')])
+  CONC3 <- bind.Chla[,c('TBA','BR','Bloom')]
   bind.Chla$conc.Blend <- apply(U3*CONC3, 1, sum)
 
   return(bind.Chla)
@@ -122,7 +127,7 @@ TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
   return(result)
 }
 
-#' @title C6
+#' @title C6 (Being deprecated)
 #' @param Rrs665 Rrs665
 #' @param Rrs754 Rrs754
 #' @export
@@ -130,6 +135,19 @@ TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
 C6 <- function(Rrs665, Rrs754){
   ind <- 1/Rrs665*Rrs754
   Chla <- 10^( ind * 0.14 + 2.11)
+  result <- list(ind=ind,
+                 Chla=Chla)
+  return(result)
+}
+
+#' @title Bloom
+#' @param Rrs665 Rrs665
+#' @param Rrs754 Rrs754
+#' @export
+#' @family Algorithms: Chla concentration
+Bloom <- function(Rrs665, Rrs754){
+  ind <- 1/Rrs665*Rrs754
+  Chla <- 257.740*exp(0.279*ind)
   result <- list(ind=ind,
                  Chla=Chla)
   return(result)
@@ -370,7 +388,7 @@ Chla_algorithms_name <- function(){
   message('Please run QAA_v5 alone if required.')
   return(c('BR_Gil10', 'BR_Git11',
            'TBA_Gil10', 'TBA_Git11',
-           'C6', 
+           'C6', 'Bloom',
            'OC4_OLCI', 'OC5_OCLI', 'OC6_OLCI',
            'OCI_Hu12',
            'NDCI_Mi12', 'Gons08',
@@ -401,6 +419,7 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
     BR_Gil10 = BR_Gil10(Rrs665=Rrs665, Rrs709=Rrs709)$Chla,
     TBA_Gil10 = TBA_Gil10(Rrs665, Rrs709, Rrs754)$Chla,
     C6 = C6(Rrs665, Rrs754)$Chla,
+    Bloom = Bloom(Rrs665, Rrs754)$Chla,
     OC4_OLCI = OC4_OLCI(Rrs443, Rrs490, Rrs510, Rrs560)$Chla,
     OCI_Hu12 = OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)$Chl_OCI,
     BR_Git11 = BR_Git11(Rrs665, Rrs709)$Chla,

@@ -4,12 +4,23 @@
 \alias{Scoring_system}
 \title{The main function for algorithms scoring}
 \usage{
-Scoring_system(Inputs, trim = FALSE, remove.negative = FALSE)
+Scoring_system(
+  Inputs,
+  method = "sort-based",
+  param_sort = list(decreasing = TRUE),
+  param_interval = list(trim = FALSE, reward.punishment = TRUE, decreasing = TRUE,
+    hundred.percent = FALSE),
+  remove.negative = FALSE
+)
 }
 \arguments{
 \item{Inputs}{The list returned form function \code{Getting_Asses_results}}
 
-\item{trim}{The input parameter of function \code{Score_algorithms} (Default as \code{FALSE})}
+\item{method}{The method selected to score algorithms: 'sort-based' (default) or 'interval-based'}
+
+\item{param_sort}{The parameters of function \code{Score_algorithms_sort}}
+
+\item{param_interval}{The parameters of function \code{Score_algorithms_interval}}
 
 \item{remove.negative}{Option to repalce the negative score as zero (Default as \code{FALSE})}
 }
@@ -25,6 +36,6 @@ Other Algorithm assessment:
 \code{\link{Assessment_via_cluster}()},
 \code{\link{Getting_Asses_result}},
 \code{\link{Sampling_via_cluster}()},
-\code{\link{Score_algorithms}()}
+\code{\link{Score_algorithms_interval}()}
 }
 \concept{Algorithm assessment}

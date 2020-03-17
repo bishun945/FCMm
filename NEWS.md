@@ -1,3 +1,23 @@
+## FCmm 0.5.5 (2020-03-17)
+
+  * Hey guys, due to the outbreak of coronavirus, I have stopped the update for a long time. 
+  * In this version. The assessment method in `FCMm` has been improved by a new proposed scoring rule called sort-based method.  
+  * I am collecting the data and references about the algorithm assessment and finally going to finish my manuscript. Hope this will help to improve the algorithm evalution work the in water color community.  
+  * Please, COVID-19 go away!
+
+## FCMm 0.5.4 (2020-03-03)
+
+  * Update the document of data `OLCI_TH`.  
+  * Imporve the effectiveness of function `apply_FCM_m` as the `matrix` may speed up the process rather than the `data.frame` (I suppose).
+
+## FCMm 0.5.3 (2020-02-28)
+
+  * Add newly trained `Bloom` model which was used to replace `C6` model.
+
+## FCMm 0.5.2 (2020-02-22)
+
+  * Bugs of `Sampling_via_cluster` were fixed.
+
 ## FCMm 0.5.1 (2020-02-21)
 
   * Create the new file `QAA_series.R` to add functions `TC` and `QAA_v5`. The original functions from `FCM_m_Chla_estimation` were removed accordingly.

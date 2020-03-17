@@ -56,7 +56,7 @@ y_name <- which(names(imdf) == "y")
 imdf <- cbind(imdf[,c(x_name, y_name)], imdf[,-c(x_name, y_name)])
 
 names(imdf)[-c(1,2)] <- c(412.5,442.5,490,510,
-                           560,620,665,673.75,
+                           560,620,665,673.754,
                            708.75,753.75,865,885)
 ```
 

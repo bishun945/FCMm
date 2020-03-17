@@ -13,6 +13,7 @@ Chla_algorithms_name
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},
 \code{\link{BR_Git11}()},
+\code{\link{Bloom}()},
 \code{\link{C6}()},
 \code{\link{FBA_Le13}()},
 \code{\link{FBA_Yang10}()},

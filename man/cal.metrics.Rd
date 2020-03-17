@@ -29,6 +29,7 @@ Other Utils:
 \code{\link{cal.metrics.names}()},
 \code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
-\code{\link{lmodel2_}()}
+\code{\link{lmodel2_}()},
+\code{\link{trim_sd}()}
 }
 \concept{Utils}

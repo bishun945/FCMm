@@ -23,7 +23,7 @@ Stratified sampling by clusters or types
 Other Algorithm assessment: 
 \code{\link{Assessment_via_cluster}()},
 \code{\link{Getting_Asses_result}},
-\code{\link{Score_algorithms}()},
+\code{\link{Score_algorithms_interval}()},
 \code{\link{Scoring_system}()}
 }
 \concept{Algorithm assessment}

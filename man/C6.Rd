@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCM_m_Chla_estimation.R
 \name{C6}
 \alias{C6}
-\title{C6}
+\title{C6 (Being deprecated)}
 \usage{
 C6(Rrs665, Rrs754)
 }
@@ -12,12 +12,13 @@ C6(Rrs665, Rrs754)
 \item{Rrs754}{Rrs754}
 }
 \description{
-C6
+C6 (Being deprecated)
 }
 \seealso{
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},
 \code{\link{BR_Git11}()},
+\code{\link{Bloom}()},
 \code{\link{Chla_algorithms_name}()},
 \code{\link{FBA_Le13}()},
 \code{\link{FBA_Yang10}()},

@@ -75,9 +75,11 @@ apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
     stop("The number of wavelength is different from the col of Rrs_clusters, please check them!")
   if(length(wavelength) != ncol(Rrs))
     stop("The col of input Rrs dataframe is different from the number of wavelength, please check!")
-
+  
+  v <- as.matrix(v)
+  
   k <- nrow(v)
-  x <- Rrs
+  x <- as.matrix(Rrs)
   Area_x <- .trapz(wavelength, x)
   x.stand <- x
   for(i in 1:ncol(x)){x.stand[,i] <- x[,i]/Area_x}

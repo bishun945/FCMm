@@ -24,6 +24,7 @@ To calculate the Chla concentration via blending remote sensing algorithms.
 \note{
 The input of \code{Rrs} must have bands with wavelength at 665, 709 and 754 nm.
   See examples of using this function.
+  (2020-02-28) The \code{C6} model was replaced by \code{Bloom} model.
 }
 \examples{
 \dontrun{
@@ -50,6 +51,7 @@ dt_Chla <- FCM_m_Chla_estimation(Rrs=data.frame(Rrs665=Rrs$`665`,
 Other Algorithms: Chla concentration: 
 \code{\link{BR_Gil10}()},
 \code{\link{BR_Git11}()},
+\code{\link{Bloom}()},
 \code{\link{C6}()},
 \code{\link{Chla_algorithms_name}()},
 \code{\link{FBA_Le13}()},

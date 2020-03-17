@@ -12,6 +12,7 @@ Assessment_via_cluster(
   log10 = FALSE,
   total = TRUE,
   hard.mode = TRUE,
+  cal.precision = FALSE,
   na.process = FALSE,
   plot.col = FALSE
 )
@@ -31,6 +32,8 @@ Assessment_via_cluster(
 
 \item{hard.mode}{If \code{FALSE}, the membership values are used to calculate validation metrics}
 
+\item{cal.precision}{Whether to calculate precision (only support for vectorized metrics), default as \code{FALSE}}
+
 \item{na.process}{na.process and choose to statistic na value percent}
 
 \item{plot.col}{option to plot col result for chosed metrics (Default as FALSE)}
@@ -41,11 +44,15 @@ List
 \description{
 Assessment each algorithm for every cluster
 }
+\note{
+If the cal.precision is running, the \code{hard.mode == TRUE} is used. In that case,
+  mean and sd calculation is conducted for hard mode based on result from cal.metrics.vector
+}
 \seealso{
 Other Algorithm assessment: 
 \code{\link{Getting_Asses_result}},
 \code{\link{Sampling_via_cluster}()},
-\code{\link{Score_algorithms}()},
+\code{\link{Score_algorithms_interval}()},
 \code{\link{Scoring_system}()}
 }
 \concept{Algorithm assessment}

@@ -5,12 +5,22 @@
 \alias{Getting_Asses_results}
 \title{Get the result of function Assessment_via_cluster}
 \usage{
-Getting_Asses_results(sample.size, pred, meas, memb, cluster, seed = NULL)
+Getting_Asses_results(
+  sample.size,
+  replace = FALSE,
+  pred,
+  meas,
+  memb,
+  cluster,
+  seed = NULL
+)
 }
 \arguments{
 \item{sample.size}{Sample size. This supports a bootstrap way to run the function 
 \code{Assessment_via_cluster}. The number should not be larger than the row number 
 of pred or so.}
+
+\item{replace}{Logical, replace, default as \code{FALSE}}
 
 \item{pred}{Prediction matrix}
 
@@ -28,7 +38,7 @@ A list containing fuzzy and hard results from \code{Assessment_via_cluster}
 \description{
 This function mainly use function \code{Assessment_via_cluster} to get
   assesments both from fuzzy and hard mode. Specifically, it will return fuzzy_MAE, 
-  fuzzy_MAPE, hard_Slope, NA_percent, and hard_Rsquare which should be seemed as the 
+  fuzzy_MAPE, hard_Slope, Valid_percent, and hard_Rsquare which should be seemed as the 
   input value of function \code{Scoring_system}.
 }
 \note{
@@ -41,7 +51,7 @@ The row number of \code{pred}, \code{meas}, \code{memb}, and \code{cluster} shou
 Other Algorithm assessment: 
 \code{\link{Assessment_via_cluster}()},
 \code{\link{Sampling_via_cluster}()},
-\code{\link{Score_algorithms}()},
+\code{\link{Score_algorithms_interval}()},
 \code{\link{Scoring_system}()}
 }
 \concept{Algorithm assessment}

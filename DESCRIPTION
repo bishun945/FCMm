@@ -1,7 +1,7 @@
 Package: FCMm
 Type: Package
 Title: Fuzzy Cluster Method based on the optimized m value (fuzzifier)
-Version: 0.5.5
+Version: 0.5.6
 Authors@R: c(person("Shun", "Bi", ,"bishun1994@foxmail.com", c("aut","cre")))
 Author: Shun Bi [aut, cre]
 Maintainer: Shun Bi <bishun1994@foxmail.com>

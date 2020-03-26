@@ -1,4 +1,8 @@
-## FCmm 0.5.5 (2020-03-17)
+## FCMm 0.5.6 (2020-03-26)
+
+  * Bugs of `apply_to_image` fixed.
+
+## FCMm 0.5.5 (2020-03-17)
 
   * Hey guys, due to the outbreak of coronavirus, I have stopped the update for a long time. 
   * In this version. The assessment method in `FCMm` has been improved by a new proposed scoring rule called sort-based method.  

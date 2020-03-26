@@ -127,6 +127,7 @@ apply_to_image <- function(input, res,
   names(imRrs.raw) <- paste0("Rrs",wv)
   Rrs <- as.matrix(imRrs.raw)
   Area <- .trapz(wv,Rrs)
+  Area <- as.data.frame(Area)
   imRrs.n <- imRrs.raw
   for(i in 1:ncol(imRrs.raw))
     imRrs.n[,i] = imRrs.raw[,i] / Area

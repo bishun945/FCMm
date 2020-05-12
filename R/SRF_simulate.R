@@ -86,7 +86,7 @@ SRF_simulate <- function(Rrs,
     }
     
     if(wv_as_column){
-      SRF$Rrs_simu <- t(SRF$Rrs_simu)[-1,] %>% as.data.frame %>% setNames(., SRF$Rrs_simu[,1])
+      SRF$Rrs_simu <- t(SRF$Rrs_simu)[-1,] %>% setNames(., SRF$Rrs_simu[,1])
     }
     
     result[[sensor]] <- SRF

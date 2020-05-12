@@ -108,7 +108,7 @@ apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
 
   m <- m_used
   u <- 1/d^(2/(m-1))/(apply(1/d^(2/(m-1)),1,sum))
-  cluster <- apply(u,1,which.max)
+  cluster <- as.numeric(apply(u,1,which.max))
 
   quality <- rep('Dubious',nrow(x_))
   w <- which( (u %>% apply(.,1,max)) >= (k-1)/k)

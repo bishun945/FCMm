@@ -1,3 +1,7 @@
+## FCMm 0.5.7 (2020-05-12)
+
+  * Bugs of `SRF_simulate` fixed.
+
 ## FCMm 0.5.6 (2020-03-26)
 
   * Bugs of `apply_to_image` fixed.

@@ -46,6 +46,8 @@ SRF_simulate <- function(Rrs,
                          na.rm=TRUE,
                          wv_as_column=TRUE){
   
+  Rrs <- as.data.frame(Rrs)
+  
   if(select_sensor[1] == "All" & length(select_sensor) == 1){
     sensors <- show_sensor_names()
   }else{

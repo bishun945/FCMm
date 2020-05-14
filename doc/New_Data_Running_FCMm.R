@@ -34,7 +34,7 @@ dt_Chla$Chla_true <- WaterSpec35$Chla
 
 options(scipen=10000)
 
-subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','C6','conc.Blend')) %>%
+subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend')) %>%
   reshape2::melt(., id=c('cluster','Chla_true')) %>%
   ggplot(data=.) + 
   geom_point(aes(x=Chla_true,y=value,group=cluster,color=cluster),
@@ -52,7 +52,7 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','C6','conc.Blend')) %>
 
 MAPEs <- NULL
 i <- 1
-for(model in c('BR','TBA','C6','conc.Blend')){
+for(model in c('BR','TBA','Bloom','conc.Blend')){
   MAPEs[i] <- cal.metrics(x=dt_Chla$Chla_true %>% log10,
                           y=dt_Chla[,model]  %>% log10,
                           name='MAPE',log10=TRUE)
@@ -63,7 +63,7 @@ print(MAPEs)
 
 MAEs <- NULL
 i <- 1
-for(model in c('BR','TBA','C6','conc.Blend')){
+for(model in c('BR','TBA','Bloom','conc.Blend')){
   MAEs[i] <- cal.metrics(x=dt_Chla$Chla_true,
                          y=dt_Chla[,model],
                          name='MAE',log10=TRUE)

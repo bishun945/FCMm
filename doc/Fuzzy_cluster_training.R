@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>",
                       fig.align='center')
 
-## ----message=TRUE, warning=TRUE-----------------------------------------------
+## ----message=F, warning=F-----------------------------------------------------
 rm(list=ls())
 library(FCMm)
 library(tidyverse)
@@ -28,11 +28,11 @@ FD <- FuzzifierDetermination(x, wv, stand=F)
 (FD$m.used)
 nb <- 4
 set.seed(54321) # I just set this seed so that you can re-produce them
-result <- FCM.new(FD, nb)
+result <- FCM.new(FD, nb, fast.mode = T)
 summary(result)
 print(result$p.jitter)
 
-## ----warning=FALSE, include=TRUE----------------------------------------------
+## ----message=FALSE, warning=FALSE, include=TRUE-------------------------------
 p.spec <- plot_spec(result, show.stand=F, HABc=NULL)
 # print(p.spec$p.all.spec)
 # print(p.spec$p.cluster.spec)

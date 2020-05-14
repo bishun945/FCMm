@@ -33,7 +33,7 @@ Just same to vignette `Cluster_number_determination.Rmd`, this one shows how to 
 
 ## Dataframe process
 
-```{r message=TRUE, warning=TRUE}
+```{r message=F, warning=F}
 rm(list=ls())
 library(FCMm)
 library(tidyverse)
@@ -71,7 +71,7 @@ FD <- FuzzifierDetermination(x, wv, stand=F)
 (FD$m.used)
 nb <- 4
 set.seed(54321) # I just set this seed so that you can re-produce them
-result <- FCM.new(FD, nb)
+result <- FCM.new(FD, nb, fast.mode = T)
 summary(result)
 print(result$p.jitter)
 ```
@@ -94,7 +94,7 @@ This part shows how to obtain the visualization results in the package `FCMm`.
 
 Function `plot_spec` is used for spectrally plotting the related FCM-m result.
 
-```{r warning=FALSE, include=TRUE}
+```{r message=FALSE, warning=FALSE, include=TRUE}
 p.spec <- plot_spec(result, show.stand=F, HABc=NULL)
 # print(p.spec$p.all.spec)
 # print(p.spec$p.cluster.spec)

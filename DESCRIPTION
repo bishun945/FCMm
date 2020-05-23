@@ -1,7 +1,7 @@
 Package: FCMm
 Type: Package
 Title: Fuzzy Cluster Method based on the optimized m value (fuzzifier)
-Version: 0.5.7
+Version: 0.6.1
 Authors@R: c(person("Shun", "Bi", ,"bishun1994@foxmail.com", c("aut","cre")))
 Author: Shun Bi [aut, cre]
 Maintainer: Shun Bi <bishun1994@foxmail.com>
@@ -9,11 +9,29 @@ Description: An improved FCM method (FCM-m) for optical classification of inland
 Depends: R (>= 3.6)
 License: MIT + file LICENSE
 URL: https://github.com/bishun945/FCMm
-Imports: ggplot2, ggthemes, heatmaply, ppclust, raster,
-         reshape2, viridis, magrittr, inaparc, stringr, 
-         fclust, tidyverse, gridExtra, utils, readxl, lmodel2
+Imports: 
+    readxl (>= 1.3.1),
+    stringr (>= 1.4.0),
+    ggplot2 (>= 3.2.1),
+    ggthemes (>= 4.2.0),
+    heatmaply (>= 1.0.0), 
+    viridis (>= 0.5.1), 
+    gridExtra (>= 2.3), 
+    raster (>= 3.0-7),
+    ppclust (>= 0.1.3), 
+    fclust (>= 2.1.1), 
+    inaparc (>= 0.2.0),
+    magrittr (>= 1.5), 
+    reshape2 (>= 1.4.3), 
+    lmodel2 (>= 1.7-3),
+    stats (>= 3.6.2),
+    utils (>= 3.6.2)
+Suggests:
+    knitr (>= 1.26),
+    rmarkdown (>= 2.0),
+    dplyr (>= 0.8.3),
+    tidyverse (>= 1.3.0)
 Encoding: UTF-8
 LazyData: yes
-Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2

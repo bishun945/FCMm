@@ -1,11 +1,18 @@
 ## ----setup, include = FALSE---------------------------------------------------
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>",
-                      fig.align='center')
+knitr::opts_chunk$set(
+	fig.align = "center",
+	message = FALSE,
+	warning = FALSE,
+	collapse = TRUE,
+	comment = "#>"
+)
 
 ## ----message=FALSE, warning=FALSE---------------------------------------------
 rm(list=ls())
 library(FCMm)
-library(tidyverse)
+library(ggplot2)
+library(magrittr)
+library(dplyr)
 data("OLCI_TH")
 data("Bi_clusters")
 
@@ -30,21 +37,8 @@ sample_n(imdf[,-c(1,2)],50) %>%
   theme_bw() + 
   theme(legend.position='none', text=element_text(size=18))
 
-## ----message=FALSE, warning=FALSE, fig.height=4, fig.width=6------------------
-generate_param <- function(wl){
-  w <- (wavelength.default %in% wl)
-  wavelength <- wavelength.default[w]
-  Rrs_clusters <- Rrs_clusters.default[,w]
-  # generate the required res
-  res <- list()
-  res$FD$wv <- wavelength
-  res$K <- nrow(Rrs_clusters)
-  res$res.FCM <- list(v=Rrs_clusters,m=1.36)
-  return(res)
-}
-
+## ----message=TRUE, warning=FALSE, fig.height=4, fig.width=6-------------------
 res <- generate_param(c(413,443,490,510,560,620,665,674,709,754,865,885))
-
 
 im_result <- apply_to_image(input=OLCI_TH, res=res, title.name="Test_image",
                             Chla_est=T, output_image=F)

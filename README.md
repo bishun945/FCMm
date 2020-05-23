@@ -5,8 +5,8 @@
 status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
 
 **Author**: Shun Bi  
-**Date**: 2020-05-14  
-**Version**: 0.5.7  
+**Date**: 2020-05-23  
+**Version**: 0.6.1  
 **E-mail**: <bishun1994@foxmail.com>
 
 ## Overview
@@ -45,6 +45,8 @@ devtools::install_github('bishun945/FCMm', build_vignettes=TRUE)
 
 ## Usage
 
+### 1\. Classification of water spectra based on pre-defined cluster centers
+
 ``` r
 # Load testing data
 library(FCMm)
@@ -72,6 +74,39 @@ plot(result$p.group)
 ``` r
 # plot(result$p.group+facet_wrap(~cluster, ncol=2))
 ```
+
+### 2\. Algorithms blending via membership values from FCMm
+
+``` r
+library(magrittr)
+dt_Chla <- FCM_m_Chla_estimation(Rrs=data.frame(Rrs665=Rrs$`665`,
+                                                Rrs709=Rrs$`708.75`,
+                                                Rrs754=Rrs$`753.75`),
+                                 U=result$u)
+dt_Chla$cluster <- result$cluster %>% as.character
+dt_Chla$Chla_true <- WaterSpec35$Chla
+
+options(scipen=10000)
+
+subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend')) %>%
+  reshape2::melt(., id=c('cluster','Chla_true')) %>%
+  ggplot(data=.) + 
+  geom_point(aes(x=Chla_true,y=value,group=cluster,color=cluster),
+             alpha=0.8, size=4) +
+  scale_x_log10(limits=c(1,800)) + 
+  scale_y_log10(limits=c(1,800)) +
+  scale_color_manual(values=heatmaply::RdYlBu(result$K)) + 
+  labs(x='True value of Chla concentration (ug/L)',
+       y='Estimated value of Chla concentration (ug/L)',
+       color='Cluster') + 
+  geom_abline(intercept=0, slope=1, linetype=2) + 
+  facet_wrap(~variable, nrow=2) + 
+  theme_bw() + 
+  theme(axis.text.x.bottom = element_text(hjust=1),
+        strip.background = element_rect(color="white", fill="white"))
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" />
 
 ## Getting help
 

@@ -1,22 +1,30 @@
 ## ----setup, include = FALSE---------------------------------------------------
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>",
-                      fig.align='center')
+knitr::opts_chunk$set(
+	fig.align = "center",
+	message = FALSE,
+	warning = FALSE,
+	collapse = TRUE,
+	comment = "#>"
+)
 
 ## ----message=FALSE, warning=FALSE---------------------------------------------
 rm(list=ls())
 library(FCMm)
-library(tidyverse)
+library(ggplot2)
+library(magrittr)
 data("WaterSpec35")
 data("Bi_clusters")
 Rrs <- WaterSpec35[,3:17]
 
 ## ----fig.height=4, fig.width=6------------------------------------------------
-qplot(data=WaterSpec35, x=Chla, geom='density', xlab='The raw Chla')
-qplot(data=WaterSpec35, x=Chla, geom='density', log='x', xlab='Log10 transformed Chla')
+qplot(data=WaterSpec35, x=Chla, geom='density', xlab='The raw Chla') + 
+  theme_bw() + theme(text = element_text(size=13))
+qplot(data=WaterSpec35, x=Chla, geom='density', log='x', xlab='Log10 transformed Chla') + 
+  theme_bw() + theme(text = element_text(size=13))
 p.spec <- plot_spec_from_df(Rrs) + 
   labs(x='Wavelength (nm)',y=expression(Rrs~(sr^-1))) + 
   theme_bw() + 
-  theme(legend.position='none', text=element_text(size=18))
+  theme(legend.position='none', text=element_text(size=13))
 print(p.spec)
 
 ## ----message=FALSE, warning=FALSE, fig.height=4, fig.width=6------------------
@@ -48,7 +56,8 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
   geom_abline(intercept=0, slope=1, linetype=2) + 
   facet_wrap(~variable, nrow=2) + 
   theme_bw() + 
-  theme(axis.text.x.bottom = element_text(hjust=1))
+  theme(axis.text.x.bottom = element_text(hjust=1),
+        strip.background = element_rect(color="white", fill="white"))
 
 MAPEs <- NULL
 i <- 1
@@ -59,7 +68,8 @@ for(model in c('BR','TBA','Bloom','conc.Blend')){
   names(MAPEs)[i] <- model
   i <- i + 1
 }
-print(MAPEs)
+names(MAPEs)[i-1] = 'Blend'
+print(MAPEs %>% round(2))
 
 MAEs <- NULL
 i <- 1
@@ -70,7 +80,8 @@ for(model in c('BR','TBA','Bloom','conc.Blend')){
   names(MAEs)[i] <- model
   i <- i + 1
 }
-print(MAEs)
+names(MAEs)[i-1] = 'Blend'
+print(MAEs %>% round(3))
 
 ## ----fig.height=4, fig.width=6------------------------------------------------
 Rrs_sub <- subset(Rrs, select=c(`412.5`,`442.5`,`490`,`510`,

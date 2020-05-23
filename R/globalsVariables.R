@@ -1,21 +1,3 @@
-#' @import ppclust
-#' @importFrom magrittr %>% %<>%
-#' @import reshape2
-#' @import ggplot2
-#' @import raster
-#' @import viridis
-#' @import ggthemes
-#' @import heatmaply
-#' @import inaparc
-#' @import stringr
-#' @import fclust
-#' @import tidyverse
-#' @import lmodel2
-#' @importFrom gridExtra arrangeGrob
-#' @importFrom utils write.csv data
-#' @importFrom readxl read_excel excel_sheets
-#' @importFrom stats runif
-
 utils::globalVariables(c('.','band','value','name','wv','variable',
                          'kmpp', 'imembrand','x','y','r','g','b',
                          'res.im.cluster','Chla','Rrs_clusters.default',

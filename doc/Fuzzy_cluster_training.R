@@ -1,11 +1,19 @@
 ## ----setup, include = FALSE---------------------------------------------------
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>",
-                      fig.align='center')
+knitr::opts_chunk$set(
+	fig.align = "center",
+	message = FALSE,
+	warning = FALSE,
+	collapse = TRUE,
+	comment = "#>"
+)
 
 ## ----message=F, warning=F-----------------------------------------------------
 rm(list=ls())
 library(FCMm)
-library(tidyverse)
+library(ggplot2)
+library(magrittr)
+library(stringr)
+library(dplyr)
 data("Nechad2015")
 w <- Nechad2015 %>% names %>%
   str_extract(.,pattern="\\d") %>%
@@ -13,6 +21,9 @@ w <- Nechad2015 %>% names %>%
 wv <- w %>% names(Nechad2015)[.] %>%
   gsub('X','',.) %>% as.numeric
 x <- w %>% Nechad2015[,.]
+set.seed(1234)
+w_sample <- sample_n(seq(nrow(x)) %>% data.frame, 100) %>% as.matrix %>% c
+x <- x[w_sample,]
 names(x) <- wv
 rm(w)
 
@@ -24,13 +35,14 @@ p.spec <- plot_spec_from_df(x) +
 print(p.spec)
 
 ## ----message=FALSE, warning=FALSE, fig.height=4, fig.width=6------------------
+library(ppclust)
 FD <- FuzzifierDetermination(x, wv, stand=F)
 (FD$m.used)
 nb <- 4
 set.seed(54321) # I just set this seed so that you can re-produce them
 result <- FCM.new(FD, nb, fast.mode = T)
 summary(result)
-print(result$p.jitter)
+result$p.jitter + theme(text = element_text(size=13))
 
 ## ----message=FALSE, warning=FALSE, include=TRUE-------------------------------
 p.spec <- plot_spec(result, show.stand=F, HABc=NULL)
@@ -68,23 +80,30 @@ p.group.facet <- ggplot(data=tmp.p) +
   labs(color=paste0('Cluster ',seq(result$K)),y='Normalized_scale') + 
   facet_wrap(~cluster, nrow=1) + 
   theme_bw() + 
-  theme(legend.position='none')
+  theme(text = element_text(size=13),
+        legend.position='none',
+        strip.background = element_rect(fill='white', color="white"))
 # plot(p.group.facet)
 
-Nechad2015$cluster <- result$res.FCM$cluster %>% as.character
+Nechad2015_sample <- Nechad2015[w_sample, ]
+Nechad2015_sample$cluster <- result$res.FCM$cluster %>% as.character
 
-tmp <- data.frame(cluster=Nechad2015$cluster,Chla=Nechad2015$`X.Chl_a..ug.L.`) %>% na.omit
+tmp <- data.frame(cluster=Nechad2015_sample$cluster, 
+                  Chla=Nechad2015_sample$`X.Chl_a..ug.L.`) %>% na.omit
 tmp$cluster <- reorder(tmp$cluster, tmp$Chla, mean)
 
 p.boxplot <- ggplot(data=tmp, aes(x=cluster,y=Chla,fill=cluster)) + 
   geom_boxplot(outlier.color=NA) + scale_y_log10() + 
   scale_fill_manual(values=cp) + 
-  theme_bw() + theme(legend.position='none')
+  theme_bw() + 
+  theme(text = element_text(size=13),
+        legend.position='none')
 
 p.cluster.spec.n <- plot_spec_from_df(result$res.FCM$v) + 
   geom_path(size=1.5) + labs(y="Normalized_scale") + 
   scale_color_manual(values=cp) +
-  theme(legend.position='right')
+  theme(text = element_text(size=13),
+        legend.position='right')
 
 library(gridExtra)
 pm <- arrangeGrob(grobs=list(p.cluster.spec.n, p.boxplot),nrow=1) %>%

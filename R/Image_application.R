@@ -85,6 +85,15 @@
 #' Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
 #'   an improved Fuzzy C-Means method[J]. Optics Express, 2019, 27(24): 34838-34856.
 #' @family Fuzzy cluster functions
+#' 
+#' @import ggplot2
+#' @import viridis
+#' @import raster
+#' @importFrom reshape2 melt
+#' @importFrom magrittr %>% %<>%
+#' @importFrom heatmaply RdYlBu
+#' @importFrom ggthemes theme_map
+#' 
 
 apply_to_image <- function(input, res,
                            output_image=TRUE, output_resultpng=FALSE, output_imRrs.n=FALSE,
@@ -260,7 +269,6 @@ apply_to_image <- function(input, res,
                              .[. < max(sub.Chla$Chla, na.rm=T)] %>% round(.,2))
     }
     print(p.Chla)
-    ggsave(paste0(fn_Chla, '.png'), plot=p.Chla, device='png', width=width, height=height, units='in')
   }
 
   # Save ggplot png for membership and cluster patterns
@@ -268,6 +276,7 @@ apply_to_image <- function(input, res,
     ggsave(paste0(fn_memb,'.png'), plot=p.memb, device='png')
     ggsave(paste0(fn_cluster,'.png'), plot=p.cluster, device='png', width=width, height=height, units='in')
     ggsave(paste0(fn_truecolorpng, '.png'), plot=p.truecolor, device='png', width=width, height=height, units='in')
+    ggsave(paste0(fn_Chla, '.png'), plot=p.Chla, device='png', width=width, height=height, units='in')
   }
 
   message('Saving the results to the list ......')

@@ -1,5 +1,5 @@
-#' @title Assessment each algorithm for every cluster
 #' @name Assessment_via_cluster
+#' @title Assessment each algorithm for every cluster
 #' @param pred prediciton of Chla
 #' @param meas in-situ measurement of Chla
 #' @param memb membership value matrix
@@ -13,10 +13,14 @@
 #' 
 #' @note If the cal.precision is running, the \code{hard.mode == TRUE} is used. In that case,
 #'   mean and sd calculation is conducted for hard mode based on result from cal.metrics.vector
-#'   
 #' @export
 #' @return List
 #' @family Algorithm assessment
+#' 
+#' @import ggplot2  
+#' @importFrom heatmaply Spectral
+#' @importFrom stats runif
+#' 
 Assessment_via_cluster <- function(pred, meas, memb,
                                    metrics = c('MAE','MAPE'),
                                    log10 = FALSE, 
@@ -24,8 +28,8 @@ Assessment_via_cluster <- function(pred, meas, memb,
                                    hard.mode= TRUE,
                                    cal.precision = FALSE,
                                    na.process = FALSE,
-                                   plot.col = FALSE
-){
+                                   plot.col = FALSE){
+  
   pred <- as.data.frame(pred)
   meas <- as.data.frame(meas)
   
@@ -298,8 +302,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
   
 }
 
-#' @title Score a vector of error metrics for algorithms
+
+
 #' @name Score_algorithms_interval
+#' @title Score a vector of error metrics for algorithms
 #' @param x Input vector of error metrics (NA values are allowed)
 #' @param trim whether to run a trim process to calculate mean and standard deviation of 
 #'   input vector x (Default as \code{FALSE})
@@ -314,6 +320,9 @@ Assessment_via_cluster <- function(pred, meas, memb,
 #' @export
 #' @return List
 #' @family Algorithm assessment
+#' 
+#' @importFrom stats qt sd
+#' @import ggplot2
 
 Score_algorithms_interval <- function(x, trim=FALSE, reward.punishment=TRUE, 
                              decreasing=TRUE, hundred.percent=FALSE
@@ -419,8 +428,6 @@ Score_algorithms_interval <- function(x, trim=FALSE, reward.punishment=TRUE,
 
 
 
-
-
 Score_algorithms_sort <- function(x, decreasing = TRUE){
   
   x <- as.numeric(x)
@@ -448,8 +455,10 @@ Score_algorithms_sort <- function(x, decreasing = TRUE){
 
 }
 
-#' @title Stratified sampling by clusters or types
+
+
 #' @name Sampling_via_cluster
+#' @title Stratified sampling by clusters or types
 #' @param x A vector represents the cluster or type, only support numeric value now.
 #' @param num The number of sampling
 #' @param replace The way of sampling. See \code{help(sample)} for more details
@@ -518,12 +527,12 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 }
 
 
+#' @name Getting_Asses_results
 #' @title Get the result of function Assessment_via_cluster
 #' @description This function mainly use function \code{Assessment_via_cluster} to get
 #'   assesments both from fuzzy and hard mode. Specifically, it will return fuzzy_MAE, 
 #'   fuzzy_MAPE, hard_Slope, Valid_percent, and hard_Rsquare which should be seemed as the 
 #'   input value of function \code{Scoring_system}.
-#' @name Getting_Asses_result
 #' @param sample.size Sample size. This supports a bootstrap way to run the function 
 #'   \code{Assessment_via_cluster}. The number should not be larger than the row number 
 #'   of pred or so.
@@ -605,8 +614,8 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 }
 
 
-#' @title The main function for algorithms scoring
 #' @name Scoring_system
+#' @title The main function for algorithms scoring
 #' @param Inputs The list returned form function \code{Getting_Asses_results}
 #' @param method The method selected to score algorithms: 'sort-based' (default) or 'interval-based'
 #' @param param_sort The parameters of function \code{Score_algorithms_sort}
@@ -617,7 +626,6 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 #'   Precision.list, and Total_score.melt.
 #' @family Algorithm assessment
 #' 
-
 Scoring_system <- function(Inputs, 
                            method = 'sort-based',
                            param_sort = list(decreasing = TRUE),

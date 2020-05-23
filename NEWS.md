@@ -1,3 +1,9 @@
+## FCMm 0.6.1 (2020-05-23)
+
+  * This version updated the arrangement of codes, fixed bugs, and collected data sets.
+  * Ignored files are removed from Gihub.
+  * I gonna resolve the problem of `do` parameters in next versions.
+
 ## FCMm 0.5.7 (2020-05-12)
 
   * Bugs of `SRF_simulate` fixed.

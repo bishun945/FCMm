@@ -10,8 +10,13 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>",
-                      fig.align='center')
+knitr::opts_chunk$set(
+	fig.align = "center",
+	message = FALSE,
+	warning = FALSE,
+	collapse = TRUE,
+	comment = "#>"
+)
 ```
 
 # Lists of vignettes showing how to use FCMm
@@ -40,7 +45,8 @@ This demo shows how to apply `FCMm` to a new data set if users just want to run 
 ```{r message=FALSE, warning=FALSE}
 rm(list=ls())
 library(FCMm)
-library(tidyverse)
+library(ggplot2)
+library(magrittr)
 data("WaterSpec35")
 data("Bi_clusters")
 Rrs <- WaterSpec35[,3:17]
@@ -50,17 +56,19 @@ Rrs <- WaterSpec35[,3:17]
 
 At first, it is necessary to check out the dataframe situation before clustering (I suppose it is also important to do that in any other researches). The density plots show that the corresponding Chla concentration is severely skewed so it allows us to do a log10-transformed when estimate or validate the candidate algorithms.
 
-Function `plot_spec_from_df` suppports a quick look about the spectral dataframe. Just type `help(plot_spec_from_df)` to see more details.
+Function `plot_spec_from_df` supports a quick look about the spectral dataframe. Just type `help(plot_spec_from_df)` to see more details.
 
 **Note**: The input of `plot_spec_from_df` should be a matrix or data.frame with colnames that could be transformed into the numeric --- as the x-axis of the plot. Since the return of `plot_spec_from_df` is a `ggplot` list, you could modify or add it for your purpose (such as add labs or themes).
 
 ```{r fig.height=4, fig.width=6}
-qplot(data=WaterSpec35, x=Chla, geom='density', xlab='The raw Chla')
-qplot(data=WaterSpec35, x=Chla, geom='density', log='x', xlab='Log10 transformed Chla')
+qplot(data=WaterSpec35, x=Chla, geom='density', xlab='The raw Chla') + 
+  theme_bw() + theme(text = element_text(size=13))
+qplot(data=WaterSpec35, x=Chla, geom='density', log='x', xlab='Log10 transformed Chla') + 
+  theme_bw() + theme(text = element_text(size=13))
 p.spec <- plot_spec_from_df(Rrs) + 
   labs(x='Wavelength (nm)',y=expression(Rrs~(sr^-1))) + 
   theme_bw() + 
-  theme(legend.position='none', text=element_text(size=18))
+  theme(legend.position='none', text=element_text(size=13))
 print(p.spec)
 ```
 
@@ -87,6 +95,7 @@ result$p.group
  - *m.used*: the used value of fuzzifier(m)
  - *K*: cluster number
  - *p.group*: a ggplot list for plotting the cluster result
+ - *p.group.facet*: a ggplot list by facet for plotting the cluster result
  - *dt.plot*: dataframe used for ggplot
 
 ## Estimating Chla concentration by FCMm
@@ -117,7 +126,8 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
   geom_abline(intercept=0, slope=1, linetype=2) + 
   facet_wrap(~variable, nrow=2) + 
   theme_bw() + 
-  theme(axis.text.x.bottom = element_text(hjust=1))
+  theme(axis.text.x.bottom = element_text(hjust=1),
+        strip.background = element_rect(color="white", fill="white"))
 
 MAPEs <- NULL
 i <- 1
@@ -128,7 +138,8 @@ for(model in c('BR','TBA','Bloom','conc.Blend')){
   names(MAPEs)[i] <- model
   i <- i + 1
 }
-print(MAPEs)
+names(MAPEs)[i-1] = 'Blend'
+print(MAPEs %>% round(2))
 
 MAEs <- NULL
 i <- 1
@@ -139,7 +150,8 @@ for(model in c('BR','TBA','Bloom','conc.Blend')){
   names(MAEs)[i] <- model
   i <- i + 1
 }
-print(MAEs)
+names(MAEs)[i-1] = 'Blend'
+print(MAEs %>% round(3))
 ```
 
 It is glad to see the Blending result performs better than others with its log-transformed MAPE = `r MAPEs['conc.Blend'] %>% round(2)` % and MAE = `r MAEs['conc.Blend'] %>% round(2)` ug/L.
@@ -148,7 +160,7 @@ It is glad to see the Blending result performs better than others with its log-t
 
 As mentioned before, the input Rrs may do not match the default wavelength from `wavelength.default`. This section will show you how to do that kind of clustering by `FCMm`.
 
-Here we suppose the selected bands are 412.5, 442.5, 490, 510, 560, 620, 665, 673.75, 708.75, 753.75, 865, and 885. Note that the `m.used` of `FD` list may change a little if different band number is used. But we assume the difference is negligible (i.e., still equal to the former one `r result$m_used`).
+Here we suppose the selected bands are `412.5`, `442.5`, `490`, `510`, `560`, `620`, `665`, `673.75`, `708.75`, `753.75`, `865`, and `885`. Note that the `m.used` of `FD` list may change a little if different band number is used. But we assume the difference is negligible (i.e., still equal to the former one `r result$m_used`).
 
 ```{r fig.height=4, fig.width=6}
 Rrs_sub <- subset(Rrs, select=c(`412.5`,`442.5`,`490`,`510`,

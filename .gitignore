@@ -16,3 +16,7 @@ Meta
 .Rhistory
 .Rhistory
 .Rproj.user/shared/notebooks/paths
+.gitignore
+.Rbuildignore
+.gitattributes
+FCMm.Rproj

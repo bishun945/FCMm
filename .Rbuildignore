@@ -7,3 +7,8 @@
 ^pkgdown$
 ^\.travis\.yml$
 ^\test$
+^\.Rhistory$
+^\.gitignore$
+^\.Rbuildignore$
+^\.gitattributes$
+^FCMm\.Rproj$

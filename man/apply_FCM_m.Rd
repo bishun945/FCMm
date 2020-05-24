@@ -16,14 +16,16 @@ Default use the data from \code{Bi_clusters.rda}}
 \item{Rrs_clusters}{Data.frame, used for applying FCM.
 Default use the data from \code{Bi_clusters.rda}}
 
+\item{m_used}{Number, Used fuzzifier value}
+
 \item{stand}{Logical, whether to normalized the Rrs data. Default as \code{FALSE} means do not.}
 
 \item{default.cluster}{Logical, whether to use the default clusters.
 Default use the data from \code{Bi_clusters.rda}}
 
-\item{m_used}{Number, Used fuzzifier value}
-
 \item{option.plot}{Logical, whether to plot the result. Default as \code{FALSE}}
+
+\item{quatliy_chech}{Logical, quality chech option (default as \code{FALSE})}
 }
 \value{
 A \code{list} including several results of function \code{apply_FCM_m()}
@@ -40,7 +42,7 @@ A \code{list} including several results of function \code{apply_FCM_m()}
     \item \strong{p.group}  A ggplot list for plotting the cluster result
     \item \strong{p.group.facet} \code{p.group} with facet to see each cluster resutls
       more clearly
-    \item \strong{dt.plot}  Dataframe used for ggplot
+    \item \strong{dt.melt}  Dataframe used for ggplot
   }
 }
 \description{

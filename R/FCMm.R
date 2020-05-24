@@ -338,6 +338,7 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 #' @param default.cluster Logical, whether to use the default clusters.
 #'   Default use the data from \code{Bi_clusters.rda}
 #' @param m_used Number, Used fuzzifier value
+#' @param quatliy_chech Logical, quality chech option (default as \code{FALSE})
 #' @param option.plot Logical, whether to plot the result. Default as \code{FALSE}
 #'
 #' @export
@@ -356,7 +357,7 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 #'     \item \strong{p.group}  A ggplot list for plotting the cluster result
 #'     \item \strong{p.group.facet} \code{p.group} with facet to see each cluster resutls
 #'       more clearly
-#'     \item \strong{dt.plot}  Dataframe used for ggplot
+#'     \item \strong{dt.melt}  Dataframe used for ggplot
 #'   }
 #' 
 #' @examples
@@ -378,9 +379,12 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 #' @importFrom magrittr %>% %<>%
 #' @importFrom heatmaply RdYlBu
 #' @importFrom reshape2 melt
-apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
-                        stand=FALSE, default.cluster=TRUE, m_used=1.36,
-                        option.plot=FALSE){
+apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
+                        m_used = 1.36,
+                        stand = FALSE,
+                        default.cluster = TRUE,
+                        quality_check = FALSE,
+                        option.plot = FALSE){
   
   if(default.cluster){
     v <- Rrs_clusters.default
@@ -422,7 +426,7 @@ apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
   }
   
   # Build distance and membership matrix
-  d <- matrix(NA, ncol=nrow(v_), nrow=nrow(x_))
+  d <- matrix(ncol=nrow(v_), nrow=nrow(x_))
   for(j in 1:ncol(d)){
     v_tmp <- rep(as.matrix(v_[j,]),nrow(x_)) %>% matrix(.,ncol=ncol(v_), byrow=T)
     x_tmp <- x_ %>% as.matrix %>% as.data.frame
@@ -435,9 +439,13 @@ apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
   u <- 1/d^(2/(m-1))/(apply(1/d^(2/(m-1)),1,sum))
   cluster <- as.numeric(apply(u,1,which.max))
   
-  quality <- rep('Dubious',nrow(x_))
-  w <- which( (u %>% apply(.,1,max)) >= (k-1)/k)
-  quality[w] <- 'Believable'
+  if(quality_check == TRUE){
+    quality <- rep('Dubious',nrow(x_))
+    w <- which( (u %>% apply(.,1,max)) >= (k-1)/k)
+    quality[w] <- 'Believable'
+  }else{
+    quality <- NULL
+  }
   
   result <- list()
   result$x <- Rrs
@@ -450,36 +458,31 @@ apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
   result$m_used <- m_used
   result$K <- k
   
-  if(option.plot){# plot job
+  if(option.plot){
     cp <- RdYlBu(k)
     cp.sub <- cp[(unique(cluster)) %>% sort]
     names(Rrs) <- as.character(wavelength)
-    dt <- cbind(nm=as.character(seq(1,nrow(Rrs))),Rrs)
-    dt$nm %<>% levels(.)[.]
-    dt.melt <- melt(dt,id=1,variable.name='band',value.name='Rrs')
-    dt.melt$band %<>% levels(.)[.] %>% as.numeric
-    dt2.melt <- cbind(cluster=cluster, Rrs) %>% melt(., id=c('cluster'))
-    dt3.melt <- cbind(quality=quality,Rrs) %>% melt(., id=c('quality'))
-    dt3.melt$quality %<>% levels(.)[.]
-    dt.plot <- cbind(dt.melt,cluster=as.character(dt2.melt$cluster),quality=dt3.melt$quality)
-    dt.plot$cluster %<>% levels(.)[.]
-    dt.plot$quality %<>% levels(.)[.]
-    p.group <- ggplot(data=dt.plot)+
-      geom_line(aes(x=band,y=Rrs,color=cluster,group=nm, linetype=quality),
+    dt <- cbind(nm=rownames(Rrs), Rrs, cluster = as.character(cluster))
+    dt.melt <- melt(dt, id=c("nm","cluster"), variable.name='band', value.name='Rrs')
+    dt.melt <- .level_to_variable(dt.melt)
+    dt.melt$band %<>% as.numeric
+    p.group <- ggplot(data=dt.melt)+
+      geom_line(aes(x=band,y=Rrs,color=cluster,group=nm),
                 size=1, alpha=0.8) +
       scale_color_manual(values=cp.sub) +
-      scale_linetype_manual(values=c('solid','longdash')) +
-      labs(x='Wavelength (nm)', y=expression(Rrs~(sr^-1))) +
+      labs(x='Wavelength (nm)', y=expression(bold(Rrs~(sr^-1))), color = 'Cluster') +
       theme_bw() +
       theme(text = element_text(face='bold',size=16), legend.position='right')
     
     result$p.group <- p.group
-    result$p.group.facet <- p.group + facet_wrap(~cluster)
-    result$dt.plot <- dt.plot
+    result$p.group.facet <- p.group + 
+      facet_wrap(~cluster) + 
+      theme(strip.text = element_blank())
+    result$dt.melt <- dt.melt
   }else{
     result$p.group <- NULL
     result$p.group.facet <- NULL
-    result$dt.plot <- NULL
+    result$dt.melt <- NULL
   }
   
   return(result)

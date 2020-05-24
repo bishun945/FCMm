@@ -52,25 +52,27 @@ p.spec <- plot_spec(result, show.stand=F, HABc=NULL)
 
 ## ----message=FALSE, warning=FALSE, fig.height=5, fig.width=6------------------
 library(magrittr)
+library(reshape2)
+library(heatmaply)
 # melt data
 tmp <- data.frame(cluster = result$res.FCM$cluster %>% as.character,
                   X = FD$x.stand)
 names(tmp)[2:ncol(tmp)] <- as.character(wv)
-tmp.p <- reshape2::melt(tmp, id='cluster', variable.name='band', value.name='value')
+tmp.p <- melt(tmp, id='cluster', variable.name='band', value.name='value')
 tmp.p$cluster %<>% levels(.)[.]
 tmp.p$band %<>% levels(.)[.] %>% as.numeric
 
 tmp2 <- data.frame(name = seq(1,nrow(tmp)) %>% as.character,
                    tmp[,2:ncol(tmp)])
 names(tmp2)[2:ncol(tmp2)] <- as.character(wv)
-tmp2.p <- reshape2::melt(tmp2, id='name', variable.name='band', value.name='value')
+tmp2.p <- melt(tmp2, id='name', variable.name='band', value.name='value')
 tmp2.p$name %<>% levels(.)[.]
 tmp2.p$band %<>% levels(.)[.] %>% as.numeric
 tmp.p$name <- tmp2.p$name  
 tmp.p$cluster <- paste0('Cluster ',tmp.p$cluster)
 
 # plot
-cp2 <- cp <- heatmaply::RdYlBu(result$K)
+cp2 <- cp <- RdYlBu(result$K)
 names(cp) <- seq(1,result$K)
 names(cp2) <- paste0('Cluster ',seq(1,result$K))
 p.group.facet <- ggplot(data=tmp.p) + 

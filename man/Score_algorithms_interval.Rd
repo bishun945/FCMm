@@ -38,7 +38,7 @@ Score a vector of error metrics for algorithms
 \seealso{
 Other Algorithm assessment: 
 \code{\link{Assessment_via_cluster}()},
-\code{\link{Getting_Asses_result}},
+\code{\link{Getting_Asses_results}()},
 \code{\link{Sampling_via_cluster}()},
 \code{\link{Scoring_system}()}
 }

@@ -33,6 +33,7 @@ summary(result)
 result$p.group
 
 ## ----fig.height=4, fig.width=6------------------------------------------------
+library(reshape2)
 dt_Chla <- FCM_m_Chla_estimation(Rrs=data.frame(Rrs665=Rrs$`665`,
                                                 Rrs709=Rrs$`708.75`,
                                                 Rrs754=Rrs$`753.75`),
@@ -43,7 +44,7 @@ dt_Chla$Chla_true <- WaterSpec35$Chla
 options(scipen=10000)
 
 subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend')) %>%
-  reshape2::melt(., id=c('cluster','Chla_true')) %>%
+  melt(., id=c('cluster','Chla_true')) %>%
   ggplot(data=.) + 
   geom_point(aes(x=Chla_true,y=value,group=cluster,color=cluster),
              alpha=0.8, size=4) +

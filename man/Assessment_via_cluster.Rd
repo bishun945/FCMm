@@ -50,7 +50,7 @@ If the cal.precision is running, the \code{hard.mode == TRUE} is used. In that c
 }
 \seealso{
 Other Algorithm assessment: 
-\code{\link{Getting_Asses_result}},
+\code{\link{Getting_Asses_results}()},
 \code{\link{Sampling_via_cluster}()},
 \code{\link{Score_algorithms_interval}()},
 \code{\link{Scoring_system}()}

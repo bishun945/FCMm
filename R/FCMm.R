@@ -292,6 +292,7 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 
 
 #' @importFrom ppclust is.ppclust
+#' @importFrom reshape2 melt
 .plot.jitter <- function(res){
   if(!is.ppclust(res))
     stop("The input value is not a ppclust list!")
@@ -376,6 +377,7 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 #' @import ggplot2
 #' @importFrom magrittr %>% %<>%
 #' @importFrom heatmaply RdYlBu
+#' @importFrom reshape2 melt
 apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
                         stand=FALSE, default.cluster=TRUE, m_used=1.36,
                         option.plot=FALSE){

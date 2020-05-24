@@ -20,6 +20,7 @@
 #' @import ggplot2  
 #' @importFrom heatmaply Spectral
 #' @importFrom stats runif
+#' @importFrom reshape2 melt
 #' 
 Assessment_via_cluster <- function(pred, meas, memb,
                                    metrics = c('MAE','MAPE'),
@@ -626,6 +627,7 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 #'   Precision.list, and Total_score.melt.
 #' @family Algorithm assessment
 #' 
+#' @importFrom reshape2 melt
 Scoring_system <- function(Inputs, 
                            method = 'sort-based',
                            param_sort = list(decreasing = TRUE),

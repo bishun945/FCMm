@@ -34,7 +34,7 @@ The main function for algorithms scoring
 \seealso{
 Other Algorithm assessment: 
 \code{\link{Assessment_via_cluster}()},
-\code{\link{Getting_Asses_result}},
+\code{\link{Getting_Asses_results}()},
 \code{\link{Sampling_via_cluster}()},
 \code{\link{Score_algorithms_interval}()}
 }

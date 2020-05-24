@@ -45,72 +45,14 @@ summary(result)
 result$p.jitter + theme(text = element_text(size=13))
 
 ## ----message=FALSE, warning=FALSE, include=TRUE-------------------------------
-p.spec <- plot_spec(result, show.stand=F, HABc=NULL)
-# print(p.spec$p.all.spec)
-# print(p.spec$p.cluster.spec)
-# print(p.spec$p.group.spec.2)
+if(library('cowplot', logical.return = T)){
+  library('cowplot')
+}else{
+  install.packages("cowplot")
+  library('cowplot')
+}
 
-## ----message=FALSE, warning=FALSE, fig.height=5, fig.width=6------------------
-library(magrittr)
-library(reshape2)
-library(heatmaply)
-# melt data
-tmp <- data.frame(cluster = result$res.FCM$cluster %>% as.character,
-                  X = FD$x.stand)
-names(tmp)[2:ncol(tmp)] <- as.character(wv)
-tmp.p <- melt(tmp, id='cluster', variable.name='band', value.name='value')
-tmp.p$cluster %<>% levels(.)[.]
-tmp.p$band %<>% levels(.)[.] %>% as.numeric
-
-tmp2 <- data.frame(name = seq(1,nrow(tmp)) %>% as.character,
-                   tmp[,2:ncol(tmp)])
-names(tmp2)[2:ncol(tmp2)] <- as.character(wv)
-tmp2.p <- melt(tmp2, id='name', variable.name='band', value.name='value')
-tmp2.p$name %<>% levels(.)[.]
-tmp2.p$band %<>% levels(.)[.] %>% as.numeric
-tmp.p$name <- tmp2.p$name  
-tmp.p$cluster <- paste0('Cluster ',tmp.p$cluster)
-
-# plot
-cp2 <- cp <- RdYlBu(result$K)
-names(cp) <- seq(1,result$K)
-names(cp2) <- paste0('Cluster ',seq(1,result$K))
-p.group.facet <- ggplot(data=tmp.p) + 
-  geom_path(aes(x=band, y=value, group=name, color=cluster), alpha=0.9) + 
-  scale_color_manual(values=cp2,
-                     labels=paste0('Cluster ',seq(result$K))) + 
-  labs(color=paste0('Cluster ',seq(result$K)),y='Normalized_scale') + 
-  facet_wrap(~cluster, nrow=1) + 
-  theme_bw() + 
-  theme(text = element_text(size=13),
-        legend.position='none',
-        strip.background = element_rect(fill='white', color="white"))
-# plot(p.group.facet)
-
-Nechad2015_sample <- Nechad2015[w_sample, ]
-Nechad2015_sample$cluster <- result$res.FCM$cluster %>% as.character
-
-tmp <- data.frame(cluster=Nechad2015_sample$cluster, 
-                  Chla=Nechad2015_sample$`X.Chl_a..ug.L.`) %>% na.omit
-tmp$cluster <- reorder(tmp$cluster, tmp$Chla, mean)
-
-p.boxplot <- ggplot(data=tmp, aes(x=cluster,y=Chla,fill=cluster)) + 
-  geom_boxplot(outlier.color=NA) + scale_y_log10() + 
-  scale_fill_manual(values=cp) + 
-  theme_bw() + 
-  theme(text = element_text(size=13),
-        legend.position='none')
-
-p.cluster.spec.n <- plot_spec_from_df(result$res.FCM$v) + 
-  geom_path(size=1.5) + labs(y="Normalized_scale") + 
-  scale_color_manual(values=cp) +
-  theme(text = element_text(size=13),
-        legend.position='right')
-
-library(gridExtra)
-pm <- arrangeGrob(grobs=list(p.cluster.spec.n, p.boxplot),nrow=1) %>%
-  arrangeGrob(grobs=list(., p.group.facet),
-                          nrow=2,top='Nechad2015: Normalized cluster result')
-plot(pm)
-
+p.spec <- plot_spec(result, show.stand=T, HABc=NULL)
+print(p.spec$p.cluster.spec)
+plot_grid(plotlist = p.spec$p.group.spec.2)
 

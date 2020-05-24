@@ -1,3 +1,7 @@
+## FCMm 0.6.2 (2020-05-24)
+
+  * Bugs fixed.
+
 ## FCMm 0.6.1 (2020-05-23)
 
   * This version updated the arrangement of codes, fixed bugs, and collected data sets.

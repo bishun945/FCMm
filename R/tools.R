@@ -12,6 +12,7 @@
 #' 
 #' @importFrom stats cor cor.test median na.omit sd
 #' @importFrom stats confint cov lm qt var
+#' @importFrom magrittr %>% %<>%
 cal.metrics <- function(x,y,name="all",log10=FALSE){
 
   name <- match.arg(name, cal.metrics.names())

@@ -60,45 +60,37 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
   theme(axis.text.x.bottom = element_text(hjust=1),
         strip.background = element_rect(color="white", fill="white"))
 
-MAPEs <- NULL
+MAPEs <- MAEs <- NULL
 i <- 1
 for(model in c('BR','TBA','Bloom','conc.Blend')){
   MAPEs[i] <- cal.metrics(x=dt_Chla$Chla_true %>% log10,
                           y=dt_Chla[,model]  %>% log10,
                           name='MAPE',log10=TRUE)
-  names(MAPEs)[i] <- model
-  i <- i + 1
-}
-names(MAPEs)[i-1] = 'Blend'
-print(MAPEs %>% round(2))
-
-MAEs <- NULL
-i <- 1
-for(model in c('BR','TBA','Bloom','conc.Blend')){
   MAEs[i] <- cal.metrics(x=dt_Chla$Chla_true,
                          y=dt_Chla[,model],
                          name='MAE',log10=TRUE)
-  names(MAEs)[i] <- model
+  names(MAPEs)[i] <- names(MAEs)[i] <- model
   i <- i + 1
 }
-names(MAEs)[i-1] = 'Blend'
+names(MAPEs)[i-1] <- names(MAEs)[i-1] <- 'Blend'
+print(MAPEs %>% round(2))
 print(MAEs %>% round(3))
 
-## ----fig.height=4, fig.width=6------------------------------------------------
-Rrs_sub <- subset(Rrs, select=c(`412.5`,`442.5`,`490`,`510`,
-                                `560`,`620`,`665`,`673.75`,
-                                `708.75`,`753.75`,`865`,`885`))
-wavelength.sub <- c(412.5,442.5,490,510,
-                    560,620,665,673.75,
-                    708.75,753.75,865,885)
-Rrs_clusters.sub <- which(names(Rrs_clusters.default) != 'X400' &
-                            names(Rrs_clusters.default) != 'X681' & 
-                            names(Rrs_clusters.default) != 'X779') %>%
-  Rrs_clusters.default[,.]
-
-# Note the parameter settings in this function `default.cluster=F`
-result_sub <- apply_FCM_m(Rrs=Rrs_sub, wavelength=wavelength.sub,
-                          Rrs_clusters=Rrs_clusters.sub,
-                          stand=F, default.cluster=F, option.plot=T)
-result_sub$p.group
+## ----fig.height=4, fig.width=6, eval=F----------------------------------------
+#  Rrs_sub <- subset(Rrs, select=c(`412.5`,`442.5`,`490`,`510`,
+#                                  `560`,`620`,`665`,`673.75`,
+#                                  `708.75`,`753.75`,`865`,`885`))
+#  wavelength.sub <- c(412.5,442.5,490,510,
+#                      560,620,665,673.75,
+#                      708.75,753.75,865,885)
+#  Rrs_clusters.sub <- which(names(Rrs_clusters.default) != 'X400' &
+#                              names(Rrs_clusters.default) != 'X681' &
+#                              names(Rrs_clusters.default) != 'X779') %>%
+#    Rrs_clusters.default[,.]
+#  
+#  # Note the parameter settings in this function `default.cluster=F`
+#  result_sub <- apply_FCM_m(Rrs=Rrs_sub, wavelength=wavelength.sub,
+#                            Rrs_clusters=Rrs_clusters.sub,
+#                            stand=F, default.cluster=F, option.plot=T)
+#  result_sub$p.group
 

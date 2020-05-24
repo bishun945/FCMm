@@ -456,7 +456,7 @@ apply_FCM_m <- function(Rrs, wavelength, Rrs_clusters,
     names(Rrs) <- as.character(wavelength)
     dt <- cbind(nm=as.character(seq(1,nrow(Rrs))),Rrs)
     dt$nm %<>% levels(.)[.]
-    dt.melt <- melt(dt,id=c('nm'),variable.name='band',value.name='Rrs')
+    dt.melt <- melt(dt,id=1,variable.name='band',value.name='Rrs')
     dt.melt$band %<>% levels(.)[.] %>% as.numeric
     dt2.melt <- cbind(cluster=cluster, Rrs) %>% melt(., id=c('cluster'))
     dt3.melt <- cbind(quality=quality,Rrs) %>% melt(., id=c('quality'))
@@ -554,7 +554,6 @@ plot_spec <- function(res, show.stand=FALSE, HABc=NULL){
 #' @export
 #' @family Fuzzy cluster functions
 #' 
-#' @import viridis
 #' @import ggplot2
 #' @importFrom reshape2 melt
 #' @importFrom magrittr %>% %<>%
@@ -564,12 +563,12 @@ plot_spec_from_df <- function(df){
   tmp.spec <- cbind(nm=seq(1,nrow(df)), df) %>% as.data.frame
   names(tmp.spec)[1] <- "name"
   tmp.spec$name %<>% as.character
-  spectra.p <- melt(tmp.spec,id='name',variable.name='band',value.name='value')
+  spectra.p <- melt(tmp.spec, id=1,variable.name='band',value.name='value')
   spectra.p$band %<>% levels(.)[.] %>% as.numeric
   result <- ggplot(data=spectra.p,
                    aes(x=band,y=value,group=name,color=name)) +
     geom_path(alpha=0.5) +
-    scale_colour_viridis(discrete=TRUE) +
+    scale_colour_viridis_d() +
     theme_bw() +
     theme(legend.position='none')
   return(result)
@@ -593,7 +592,7 @@ plot_spec_from_df <- function(df){
   result <- ggplot() +
     geom_path(data=spectra.p,
               aes(x=band,y=value,group=name,color=name),alpha=0.3) +
-    scale_colour_viridis(discrete=TRUE) +
+    scale_colour_viridis_d() +
     labs(title=paste0("All spectra of dataset N=",as.character(dim(res$FD$x)[1])),
          x="Wavelength", y=y.lable) +
     theme_bw() +

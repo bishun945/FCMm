@@ -87,7 +87,6 @@
 #' @family Fuzzy cluster functions
 #' 
 #' @import ggplot2
-#' @import viridis
 #' @import raster
 #' @importFrom reshape2 melt
 #' @importFrom magrittr %>% %<>%
@@ -188,7 +187,7 @@ apply_to_image <- function(input, res,
   p.memb<- ggplot() +
     geom_raster(data=melt(sub.memb,id=c('x','y')), aes(x=x,y=y,fill=value),
                 hjust=0.5, vjust=0.5) +
-    scale_fill_viridis(na.value='white',begin=0,end=1,
+    scale_fill_viridis_c(na.value='white',begin=0,end=1,
                        breaks=c(0.0,0.25,0.5,0.75,1.0)) +
     labs(fill='Membership', title=title.name) +
     coord_equal() + theme_map() +
@@ -259,12 +258,12 @@ apply_to_image <- function(input, res,
             strip.background=element_rect(fill='white',color='white'))
     if(max(sub.Chla$Chla, na.rm=T) >= 800){
       p.Chla <- p.Chla +
-        scale_fill_viridis(na.value='gray', trans='log10',
+        scale_fill_viridis_c(na.value='gray', trans='log10',
                            limits=c(1,800),
                            breaks=c(10^seq(0,2.9,0.5)) %>% round(.,2))
     }else{
       p.Chla <- p.Chla +
-        scale_fill_viridis(na.value='gray', trans='log10',
+        scale_fill_viridis_c(na.value='gray', trans='log10',
                            breaks=c(10^seq(0,2.9,0.5)) %>%
                              .[. < max(sub.Chla$Chla, na.rm=T)] %>% round(.,2))
     }

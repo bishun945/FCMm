@@ -2,3 +2,9 @@
 
 language: R
 cache: packages
+
+os: 
+  - osx
+  - linux
+
+warning_are_errors: false

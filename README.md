@@ -3,6 +3,8 @@
 
 [![Travis build
 status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/bishun945/FCMm?branch=master&svg=true)](https://ci.appveyor.com/project/bishun945/FCMm)
 
 **Author**: Shun Bi  
 **Date**: 2020-05-24  

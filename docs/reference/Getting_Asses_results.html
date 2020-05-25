@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Seven built-in clusters — Rrs_clusters.default • FCMm</title>
+<title>Get the result of function Assessment_via_cluster — Getting_Asses_results • FCMm</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,11 @@
 
 
 
-<meta property="og:title" content="Seven built-in clusters — Rrs_clusters.default" />
-<meta property="og:description" content="A dataframe contains the water optical clusters produced by Bi et al. (2019)" />
+<meta property="og:title" content="Get the result of function Assessment_via_cluster — Getting_Asses_results" />
+<meta property="og:description" content="This function mainly use function Assessment_via_cluster to get
+  assesments both from fuzzy and hard mode. Specifically, it will return fuzzy_MAE, 
+  fuzzy_MAPE, hard_Slope, Valid_percent, and hard_Rsquare which should be seemed as the 
+  input value of function Scoring_system." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -137,41 +140,86 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Seven built-in clusters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/Data_collection.R'><code>R/Data_collection.R</code></a></small>
-    <div class="hidden name"><code>Rrs_clusters.default.Rd</code></div>
+    <h1>Get the result of function Assessment_via_cluster</h1>
+    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/Algorithms_assessment.R'><code>R/Algorithms_assessment.R</code></a></small>
+    <div class="hidden name"><code>Getting_Asses_results.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataframe contains the water optical clusters produced by Bi et al. (2019)</p>
+    <p>This function mainly use function <code>Assessment_via_cluster</code> to get
+  assesments both from fuzzy and hard mode. Specifically, it will return fuzzy_MAE, 
+  fuzzy_MAPE, hard_Slope, Valid_percent, and hard_Rsquare which should be seemed as the 
+  input value of function <code>Scoring_system</code>.</p>
     </div>
 
-    <pre class="usage"><span class='no'>Rrs_clusters.default</span></pre>
+    <pre class="usage"><span class='fu'>Getting_Asses_results</span>(
+  <span class='no'>sample.size</span>,
+  <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>pred</span>,
+  <span class='no'>meas</span>,
+  <span class='no'>memb</span>,
+  <span class='no'>cluster</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>sample.size</th>
+      <td><p>Sample size. This supports a bootstrap way to run the function 
+<code>Assessment_via_cluster</code>. The number should not be larger than the row number 
+of pred or so.</p></td>
+    </tr>
+    <tr>
+      <th>replace</th>
+      <td><p>Logical, replace, default as <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>pred</th>
+      <td><p>Prediction matrix</p></td>
+    </tr>
+    <tr>
+      <th>meas</th>
+      <td><p>Measured (actual) vector</p></td>
+    </tr>
+    <tr>
+      <th>memb</th>
+      <td><p>Membership matrix</p></td>
+    </tr>
+    <tr>
+      <th>cluster</th>
+      <td><p>Cluster vector</p></td>
+    </tr>
+    <tr>
+      <th>seed</th>
+      <td><p>Seed number for fixing the random process. See <code><a href='https://rdrr.io/r/utils/help.html'>help(set.seed)</a></code> for more details.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe with 7 rows by 15 cols</p>
+    <p>A list containing fuzzy and hard results from <code>Assessment_via_cluster</code></p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>You have to take a look at the description of this built-in cluster (water type) such as
-  thier corresponding water color parameters in Bi et al. (2019).</p>
+    <p>The row number of <code>pred</code>, <code>meas</code>, <code>memb</code>, and <code>cluster</code> should be the same. 
+  This function is designed for bootstraping process to get Chla algorithms assessment. Therefore, 
+  parameters of <code>Assessment_via_cluster</code> is set as fixed such as <code>log10 = TRUE</code>, 
+  <code>na.process = TRUE</code>. Given that, I will not export this function in latter to avoid confuses.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other Datasets: 
-<code><a href='Nechad2015.html'>Nechad2015</a></code>,
-<code><a href='OLCI_TH.html'>OLCI_TH</a></code>,
-<code><a href='SRF_LIST.html'>SRF_LIST</a></code>,
-<code><a href='Valente2019.html'>Valente2019</a></code>,
-<code><a href='WaterSpec35.html'>WaterSpec35</a></code>,
-<code><a href='dt_water.html'>dt_water</a></code>,
-<code><a href='wavelength.default.html'>wavelength.default</a></code></p></div>
+    <div class='dont-index'><p>Other Algorithm assessment: 
+<code><a href='Assessment_via_cluster.html'>Assessment_via_cluster</a>()</code>,
+<code><a href='Sampling_via_cluster.html'>Sampling_via_cluster</a>()</code>,
+<code><a href='Score_algorithms_interval.html'>Score_algorithms_interval</a>()</code>,
+<code><a href='Scoring_system.html'>Scoring_system</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#note">Note</a></li>
       <li><a href="#see-also">See also</a></li>
     </ul>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Seven built-in clusters — Rrs_clusters.default • FCMm</title>
+<title>Stratified sampling by clusters or types — Sampling_via_cluster • FCMm</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Seven built-in clusters — Rrs_clusters.default" />
-<meta property="og:description" content="A dataframe contains the water optical clusters produced by Bi et al. (2019)" />
+<meta property="og:title" content="Stratified sampling by clusters or types — Sampling_via_cluster" />
+<meta property="og:description" content="Stratified sampling by clusters or types" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -137,42 +137,51 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Seven built-in clusters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/Data_collection.R'><code>R/Data_collection.R</code></a></small>
-    <div class="hidden name"><code>Rrs_clusters.default.Rd</code></div>
+    <h1>Stratified sampling by clusters or types</h1>
+    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/Algorithms_assessment.R'><code>R/Algorithms_assessment.R</code></a></small>
+    <div class="hidden name"><code>Sampling_via_cluster.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataframe contains the water optical clusters produced by Bi et al. (2019)</p>
+    <p>Stratified sampling by clusters or types</p>
     </div>
 
-    <pre class="usage"><span class='no'>Rrs_clusters.default</span></pre>
+    <pre class="usage"><span class='fu'>Sampling_via_cluster</span>(<span class='no'>x</span>, <span class='no'>num</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A vector represents the cluster or type, only support numeric value now.</p></td>
+    </tr>
+    <tr>
+      <th>num</th>
+      <td><p>The number of sampling</p></td>
+    </tr>
+    <tr>
+      <th>replace</th>
+      <td><p>The way of sampling. See <code><a href='https://rdrr.io/r/utils/help.html'>help(sample)</a></code> for more details</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe with 7 rows by 15 cols</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>You have to take a look at the description of this built-in cluster (water type) such as
-  thier corresponding water color parameters in Bi et al. (2019).</p>
+    <p>List</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other Datasets: 
-<code><a href='Nechad2015.html'>Nechad2015</a></code>,
-<code><a href='OLCI_TH.html'>OLCI_TH</a></code>,
-<code><a href='SRF_LIST.html'>SRF_LIST</a></code>,
-<code><a href='Valente2019.html'>Valente2019</a></code>,
-<code><a href='WaterSpec35.html'>WaterSpec35</a></code>,
-<code><a href='dt_water.html'>dt_water</a></code>,
-<code><a href='wavelength.default.html'>wavelength.default</a></code></p></div>
+    <div class='dont-index'><p>Other Algorithm assessment: 
+<code><a href='Assessment_via_cluster.html'>Assessment_via_cluster</a>()</code>,
+<code><a href='Getting_Asses_results.html'>Getting_Asses_results</a>()</code>,
+<code><a href='Score_algorithms_interval.html'>Score_algorithms_interval</a>()</code>,
+<code><a href='Scoring_system.html'>Scoring_system</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
-      <li><a href="#note">Note</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#see-also">See also</a></li>
     </ul>
 

@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
       <h1>The application of FCMm to imagery data</h1>
                         <h4 class="author">Shun Bi</h4>
             
-            <h4 class="date">2020-02-13</h4>
+            <h4 class="date">2020-05-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bishun945/FCMm/blob/master/vignettes/Raster_Running_FCMm.Rmd"><code>vignettes/Raster_Running_FCMm.Rmd</code></a></small>
       <div class="hidden name"><code>Raster_Running_FCMm.Rmd</code></div>
@@ -135,32 +135,39 @@
 <p>The <code>OLCI_TH</code> is a <code>RasterBrick</code> of package <code>raster</code>. For running in <code>FCMm</code>, this <code>RasterBrick</code> should be converted as <code>ImageDataframe</code> so-called as <code>imdf</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(<span class="dt">list=</span><span class="kw"><a href="https://rdrr.io/r/base/ls.html">ls</a></span>())</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(FCMm)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"OLCI_TH"</span>)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"Bi_clusters"</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(OLCI_TH)</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; [1] "RasterBrick"</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; attr(,"package")</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; [1] "raster"</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co"># convert RasterBrick to imdf with NA value removed and xy coordinates recorded</span></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">imdf &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/raster/man/as.data.frame.html">as.data.frame</a></span>(OLCI_TH, <span class="dt">na.rm=</span>T, <span class="dt">xy=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(imdf)[<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">2</span>)] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">412.5</span>,<span class="fl">442.5</span>,<span class="dv">490</span>,<span class="dv">510</span>,</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">                           <span class="dv">560</span>,<span class="dv">620</span>,<span class="dv">665</span>,<span class="fl">673.75</span>,</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">                           <span class="fl">708.75</span>,<span class="fl">753.75</span>,<span class="dv">865</span>,<span class="dv">885</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(magrittr)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"OLCI_TH"</span>)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"Bi_clusters"</span>)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(OLCI_TH)</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; [1] "RasterBrick"</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt; attr(,"package")</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt; [1] "raster"</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co"># convert RasterBrick to imdf with NA value removed and xy coordinates recorded</span></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">imdf &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/raster/man/as.data.frame.html">as.data.frame</a></span>(OLCI_TH, <span class="dt">na.rm=</span>T, <span class="dt">xy=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">x_name &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(imdf) <span class="op">==</span><span class="st"> "x"</span>)</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">y_name &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(imdf) <span class="op">==</span><span class="st"> "y"</span>)</a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">imdf &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(imdf[,<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(x_name, y_name)], imdf[,<span class="op">-</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(x_name, y_name)])</a>
+<a class="sourceLine" id="cb1-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(imdf)[<span class="op">-</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>)] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">412.5</span>,<span class="fl">442.5</span>,<span class="dv">490</span>,<span class="dv">510</span>,</a>
+<a class="sourceLine" id="cb1-22" data-line-number="22">                           <span class="dv">560</span>,<span class="dv">620</span>,<span class="dv">665</span>,<span class="fl">673.75</span>,</a>
+<a class="sourceLine" id="cb1-23" data-line-number="23">                           <span class="fl">708.75</span>,<span class="fl">753.75</span>,<span class="dv">865</span>,<span class="dv">885</span>)</a></code></pre></div>
 </div>
 <div id="data-set-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-set-plots" class="anchor"></a>Data set plots</h2>
-<p>Function <code>plot_spec_from_df</code> suppports a quick look about the spectral dataframe. Just type <code><a href="https://rdrr.io/r/utils/help.html">help(plot_spec_from_df)</a></code> to see more details.</p>
+<p>Function <code>plot_spec_from_df</code> supports a quick look about the spectral dataframe. Just type <code><a href="https://rdrr.io/r/utils/help.html">help(plot_spec_from_df)</a></code> to see more details.</p>
 <p><strong>Note</strong>: The input of <code>plot_spec_from_df</code> should be a matrix or data.frame with colnames that could be transformed into the numeric — as the x-axis of the plot. Since the return of <code>plot_spec_from_df</code> is a <code>ggplot</code> list, you could modify or add it for your purpose (such as add labs or themes).</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">54321</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">sample_n</span>(imdf[,<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">2</span>)],<span class="dv">50</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/sample.html">sample_n</a></span>(imdf[,<span class="op">-</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>)],<span class="dv">50</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="../reference/plot_spec_from_df.html">plot_spec_from_df</a></span>(.) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">18</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="dt">size=</span><span class="dv">18</span>))</a></code></pre></div>
 <p><img src="Raster_Running_FCMm_files/figure-html/unnamed-chunk-2-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>A-ha! The performance of AC is not bad.</p>
 </div>
@@ -173,39 +180,43 @@
 <a href="#clustering-the-raster-and-chla-estimation" class="anchor"></a>Clustering the raster and Chla estimation</h2>
 <p>Function <code>apply_to_image</code> provides many parameters for users to decide the process for their desired results. You can see more details by typing <code><a href="https://rdrr.io/r/utils/help.html">help(apply_to_image)</a></code>.</p>
 <p><strong>Note</strong>: The process might take a long time which depends on your local machine.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">generate_param &lt;-<span class="st"> </span><span class="cf">function</span>(wl){</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  w &lt;-<span class="st"> </span>(wavelength.default <span class="op">%in%</span><span class="st"> </span>wl)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  wavelength &lt;-<span class="st"> </span>wavelength.default[w]</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  Rrs_clusters &lt;-<span class="st"> </span>Rrs_clusters.default[,w]</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="co"># generate the required res</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">  res &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>()</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">  res<span class="op">$</span>FD<span class="op">$</span>wv &lt;-<span class="st"> </span>wavelength</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">  res<span class="op">$</span>K &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(Rrs_clusters)</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">  res<span class="op">$</span>res.FCM &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">v=</span>Rrs_clusters,<span class="dt">m=</span><span class="fl">1.36</span>)</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(res)</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">}</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13">res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/generate_param.html">generate_param</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">413</span>,<span class="dv">443</span>,<span class="dv">490</span>,<span class="dv">510</span>,<span class="dv">560</span>,<span class="dv">620</span>,<span class="dv">665</span>,<span class="dv">674</span>,<span class="dv">709</span>,<span class="dv">754</span>,<span class="dv">865</span>,<span class="dv">885</span>))</a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16">im_result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/apply_to_image.html">apply_to_image</a></span>(<span class="dt">input=</span>OLCI_TH, <span class="dt">res=</span>res, <span class="dt">title.name=</span><span class="st">"Test_image"</span>,</a>
-<a class="sourceLine" id="cb3-17" data-line-number="17">                            <span class="dt">Chla_est=</span>T, <span class="dt">output_image=</span>F)</a></code></pre></div>
-<p><img src="Raster_Running_FCMm_files/figure-html/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;"><img src="Raster_Running_FCMm_files/figure-html/unnamed-chunk-3-2.png" width="576" style="display: block; margin: auto;"><img src="Raster_Running_FCMm_files/figure-html/unnamed-chunk-3-3.png" width="576" style="display: block; margin: auto;"><img src="Raster_Running_FCMm_files/figure-html/unnamed-chunk-3-4.png" width="576" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(im_result)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt;                Length Class       Mode</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; input          791136 RasterBrick S4  </span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; res                 3 -none-      list</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; raster.memb    346458 RasterBrick S4  </span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; raster.cluster  49494 RasterLayer S4  </span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; p.memb              9 gg          list</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; p.cluster           9 gg          list</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; p.truecolor         9 gg          list</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; p.Chla              9 gg          list</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; imdf               14 data.frame  list</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; imRrs.raw          12 data.frame  list</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; imRrs.n            12 data.frame  list</span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; res.FCM             8 -none-      list</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; res.Chla           11 data.frame  list</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/generate_param.html">generate_param</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">413</span>,<span class="dv">443</span>,<span class="dv">490</span>,<span class="dv">510</span>,<span class="dv">560</span>,<span class="dv">620</span>,<span class="dv">665</span>,<span class="dv">674</span>,<span class="dv">709</span>,<span class="dv">754</span>,<span class="dv">865</span>,<span class="dv">885</span>))</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">im_result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/apply_to_image.html">apply_to_image</a></span>(<span class="dt">input=</span>OLCI_TH, <span class="dt">res=</span>res, <span class="dt">title.name=</span><span class="st">"Test_image"</span>,</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">                            <span class="dt">Chla_est=</span>T, <span class="dt">output_image=</span>F)</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; Since we have not check the input image file,</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;   please make sure the wavelength of image file and cluster dataframe match correspondingly.</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; The normalization of spectra is default in thie version!</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; Apply fcm to image dataframe ......</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; Plotting membership values ......</span></a></code></pre></div>
+<p><img src="Raster_Running_FCMm_files/figure-html/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;"></p>
+<pre><code>#&gt; Plotting clusters ......</code></pre>
+<p><img src="Raster_Running_FCMm_files/figure-html/unnamed-chunk-3-2.png" width="576" style="display: block; margin: auto;"></p>
+<pre><code>#&gt; Note: this function is designed for OLCI or MERIS band settings!
+#&gt; The following bands (also as their names) must be contained in Rrs:
+#&gt; Rrs665 Rrs709 Rrs754
+#&gt; Plotting Chla concentration ......</code></pre>
+<p><img src="Raster_Running_FCMm_files/figure-html/unnamed-chunk-3-3.png" width="576" style="display: block; margin: auto;"></p>
+<pre><code>#&gt; Saving the results to the list ......
+#&gt; output_membership
+#&gt; output_cluster
+#&gt; Done!</code></pre>
+<p><img src="Raster_Running_FCMm_files/figure-html/unnamed-chunk-3-4.png" width="576" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(im_result)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt;                Length Class       Mode</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; input          791136 RasterBrick S4  </span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; res                 3 -none-      list</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; raster.memb    346458 RasterBrick S4  </span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; raster.cluster  49494 RasterLayer S4  </span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; p.memb              9 gg          list</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; p.cluster           9 gg          list</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; p.truecolor         9 gg          list</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; p.Chla              9 gg          list</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; imdf               14 data.frame  list</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; imRrs.raw          12 data.frame  list</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; imRrs.n            12 data.frame  list</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; res.FCM             8 -none-      list</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; res.Chla           11 data.frame  list</span></a></code></pre></div>
 <p><code>im_result</code> list contains several result by <code>apply_to_image</code>:</p>
 <ul>
 <li>

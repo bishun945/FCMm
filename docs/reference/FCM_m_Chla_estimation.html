@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
       </span>
     </div>
 
@@ -138,7 +138,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Estimate Chla concentration by algorithms blending via membership values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/FCM_m_Chla_estimation.R'><code>R/FCM_m_Chla_estimation.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/Chla_estimation.R'><code>R/Chla_estimation.R</code></a></small>
     <div class="hidden name"><code>FCM_m_Chla_estimation.Rd</code></div>
     </div>
 
@@ -171,7 +171,8 @@ columns presenting seven membership values from each cluster produced by FCM-m</
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The input of <code>Rrs</code> must have bands with wavelength at 665, 709 and 754 nm.
-  See examples of using this function.</p>
+  See examples of using this function.
+  (2020-02-28) The <code>C6</code> model was replaced by <code>Bloom</code> model.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -188,6 +189,7 @@ columns presenting seven membership values from each cluster produced by FCM-m</
     <div class='dont-index'><p>Other Algorithms: Chla concentration: 
 <code><a href='BR_Gil10.html'>BR_Gil10</a>()</code>,
 <code><a href='BR_Git11.html'>BR_Git11</a>()</code>,
+<code><a href='Bloom.html'>Bloom</a>()</code>,
 <code><a href='C6.html'>C6</a>()</code>,
 <code><a href='Chla_algorithms_name.html'>Chla_algorithms_name</a>()</code>,
 <code><a href='FBA_Le13.html'>FBA_Le13</a>()</code>,

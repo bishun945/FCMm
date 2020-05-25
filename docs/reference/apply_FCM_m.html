@@ -78,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
       </span>
     </div>
 
@@ -139,7 +139,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Apply FCM_m to new input Rrs</h1>
-    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/apply_FCM_m.R'><code>R/apply_FCM_m.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/bishun945/FCMm/blob/master/R/FCMm.R'><code>R/FCMm.R</code></a></small>
     <div class="hidden name"><code>apply_FCM_m.Rd</code></div>
     </div>
 
@@ -169,6 +169,10 @@ Default use the data from <code>Bi_clusters.rda</code></p></td>
 Default use the data from <code>Bi_clusters.rda</code></p></td>
     </tr>
     <tr>
+      <th>m_used</th>
+      <td><p>Number, Used fuzzifier value</p></td>
+    </tr>
+    <tr>
       <th>stand</th>
       <td><p>Logical, whether to normalized the Rrs data. Default as <code>FALSE</code> means do not.</p></td>
     </tr>
@@ -178,12 +182,12 @@ Default use the data from <code>Bi_clusters.rda</code></p></td>
 Default use the data from <code>Bi_clusters.rda</code></p></td>
     </tr>
     <tr>
-      <th>m_used</th>
-      <td><p>Number, Used fuzzifier value</p></td>
-    </tr>
-    <tr>
       <th>option.plot</th>
       <td><p>Logical, whether to plot the result. Default as <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>quatliy_chech</th>
+      <td><p>Logical, quality chech option (default as <code>FALSE</code>)</p></td>
     </tr>
     </table>
 
@@ -194,6 +198,7 @@ Default use the data from <code>Bi_clusters.rda</code></p></td>
 <li><p><strong>x.stand</strong>  The standardized Rrs dataframe, if <code>stand=F</code></p></li>
 <li><p><strong>d</strong>  Distance to each cluster</p></li>
 <li><p><strong>u</strong>  Membership values</p></li>
+<li><p><strong>Area</strong> Spectral intergration of each sample</p></li>
 <li><p><strong>cluster</strong>  Defined by the maximum of membership</p></li>
 <li><p><strong>quality</strong>  The quality of the cluster results.</p></li>
 <li><p><strong>m.used</strong>  The used value of fuzzifier(m)</p></li>
@@ -201,7 +206,7 @@ Default use the data from <code>Bi_clusters.rda</code></p></td>
 <li><p><strong>p.group</strong>  A ggplot list for plotting the cluster result</p></li>
 <li><p><strong>p.group.facet</strong> <code>p.group</code> with facet to see each cluster resutls
       more clearly</p></li>
-<li><p><strong>dt.plot</strong>  Dataframe used for ggplot</p></li>
+<li><p><strong>dt.melt</strong>  Dataframe used for ggplot</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>

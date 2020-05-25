@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">FCMm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
       <h1>How to apply the default FCMm to new data?</h1>
                         <h4 class="author">Shun Bi</h4>
             
-            <h4 class="date">2020-02-13</h4>
+            <h4 class="date">2020-05-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bishun945/FCMm/blob/master/vignettes/New_Data_Running_FCMm.Rmd"><code>vignettes/New_Data_Running_FCMm.Rmd</code></a></small>
       <div class="hidden name"><code>New_Data_Running_FCMm.Rmd</code></div>
@@ -134,25 +134,28 @@
 <a href="#dataframe-process" class="anchor"></a>Dataframe process</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(<span class="dt">list=</span><span class="kw"><a href="https://rdrr.io/r/base/ls.html">ls</a></span>())</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(FCMm)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"WaterSpec35"</span>)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"Bi_clusters"</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">Rrs &lt;-<span class="st"> </span>WaterSpec35[,<span class="dv">3</span><span class="op">:</span><span class="dv">17</span>]</a></code></pre></div>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(magrittr)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"WaterSpec35"</span>)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"Bi_clusters"</span>)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">Rrs &lt;-<span class="st"> </span>WaterSpec35[,<span class="dv">3</span><span class="op">:</span><span class="dv">17</span>]</a></code></pre></div>
 </div>
 <div id="data-set-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-set-plots" class="anchor"></a>Data set plots</h2>
 <p>At first, it is necessary to check out the dataframe situation before clustering (I suppose it is also important to do that in any other researches). The density plots show that the corresponding Chla concentration is severely skewed so it allows us to do a log10-transformed when estimate or validate the candidate algorithms.</p>
-<p>Function <code>plot_spec_from_df</code> suppports a quick look about the spectral dataframe. Just type <code><a href="https://rdrr.io/r/utils/help.html">help(plot_spec_from_df)</a></code> to see more details.</p>
+<p>Function <code>plot_spec_from_df</code> supports a quick look about the spectral dataframe. Just type <code><a href="https://rdrr.io/r/utils/help.html">help(plot_spec_from_df)</a></code> to see more details.</p>
 <p><strong>Note</strong>: The input of <code>plot_spec_from_df</code> should be a matrix or data.frame with colnames that could be transformed into the numeric — as the x-axis of the plot. Since the return of <code>plot_spec_from_df</code> is a <code>ggplot</code> list, you could modify or add it for your purpose (such as add labs or themes).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">qplot</span>(<span class="dt">data=</span>WaterSpec35, <span class="dt">x=</span>Chla, <span class="dt">geom=</span><span class="st">'density'</span>, <span class="dt">xlab=</span><span class="st">'The raw Chla'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/qplot.html">qplot</a></span>(<span class="dt">data=</span>WaterSpec35, <span class="dt">x=</span>Chla, <span class="dt">geom=</span><span class="st">'density'</span>, <span class="dt">xlab=</span><span class="st">'The raw Chla'</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">text =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="dt">size=</span><span class="dv">13</span>))</a></code></pre></div>
 <p><img src="New_Data_Running_FCMm_files/figure-html/unnamed-chunk-2-1.png" width="576" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">qplot</span>(<span class="dt">data=</span>WaterSpec35, <span class="dt">x=</span>Chla, <span class="dt">geom=</span><span class="st">'density'</span>, <span class="dt">log=</span><span class="st">'x'</span>, <span class="dt">xlab=</span><span class="st">'Log10 transformed Chla'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/qplot.html">qplot</a></span>(<span class="dt">data=</span>WaterSpec35, <span class="dt">x=</span>Chla, <span class="dt">geom=</span><span class="st">'density'</span>, <span class="dt">log=</span><span class="st">'x'</span>, <span class="dt">xlab=</span><span class="st">'Log10 transformed Chla'</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">text =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="dt">size=</span><span class="dv">13</span>))</a></code></pre></div>
 <p><img src="New_Data_Running_FCMm_files/figure-html/unnamed-chunk-2-2.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">p.spec &lt;-<span class="st"> </span><span class="kw"><a href="../reference/plot_spec_from_df.html">plot_spec_from_df</a></span>(Rrs) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">18</span>))</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x=</span><span class="st">'Wavelength (nm)'</span>,<span class="dt">y=</span><span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(Rrs<span class="op">~</span>(sr<span class="op">^-</span><span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position=</span><span class="st">'none'</span>, <span class="dt">text=</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="dt">size=</span><span class="dv">13</span>))</a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(p.spec)</a></code></pre></div>
 <p><img src="New_Data_Running_FCMm_files/figure-html/unnamed-chunk-2-3.png" width="576" style="display: block; margin: auto;"></p>
 </div>
@@ -166,18 +169,18 @@
 <p>Function <code>apply_FCM_m</code> provides many parameters for users to decide the process for their desired results. In the following case, <code>result &lt;- apply_FCM_m(Rrs=Rrs)</code> is equal to <code><a href="../reference/apply_FCM_m.html">apply_FCM_m(Rrs=Rrs, wavelength=wavelength.default, Rrs_clusters=Rrs_clusters.default, stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=TRUE)</a></code>. You can see more details by typing <code><a href="https://rdrr.io/r/utils/help.html">help(apply_FCM_m)</a></code></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/apply_FCM_m.html">apply_FCM_m</a></span>(<span class="dt">Rrs=</span>Rrs, <span class="dt">option.plot=</span><span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(result)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;               Length Class      Mode     </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; x              15    data.frame list     </span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; x.stand        15    data.frame list     </span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; d             245    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; u             245    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; cluster        35    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; quality        35    -none-     character</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; m_used          1    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; K               1    -none-     numeric  </span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; p.group         9    gg         list     </span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; p.group.facet   9    gg         list     </span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; dt.plot         5    data.frame list</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;               Length Class      Mode   </span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; x              15    data.frame list   </span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; x.stand       525    -none-     numeric</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; d             245    -none-     numeric</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; u             245    -none-     numeric</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; Area           35    -none-     numeric</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; cluster        35    -none-     numeric</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; m_used          1    -none-     numeric</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; K               1    -none-     numeric</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; p.group         9    gg         list   </span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; p.group.facet   9    gg         list   </span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; dt.melt         4    data.frame list</span></a>
 <a class="sourceLine" id="cb5-15" data-line-number="15">result<span class="op">$</span>p.group</a></code></pre></div>
 <p><img src="New_Data_Running_FCMm_files/figure-html/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;"></p>
 <p><code>result</code> list contains several result by <code>apply_FCM_M</code> (partly same to <code>FD</code> list):</p>
@@ -203,76 +206,70 @@
 <li>
 <em>p.group</em>: a ggplot list for plotting the cluster result</li>
 <li>
+<em>p.group.facet</em>: a ggplot list by facet for plotting the cluster result</li>
+<li>
 <em>dt.plot</em>: dataframe used for ggplot</li>
 </ul>
 </div>
 <div id="estimating-chla-concentration-by-fcmm" class="section level2">
 <h2 class="hasAnchor">
 <a href="#estimating-chla-concentration-by-fcmm" class="anchor"></a>Estimating Chla concentration by FCMm</h2>
-<p>Our package provides a new framework to estimate Chla concentration. The main point is <strong>algorithm blending</strong> which uses the advantages of candidates algorithm for their optimizing water type (such as TBA for turbid water and BR for relatively clear water). The three build-in algorithms used in <code>FCMm</code> are <code>TBA</code>, <code>BR</code>, and <code>C6</code>. Note that the <code>C6</code> model was designed for water bloom (or called harmful algal bloom waters with extremely high Chla concentration or scums). Please see more details in <code><a href="https://rdrr.io/r/utils/help.html">help(FCM_m_Chla_estiamtion)</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">dt_Chla &lt;-<span class="st"> </span><span class="kw"><a href="../reference/FCM_m_Chla_estimation.html">FCM_m_Chla_estimation</a></span>(<span class="dt">Rrs=</span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">Rrs665=</span>Rrs<span class="op">$</span><span class="st">`</span><span class="dt">665</span><span class="st">`</span>,</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">                                                <span class="dt">Rrs709=</span>Rrs<span class="op">$</span><span class="st">`</span><span class="dt">708.75</span><span class="st">`</span>,</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">                                                <span class="dt">Rrs754=</span>Rrs<span class="op">$</span><span class="st">`</span><span class="dt">753.75</span><span class="st">`</span>),</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">                                 <span class="dt">U=</span>result<span class="op">$</span>u)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Note: this function is designed for OLCI or MERIS band settings!</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; The following bands (also as their names) must be contained in Rrs:</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; Rrs665 Rrs709 Rrs754</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">dt_Chla<span class="op">$</span>cluster &lt;-<span class="st"> </span>result<span class="op">$</span>cluster <span class="op">%&gt;%</span><span class="st"> </span>as.character</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">dt_Chla<span class="op">$</span>Chla_true &lt;-<span class="st"> </span>WaterSpec35<span class="op">$</span>Chla</a>
+<p>Our package provides a new framework to estimate Chla concentration. The main point is <strong>algorithm blending</strong> which uses the advantages of candidates algorithm for their optimizing water type (such as TBA for turbid water and BR for relatively clear water). The three build-in algorithms used in <code>FCMm</code> are <code>TBA</code>, <code>BR</code>, and <code>Bloom</code>. Note that the <code>Bloom</code> model was designed for water bloom (or called harmful algal bloom waters with extremely high Chla concentration or scums). Please see more details in <code><a href="https://rdrr.io/r/utils/help.html">help(FCM_m_Chla_estiamtion)</a></code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(reshape2)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">dt_Chla &lt;-<span class="st"> </span><span class="kw"><a href="../reference/FCM_m_Chla_estimation.html">FCM_m_Chla_estimation</a></span>(<span class="dt">Rrs=</span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">Rrs665=</span>Rrs<span class="op">$</span><span class="st">`</span><span class="dt">665</span><span class="st">`</span>,</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">                                                <span class="dt">Rrs709=</span>Rrs<span class="op">$</span><span class="st">`</span><span class="dt">708.75</span><span class="st">`</span>,</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">                                                <span class="dt">Rrs754=</span>Rrs<span class="op">$</span><span class="st">`</span><span class="dt">753.75</span><span class="st">`</span>),</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">                                 <span class="dt">U=</span>result<span class="op">$</span>u)</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">dt_Chla<span class="op">$</span>cluster &lt;-<span class="st"> </span>result<span class="op">$</span>cluster <span class="op">%&gt;%</span><span class="st"> </span>as.character</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">dt_Chla<span class="op">$</span>Chla_true &lt;-<span class="st"> </span>WaterSpec35<span class="op">$</span>Chla</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">scipen=</span><span class="dv">10000</span>)</a>
 <a class="sourceLine" id="cb6-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">scipen=</span><span class="dv">10000</span>)</a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="kw"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(dt_Chla, <span class="dt">select=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'cluster'</span>,<span class="st">'Chla_true'</span>,<span class="st">'BR'</span>,<span class="st">'TBA'</span>,<span class="st">'C6'</span>,<span class="st">'conc.Blend'</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="st">  </span>reshape2<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(., <span class="dt">id=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'cluster'</span>,<span class="st">'Chla_true'</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="st">  </span><span class="kw">ggplot</span>(<span class="dt">data=</span>.) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span>Chla_true,<span class="dt">y=</span>value,<span class="dt">group=</span>cluster,<span class="dt">color=</span>cluster),</a>
-<a class="sourceLine" id="cb6-17" data-line-number="17">             <span class="dt">alpha=</span><span class="fl">0.8</span>, <span class="dt">size=</span><span class="dv">4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">limits=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>,<span class="dv">800</span>)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="st">  </span><span class="kw">scale_y_log10</span>(<span class="dt">limits=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>,<span class="dv">800</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values=</span>heatmaply<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/heatmaply/man/RColorBrewer_colors.html">RdYlBu</a></span>(result<span class="op">$</span>K)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">'True value of Chla concentration (ug/L)'</span>,</a>
-<a class="sourceLine" id="cb6-22" data-line-number="22">       <span class="dt">y=</span><span class="st">'Estimated value of Chla concentration (ug/L)'</span>,</a>
-<a class="sourceLine" id="cb6-23" data-line-number="23">       <span class="dt">color=</span><span class="st">'Cluster'</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept=</span><span class="dv">0</span>, <span class="dt">slope=</span><span class="dv">1</span>, <span class="dt">linetype=</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>variable, <span class="dt">nrow=</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x.bottom =</span> <span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb6-28" data-line-number="28"><span class="co">#&gt; Warning: Removed 8 rows containing missing values (geom_point).</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="kw"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(dt_Chla, <span class="dt">select=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'cluster'</span>,<span class="st">'Chla_true'</span>,<span class="st">'BR'</span>,<span class="st">'TBA'</span>,<span class="st">'Bloom'</span>,<span class="st">'conc.Blend'</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(., <span class="dt">id=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'cluster'</span>,<span class="st">'Chla_true'</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="dt">data=</span>.) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span>Chla_true,<span class="dt">y=</span>value,<span class="dt">group=</span>cluster,<span class="dt">color=</span>cluster),</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">             <span class="dt">alpha=</span><span class="fl">0.8</span>, <span class="dt">size=</span><span class="dv">4</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_log10</a></span>(<span class="dt">limits=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>,<span class="dv">800</span>)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_log10</a></span>(<span class="dt">limits=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>,<span class="dv">800</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values=</span>heatmaply<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/heatmaply/man/RColorBrewer_colors.html">RdYlBu</a></span>(result<span class="op">$</span>K)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x=</span><span class="st">'True value of Chla concentration (ug/L)'</span>,</a>
+<a class="sourceLine" id="cb6-20" data-line-number="20">       <span class="dt">y=</span><span class="st">'Estimated value of Chla concentration (ug/L)'</span>,</a>
+<a class="sourceLine" id="cb6-21" data-line-number="21">       <span class="dt">color=</span><span class="st">'Cluster'</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span>(<span class="dt">intercept=</span><span class="dv">0</span>, <span class="dt">slope=</span><span class="dv">1</span>, <span class="dt">linetype=</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span>variable, <span class="dt">nrow=</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">axis.text.x.bottom =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="dt">hjust=</span><span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb6-26" data-line-number="26">        <span class="dt">strip.background =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_rect</a></span>(<span class="dt">color=</span><span class="st">"white"</span>, <span class="dt">fill=</span><span class="st">"white"</span>))</a></code></pre></div>
 <p><img src="New_Data_Running_FCMm_files/figure-html/unnamed-chunk-4-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">MAPEs &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">MAPEs &lt;-<span class="st"> </span>MAEs &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">i &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="cf">for</span>(model <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'BR'</span>,<span class="st">'TBA'</span>,<span class="st">'C6'</span>,<span class="st">'conc.Blend'</span>)){</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="cf">for</span>(model <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'BR'</span>,<span class="st">'TBA'</span>,<span class="st">'Bloom'</span>,<span class="st">'conc.Blend'</span>)){</a>
 <a class="sourceLine" id="cb7-5" data-line-number="5">  MAPEs[i] &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cal.metrics.html">cal.metrics</a></span>(<span class="dt">x=</span>dt_Chla<span class="op">$</span>Chla_true <span class="op">%&gt;%</span><span class="st"> </span>log10,</a>
 <a class="sourceLine" id="cb7-6" data-line-number="6">                          <span class="dt">y=</span>dt_Chla[,model]  <span class="op">%&gt;%</span><span class="st"> </span>log10,</a>
 <a class="sourceLine" id="cb7-7" data-line-number="7">                          <span class="dt">name=</span><span class="st">'MAPE'</span>,<span class="dt">log10=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">  <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(MAPEs)[i] &lt;-<span class="st"> </span>model</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9">  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10">}</a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(MAPEs)</a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;         BR        TBA         C6 conc.Blend </span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;  111.74173   66.97913  163.14652   58.77644</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15">MAEs &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16">i &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="cf">for</span>(model <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'BR'</span>,<span class="st">'TBA'</span>,<span class="st">'C6'</span>,<span class="st">'conc.Blend'</span>)){</a>
-<a class="sourceLine" id="cb7-18" data-line-number="18">  MAEs[i] &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cal.metrics.html">cal.metrics</a></span>(<span class="dt">x=</span>dt_Chla<span class="op">$</span>Chla_true,</a>
-<a class="sourceLine" id="cb7-19" data-line-number="19">                         <span class="dt">y=</span>dt_Chla[,model],</a>
-<a class="sourceLine" id="cb7-20" data-line-number="20">                         <span class="dt">name=</span><span class="st">'MAE'</span>,<span class="dt">log10=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb7-21" data-line-number="21">  <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(MAEs)[i] &lt;-<span class="st"> </span>model</a>
-<a class="sourceLine" id="cb7-22" data-line-number="22">  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb7-23" data-line-number="23">}</a>
-<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(MAEs)</a>
-<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt;         BR        TBA         C6 conc.Blend </span></a>
-<a class="sourceLine" id="cb7-26" data-line-number="26"><span class="co">#&gt;  0.4677345  0.2181545  0.6486076  0.2466898</span></a></code></pre></div>
-<p>It is glad to see the Blending result performs better than others with its log-transformed MAPE = 58.78 % and MAE = 0.25 ug/L.</p>
+<a class="sourceLine" id="cb7-8" data-line-number="8">  MAEs[i] &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cal.metrics.html">cal.metrics</a></span>(<span class="dt">x=</span>dt_Chla<span class="op">$</span>Chla_true,</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">                         <span class="dt">y=</span>dt_Chla[,model],</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">                         <span class="dt">name=</span><span class="st">'MAE'</span>,<span class="dt">log10=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">  <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(MAPEs)[i] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(MAEs)[i] &lt;-<span class="st"> </span>model</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">}</a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(MAPEs)[i<span class="dv">-1</span>] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(MAEs)[i<span class="dv">-1</span>] &lt;-<span class="st"> 'Blend'</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(MAPEs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;     BR    TBA  Bloom  Blend </span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;  47.69  68.95 202.01  36.18</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(MAEs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;    BR   TBA Bloom Blend </span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt; 0.254 0.225 0.928 0.199</span></a></code></pre></div>
+<p>It is glad to see the Blending result performs better than others with its log-transformed MAPE = NA % and MAE = NA ug/L.</p>
 </div>
 </div>
 <div id="one-more-thing" class="section level1">
 <h1 class="hasAnchor">
 <a href="#one-more-thing" class="anchor"></a>One more thing</h1>
 <p>As mentioned before, the input Rrs may do not match the default wavelength from <code>wavelength.default</code>. This section will show you how to do that kind of clustering by <code>FCMm</code>.</p>
-<p>Here we suppose the selected bands are 412.5, 442.5, 490, 510, 560, 620, 665, 673.75, 708.75, 753.75, 865, and 885. Note that the <code>m.used</code> of <code>FD</code> list may change a little if different band number is used. But we assume the difference is negligible (i.e., still equal to the former one 1.36).</p>
+<p>Here we suppose the selected bands are <code>412.5</code>, <code>442.5</code>, <code>490</code>, <code>510</code>, <code>560</code>, <code>620</code>, <code>665</code>, <code>673.75</code>, <code>708.75</code>, <code>753.75</code>, <code>865</code>, and <code>885</code>. Note that the <code>m.used</code> of <code>FD</code> list may change a little if different band number is used. But we assume the difference is negligible (i.e., still equal to the former one 1.36).</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">Rrs_sub &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(Rrs, <span class="dt">select=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">`</span><span class="dt">412.5</span><span class="st">`</span>,<span class="st">`</span><span class="dt">442.5</span><span class="st">`</span>,<span class="st">`</span><span class="dt">490</span><span class="st">`</span>,<span class="st">`</span><span class="dt">510</span><span class="st">`</span>,</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">                                <span class="st">`</span><span class="dt">560</span><span class="st">`</span>,<span class="st">`</span><span class="dt">620</span><span class="st">`</span>,<span class="st">`</span><span class="dt">665</span><span class="st">`</span>,<span class="st">`</span><span class="dt">673.75</span><span class="st">`</span>,</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3">                                <span class="st">`</span><span class="dt">708.75</span><span class="st">`</span>,<span class="st">`</span><span class="dt">753.75</span><span class="st">`</span>,<span class="st">`</span><span class="dt">865</span><span class="st">`</span>,<span class="st">`</span><span class="dt">885</span><span class="st">`</span>))</a>
@@ -289,7 +286,6 @@
 <a class="sourceLine" id="cb8-14" data-line-number="14">                          <span class="dt">Rrs_clusters=</span>Rrs_clusters.sub,</a>
 <a class="sourceLine" id="cb8-15" data-line-number="15">                          <span class="dt">stand=</span>F, <span class="dt">default.cluster=</span>F, <span class="dt">option.plot=</span>T)</a>
 <a class="sourceLine" id="cb8-16" data-line-number="16">result_sub<span class="op">$</span>p.group</a></code></pre></div>
-<p><img src="New_Data_Running_FCMm_files/figure-html/unnamed-chunk-5-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
   </div>
 

@@ -7,9 +7,10 @@
 status](https://www.r-pkg.org/badges/version/FCMm)](https://CRAN.R-project.org/package=FCMm)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Project Status: Active – The project has reached a stable, usable
-state and is being actively
-developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Project Status: Inactive – The project has reached a stable, usable
+state but is no longer being actively developed; support/maintenance
+will be provided as time
+allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
 [![Travis build
 status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
 [![AppVeyor build
@@ -22,7 +23,7 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 
 **Author**: Shun Bi  
 **Date**: 2020-05-28  
-**Version**: 0.6.2  
+**Version**: 0.6.3  
 **E-mail**: <bishun1994@foxmail.com>
 
 ## Overview

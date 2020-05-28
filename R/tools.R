@@ -431,12 +431,12 @@ trim_sd <- function(x, trim=0.05, na.rm=T){
 
 
 #' @title Convert dataframe with factor to character
-#' @name .level_to_variable
+#' @name level_to_variable
 #' @param dt dataframe
 #' @param warn warnning option
 #' @export
 #' @family Utils
-.level_to_variable <- function(dt, warn=F){
+level_to_variable <- function(dt, warn=F){
   if(!is.data.frame(dt))
     stop('Input must be a data.frame')
   w <- NULL

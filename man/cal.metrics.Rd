@@ -24,11 +24,11 @@ Assess the performance of algorithms
 }
 \seealso{
 Other Utils: 
-\code{\link{.level_to_variable}()},
 \code{\link{SRF_simulate}()},
 \code{\link{cal.metrics.names}()},
 \code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
+\code{\link{level_to_variable}()},
 \code{\link{lmodel2_}()},
 \code{\link{trim_sd}()}
 }

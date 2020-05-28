@@ -14,11 +14,11 @@ List all metrics in function cal.metrics
 }
 \seealso{
 Other Utils: 
-\code{\link{.level_to_variable}()},
 \code{\link{SRF_simulate}()},
 \code{\link{cal.metrics.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()},
+\code{\link{level_to_variable}()},
 \code{\link{lmodel2_}()},
 \code{\link{trim_sd}()}
 }

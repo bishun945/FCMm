@@ -1,8 +1,8 @@
+#' @name SRF_LIST
 #' @title Collection of spectral responding functions
 #' @description A list inlcuding spectral responding functions of several popular sensors
 #' @docType data
 #' @keywords datasets
-#' @name SRF_LIST
 #' @usage SRF_LIST
 #' @format List with four elements: sensor (character), srf (data.frame), cw_med (num), and cw_max (num)
 #' @details The cw_med and cw_max are different sicne 
@@ -29,11 +29,11 @@ NULL
 
 
 
+#' @name OLCI_TH
 #' @title A test OLCI image raster in Lake Taihu
 #' @description A dataframe contains OLCI_TH data
 #' @docType data
 #' @keywords datasets
-#' @name OLCI_TH
 #' @usage OLCI_TH
 #' @format A RasterBrick with 791136 elements
 #' @details This dataset is a OLCI raster in Lake Taihu for testing the package `FCMm`.  
@@ -57,11 +57,11 @@ NULL
 
 
 
+#' @name Nechad2015
 #' @title Collection of in_situ data by Nechad et al. (2015)
 #' @description A dataframe contains Nechad2015 data
 #' @docType data
 #' @keywords datasets
-#' @name Nechad2015
 #' @usage Nechad2015
 #' @format A dataframe with 336 rows by 18 cols
 #' @details None
@@ -77,11 +77,11 @@ NULL
 
 
 
+#' @name AeronetOC2019
 #' @title Collection of coastal AeronetOC water spectra till 2019
 #' @description A dataframe contains AeronetOC data
 #' @docType data
 #' @keywords datasets
-#' @name AeronetOC2019
 #' @usage AeronetOC2019
 #' @format A dataframe with 10667 rows by 14 cols
 #' @details AeronetOC is collected from Level 2 products provided by Aeronet Ocean Color stations located
@@ -96,11 +96,11 @@ NULL
 
 
 
+#' @name WaterSpec35
 #' @title A test-purpose collection of inland water data
 #' @description A dataframe contains WaterSpec35 data
 #' @docType data
 #' @keywords datasets
-#' @name WaterSpec35
 #' @usage WaterSpec35
 #' @format A dataframe with 35 rows by 17 cols
 #' @details This dataset is a part of research of Bi et al. (2019) for
@@ -117,11 +117,11 @@ NULL
 
 
 
+#' @name Valente2019
 #' @title Collection of in_situ data by Valente et al. (2019)
 #' @description A dataframe contains Valente2019 data
 #' @docType data
 #' @keywords datasets
-#' @name Valente2019
 #' @usage Valente2019
 #' @format A dataframe with 1205 rows by 14 cols
 #' @details None
@@ -136,11 +136,11 @@ NULL
 
 
 
+#' @name dt_water
 #' @title Absorption and scattering coefficient of pure water
 #' @description Absorption and scattering coefficient of pure water with unit m^-1
 #' @docType data
 #' @keywords datasets
-#' @name dt_water
 #' @usage dt_water
 #' @format A dataframe with 561 rows by 4 cols
 #' @details The wavelength is from 340 nm to 900 nm.
@@ -151,11 +151,11 @@ NULL
 
 
 
+#' @name Rrs_clusters.default
 #' @title Seven built-in clusters
 #' @description A dataframe contains the water optical clusters produced by Bi et al. (2019)
 #' @docType data
 #' @keywords datasets
-#' @name Rrs_clusters.default
 #' @usage Rrs_clusters.default
 #' @format dataframe with 7 rows by 15 cols
 #' @note You have to take a look at the description of this built-in cluster (water type) such as
@@ -165,11 +165,11 @@ NULL
 
 
 
+#' @name wavelength.default
 #' @title Wavelength of built-in clusters
 #' @description A vector contains the wavelength of water optical clusters produced by Bi et al. (2019)
 #' @docType data
 #' @keywords datasets
-#' @name wavelength.default
 #' @usage wavelength.default
 #' @format a vector with 15 elements
 #' @family Datasets

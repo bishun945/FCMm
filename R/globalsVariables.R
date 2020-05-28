@@ -22,4 +22,10 @@ utils::globalVariables(c('.',
                          "Rrs709",
                          "Rrs754",
                          "Rrs779",
-                         "Models"))
+                         "Models",
+                         "Rrs_clusters.default",
+                         "SRF_LIST",
+                         "dt_water",
+                         "permutest.lmodel2",
+                         "wavelength.default"
+                         ))

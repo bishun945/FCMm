@@ -4,8 +4,16 @@
 \alias{apply_FCM_m}
 \title{Apply FCM_m to new input Rrs}
 \usage{
-apply_FCM_m(Rrs, wavelength, Rrs_clusters,
-  stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=FALSE)
+apply_FCM_m(
+  Rrs,
+  wavelength = NULL,
+  Rrs_clusters = NULL,
+  m_used = 1.36,
+  stand = FALSE,
+  default.cluster = TRUE,
+  quality_check = FALSE,
+  option.plot = FALSE
+)
 }
 \arguments{
 \item{Rrs}{Data.frame, the input Rrs of FCM.}

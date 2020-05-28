@@ -1,13 +1,27 @@
 
 # FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="139" /></a>
 
+<!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/FCMm)](https://CRAN.R-project.org/package=FCMm)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Travis build
 status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/bishun945/FCMm?branch=master&svg=true)](https://ci.appveyor.com/project/bishun945/FCMm)
+[![CircleCI build
+status](https://circleci.com/gh/bishun945/FCMm.svg?style=svg)](https://circleci.com/gh/bishun945/FCMm)
+[![Launch
+binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun945/FCMm/master?urlpath=https://mybinder.org/v2/gh/bishun945/FCMm/master)
+<!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2020-05-24  
+**Date**: 2020-05-28  
 **Version**: 0.6.2  
 **E-mail**: <bishun1994@foxmail.com>
 

@@ -1,11 +1,17 @@
 Package: FCMm
 Type: Package
 Title: Fuzzy Cluster Method based on the optimized m value (fuzzifier)
-Version: 0.6.2
+Version: 0.6.3
 Authors@R: c(person("Shun", "Bi", ,"bishun1994@foxmail.com", c("aut","cre")))
 Author: Shun Bi [aut, cre]
 Maintainer: Shun Bi <bishun1994@foxmail.com>
-Description: An improved FCM method (FCM-m) for optical classification of inland waters.
+Description: The package provides an improved FCM method (FCMm) for optical classification
+    of inland waters remote sensing. You can train your own high dimensional spectra data to
+    obtain the centroid via FCMm or just use the built-in centroids for the inland water system.
+    The package also supports the Chla concentration estimation through published algorithms and 
+    finally to return the blending results by assigning optimized algorithm results to specific
+    water types. Spectra plot by the package ggplot2, application to image data by the package raster,
+    and other practical remote sensing tools are also supported!
 Depends: R (>= 3.6)
 License: MIT + file LICENSE
 URL: https://github.com/bishun945/FCMm

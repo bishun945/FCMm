@@ -30,12 +30,12 @@ This function was modified by the package \code{lmodel2} (Version 1.7-3) since
 }
 \seealso{
 Other Utils: 
-\code{\link{.level_to_variable}()},
 \code{\link{SRF_simulate}()},
 \code{\link{cal.metrics.names}()},
 \code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()},
+\code{\link{level_to_variable}()},
 \code{\link{trim_sd}()}
 }
 \concept{Utils}

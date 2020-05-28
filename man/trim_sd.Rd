@@ -21,12 +21,12 @@ Standard deviation by trimmed values
 }
 \seealso{
 Other Utils: 
-\code{\link{.level_to_variable}()},
 \code{\link{SRF_simulate}()},
 \code{\link{cal.metrics.names}()},
 \code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()},
+\code{\link{level_to_variable}()},
 \code{\link{lmodel2_}()}
 }
 \concept{Utils}

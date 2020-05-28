@@ -326,9 +326,6 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 #' Application of FCM_m method for new Rrs data based on default cluster settings
 #'   or user-defined clusters (trained by FCM.new).
 #'
-#' @usage apply_FCM_m(Rrs, wavelength, Rrs_clusters,
-#'   stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=FALSE)
-#'
 #' @param Rrs Data.frame, the input Rrs of FCM.
 #' @param wavelength Numeric vector, used for applying FCM.
 #'   Default use the data from \code{Bi_clusters.rda}
@@ -338,7 +335,7 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 #' @param default.cluster Logical, whether to use the default clusters.
 #'   Default use the data from \code{Bi_clusters.rda}
 #' @param m_used Number, Used fuzzifier value
-#' @param quatliy_chech Logical, quality chech option (default as \code{FALSE})
+#' @param quality_check Logical, quality chech option (default as \code{FALSE})
 #' @param option.plot Logical, whether to plot the result. Default as \code{FALSE}
 #'
 #' @export
@@ -464,7 +461,7 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
     names(Rrs) <- as.character(wavelength)
     dt <- cbind(nm=rownames(Rrs), Rrs, cluster = as.character(cluster))
     dt.melt <- melt(dt, id=c("nm","cluster"), variable.name='band', value.name='Rrs')
-    dt.melt <- .level_to_variable(dt.melt)
+    dt.melt <- level_to_variable(dt.melt)
     dt.melt$band %<>% as.numeric
     p.group <- ggplot(data=dt.melt)+
       geom_line(aes(x=band,y=Rrs,color=cluster,group=nm),

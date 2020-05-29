@@ -31,9 +31,9 @@ Default use the data from \code{Bi_clusters.rda}}
 \item{default.cluster}{Logical, whether to use the default clusters.
 Default use the data from \code{Bi_clusters.rda}}
 
-\item{option.plot}{Logical, whether to plot the result. Default as \code{FALSE}}
+\item{quality_check}{Logical, quality chech option (default as \code{FALSE})}
 
-\item{quatliy_chech}{Logical, quality chech option (default as \code{FALSE})}
+\item{option.plot}{Logical, whether to plot the result. Default as \code{FALSE}}
 }
 \value{
 A \code{list} including several results of function \code{apply_FCM_m()}

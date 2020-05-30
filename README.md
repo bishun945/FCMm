@@ -22,8 +22,8 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2020-05-29  
-**Version**: 0.6.3  
+**Date**: 2020-05-30  
+**Version**: 0.7.1  
 **E-mail**: <bishun1994@foxmail.com>
 
 ## Overview
@@ -112,7 +112,7 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
              alpha=0.8, size=4) +
   scale_x_log10(limits=c(1,800)) + 
   scale_y_log10(limits=c(1,800)) +
-  scale_color_manual(values=heatmaply::RdYlBu(result$K)) + 
+  scale_color_manual(values=RdYlBu(result$K)) + 
   labs(x='True value of Chla concentration (ug/L)',
        y='Estimated value of Chla concentration (ug/L)',
        color='Cluster') + 

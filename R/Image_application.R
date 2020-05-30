@@ -90,7 +90,6 @@
 #' @import raster
 #' @importFrom reshape2 melt
 #' @importFrom magrittr %>% %<>%
-#' @importFrom heatmaply RdYlBu
 #' @importFrom ggthemes theme_map
 #' 
 

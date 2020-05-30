@@ -352,7 +352,7 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 #'     \item \strong{m.used}  The used value of fuzzifier(m)
 #'     \item \strong{K}  Cluster number
 #'     \item \strong{p.group}  A ggplot list for plotting the cluster result
-#'     \item \strong{p.group.facet} \code{p.group} with facet to see each cluster resutls
+#'     \item \strong{p.group.facet} \code{p.group} with facet to see each cluster results
 #'       more clearly
 #'     \item \strong{dt.melt}  Dataframe used for ggplot
 #'   }
@@ -374,7 +374,6 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 #' 
 #' @import ggplot2
 #' @importFrom magrittr %>% %<>%
-#' @importFrom heatmaply RdYlBu
 #' @importFrom reshape2 melt
 apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
                         m_used = 1.36,
@@ -519,7 +518,6 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
 #' 
 #' @import ggplot2
 #' @importFrom reshape2 melt
-#' @importFrom heatmaply RdYlBu
 #' @importFrom magrittr %>% %<>%
 plot_spec <- function(res, show.stand=FALSE, HABc=NULL){
   

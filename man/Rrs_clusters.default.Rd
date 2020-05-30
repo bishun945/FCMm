@@ -13,7 +13,7 @@ A dataframe contains the water optical clusters produced by Bi et al. (2019)
 }
 \note{
 You have to take a look at the description of this built-in cluster (water type) such as
-  thier corresponding water color parameters in Bi et al. (2019).
+  their corresponding water color parameters in Bi et al. (2019).
 }
 \seealso{
 Other Datasets: 

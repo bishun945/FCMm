@@ -9,12 +9,12 @@
 SRF_LIST
 }
 \description{
-A list inlcuding spectral responding functions of several popular sensors
+A list including spectral responding functions of several popular sensors
 }
 \details{
-The cw_med and cw_max are different sicne 
+The cw_med and cw_max are different since 
   we use two functions \code{find_center_wavelength_med} and 
-  \code{find_center_wavelength_max} to obtain thier center wavelength.
+  \code{find_center_wavelength_max} to obtain their center wavelength.
   \itemize{
     \item \code{find_center_wavelength_med} center wavelength is determined by the wavelength
       position of half-maximum width

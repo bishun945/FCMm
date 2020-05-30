@@ -22,7 +22,7 @@ all supported sensors. Default as \code{All}}
 \item{output_wavelength}{Character. \code{MED} (default) or \code{MAX}.
 Define the center wavelength. \code{MED} means the center wavelength is 
 middle position of half maximun of max peak. While \code{MAX} means the 
-poition at the maximun of SRF peak.}
+position at the maximun of SRF peak.}
 
 \item{save_as_csv}{Logical. Choose to save the simulation results as single csv for each
 sensor. Default with \code{FALSE}}

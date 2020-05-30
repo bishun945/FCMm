@@ -1,13 +1,13 @@
 #' @name SRF_LIST
 #' @title Collection of spectral responding functions
-#' @description A list inlcuding spectral responding functions of several popular sensors
+#' @description A list including spectral responding functions of several popular sensors
 #' @docType data
 #' @keywords datasets
 #' @usage SRF_LIST
 #' @format List with four elements: sensor (character), srf (data.frame), cw_med (num), and cw_max (num)
-#' @details The cw_med and cw_max are different sicne 
+#' @details The cw_med and cw_max are different since 
 #'   we use two functions \code{find_center_wavelength_med} and 
-#'   \code{find_center_wavelength_max} to obtain thier center wavelength.
+#'   \code{find_center_wavelength_max} to obtain their center wavelength.
 #'   \itemize{
 #'     \item \code{find_center_wavelength_med} center wavelength is determined by the wavelength
 #'       position of half-maximum width
@@ -159,7 +159,7 @@ NULL
 #' @usage Rrs_clusters.default
 #' @format dataframe with 7 rows by 15 cols
 #' @note You have to take a look at the description of this built-in cluster (water type) such as
-#'   thier corresponding water color parameters in Bi et al. (2019).
+#'   their corresponding water color parameters in Bi et al. (2019).
 #' @family Datasets
 NULL
 

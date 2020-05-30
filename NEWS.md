@@ -1,3 +1,12 @@
+## FCMm 0.7.1 (2020-05-30)
+
+  1. Updated README files of which superlinks for vigettes are deleted as the nexting version will include other vigettes or some modifications.
+  2. Renamed the filename of vignettes, also, of which superlinks are deleted. Several old version vignettes on DOC folder are also deleted.
+  3. Fixed spelling errors in Rd files.
+  4. In this version, the imported packge - heatmaply - was deleted as it would include warning information when library(FCMm). Anyway, the functions supported by heatmaply, i.e., Spectral() and RdYlBu() are imported from packages grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral") and  ... ,"RdYlBu").
+  5. Added cran-comments.md file as I decide to release this packge to CRAN.
+  6. Updated man Rd files.
+
 ## FCMm 0.6.2 (2020-05-24)
 
   * Bugs fixed.
@@ -20,13 +29,13 @@
 
   * Hey guys, due to the outbreak of coronavirus, I have stopped the update for a long time. 
   * In this version. The assessment method in `FCMm` has been improved by a new proposed scoring rule called sort-based method.  
-  * I am collecting the data and references about the algorithm assessment and finally going to finish my manuscript. Hope this will help to improve the algorithm evalution work the in water color community.  
+  * I am collecting the data and references about the algorithm assessment and finally going to finish my manuscript. Hope this will help to improve the algorithm evaluation work the in water color community.  
   * Please, COVID-19 go away!
 
 ## FCMm 0.5.4 (2020-03-03)
 
   * Update the document of data `OLCI_TH`.  
-  * Imporve the effectiveness of function `apply_FCM_m` as the `matrix` may speed up the process rather than the `data.frame` (I suppose).
+  * Improve the effectiveness of function `apply_FCM_m` as the `matrix` may speed up the process rather than the `data.frame` (I suppose).
 
 ## FCMm 0.5.3 (2020-02-28)
 
@@ -45,7 +54,7 @@
 ## FCMm 0.4.17 (2020-02-20)
 
   * Modify the constrain of SMA linear regression such as Rsquare value and point number taken part into the calculation.
-  * Next update is a first-point chaning version, 0.5.X since the new assessment system (scoring system) will be load ASAP.
+  * Next update is a first-point caning version, 0.5.X since the new assessment system (scoring system) will be load ASAP.
 
 ## FCMm 0.4.16 (2020-02-19)
 
@@ -82,7 +91,7 @@
 
 ## FCMm 0.4.8 (2020-02-09)
 
-  * Update the function `cal.metrics` which remove the double version of `.cal.mae` or `.bias`. The log10-transformation is now supported by the logcial parameter `log10`. 
+  * Update the function `cal.metrics` which remove the double version of `.cal.mae` or `.bias`. The log10-transformation is now supported by the logical parameter `log10`. 
   * Add functions `cal.metrics.vector` and `cal.metrics.vector.names` which calculate the validation metrics via pairwise way (results are columns). 
   * Update the function `Assessment_via_cluster` by adding a fuzzy mode to calculate validation metrics via membership values.
 
@@ -97,8 +106,8 @@
 
 ## Notes (2020-01-21)
 
-  * Even though the coming **phylogenetic tree method** will offer a good option to post-classify the numerous clusters, we still have to design a better allocation strategy on **cluster number**. That's to say, the nearby cluster name (for instance, `Cluster 1` and `Cluster 2`) should have the similar optical attribution. However, the current `FCM.new` or `FuzzifierDetermiantion` functions return the totally random results. Should be inporved later!
-  * Another **confusing** thing is the parameter `stand` in many functions (for instance, `FCM.new`). The original design of `stand` is making sure the input `x` has been standardized so that the median-process of clustering should not standardize that. Actually, the parameter could be better understood if named as `DoStand`. When `DoStand` is `True`, it means the input `x` have to be standardized in the following process. This change will make numerous source codes different so I will get to do it after other funcitons are gradually imporved.
+  * Even though the coming **phylogenetic tree method** will offer a good option to post-classify the numerous clusters, we still have to design a better allocation strategy on **cluster number**. That's to say, the nearby cluster name (for instance, `Cluster 1` and `Cluster 2`) should have the similar optical attribution. However, the current `FCM.new` or `FuzzifierDetermiantion` functions return the totally random results. Should be improved later!
+  * Another **confusing** thing is the parameter `stand` in many functions (for instance, `FCM.new`). The original design of `stand` is making sure the input `x` has been standardized so that the median-process of clustering should not standardize that. Actually, the parameter could be better understood if named as `DoStand`. When `DoStand` is `True`, it means the input `x` have to be standardized in the following process. This change will make numerous source codes different so I will get to do it after other functions are gradually improved.
 
 ## FCMm 0.4.5 (2020-01-21)
   

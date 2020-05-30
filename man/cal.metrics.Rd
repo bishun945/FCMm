@@ -19,7 +19,7 @@ cal.metrics(x,y,name="all",log10=FALSE)
 Assess the performance of algorithms
 }
 \note{
-(2020-02-09) All functions used log10 transformation was assgined to the 
+(2020-02-09) All functions used log10 transformation was assigned to the 
   Key parameter `log10`
 }
 \seealso{

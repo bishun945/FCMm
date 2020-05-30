@@ -15,7 +15,7 @@ NDCI_Mi12(Rrs665, Rrs709)
 Normalized difference Chlorophyll index method by Mishra et al. (2012)
 }
 \note{
-Chla_test as a test verison of NDCI_Mi12 results parameterized by Bi
+Chla_test as a test version of NDCI_Mi12 results parameterized by Bi
 }
 \references{
 Mishra S, Mishra D R. Normalized difference chlorophyll index:

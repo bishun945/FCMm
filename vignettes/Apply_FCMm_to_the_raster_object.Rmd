@@ -1,10 +1,10 @@
 ---
-title: "The application of FCMm to imagery data"
+title: "Apply FCMm to the raster object"
 author: "Shun Bi"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The application of FCMm to imagery data}
+  %\VignetteIndexEntry{Apply FCMm to the raster object}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,17 +18,6 @@ knitr::opts_chunk$set(
 	comment = "#>"
 )
 ```
-
-# Lists of vignettes showing how to use FCMm
-
-Dear users, the four vignettes of `FCMm` were provided in this package to demonstrate the usage and application to obtain the cluster number, to train the user-defined data set, to apply the default FCMm to new data (such as Chla concentration estimation), and the imagery data.
-
-Here are the step-by-step demos:
-
- - [Demo_1: How to determine the cluster number?](./doc/Cluster_number_determination.html)
- - [Demo_2: How to train the fuzzy cluster?](./doc/Fuzzy_cluster_training.html)
- - [Demo_3: How to apply the default FCMm to new data?](./doc/New_Data_Running_FCMm.html)
- - [**Demo_4: The application of FCMm to imagery data.**](./doc/Raster_Running_FCMm.html)
 
 # Preparing the data set
 

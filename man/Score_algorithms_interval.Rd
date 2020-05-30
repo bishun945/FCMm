@@ -18,7 +18,7 @@ Score_algorithms_interval(
 \item{trim}{whether to run a trim process to calculate mean and standard deviation of 
 input vector x (Default as \code{FALSE})}
 
-\item{reward.punishment}{wheter to conduct the reward and punishment mechainism in scoring
+\item{reward.punishment}{Whether to conduct the reward and punishment mechanism in scoring
 system (Default as \code{TRUE})}
 
 \item{decreasing}{the order of the good metric to be evaluated. For instance, MAE should use

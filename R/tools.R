@@ -7,7 +7,7 @@
 #' @param log10 Logical. Whether the input x and y should be log10-transformed
 #' @export
 #' @family Utils
-#' @note (2020-02-09) All functions used log10 transformation was assgined to the 
+#' @note (2020-02-09) All functions used log10 transformation was assigned to the 
 #'   Key parameter `log10`
 #' 
 #' @importFrom stats cor cor.test median na.omit sd
@@ -433,7 +433,7 @@ trim_sd <- function(x, trim=0.05, na.rm=T){
 #' @title Convert dataframe with factor to character
 #' @name level_to_variable
 #' @param dt dataframe
-#' @param warn warnning option
+#' @param warn warning option
 #' @export
 #' @family Utils
 level_to_variable <- function(dt, warn=F){
@@ -831,7 +831,7 @@ CLsma <-
 #' @param output_wavelength Character. \code{MED} (default) or \code{MAX}.
 #'   Define the center wavelength. \code{MED} means the center wavelength is 
 #'   middle position of half maximun of max peak. While \code{MAX} means the 
-#'   poition at the maximun of SRF peak.
+#'   position at the maximun of SRF peak.
 #' @param save_as_csv Logical. Choose to save the simulation results as single csv for each
 #'   sensor. Default with \code{FALSE}
 #' @param na.rm Logical. Should NA values be removed? Default as \code{TRUE}
@@ -995,5 +995,23 @@ find_center_wavelength_max <- function(dt){
 show_sensor_names <- function(){
   return(names(SRF_LIST))
 }
+
+
+# color platte
+
+#' @name Spectral
+#' @title Spectral
+#' @param n Number of colors
+#' @return Color codes
+#' @export
+Spectral <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+
+#' @name RdYlBu
+#' @title RdYlBu
+#' @param n Number of colors
+#' @return Color codes
+#' @export
+RdYlBu <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlBu"))
+
 
 

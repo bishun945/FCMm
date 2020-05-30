@@ -22,7 +22,7 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2020-05-28  
+**Date**: 2020-05-29  
 **Version**: 0.6.3  
 **E-mail**: <bishun1994@foxmail.com>
 
@@ -127,16 +127,11 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
 
 ## Getting help
 
-  - About this package, I have written four vignettes to present the
+  - About this package, I have written several vignettes to present the
     usage of `FCMm`. Please read them carefully if you want to use this
     package for your research. Also, e-mail me via
     [bishun1994@foxmail.com](bishun1994@foxmail.com) without hesitation
-    if you have any questions or find any bug about it. They
-        are:
-      - [Cluster\_number\_determination](./doc/Cluster_number_determination.html)
-      - [Fuzzy\_cluster\_training](./doc/Fuzzy_cluster_training.html)
-      - [New\_Data\_Running\_FCMm](./doc/New_Data_Running_FCMm.html)
-      - [Raster\_Running\_FCMm](./doc/Raster_Running_FCMm.html)
+    if you have any questions or find any bug about it.
   - If you are more interested in the application of FCM-m about inland
     water spectra, I recommend you to read [Bi *et al.*
     (2019)](https://www.osapublishing.org/oe/abstract.cfm?uri=oe-27-24-34838)

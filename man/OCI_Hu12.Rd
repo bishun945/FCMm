@@ -21,7 +21,7 @@ OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)
 OCI algorithm by Hu et al. (2012)
 }
 \references{
-Hu C, Lee Z, Franz B. Chlorophyll aalgorithms for oligotrophic oceans: 
+Hu C, Lee Z, Franz B. Chlorophyll a algorithms for oligotrophic oceans: 
   A novel approach based on three‐band reflectance difference[J]. Journal of Geophysical 
   Research: Oceans, 2012, 117(C1).
 }

@@ -22,7 +22,7 @@ Scoring_system(
 
 \item{param_interval}{The parameters of function \code{Score_algorithms_interval}}
 
-\item{remove.negative}{Option to repalce the negative score as zero (Default as \code{FALSE})}
+\item{remove.negative}{Option to replace the negative score as zero (Default as \code{FALSE})}
 }
 \value{
 A list including Total_score, Accuracy, Precision, Effectiveness, Accuracy.list, 

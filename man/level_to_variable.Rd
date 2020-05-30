@@ -9,7 +9,7 @@ level_to_variable(dt, warn = F)
 \arguments{
 \item{dt}{dataframe}
 
-\item{warn}{warnning option}
+\item{warn}{warning option}
 }
 \description{
 Convert dataframe with factor to character

@@ -42,7 +42,7 @@ This function mainly use function \code{Assessment_via_cluster} to get
 }
 \note{
 The row number of \code{pred}, \code{meas}, \code{memb}, and \code{cluster} should be the same. 
-  This function is designed for bootstraping process to get Chla algorithms assessment. Therefore, 
+  This function is designed for bootstrapping process to get Chla algorithms assessment. Therefore, 
   parameters of \code{Assessment_via_cluster} is set as fixed such as \code{log10 = TRUE}, 
   \code{na.process = TRUE}. Given that, I will not export this function in latter to avoid confuses.
 }

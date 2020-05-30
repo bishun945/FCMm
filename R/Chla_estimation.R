@@ -237,7 +237,7 @@ OC6_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
 #' @param Rrs665 Rrs665
 #' @export
 #' @family Algorithms: Chla concentration
-#' @references Hu C, Lee Z, Franz B. Chlorophyll aalgorithms for oligotrophic oceans: 
+#' @references Hu C, Lee Z, Franz B. Chlorophyll a algorithms for oligotrophic oceans: 
 #'   A novel approach based on three‐band reflectance difference[J]. Journal of Geophysical 
 #'   Research: Oceans, 2012, 117(C1).
 OCI_Hu12 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
@@ -312,7 +312,7 @@ TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
 #' @param Rrs709 Rrs709
 #' @export
 #' @family Algorithms: Chla concentration
-#' @note Chla_test as a test verison of NDCI_Mi12 results parameterized by Bi
+#' @note Chla_test as a test version of NDCI_Mi12 results parameterized by Bi
 #' @references Mishra S, Mishra D R. Normalized difference chlorophyll index:
 #'   A novel model for remote estimation of chlorophyll-a concentration in turbid 
 #'   productive waters[J]. Remote Sensing of Environment, 2012, 117: 394-406.

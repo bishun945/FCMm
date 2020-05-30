@@ -18,7 +18,6 @@
 #' @family Algorithm assessment
 #' 
 #' @import ggplot2  
-#' @importFrom heatmaply Spectral
 #' @importFrom stats runif
 #' @importFrom reshape2 melt
 #' 
@@ -310,7 +309,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
 #' @param x Input vector of error metrics (NA values are allowed)
 #' @param trim whether to run a trim process to calculate mean and standard deviation of 
 #'   input vector x (Default as \code{FALSE})
-#' @param reward.punishment wheter to conduct the reward and punishment mechainism in scoring
+#' @param reward.punishment Whether to conduct the reward and punishment mechanism in scoring
 #'   system (Default as \code{TRUE})
 #' @param decreasing the order of the good metric to be evaluated. For instance, MAE should use
 #'   \code{decreasing = TRUE} (Default) since the algorithm performs better when MAE becomes smaller. 
@@ -544,7 +543,7 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' @param cluster Cluster vector
 #' @param seed Seed number for fixing the random process. See \code{help(set.seed)} for more details.
 #' @note The row number of \code{pred}, \code{meas}, \code{memb}, and \code{cluster} should be the same. 
-#'   This function is designed for bootstraping process to get Chla algorithms assessment. Therefore, 
+#'   This function is designed for bootstrapping process to get Chla algorithms assessment. Therefore, 
 #'   parameters of \code{Assessment_via_cluster} is set as fixed such as \code{log10 = TRUE}, 
 #'   \code{na.process = TRUE}. Given that, I will not export this function in latter to avoid confuses.
 #' @export
@@ -621,7 +620,7 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 #' @param method The method selected to score algorithms: 'sort-based' (default) or 'interval-based'
 #' @param param_sort The parameters of function \code{Score_algorithms_sort}
 #' @param param_interval The parameters of function \code{Score_algorithms_interval}
-#' @param remove.negative Option to repalce the negative score as zero (Default as \code{FALSE})
+#' @param remove.negative Option to replace the negative score as zero (Default as \code{FALSE})
 #' @export
 #' @return A list including Total_score, Accuracy, Precision, Effectiveness, Accuracy.list, 
 #'   Precision.list, and Total_score.melt.

@@ -21,38 +21,40 @@ knitr::opts_chunk$set(
 
 # Preparing the data set
 
-Just same to vignette `Cluster_number_determination.Rmd`, this one shows how to use the `FCMm` package to train the fuzzy cluster about your data set (suppose the cluster number is obtained before). Here we use our demo data `Nechad2015` (resampled to `100` in number) and suppose the optimized cluster number is `4`.
+This vignette shows the usage of the package `FCMm` for determining the cluster number (if `FCM` selected) and for training the centroids and memberships depending on input data. Here we use our demo data `Nechad2015` (resampled to `100` in number for saving vignettes building time).
 
-**Note**: we also need package `tidyverse` to string and data processing.
+**Note**: we also need some other packages to facilitate our process and plot.
 
-## Dataframe process
+## Data pre-process
 
 ```{r message=F, warning=F}
 rm(list=ls())
-library(FCMm)
-library(ggplot2)
-library(magrittr)
-library(stringr)
-library(dplyr)
-data("Nechad2015")
-w <- Nechad2015 %>% names %>%
-  str_extract(.,pattern="\\d") %>%
-  is.na %>% {!.}
-wv <- w %>% names(Nechad2015)[.] %>%
-  gsub('X','',.) %>% as.numeric
-x <- w %>% Nechad2015[,.]
-set.seed(1234)
-w_sample <- sample_n(seq(nrow(x)) %>% data.frame, 100) %>% as.matrix %>% c
-x <- x[w_sample,]
+
+library(FCMm)      # this package required for functions of FCMm
+library(ggplot2)   # this package required for producing plots
+library(magrittr)  # this package required for pipe-operator. `vignette("magrittr")` to see more details
+library(stringr)   # this package required for string operations
+
+data("Nechad2015") # load the required dataset
+head(Nechad2015)   # to see the structrue of Nechad2015
+
+x <- Nechad2015[,3:11] # subset Rrs data
+wv <- gsub("X","",names(x)) %>% as.numeric # remove the "X" character of x names (to make them numeric)
+set.seed(1234) # Set this seed so that you can re-produce them
+w = sample(1:nrow(x), 100) # sample 100 rows of the orignal data, you can test the whole set if you like
+x <- x[w, ]
 names(x) <- wv
-rm(w)
+
+dim(x)
 ```
 
 ## Spectra plot
 
-After that, we subset Rrs dataframe (named `x`) and wavelength vector (named `wv`). It is time to plot the spectra of this set by using function `plot_spec_from_df`.
+Now Rrs dataframe (named `x`) and wavelength vector (named `wv`) are obtained and could be used for spectra plotting by using function `plot_spec_from_df()`.
 
-**Note**: The input of `plot_spec_from_df` should be a matrix or data.frame with colnames that could be transformed into the numeric --- as the x-axis of the plot. Since the return of `plot_spec_from_df` is a `ggplot` list, you could modify or add it for your purpose (such as add labs or themes).
+**Note**: The input of `plot_spec_from_df()` should be a matrix or data.frame with colnames that could be transformed into the numeric as the x-axis of the plot. 
+
+Anyway, the return of `plot_spec_from_df()` is a `ggplot` list which means you can do anything to it if you are familiar with the package `ggplot2`.
 
 ```{r fig.height=4, fig.width=6}
 p.spec <- plot_spec_from_df(x) + 
@@ -62,38 +64,111 @@ p.spec <- plot_spec_from_df(x) +
 print(p.spec)
 ```
 
+In the raw scale of Rrs, the difference between the spectra is mainly manifested as the magnitude change, especially the reflection at NIR. But it doesn't seem that clusters could be manually detected from the spectra plot. As we all know, the difference of water color is more caused by the spectral shape rather than the magnitude, which can be seen from the trend difference from the blue region to the red. Therefore, a better way is to normalize the spectrum. Let's look at the spectra plot of area-normalized spectral. In the following plot, it is obviously found that several clusters sharing the similar spectra shape, which is also the base of FCM running.
+
+```{r}
+# Here used is an interal function `.trapz()` to normalized the raw spectra. However, if you could use the normalize function of which you like. See more details in the package `scales`.
+x.stand <- x / FCMm:::.trapz(wv, x)
+p.spec.stand <- plot_spec_from_df(x.stand) + 
+  labs(x='Wavelength (nm)',y=expression(Normalized~Rrs)) + 
+  theme_bw() + 
+  theme(legend.position='none', text=element_text(size=18))
+print(p.spec.stand)
+```
+
+
+## Cluster number determination
+
+Before optimizing the best cluster number, we have to obtain an FD list produced by function `FuzzifierDetermination()` just as follow. This function is used for determining the optimal fuzzifier (or called m value) for following FCM process. The result `m.used` from the `FD` list is the desired value of Fuzzifier (m) value.
+
+### Generate `FD` list
+
+```{r}
+set.seed(1234)
+FD <- FuzzifierDetermination(x, wv, stand=F)
+# stand = F means the input x has not been normalized yet, telling the function to normalize x at first. 
+# Otherwise, use FuzzifierDetermination(x.stand, wv, stand=T) which means the x.stand has been normalized.
+summary(FD)
+```
+
+`FD` list contains several result by `FuzzifierDetermination()`:
+
+ - *x*: the raw input Rrs dataframe with unit sr^-1
+ - *x.stand*: the standardized Rrs dataframe, if `stand=F`
+ - *wv*: wavelength with unit nm
+ - *max.m*: the maximum fuzzifier of FCM as a restriction
+ - *stand*: logic value for choosing whether to use standardization
+ - *dmetric*: string value for choosing which distance metric to be used
+ - *Area*: numeric vector for trapezoidal integral values
+ - *m.ub*: the upper boundary of fuzzifier (m) value
+ - *m.used*: the desired value of fuzzifier (m) value
+ 
+### Validate functions or metrics
+
+Here introduced are several famous cluster validate metrics such as `SIL.F`, `PE`, `PC`, and `MPC`. In brief, these metrics mean the goodness of cluster results. Except for `PE`, the larger of `SIL.F`,  `PC`, and `MPC`, the better of the cluster at that time. If you are more interested in that, please see more details in the document of package `ppclust` by Zeynel Cebeci and `fclust` by Paolo Giordani. Thanks for their efforts which inspire me a lot to build the `FCMm` package. 
+
+```{r fig.height=3, fig.width=6, message=FALSE, warning=FALSE}
+library(ppclust)
+library(fclust)
+nb_min <- 3
+nb_max <- 10
+idxsf <- idxpe <- idxpc <- idxmpc <- seq(nb_min,nb_max,1)
+i <- 1
+for(nb in nb_min:nb_max){
+  res <- FCM.new(FD, nb, fast.mode=T) # open the fast mode for saving time
+  tmp <- ppclust2(res$res.FCM, otype="fclust")
+  idxsf[i] <- SIL.F(tmp$Xca, tmp$U, alpha=1) # optimal with maximum value
+  idxpe[i] <- -PE(tmp$U) # optimal with minimum value (NOTE I make it negative to follow with other metrics)
+  idxpc[i] <- PC(tmp$U) # optimal with maximum value
+  idxmpc[i] <- MPC(tmp$U) # optimal with maximum value
+  i <- i + 1
+}
+
+dt <- data.frame(nb=seq(nb_min,nb_max,1),idxsf,idxpe,idxpc,idxmpc)
+opt.num <- c(apply(dt,2,which.max)[-c(1,3)]+1,apply(dt,2,which.min)[3]+1)
+
+dt %>% reshape2::melt(., id='nb') %>% 
+  ggplot(data=.,aes(x=nb,y=value,group=variable,color=variable)) + 
+  geom_path() + 
+  labs(x = "Cluster number", y = 'Metric values') +
+  facet_wrap(~variable, scales='free_y', nrow=2) + 
+  theme_bw() + 
+  theme(text=element_text(size=13), 
+        legend.position='none', 
+        strip.background = element_rect(fill="white", color="white"))
+nb <- 4
+```
+
+Back to the code, here we assume the best cluster number is ranging from `r nb_min` to `r nb_max` (maybe out of this range but is unusual to obtain such large number). Then we calculate every validate metrics and record them into their corresponding vectors. Finally, we will obtain the goodness curve of cluster results changing with cluster number.
+
+**Note**: the better solution to determine a cluster number is to bootstrapply sub-sample the original set, to repeat the process mentioned above for thousands times, and to decide which number is the best one. But it is quite time-consuming. For saving time, we simply selected `4` as the determined cluster number.
+
 ## FCM running
 
-Before optimizing the best cluster number, we have to obtain an FD list produced by function `FuzzifierDetermination` just as follows.
+The input of the function `FCM.new()` is a `FD` list which includes the information about the training set (normalized Rrs), the selected fuzzifier value (`r FD$m.used`), and also the cluster number (`r nb`).
 
 ```{r message=FALSE, warning=FALSE, fig.height=4, fig.width=6}
-library(ppclust)
-FD <- FuzzifierDetermination(x, wv, stand=F)
-(FD$m.used)
-nb <- 4
-set.seed(54321) # I just set this seed so that you can re-produce them
+set.seed(54321) 
 result <- FCM.new(FD, nb, fast.mode = T)
 summary(result)
-result$p.jitter + theme(text = element_text(size=13))
+result$p.jitter + theme(text = element_text(size=13)) 
 ```
+
+Jitter plots are quite useful to inspect the cluster performance by watching the membership values assigned by each cluster. The result shows good that most of points are at bottom and top (membership equal to zero and one) which means the training set are strictly assigned to one specific cluster, avoiding too soft cluster result when using default `m = 2`. This is in line with our demand for fuzzy clustering of water spectra which finds a good compromise between the need to assign most spectra to a given cluster, and need to discriminate spectra that classify poorly.
 
 The used m value is `r FD$m.used` which is less than the default 2. The reason and its benefits should be a view from the reference of package `FCMm`, i.e., Bi *et al.* (2019).
 
-`result` list contains several result by `FCM.new`:
+A `result` list contains several result by `FCM.new()`:
 
- - *FD*: the return list by function `FuzzifierDetermination`
+ - *FD*: the return list by function `FuzzifierDetermination()`
  - *res.FCM*: the optimized FCM result generated by functions in package `ppclust`
  - *K*: cluster number
  - *plot.jitter*: logic value for the option of doing jitter plot by package `ggplot2`
  - *fast.mode*: logic value for choosing whether to use fast mode
 
-Qualitatively, the disturbing points of membership value are mainly distributed between 0 and 1  which should be the correct distribution of membership value. This is in line with our demand for fuzzy clustering of water spectra which finds a good compromise between the need to assign most spectra to a given cluster, and need to discriminate spectra that classify poorly.
+## FCM plotting
 
-## FCM plotting --- basic version
-
-This part shows how to obtain the visualization results in the package `FCMm`.
-
-Function `plot_spec` is used for spectral plotting the related FCM-m result.
+This part shows how to obtain the visualization results in the package `FCMm`. Function `plot_spec()` is used for spectral plotting the related FCM-m result. Meanwhile, I recommend the package `cowplot` to help merging produced plots.
 
 ```{r message=FALSE, warning=FALSE, include=TRUE}
 if(library('cowplot', logical.return = T)){
@@ -111,7 +186,7 @@ plot_grid(plotlist = p.spec$p.group.spec.2)
 
 ## Short result analysis
 
-The plot `Nechad2015: Normalized cluster result` shows great work. The normalized Rrs spectra rather than the raw were presented here since I gonna focus more on the shape of the water spectra which is mainly affected by the phytoplankton (i.e., denoted as Chla concentration shown in the boxplot). The higher the Chla concentration, the higher reflectance of water near 700 nm and the lower near-visible range (as we know the absorption of pigment will lead to the reduction of light). 
+The plot `Nechad2015: Normalized cluster result` shows great work. The normalized Rrs spectra rather than the raw were presented here since I gonna focus more on the shape of the water spectra which is mainly affected by the phytoplankton (i.e., denoted as Chla concentration). The higher the Chla concentration, the higher reflectance of water near 700 nm and the lower near-visible range (as we know the absorption of pigment will lead to the reduction of light). 
 
 Of course, there should be more applications of this cluster in the future, especially the accuracy, rationality, and applicability of the results, especially in the aspect of Chla concentration classification inversion. I will not repeat it here.
 

@@ -1,3 +1,10 @@
+## FCMm 0.7.2 (2020-05-31)
+
+  1. Deleted the suggested package `dplyr` as I can use `base::sample` as an alternative.
+  2. The previous four vignettes are shorten to the two that are `Cluster_a_new_dataset_by_FCM` and `Usage_of_the_built_in_centroids_by_FCMm` which might provide enough help for users.
+  3. Files in DOCS are updated.
+  4. README updated.
+
 ## FCMm 0.7.1 (2020-05-30)
 
   1. Updated README files of which superlinks for vigettes are deleted as the nexting version will include other vigettes or some modifications.

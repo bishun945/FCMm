@@ -1,7 +1,7 @@
 Package: FCMm
 Type: Package
 Title: Fuzzy Cluster Method Based on the Optimized m Value (Fuzzifier)
-Version: 0.7.1
+Version: 0.7.2
 Authors@R: c(person("Shun", "Bi", ,"bishun1994@foxmail.com", c("aut","cre")))
 Author: Shun Bi [aut, cre]
 Maintainer: Shun Bi <bishun1994@foxmail.com>
@@ -32,7 +32,7 @@ Suggests:
     fclust,
     knitr,
     cowplot (>= 1.0.0), 
-    dplyr (>= 0.8.3)
+    rmarkdown
 Encoding: UTF-8
 LazyData: yes
 VignetteBuilder: knitr

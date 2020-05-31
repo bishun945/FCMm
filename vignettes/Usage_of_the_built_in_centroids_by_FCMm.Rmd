@@ -19,17 +19,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Preparing the data set
+This vignette contains two parts to introduce the usage of the built-in centroids by FCMm (see more details in Bi *et al.* (2019)) when using (I) new coming in situ spectra and (II) new coming raster data.
+
+# Part I: New coming in situ spectra
+
+## Preparing the data set
 
 This demo shows how to apply `FCMm` to a new data set if users just want to run it by the default cluster spectra and fuzzifier. The required data sets are `WaterSpec35` and `Bi_clusters`. The former is a dataset with water spectra of inland waters and corresponding Chla concentration (ug/L unit). The latter one is the seven water cluster spectra which trained by FCM-m method (see more details in Bi *et al.* (2019))
 
-**Note_1**: Have to know that `WaterSpec35` is **ONLY** for the testing of `FCMm` in this package. Therefore, if you want to use this dataset to your research, you should contact us to ask for the permit at first via bishun1994@foxmail or liyunmei@njnu.edu.cn. I hope you can understand.
+**Note_1**: `WaterSpec35` is **ONLY** for the testing of `FCMm` in this package. If you want to use this dataset to your research, you should contact us to ask for the permit and more metadata about that by email liyunmei@njnu.edu.cn and cc to bishun1994@foxmail.com. Hope you can understand.
 
-**Note_2**: we also need package `tidyverse` to string and data processing.
+**Note_2**: The section `FCM running` used the default Rrs clusters. However, the input of Rrs data may not match the default wavelength settings such as quality control or atmospheric correction failure or so. Anyway, I have provided another section `One more thing` if your wavelength is not matching with the default.
 
-**Note_3**: The section `FCM running` used the default Rrs clusters. However, the input of Rrs data may not match the default wavelength settings such as quality control or atmospheric correction failure or so. Anyway, I have provided another section `One more thing` if your wavelength is not matching with the default. I hope you have a good day.
-
-## Dataframe process
+### Dataframe process
 
 ```{r message=FALSE, warning=FALSE}
 rm(list=ls())
@@ -41,13 +43,15 @@ data("Bi_clusters")
 Rrs <- WaterSpec35[,3:17]
 ```
 
-## Data set plots
+### Data set plots
 
 At first, it is necessary to check out the dataframe situation before clustering (I suppose it is also important to do that in any other researches). The density plots show that the corresponding Chla concentration is severely skewed so it allows us to do a log10-transformed when estimate or validate the candidate algorithms.
 
-Function `plot_spec_from_df` supports a quick look about the spectral dataframe. Just type `help(plot_spec_from_df)` to see more details.
+Function `plot_spec_from_df()` offers a quick look about the spectral dataframe. Just type `help(FCMm::plot_spec_from_df)` to see more details.
 
-**Note**: The input of `plot_spec_from_df` should be a matrix or data.frame with colnames that could be transformed into the numeric --- as the x-axis of the plot. Since the return of `plot_spec_from_df` is a `ggplot` list, you could modify or add it for your purpose (such as add labs or themes).
+**Note**: The input of `plot_spec_from_df()` should be a matrix or data.frame with colnames that could be transformed into the numeric as the x-axis of the plot. 
+
+Anyway, the return of `plot_spec_from_df()` is a `ggplot` list which means you can do anything to it if you are familiar with the package `ggplot2`.
 
 ```{r fig.height=4, fig.width=6}
 qplot(data=WaterSpec35, x=Chla, geom='density', xlab='The raw Chla') + 
@@ -61,11 +65,11 @@ p.spec <- plot_spec_from_df(Rrs) +
 print(p.spec)
 ```
 
-# FCM running
+## FCM running
 
-## Clustering the new data
+### Clustering the new data
 
-Function `apply_FCM_m` provides many parameters for users to decide the process for their desired results. In the following case, `result <- apply_FCM_m(Rrs=Rrs)` is equal to `apply_FCM_m(Rrs=Rrs, wavelength=wavelength.default, Rrs_clusters=Rrs_clusters.default, stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=TRUE)`. You can see more details by typing `help(apply_FCM_m)`
+Function `apply_FCM_m()` provides many parameters for users to decide the process for their desired results. In the following case, `result <- apply_FCM_m(Rrs=Rrs)` is equal to `apply_FCM_m(Rrs=Rrs, wavelength=wavelength.default, Rrs_clusters=Rrs_clusters.default, stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=TRUE)`. You can see more details by typing `help(FCMm::apply_FCM_m)`.
 
 ```{r message=FALSE, warning=FALSE, fig.height=4, fig.width=6}
 result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
@@ -73,23 +77,23 @@ summary(result)
 result$p.group
 ```
 
-`result` list contains several result by `apply_FCM_M` (partly same to `FD` list):
+`result` list contains several result by `apply_FCM_M()` (partly same to a `FD` list):
 
  - *x*: the raw input Rrs dataframe with unit sr^-1
  - *x.stand*: the standardized Rrs dataframe, if `stand=F`
  - *d*: distance to each cluster
  - *u*: membership values
  - *cluster*: defined by the maximum of membership
- - *quality*: the quality of the cluster results. See more details in `help(apply_FCM_m)`
+ - *quality*: the quality of the cluster results. See more details in `help(FCMm::apply_FCM_m)`
  - *m.used*: the used value of fuzzifier(m)
  - *K*: cluster number
  - *p.group*: a ggplot list for plotting the cluster result
  - *p.group.facet*: a ggplot list by facet for plotting the cluster result
  - *dt.plot*: dataframe used for ggplot
 
-## Estimating Chla concentration by FCMm
+### Estimating Chla concentration by FCMm
 
-Our package provides a new framework to estimate Chla concentration. The main point is **algorithm blending** which uses the advantages of candidates algorithm for their optimizing water type (such as TBA for turbid water and BR for relatively clear water). The three build-in algorithms used in `FCMm` are `TBA`, `BR`, and `Bloom`. Note that the `Bloom` model was designed for water bloom (or called harmful algal bloom waters with extremely high Chla concentration or scums). Please see more details in `help(FCM_m_Chla_estiamtion)`.
+Our package provides a new framework to estimate Chla concentration. The main point is **algorithm blending** which uses the advantages of candidates algorithm for their optimizing water type (such as TBA for turbid water and BR for relatively clear water). The three build-in algorithms used in `FCMm` are `TBA`, `BR`, and `Bloom`. Note that the `Bloom` model was designed for water bloom (or called harmful algal bloom waters with extremely high Chla concentration or scums). Please see more details in `help(FCMm::FCM_m_Chla_estiamtion)`.
 
 ```{r fig.height=4, fig.width=6}
 library(reshape2)
@@ -138,7 +142,7 @@ print(MAEs %>% round(3))
 
 It is glad to see the Blending result performs better than others with its log-transformed MAPE = `r MAPEs['conc.Blend'] %>% round(2)` % and MAE = `r MAEs['conc.Blend'] %>% round(2)` ug/L.
 
-# One more thing
+## One more thing
 
 As mentioned before, the input Rrs may do not match the default wavelength from `wavelength.default`. This section will show you how to do that kind of clustering by `FCMm`.
 
@@ -162,4 +166,81 @@ result_sub <- apply_FCM_m(Rrs=Rrs_sub, wavelength=wavelength.sub,
                           stand=F, default.cluster=F, option.plot=T)
 result_sub$p.group
 ```
+
+# Part II: New coming raster data
+
+## Preparing the data set
+
+This demo shows how to apply `FCMm` to raster data sets if users just want to run it for imagery application by the default cluster spectra and fuzzifier. The required data sets are `OLCI_TH` and `Bi_clusters`. The former is a dataset with atmospherically corrected OLCI rasters of inland waters that the AC method was demonstrated in Liu *et al.* (2015) (see more details about `OLCI_TH` by typing `help(OLCI_TH)`). The latter one is the seven water cluster spectra which trained by FCM-m method (see more details in Bi *et al.* (2019))
+
+### Dataframe process
+
+The `OLCI_TH` is a `RasterBrick` of package `raster`. For running in `FCMm`, this `RasterBrick` should be converted as `ImageDataframe` so-called as `imdf`.
+
+```{r message=FALSE, warning=FALSE}
+rm(list=ls())
+library(FCMm)
+library(ggplot2)
+library(magrittr)
+data("OLCI_TH")
+data("Bi_clusters")
+
+class(OLCI_TH)
+
+# convert RasterBrick to imdf with NA value removed and xy coordinates recorded
+imdf <- raster::as.data.frame(OLCI_TH, na.rm=T, xy=TRUE)
+
+x_name <- which(names(imdf) == "x")
+y_name <- which(names(imdf) == "y")
+imdf <- cbind(imdf[,c(x_name, y_name)], imdf[,-c(x_name, y_name)])
+
+names(imdf)[-c(1,2)] <- c(412.5,442.5,490,510,
+                           560,620,665,673.75,
+                           708.75,753.75,865,885)
+```
+
+### Data set plots
+
+```{r fig.height=4, fig.width=6}
+set.seed(54321)
+imdf[sample(1:nrow(imdf),50),-c(1,2)] %>% 
+  plot_spec_from_df(.) + 
+  labs(x='Wavelength (nm)',y=expression(Rrs~(sr^-1))) + 
+  theme_bw() + 
+  theme(legend.position='none', text=element_text(size=18))
+```
+
+## FCM running
+
+### Clustering the raster and Chla estimation
+
+Function `apply_to_image()` provides many parameters for users to decide the process for their desired results. You can see more details by typing `help(FCMm::apply_to_image)`.
+
+**Note**: The process might take a long time which depends on your local machine.
+
+```{r message=TRUE, warning=FALSE, fig.height=4, fig.width=6}
+res <- generate_param(c(413,443,490,510,560,620,665,674,709,754,865,885))
+
+im_result <- apply_to_image(input=OLCI_TH, res=res, title.name="Test_image",
+                            Chla_est=T, output_image=F)
+summary(im_result)
+```
+
+`im_result` list contains several result by `apply_to_image()`:
+
+ - *input*: what we input character link to image file or `raster` object
+ - *res*: condition input of `apply_to_image()`
+ - *raster.memb*: raster object of membership value
+ - *raster.cluster*: raster object of cluster
+ - *p.memb*: ggplot list of membership value map
+ - *p.cluster*: ggplot list of cluster map
+ - *p.truecolor*: ggplot list of truecolor map
+ - *p.Chla*: ggplot list of Chla map
+ - *imdf*: data.frame of raw Rrs including xy coordinates
+ - *imRrs.raw*: data.frame of raw Rrs
+ - *imRrs.n*: data.frame of normalized Rrs
+ - *res.FCM*: list of `FCM.new()` result
+ - *res.Chla*: data.frame includes the template and final Chla estimation results
+
+
 

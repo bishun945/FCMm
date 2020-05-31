@@ -1,9 +1,8 @@
 pandoc: 2.3.1
-pkgdown: 1.4.1
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
-  Cluster_number_determination: Cluster_number_determination.html
-  Fuzzy_cluster_training: Fuzzy_cluster_training.html
-  New_Data_Running_FCMm: New_Data_Running_FCMm.html
-  Raster_Running_FCMm: Raster_Running_FCMm.html
+  Cluster_a_new_dataset_by_FCMm: Cluster_a_new_dataset_by_FCMm.html
+  Usage_of_the_built_in_centroids_by_FCMm: Usage_of_the_built_in_centroids_by_FCMm.html
+last_built: 2020-05-31T14:15Z
 

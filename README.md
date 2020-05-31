@@ -22,8 +22,8 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2020-05-30  
-**Version**: 0.7.1  
+**Date**: 2020-05-31  
+**Version**: 0.7.2  
 **E-mail**: <bishun1994@foxmail.com>
 
 ## Overview

@@ -2,3 +2,10 @@
 ^\.Rproj\.user$
 ^doc$
 ^Meta$
+^\.travis\.yml$
+^\.circleci$
+^README\.Rmd$
+^README\.html$
+^appveyor\.yml$
+^cran-comments\.md$
+^pkgdown$

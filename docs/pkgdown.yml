@@ -1,8 +1,0 @@
-pandoc: 2.3.1
-pkgdown: 1.5.1
-pkgdown_sha: ~
-articles:
-  Cluster_a_new_dataset_by_FCMm: Cluster_a_new_dataset_by_FCMm.html
-  Usage_of_the_built_in_centroids_by_FCMm: Usage_of_the_built_in_centroids_by_FCMm.html
-last_built: 2020-05-31T14:15Z
-

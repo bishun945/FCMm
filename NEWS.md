@@ -10,7 +10,7 @@
   1. Updated README files of which superlinks for vigettes are deleted as the nexting version will include other vigettes or some modifications.
   2. Renamed the filename of vignettes, also, of which superlinks are deleted. Several old version vignettes on DOC folder are also deleted.
   3. Fixed spelling errors in Rd files.
-  4. In this version, the imported packge - heatmaply - was deleted as it would include warning information when library(FCMm). Anyway, the functions supported by heatmaply, i.e., Spectral() and RdYlBu() are imported from packages grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral") and  ... ,"RdYlBu").
+  4. In this version, the imported packge - `heatmaply` - was deleted as it would include warning information when `library(FCMm)`. Anyway, the functions supported by `heatmaply`, i.e., `Spectral()` and `RdYlBu()` are imported from packages `grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral")` and  ... ,"RdYlBu").
   5. Added cran-comments.md file as I decide to release this packge to CRAN.
   6. Updated man Rd files.
 

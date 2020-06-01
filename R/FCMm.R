@@ -97,7 +97,7 @@ FuzzifierDetermination <- function(x, wv, max.m=10, stand=FALSE, dmetric="sqeucl
   Area <- NULL
   x.stand <- x
   if(stand==FALSE){
-    Area <- .trapz(wv,x)
+    Area <- trapz(wv,x)
     x.stand <- x
     for(i in 1:ncol(x)){
       x.stand[,i] = x[,i] / Area
@@ -130,7 +130,29 @@ FuzzifierDetermination <- function(x, wv, max.m=10, stand=FALSE, dmetric="sqeucl
   
 }
 
-.trapz <- function(wv,x){
+#' @name trapz
+#' @title Trapezoid integral calculation
+#' @param wv wavelength
+#' @param x data.frame that need to be trapzed with ncol equal to length of\code{wv}
+#' @return A vector presents the area result.
+#' @export
+#' @examples 
+#' \dontrun{
+#' library(FCMm)
+#' library(tidyverse)
+#' data("Nechad2015")
+#' w <- Nechad2015 %>% names %>%
+#'     str_extract(.,pattern="\\d") %>%
+#'     is.na %>% {!.}
+#' wv <- w %>% names(Nechad2015)[.] %>%
+#'     gsub('X','',.) %>% as.numeric
+#' x <- w %>% Nechad2015[,.]
+#' names(x) <- wv
+#' rm(w)
+#' Area <- trapz(wv, x)
+#' }
+
+trapz <- function(wv,x){
   Area <-  as.matrix(x[,1])
   for(i in 1:dim(x)[1]){
     y <- x[i,]
@@ -405,11 +427,11 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   
   k <- nrow(v)
   x <- as.matrix(Rrs)
-  Area_x <- .trapz(wavelength, x)
+  Area_x <- trapz(wavelength, x)
   x.stand <- x
   for(i in 1:ncol(x)){x.stand[,i] <- x[,i]/Area_x}
   
-  Area_v <- .trapz(wavelength, v)
+  Area_v <- trapz(wavelength, v)
   v.stand <- v
   for(i in 1:ncol(v)){v.stand[,i] <- v[,i]/Area_v}
   

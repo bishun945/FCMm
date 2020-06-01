@@ -67,8 +67,8 @@ print(p.spec)
 In the raw scale of Rrs, the difference between the spectra is mainly manifested as the magnitude change, especially the reflection at NIR. But it doesn't seem that clusters could be manually detected from the spectra plot. As we all know, the difference of water color is more caused by the spectral shape rather than the magnitude, which can be seen from the trend difference from the blue region to the red. Therefore, a better way is to normalize the spectrum. Let's look at the spectra plot of area-normalized spectral. In the following plot, it is obviously found that several clusters sharing the similar spectra shape, which is also the base of FCM running.
 
 ```{r}
-# Here used is an interal function `.trapz()` to normalized the raw spectra. However, if you could use the normalize function of which you like. See more details in the package `scales`.
-x.stand <- x / FCMm:::.trapz(wv, x)
+# Here used is the function `trapz()` to normalized the raw spectra. However, if you could use the normalize function of which you like. See more details in the package `scales`.
+x.stand <- x / FCMm::trapz(wv, x)
 p.spec.stand <- plot_spec_from_df(x.stand) + 
   labs(x='Wavelength (nm)',y=expression(Normalized~Rrs)) + 
   theme_bw() + 

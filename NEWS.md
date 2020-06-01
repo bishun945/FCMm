@@ -1,4 +1,10 @@
-## FCMm 0.7.2 (2020-05-31)
+## FCMm 0.7.3 (2020-06-01)
+
+  1. Refresh the Rd files in man.
+  2. Export the function `trapz()`.
+  3. Updated README.
+
+## FCMm 0.7.2 (2020-06-01)
 
   1. Deleted the suggested package `dplyr` as I can use `base::sample` as an alternative.
   2. The previous four vignettes are shorten to the two that are `Cluster_a_new_dataset_by_FCM` and `Usage_of_the_built_in_centroids_by_FCMm` which might provide enough help for users.

@@ -2,7 +2,7 @@
 
   1. Refresh the Rd files in man.
   2. Export the function `trapz()`.
-  3. Updated README.
+  3. Updated README and vignettes.
 
 ## FCMm 0.7.2 (2020-06-01)
 

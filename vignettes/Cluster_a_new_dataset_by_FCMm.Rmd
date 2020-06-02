@@ -190,6 +190,6 @@ The plot `Nechad2015: Normalized cluster result` shows great work. The normalize
 
 Of course, there should be more applications of this cluster in the future, especially the accuracy, rationality, and applicability of the results, especially in the aspect of Chla concentration classification inversion. I will not repeat it here.
 
-If you have any question about `FCMm`, please contact me without hesitation by email at bishun1994@foxmail.com
+If you have any question about `FCMm`, please contact me without hesitation by email at `bishun1994@foxmail.com`
 
 Hope you enjoy the journey using `FCMm`!

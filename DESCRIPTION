@@ -22,7 +22,7 @@ Imports:
     ggthemes (>= 4.2.0),
     raster (>= 3.0-7),
     ppclust (>= 0.1.3), 
-    inaparc (>= 0.2.0),
+    inaparc,
     magrittr (>= 1.5), 
     reshape2 (>= 1.4.3), 
     lmodel2 (>= 1.7-3),

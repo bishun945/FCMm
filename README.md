@@ -1,3 +1,5 @@
+README
+================
 
 # FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="139" /></a>
 
@@ -21,7 +23,7 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2020-06-01  
+**Date**: 2020-06-02  
 **Version**: 0.7.3  
 **E-mail**: <bishun1994@foxmail.com>
 
@@ -129,8 +131,8 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
   - About this package, I have written several vignettes to present the
     usage of `FCMm`. Please read them carefully if you want to use this
     package for your research. Also, e-mail me via
-    [bishun1994@foxmail.com](bishun1994@foxmail.com) without hesitation
-    if you have any questions or find any bug about it.
+    `bishun1994@foxmail.com` without hesitation if you have any
+    questions or find any bug about it.
   - If you are more interested in the application of FCM-m about inland
     water spectra, I recommend you to read [Bi *et al.*
     (2019)](https://www.osapublishing.org/oe/abstract.cfm?uri=oe-27-24-34838)

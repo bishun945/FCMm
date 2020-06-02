@@ -1,4 +1,5 @@
 ---
+title: README
 output: github_document
 ---
 
@@ -28,7 +29,7 @@ options(tibble.print_min=5, tibble.print_max=5)
 **Author**: Shun Bi  
 **Date**: `r Sys.Date()`  
 **Version**: `r gsub("Version: ","",readLines('DESCRIPTION')[stringr::str_which(readLines('DESCRIPTION'), 'Version')])`  
-**E-mail**: bishun1994@foxmail.com
+**E-mail**: `r 'bishun1994@foxmail.com'`
 
 ## Overview
 
@@ -102,7 +103,7 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
 
 ## Getting help
 
- - About this package, I have written several vignettes to present the usage of `FCMm`. Please read them carefully if you want to use this package for your research. Also, e-mail me via [bishun1994@foxmail.com][myemail] without hesitation if you have any questions or find any bug about it. 
+ - About this package, I have written several vignettes to present the usage of `FCMm`. Please read them carefully if you want to use this package for your research. Also, e-mail me via `bishun1994@foxmail.com` without hesitation if you have any questions or find any bug about it. 
  - If you are more interested in the application of FCM-m about inland water spectra, I recommend you to read [Bi *et al.* (2019)][Bi] for more details.
  - If you want to know some theoretical knowledge about FCM in mathematics, you could read some researches like [Dembele *et al.* (2018)][Dembele].
  - More about FCM in remote sensing applications, you can read [Moore *et al.* (2014)][Moore] and [Jackson *et al.* (2017)][Jackson] which focus on Case-II and Case-I waters, respectively.
@@ -114,4 +115,3 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
 [Moore]: https://www.sciencedirect.com/science/article/pii/S0034425713004434
 [Jackson]: https://www.sciencedirect.com/science/article/pii/S0034425717301396
 [Spyrakos]: https://aslopubs.onlinelibrary.wiley.com/doi/abs/10.1002/lno.10674
-[myemail]: bishun1994@foxmail.com

@@ -27,7 +27,7 @@ This vignette contains two parts to introduce the usage of the built-in centroid
 
 This demo shows how to apply `FCMm` to a new data set if users just want to run it by the default cluster spectra and fuzzifier. The required data sets are `WaterSpec35` and `Bi_clusters`. The former is a dataset with water spectra of inland waters and corresponding Chla concentration (ug/L unit). The latter one is the seven water cluster spectra which trained by FCM-m method (see more details in Bi *et al.* (2019))
 
-**Note_1**: `WaterSpec35` is **ONLY** for the testing of `FCMm` in this package. If you want to use this dataset to your research, you should contact us to ask for the permit and more metadata about that by email liyunmei@njnu.edu.cn and cc to bishun1994@foxmail.com. Hope you can understand.
+**Note_1**: `WaterSpec35` is **ONLY** for the testing of `FCMm` in this package. If you want to use this dataset to your research, you should contact us to ask for the permit and more metadata about that by email `liyunmei@njnu.edu.cn` and cc to `bishun1994@foxmail.com`. Hope you can understand.
 
 **Note_2**: The section `FCM running` used the default Rrs clusters. However, the input of Rrs data may not match the default wavelength settings such as quality control or atmospheric correction failure or so. Anyway, I have provided another section `One more thing` if your wavelength is not matching with the default.
 

@@ -1,3 +1,7 @@
+## FCMm 0.7.5 (2020-06-02)
+
+  # As the version 0.7.4 was submitted to CRAN, I updated `DESCRIPTION` file follow the requirement by the CRAN which also includes `LICENSE` updated by using `uesthis::use_mit_license(name="Shun Bi")`.
+
 ## FCMm 0.7.4 (2020-06-02)
 
   Found and fixed an unicode `\u2010` in one Rd files of man which may result in the error check by rhub.

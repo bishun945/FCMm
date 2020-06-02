@@ -238,7 +238,7 @@ OC6_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
 #' @export
 #' @family Algorithms: Chla concentration
 #' @references Hu C, Lee Z, Franz B. Chlorophyll a algorithms for oligotrophic oceans: 
-#'   A novel approach based on three‐band reflectance difference[J]. Journal of Geophysical 
+#'   A novel approach based on three band reflectance difference[J]. Journal of Geophysical 
 #'   Research: Oceans, 2012, 117(C1).
 OCI_Hu12 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
   CI <- Rrs560 - (Rrs443+(560-443)/(665-443)*(Rrs665-Rrs443))

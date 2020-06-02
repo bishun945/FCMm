@@ -1,3 +1,7 @@
+## FCMm 0.7.4 (2020-06-02)
+
+  Found and fixed an unicode `\u2010` in one Rd files of man which may result in the error check by rhub.
+
 ## FCMm 0.7.3 (2020-06-01)
 
   1. Refresh the Rd files in man.

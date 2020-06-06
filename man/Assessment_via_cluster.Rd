@@ -39,7 +39,13 @@ Assessment_via_cluster(
 \item{plot.col}{option to plot col result for chosed metrics (Default as FALSE)}
 }
 \value{
-List
+Results of \code{Algorithms_assessment()} are returned as a list including:
+\item{Metrcs}{A list of the selected metric values for all algorithms. \code{Valid_percent} 
+  would be included if \code{na.process} are set as \code{TRUE}}
+\item{res_plot}{Bar plots by using ggplot function for metrics value at every cluster.}
+\item{res_plot_dt}{Dataframe for plotting \code{res_plot}. I just keep it in case of plotting other types}
+\item{res_plot_facet}{\code{res_plot} added on \code{facet_wrap}.}
+\item{input}{input parameters of \code{Algorithms_assessment()}}
 }
 \description{
 Assessment each algorithm for every cluster
@@ -48,11 +54,54 @@ Assessment each algorithm for every cluster
 If the cal.precision is running, the \code{hard.mode == TRUE} is used. In that case,
   mean and sd calculation is conducted for hard mode based on result from cal.metrics.vector
 }
+\examples{
+\dontrun{
+library(FCMm) 
+library(ggplot2) 
+library(magrittr)
+library(stringr)
+data("Nechad2015")
+x <- Nechad2015[,3:11]
+wv <- gsub("X","",names(x)) \%>\% as.numeric
+set.seed(1234)
+w <- sample(1:nrow(x), 100) 
+x <- x[w, ]
+names(x) <- wv
+nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
+set.seed(1234)
+FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+result <- FCM.new(FD, nb, fast.mode = TRUE)
+p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+print(p.spec$p.cluster.spec)
+Chla <- Nechad2015$X.Chl_a..ug.L.[w]
+Chla[Chla >= 999] <- NA
+dt_Chla <- run_all_Chla_algorithms(x) \%>\% as.data.frame
+dt_Chla <- data.frame(Chla_true = Chla, 
+BR_Gil10 = dt_Chla$BR_Gil10, 
+OC4_OLCI = dt_Chla$OC4_OLCI, 
+OCI_Hu12 = dt_Chla$OCI_Hu12, 
+NDCI_Mi12= dt_Chla$NDCI_Mi12) \%>\% round(3)
+w = which(!is.na(dt_Chla$Chla_true))
+dt_Chla = dt_Chla[w,]
+memb = result$res.FCM$u[w,] \%>\% round(4)
+Asses_soft <- Assessment_via_cluster(pred = dt_Chla[,-1], 
+meas = dt_Chla[,1], memb = memb, log10 = TRUE, hard.mode = FALSE, 
+na.process = TRUE, plot.col = TRUE)
+Asses_soft$res_plot_facet
+knitr::kable(Asses_soft$MAE \%>\% round(3))
+knitr::kable(Asses_soft$MAPE \%>\% round(2))
+Asses_hard$res_plot_facet
+knitr::kable(Asses_hard$MAE \%>\% round(3))
+knitr::kable(Asses_hard$MAPE \%>\% round(2))
+}
+
+}
 \seealso{
 Other Algorithm assessment: 
 \code{\link{Getting_Asses_results}()},
 \code{\link{Sampling_via_cluster}()},
 \code{\link{Score_algorithms_interval}()},
+\code{\link{Score_algorithms_sort}()},
 \code{\link{Scoring_system}()}
 }
 \concept{Algorithm assessment}

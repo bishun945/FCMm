@@ -34,7 +34,6 @@ This demo shows how to apply `FCMm` to a new data set if users just want to run 
 ### Dataframe process
 
 ```{r message=FALSE, warning=FALSE}
-rm(list=ls())
 library(FCMm)
 library(ggplot2)
 library(magrittr)
@@ -53,7 +52,7 @@ Function `plot_spec_from_df()` offers a quick look about the spectral dataframe.
 
 Anyway, the return of `plot_spec_from_df()` is a `ggplot` list which means you can do anything to it if you are familiar with the package `ggplot2`.
 
-```{r fig.height=4, fig.width=6}
+```{r fig.height=2, fig.width=3}
 qplot(data=WaterSpec35, x=Chla, geom='density', xlab='The raw Chla') + 
   theme_bw() + theme(text = element_text(size=13))
 qplot(data=WaterSpec35, x=Chla, geom='density', log='x', xlab='Log10 transformed Chla') + 
@@ -71,7 +70,7 @@ print(p.spec)
 
 Function `apply_FCM_m()` provides many parameters for users to decide the process for their desired results. In the following case, `result <- apply_FCM_m(Rrs=Rrs)` is equal to `apply_FCM_m(Rrs=Rrs, wavelength=wavelength.default, Rrs_clusters=Rrs_clusters.default, stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=TRUE)`. You can see more details by typing `help(FCMm::apply_FCM_m)`.
 
-```{r message=FALSE, warning=FALSE, fig.height=4, fig.width=6}
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=4}
 result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
 summary(result)
 result$p.group
@@ -80,7 +79,7 @@ result$p.group
 `result` list contains several result by `apply_FCM_M()` (partly same to a `FD` list):
 
  - *x*: the raw input Rrs dataframe with unit sr^-1
- - *x.stand*: the standardized Rrs dataframe, if `stand=F`
+ - *x.stand*: the standardized Rrs dataframe, if `stand=FALSE`
  - *d*: distance to each cluster
  - *u*: membership values
  - *cluster*: defined by the maximum of membership
@@ -95,7 +94,7 @@ result$p.group
 
 Our package provides a new framework to estimate Chla concentration. The main point is **algorithm blending** which uses the advantages of candidates algorithm for their optimizing water type (such as TBA for turbid water and BR for relatively clear water). The three build-in algorithms used in `FCMm` are `TBA`, `BR`, and `Bloom`. Note that the `Bloom` model was designed for water bloom (or called harmful algal bloom waters with extremely high Chla concentration or scums). Please see more details in `help(FCMm::FCM_m_Chla_estiamtion)`.
 
-```{r fig.height=4, fig.width=6}
+```{r fig.height=3, fig.width=4}
 library(reshape2)
 dt_Chla <- FCM_m_Chla_estimation(Rrs=data.frame(Rrs665=Rrs$`665`,
                                                 Rrs709=Rrs$`708.75`,
@@ -136,8 +135,7 @@ for(model in c('BR','TBA','Bloom','conc.Blend')){
   i <- i + 1
 }
 names(MAPEs)[i-1] <- names(MAEs)[i-1] <- 'Blend'
-print(MAPEs %>% round(2))
-print(MAEs %>% round(3))
+knitr::kable(data.frame(MAPE = MAPEs %>% round(2), MAE  = MAEs %>% round(3)))
 ```
 
 It is glad to see the Blending result performs better than others with its log-transformed MAPE = `r MAPEs['conc.Blend'] %>% round(2)` % and MAE = `r MAEs['conc.Blend'] %>% round(2)` ug/L.
@@ -148,7 +146,7 @@ As mentioned before, the input Rrs may do not match the default wavelength from 
 
 Here we suppose the selected bands are `412.5`, `442.5`, `490`, `510`, `560`, `620`, `665`, `673.75`, `708.75`, `753.75`, `865`, and `885`. Note that the `m.used` of `FD` list may change a little if different band number is used. But we assume the difference is negligible (i.e., still equal to the former one `r result$m_used`).
 
-```{r fig.height=4, fig.width=6, eval=F}
+```{r fig.height=4, fig.width=6, eval=FALSE}
 Rrs_sub <- subset(Rrs, select=c(`412.5`,`442.5`,`490`,`510`,
                                 `560`,`620`,`665`,`673.75`,
                                 `708.75`,`753.75`,`865`,`885`))
@@ -160,10 +158,10 @@ Rrs_clusters.sub <- which(names(Rrs_clusters.default) != 'X400' &
                             names(Rrs_clusters.default) != 'X779') %>%
   Rrs_clusters.default[,.]
 
-# Note the parameter settings in this function `default.cluster=F`
+# Note the parameter settings in this function `default.cluster=FALSE`
 result_sub <- apply_FCM_m(Rrs=Rrs_sub, wavelength=wavelength.sub,
                           Rrs_clusters=Rrs_clusters.sub,
-                          stand=F, default.cluster=F, option.plot=T)
+                          stand=FALSE, default.cluster=FALSE, option.plot=TRUE)
 result_sub$p.group
 ```
 
@@ -188,7 +186,7 @@ data("Bi_clusters")
 class(OLCI_TH)
 
 # convert RasterBrick to imdf with NA value removed and xy coordinates recorded
-imdf <- raster::as.data.frame(OLCI_TH, na.rm=T, xy=TRUE)
+imdf <- raster::as.data.frame(OLCI_TH, na.rm=TRUE, xy=TRUE)
 
 x_name <- which(names(imdf) == "x")
 y_name <- which(names(imdf) == "y")
@@ -201,13 +199,13 @@ names(imdf)[-c(1,2)] <- c(412.5,442.5,490,510,
 
 ### Data set plots
 
-```{r fig.height=4, fig.width=6}
+```{r fig.height=2, fig.width=3}
 set.seed(54321)
 imdf[sample(1:nrow(imdf),50),-c(1,2)] %>% 
   plot_spec_from_df(.) + 
   labs(x='Wavelength (nm)',y=expression(Rrs~(sr^-1))) + 
   theme_bw() + 
-  theme(legend.position='none', text=element_text(size=18))
+  theme(legend.position='none', text=element_text(size=13))
 ```
 
 ## FCM running
@@ -218,11 +216,11 @@ Function `apply_to_image()` provides many parameters for users to decide the pro
 
 **Note**: The process might take a long time which depends on your local machine.
 
-```{r message=TRUE, warning=FALSE, fig.height=4, fig.width=6}
+```{r message=TRUE, warning=FALSE, fig.height=3, fig.width=5}
 res <- generate_param(c(413,443,490,510,560,620,665,674,709,754,865,885))
 
 im_result <- apply_to_image(input=OLCI_TH, res=res, title.name="Test_image",
-                            Chla_est=T, output_image=F)
+                            Chla_est=TRUE, output_image=FALSE)
 summary(im_result)
 ```
 

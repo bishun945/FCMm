@@ -15,6 +15,9 @@ OC4_OLCI(Rrs443, Rrs490, Rrs510, Rrs560)
 
 \item{Rrs560}{Rrs560}
 }
+\value{
+A list including the algorithm index and Chla concentration.
+}
 \description{
 NASA standard ocean color algorithm (version 4) for the OLCI bands
 }

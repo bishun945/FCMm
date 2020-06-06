@@ -26,7 +26,7 @@ to the raster file on the disk.}
   \item \strong{K}  Cluster number
   \item \strong{res.FCM}  Cluster center and used fuzzifier value.
 }
-For the convenience, function \code{generate_param()} supports to quickly
+For the convenience, function \link{generate_param} supports to quickly
   generate this \code{list}. See more in examples.}
 
 \item{output_image}{Logical, whether to produce image files}
@@ -93,7 +93,7 @@ data("OLCI_TH")
 data("Bi_clusters")
 res <- generate_param(c(413,443,490,510,560,620,665,674,709,754,865,885))
 im_result <- apply_to_image(input=OLCI_TH, res=res,
-  title.name="Test_image", Chla_est=T, output_image=F)
+  title.name="Test_image", Chla_est=TRUE, output_image=FALSE)
 }
   
 }
@@ -106,6 +106,7 @@ Other Fuzzy cluster functions:
 \code{\link{FCM.new}()},
 \code{\link{FuzzifierDetermination}()},
 \code{\link{apply_FCM_m}()},
+\code{\link{generate_param}()},
 \code{\link{plot_spec_from_df}()}
 }
 \concept{Fuzzy cluster functions}

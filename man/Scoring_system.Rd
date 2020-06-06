@@ -25,17 +25,54 @@ Scoring_system(
 \item{remove.negative}{Option to replace the negative score as zero (Default as \code{FALSE})}
 }
 \value{
-A list including Total_score, Accuracy, Precision, Effectiveness, Accuracy.list, 
-  Precision.list, and Total_score.melt.
+A list including \code{Total_score}, \code{Accuracy}, \code{Precision}, \code{Effectiveness},
+  \code{Accuracy.list}, \code{Precision.list}, and \code{Total_score.melt}.
 }
 \description{
 The main function for algorithms scoring
+}
+\examples{
+\dontrun{
+library(FCMm) 
+library(ggplot2) 
+library(magrittr)
+library(stringr)
+data("Nechad2015")
+x <- Nechad2015[,3:11]
+wv <- gsub("X","",names(x)) \%>\% as.numeric
+set.seed(1234)
+w <- sample(1:nrow(x), 100)
+x <- x[w, ]
+names(x) <- wv
+nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
+set.seed(1234)
+FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+result <- FCM.new(FD, nb, fast.mode = TRUE)
+p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+print(p.spec$p.cluster.spec)
+Chla <- Nechad2015$X.Chl_a..ug.L.[w]
+Chla[Chla >= 999] <- NA
+dt_Chla <- run_all_Chla_algorithms(x) \%>\% as.data.frame
+dt_Chla <- data.frame(Chla_true = Chla, 
+BR_Gil10 = dt_Chla$BR_Gil10, 
+OC4_OLCI = dt_Chla$OC4_OLCI, 
+OCI_Hu12 = dt_Chla$OCI_Hu12, 
+NDCI_Mi12= dt_Chla$NDCI_Mi12) \%>\% round(3)
+w = which(!is.na(dt_Chla$Chla_true))
+dt_Chla = dt_Chla[w,]
+memb = result$res.FCM$u[w,] \%>\% round(4)
+cluster =  result$res.FCM$cluster[w]
+Asses_results <- Getting_Asses_results(sample.size=20, pred = dt_Chla[,-1], 
+meas = data.frame(dt_Chla[,1]), memb = memb, cluster = cluster)
+Score = Scoring_system(Asses_results)
+}
 }
 \seealso{
 Other Algorithm assessment: 
 \code{\link{Assessment_via_cluster}()},
 \code{\link{Getting_Asses_results}()},
 \code{\link{Sampling_via_cluster}()},
-\code{\link{Score_algorithms_interval}()}
+\code{\link{Score_algorithms_interval}()},
+\code{\link{Score_algorithms_sort}()}
 }
 \concept{Algorithm assessment}

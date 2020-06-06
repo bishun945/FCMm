@@ -15,3 +15,6 @@ Color codes
 \description{
 RdYlBu
 }
+\examples{
+\dontrun{RdYlBu(7)}
+}

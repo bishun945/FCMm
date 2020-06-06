@@ -27,9 +27,7 @@ This vignette shows the usage of the package `FCMm` for determining the cluster 
 
 ## Data pre-process
 
-```{r message=F, warning=F}
-rm(list=ls())
-
+```{r message=FALSE, warning=FALSE}
 library(FCMm)      # this package required for functions of FCMm
 library(ggplot2)   # this package required for producing plots
 library(magrittr)  # this package required for pipe-operator. `vignette("magrittr")` to see more details
@@ -56,7 +54,7 @@ Now Rrs dataframe (named `x`) and wavelength vector (named `wv`) are obtained an
 
 Anyway, the return of `plot_spec_from_df()` is a `ggplot` list which means you can do anything to it if you are familiar with the package `ggplot2`.
 
-```{r fig.height=4, fig.width=6}
+```{r fig.height=3, fig.width=4}
 p.spec <- plot_spec_from_df(x) + 
   labs(x='Wavelength (nm)',y=expression(Rrs~(sr^-1))) + 
   theme_bw() + 
@@ -66,7 +64,7 @@ print(p.spec)
 
 In the raw scale of Rrs, the difference between the spectra is mainly manifested as the magnitude change, especially the reflection at NIR. But it doesn't seem that clusters could be manually detected from the spectra plot. As we all know, the difference of water color is more caused by the spectral shape rather than the magnitude, which can be seen from the trend difference from the blue region to the red. Therefore, a better way is to normalize the spectrum. Let's look at the spectra plot of area-normalized spectral. In the following plot, it is obviously found that several clusters sharing the similar spectra shape, which is also the base of FCM running.
 
-```{r}
+```{r fig.height=3, fig.width=4}
 # Here used is the function `trapz()` to normalized the raw spectra. However, if you could use the normalize function of which you like. See more details in the package `scales`.
 x.stand <- x / FCMm::trapz(wv, x)
 p.spec.stand <- plot_spec_from_df(x.stand) + 
@@ -85,16 +83,16 @@ Before optimizing the best cluster number, we have to obtain an FD list produced
 
 ```{r}
 set.seed(1234)
-FD <- FuzzifierDetermination(x, wv, stand=F)
+FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 # stand = F means the input x has not been normalized yet, telling the function to normalize x at first. 
-# Otherwise, use FuzzifierDetermination(x.stand, wv, stand=T) which means the x.stand has been normalized.
+# Otherwise, use FuzzifierDetermination(x.stand, wv, stand=TRUE) which means the x.stand has been normalized.
 summary(FD)
 ```
 
 `FD` list contains several result by `FuzzifierDetermination()`:
 
  - *x*: the raw input Rrs dataframe with unit sr^-1
- - *x.stand*: the standardized Rrs dataframe, if `stand=F`
+ - *x.stand*: the standardized Rrs dataframe, if `stand=FALSE`
  - *wv*: wavelength with unit nm
  - *max.m*: the maximum fuzzifier of FCM as a restriction
  - *stand*: logic value for choosing whether to use standardization
@@ -107,7 +105,7 @@ summary(FD)
 
 Here introduced are several famous cluster validate metrics such as `SIL.F`, `PE`, `PC`, and `MPC`. In brief, these metrics mean the goodness of cluster results. Except for `PE`, the larger of `SIL.F`,  `PC`, and `MPC`, the better of the cluster at that time. If you are more interested in that, please see more details in the document of package `ppclust` by Zeynel Cebeci and `fclust` by Paolo Giordani. Thanks for their efforts which inspire me a lot to build the `FCMm` package. 
 
-```{r fig.height=3, fig.width=6, message=FALSE, warning=FALSE}
+```{r fig.height=3, fig.width=4, message=FALSE, warning=FALSE}
 library(ppclust)
 library(fclust)
 nb_min <- 3
@@ -115,7 +113,7 @@ nb_max <- 10
 idxsf <- idxpe <- idxpc <- idxmpc <- seq(nb_min,nb_max,1)
 i <- 1
 for(nb in nb_min:nb_max){
-  res <- FCM.new(FD, nb, fast.mode=T) # open the fast mode for saving time
+  res <- FCM.new(FD, nb, fast.mode=TRUE) # open the fast mode for saving time
   tmp <- ppclust2(res$res.FCM, otype="fclust")
   idxsf[i] <- SIL.F(tmp$Xca, tmp$U, alpha=1) # optimal with maximum value
   idxpe[i] <- -PE(tmp$U) # optimal with minimum value (NOTE I make it negative to follow with other metrics)
@@ -147,7 +145,7 @@ Back to the code, here we assume the best cluster number is ranging from `r nb_m
 
 The input of the function `FCM.new()` is a `FD` list which includes the information about the training set (normalized Rrs), the selected fuzzifier value (`r FD$m.used`), and also the cluster number (`r nb`).
 
-```{r message=FALSE, warning=FALSE, fig.height=4, fig.width=6}
+```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=4}
 set.seed(54321) 
 result <- FCM.new(FD, nb, fast.mode = T)
 summary(result)
@@ -170,17 +168,17 @@ A `result` list contains several result by `FCM.new()`:
 
 This part shows how to obtain the visualization results in the package `FCMm`. Function `plot_spec()` is used for spectral plotting the related FCM-m result. Meanwhile, I recommend the package `cowplot` to help merging produced plots.
 
-```{r message=FALSE, warning=FALSE, include=TRUE}
-if(library('cowplot', logical.return = T)){
-  library('cowplot')
-}else{
-  install.packages("cowplot")
-  library('cowplot')
-}
-
-p.spec <- plot_spec(result, show.stand=T, HABc=NULL)
+```{r message=FALSE, warning=FALSE, include=TRUE, fig.height=3, fig.width=4}
+p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
 print(p.spec$p.cluster.spec)
-plot_grid(plotlist = p.spec$p.group.spec.2)
+```
+
+```{r fig.height=4, fig.width=5}
+if(library('cowplot', logical.return = TRUE)){
+  cowplot::plot_grid(plotlist = p.spec$p.group.spec.2)
+}else{
+  message("Recommend you to install 'cowplot' package by running: `install.packages('cowplot')`")
+}
 ```
 
 

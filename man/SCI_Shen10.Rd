@@ -15,6 +15,9 @@ SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681)
 
 \item{Rrs681}{Rrs681}
 }
+\value{
+A list including the algorithm index and Chla concentration.
+}
 \description{
 SCI algorithm by Shen et al. (2010)
 }

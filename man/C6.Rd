@@ -11,6 +11,9 @@ C6(Rrs665, Rrs754)
 
 \item{Rrs754}{Rrs754}
 }
+\value{
+A list including the algorithm index and Chla concentration.
+}
 \description{
 C6 (Being deprecated)
 }

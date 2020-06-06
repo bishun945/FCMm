@@ -15,8 +15,20 @@ cal.metrics.vector(x,y,name="all",log10=FALSE)
 
 \item{log10}{Logical. Whether the input x and y should be log10-transformed}
 }
+\value{
+Result of \code{cal.metrics.vector} is a list of selected metric values.
+}
 \description{
 Assess the performance of algorithms as vector
+}
+\examples{
+\dontrun{
+set.seed(1234)
+x = runif(100)
+y = runif(100)
+result = cal.metrics.vector(x,y)
+}
+
 }
 \seealso{
 Other Utils: 
@@ -25,7 +37,6 @@ Other Utils:
 \code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics}()},
 \code{\link{level_to_variable}()},
-\code{\link{lmodel2_}()},
 \code{\link{trim_sd}()}
 }
 \concept{Utils}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Algorithms_assessment.R
 \name{Score_algorithms_interval}
 \alias{Score_algorithms_interval}
-\title{Score a vector of error metrics for algorithms}
+\title{Score a vector of error metrics for algorithms by the interval}
 \usage{
 Score_algorithms_interval(
   x,
@@ -30,16 +30,29 @@ However, when comes to \code{Rsquare} from linear regression (maximum is 1), it 
 should not be greater than 100.}
 }
 \value{
-List
+Results of \code{Score_algorithms_interval()} are returned as a list including:
+\item{p}{A ggplot list of the scoring result.}
+\item{score}{The final score from by the interval score.}
+\item{u}{Trimmed mean of input x with \code{NA} values removed.}
+\item{bds}{Up and low boundaries for determining scores.}
+\item{x}{The input x.}
 }
 \description{
-Score a vector of error metrics for algorithms
+Score a vector of error metrics for algorithms by the interval
+}
+\examples{
+\dontrun{
+set.seed(1234)
+x = runif(10)
+result = Score_algorithms_interval(x)
+}
 }
 \seealso{
 Other Algorithm assessment: 
 \code{\link{Assessment_via_cluster}()},
 \code{\link{Getting_Asses_results}()},
 \code{\link{Sampling_via_cluster}()},
+\code{\link{Score_algorithms_sort}()},
 \code{\link{Scoring_system}()}
 }
 \concept{Algorithm assessment}

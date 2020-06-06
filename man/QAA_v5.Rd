@@ -12,7 +12,7 @@ QAA_v5(
   wv490 = NULL,
   wv560 = NULL,
   wv667 = NULL,
-  verbose = F
+  verbose = FALSE
 )
 }
 \arguments{
@@ -31,6 +31,20 @@ QAA_v5(
 \item{wv667}{Wavelength index of 667 nm}
 
 \item{verbose}{verbos (default as FASLE)}
+}
+\value{
+Results of \code{QAA_v5} are the list including:
+  \item{input}{input list including \code{wv}, \code{Rrs}, \code{wv412},
+    \code{wv443}, \code{wv490}, \code{wv560}, and \code{wv667}}
+  \item{const}{constant values of \code{g0}, \code{g1}, and \code{lam0}}
+  \item{Var}{Indirect variables including \code{rrs}, \code{u}, \code{Chi},
+    \code{Yita}, \code{Zeta}, \code{S}, and \code{Xi}}
+  \item{IOP}{Inherent optical properties including \code{a0}, \code{bbp0},
+    \code{ag443}, \code{a}, \code{adg}, \code{aph}, and \code{bbp}}
+  \item{Chl}{Results of Chl concentration estimation including \code{Chl_Bricaud}, 
+    \code{Bricaud_A}, \code{Bricaud_B}, \code{Chl_Liu}, \code{aChla665_star}}
+  \item{residu}{Residual constrains including \code{Upper_lim_for_Rrs667}, \code{Lower_lim_for_Rrs667},
+    \code{Rrs667_revised}, and \code{Rrs667_final}}
 }
 \description{
 Quasi-analytical algorithm by Lee et al. (2002)

@@ -13,6 +13,9 @@ Gons08(Rrs665, Rrs709, Rrs779)
 
 \item{Rrs779}{Rrs779}
 }
+\value{
+A list including the algorithm estimated bbp and Chla concentration.
+}
 \description{
 Gons algorithm by Gons et al. (2008)
 }

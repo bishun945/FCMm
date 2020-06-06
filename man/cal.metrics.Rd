@@ -15,12 +15,24 @@ cal.metrics(x,y,name="all",log10=FALSE)
 
 \item{log10}{Logical. Whether the input x and y should be log10-transformed}
 }
+\value{
+Result of \code{cal.metrics} is a list of selected metric values.
+}
 \description{
 Assess the performance of algorithms
 }
 \note{
 (2020-02-09) All functions used log10 transformation was assigned to the 
-  Key parameter `log10`
+  Key parameter `log10`.
+}
+\examples{
+\dontrun{
+set.seed(1234)
+x = runif(20)
+y = runif(20)
+result = cal.metrics(x, y)
+print(result)
+}
 }
 \seealso{
 Other Utils: 
@@ -29,7 +41,6 @@ Other Utils:
 \code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{level_to_variable}()},
-\code{\link{lmodel2_}()},
 \code{\link{trim_sd}()}
 }
 \concept{Utils}

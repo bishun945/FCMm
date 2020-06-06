@@ -63,7 +63,6 @@ Other Utils:
 \code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()},
 \code{\link{level_to_variable}()},
-\code{\link{lmodel2_}()},
 \code{\link{trim_sd}()}
 }
 \concept{Utils}

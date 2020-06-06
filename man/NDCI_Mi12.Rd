@@ -11,6 +11,9 @@ NDCI_Mi12(Rrs665, Rrs709)
 
 \item{Rrs709}{Rrs709}
 }
+\value{
+A list including the algorithm index and Chla concentration.
+}
 \description{
 Normalized difference Chlorophyll index method by Mishra et al. (2012)
 }

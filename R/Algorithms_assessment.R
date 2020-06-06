@@ -13,13 +13,62 @@
 #' 
 #' @note If the cal.precision is running, the \code{hard.mode == TRUE} is used. In that case,
 #'   mean and sd calculation is conducted for hard mode based on result from cal.metrics.vector
+#'   
 #' @export
-#' @return List
+#' @return Results of \code{Algorithms_assessment()} are returned as a list including:
+#' \item{Metrcs}{A list of the selected metric values for all algorithms. \code{Valid_percent} 
+#'   would be included if \code{na.process} are set as \code{TRUE}}
+#' \item{res_plot}{Bar plots by using ggplot function for metrics value at every cluster.}
+#' \item{res_plot_dt}{Dataframe for plotting \code{res_plot}. I just keep it in case of plotting other types}
+#' \item{res_plot_facet}{\code{res_plot} added on \code{facet_wrap}.}
+#' \item{input}{input parameters of \code{Algorithms_assessment()}}
+#' 
 #' @family Algorithm assessment
 #' 
 #' @import ggplot2  
 #' @importFrom stats runif
 #' @importFrom reshape2 melt
+#' 
+#' @examples 
+#' \dontrun{
+#' library(FCMm) 
+#' library(ggplot2) 
+#' library(magrittr)
+#' library(stringr)
+#' data("Nechad2015")
+#' x <- Nechad2015[,3:11]
+#' wv <- gsub("X","",names(x)) %>% as.numeric
+#' set.seed(1234)
+#' w <- sample(1:nrow(x), 100) 
+#' x <- x[w, ]
+#' names(x) <- wv
+#' nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
+#' set.seed(1234)
+#' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+#' result <- FCM.new(FD, nb, fast.mode = TRUE)
+#' p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+#' print(p.spec$p.cluster.spec)
+#' Chla <- Nechad2015$X.Chl_a..ug.L.[w]
+#' Chla[Chla >= 999] <- NA
+#' dt_Chla <- run_all_Chla_algorithms(x) %>% as.data.frame
+#' dt_Chla <- data.frame(Chla_true = Chla, 
+#' BR_Gil10 = dt_Chla$BR_Gil10, 
+#' OC4_OLCI = dt_Chla$OC4_OLCI, 
+#' OCI_Hu12 = dt_Chla$OCI_Hu12, 
+#' NDCI_Mi12= dt_Chla$NDCI_Mi12) %>% round(3)
+#' w = which(!is.na(dt_Chla$Chla_true))
+#' dt_Chla = dt_Chla[w,]
+#' memb = result$res.FCM$u[w,] %>% round(4)
+#' Asses_soft <- Assessment_via_cluster(pred = dt_Chla[,-1], 
+#' meas = dt_Chla[,1], memb = memb, log10 = TRUE, hard.mode = FALSE, 
+#' na.process = TRUE, plot.col = TRUE)
+#' Asses_soft$res_plot_facet
+#' knitr::kable(Asses_soft$MAE %>% round(3))
+#' knitr::kable(Asses_soft$MAPE %>% round(2))
+#' Asses_hard$res_plot_facet
+#' knitr::kable(Asses_hard$MAE %>% round(3))
+#' knitr::kable(Asses_hard$MAPE %>% round(2))
+#' }
 #' 
 Assessment_via_cluster <- function(pred, meas, memb,
                                    metrics = c('MAE','MAPE'),
@@ -117,9 +166,9 @@ Assessment_via_cluster <- function(pred, meas, memb,
       
         for(metric in metrics){
           metric_value <- cal.metrics.vector(x,y,metric,log10=log10)
-          result[[metric]][cluster, model] <- mean(metric_value, na.rm=T)
+          result[[metric]][cluster, model] <- mean(metric_value, na.rm=TRUE)
           precision_name <- paste0(metric, '_p')
-          result[[precision_name]][cluster, model] <- trim_sd(metric_value, na.rm=T)
+          result[[precision_name]][cluster, model] <- trim_sd(metric_value, na.rm=TRUE)
         }
            
       }else{ # no need for precision
@@ -166,9 +215,9 @@ Assessment_via_cluster <- function(pred, meas, memb,
           
           for(metric in metrics){
             metric_value <- cal.metrics.vector(x,y,metric,log10=log10)
-            result[[metric]]['SUM', model] <- mean(metric_value, na.rm=T)
+            result[[metric]]['SUM', model] <- mean(metric_value, na.rm=TRUE)
             precision_name <- paste0(metric, '_p')
-            result[[precision_name]]['SUM', model] <- sd(metric_value, na.rm=T)
+            result[[precision_name]]['SUM', model] <- sd(metric_value, na.rm=TRUE)
           }
           
         }else{ # no need for precision  total
@@ -211,7 +260,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
             stop("The fuzzy metrics are calculated with different rows from memb and pred")
           
           Er <- cal.metrics.vector(x,y,metric,log10)
-          result_fz[[metric]][i,j] <- sum(memb_[,i] * Er, na.rm=T)/sum(memb_[,i], na.rm=T)
+          result_fz[[metric]][i,j] <- sum(memb_[,i] * Er, na.rm=TRUE)/sum(memb_[,i], na.rm=TRUE)
           
         }
       }
@@ -229,7 +278,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
     
     num.model <- ncol(pred)
     set.seed(1234)
-    ind = runif(num.model) %>% sort.int(., index.return=T) %>% .$ix
+    ind = runif(num.model) %>% sort.int(., index.return=TRUE) %>% .$ix
     cp = Spectral(num.model)[ind]
 
     for(metric in names(result)){
@@ -305,7 +354,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
 
 
 #' @name Score_algorithms_interval
-#' @title Score a vector of error metrics for algorithms
+#' @title Score a vector of error metrics for algorithms by the interval
 #' @param x Input vector of error metrics (NA values are allowed)
 #' @param trim whether to run a trim process to calculate mean and standard deviation of 
 #'   input vector x (Default as \code{FALSE})
@@ -318,11 +367,25 @@ Assessment_via_cluster <- function(pred, meas, memb,
 #' @param hundred.percent A variable constrain for metrics that the maximun of input \code{x} 
 #'   should not be greater than 100.
 #' @export
-#' @return List
+#' 
+#' @return Results of \code{Score_algorithms_interval()} are returned as a list including:
+#' \item{p}{A ggplot list of the scoring result.}
+#' \item{score}{The final score from by the interval score.}
+#' \item{u}{Trimmed mean of input x with \code{NA} values removed.}
+#' \item{bds}{Up and low boundaries for determining scores.}
+#' \item{x}{The input x.}
+#' 
 #' @family Algorithm assessment
 #' 
 #' @importFrom stats qt sd
 #' @import ggplot2
+#' 
+#' @examples 
+#' \dontrun{
+#' set.seed(1234)
+#' x = runif(10)
+#' result = Score_algorithms_interval(x)
+#' }
 
 Score_algorithms_interval <- function(x, trim=FALSE, reward.punishment=TRUE, 
                              decreasing=TRUE, hundred.percent=FALSE
@@ -344,11 +407,11 @@ Score_algorithms_interval <- function(x, trim=FALSE, reward.punishment=TRUE,
   
   if(trim==TRUE){
     x_ = sort(x)[(n_trim+1):(n-n_trim)]
-    u <- mean(x_, na.rm=T)
-    sig <- sd(x_, na.rm=T)
+    u <- mean(x_, na.rm=TRUE)
+    sig <- sd(x_, na.rm=TRUE)
   }else{
-    u <- mean(x, na.rm=T)
-    sig <- sd(x, na.rm=T)
+    u <- mean(x, na.rm=TRUE)
+    sig <- sd(x, na.rm=TRUE)
   }
   
   tCL <- qt(0.975,length(x)-1) # 95% Student distribution
@@ -427,7 +490,27 @@ Score_algorithms_interval <- function(x, trim=FALSE, reward.punishment=TRUE,
 }
 
 
-
+#' @name Score_algorithms_sort
+#' @title Score a vector of error metrics for algorithms by the sort
+#' 
+#' @param x Input vector of error metrics (NA values are allowed)
+#' @param decreasing the order of the good metric to be evaluated. For instance, MAE should use
+#'   \code{decreasing = TRUE} (Default) since the algorithm performs better when MAE becomes smaller. 
+#'   However, when comes to \code{Rsquare} from linear regression (maximum is 1), it should be
+#'   \code{FALSE}
+#'   
+#' @export
+#' 
+#' @return Results of \code{Score_algorithms_sort()} are returned as a vector presenting score values.
+#' 
+#' @family Algorithm assessment
+#' 
+#' @examples 
+#' \dontrun{
+#' set.seed(1234)
+#' x = runif(10)
+#' result = Score_algorithms_sort(x)
+#' }
 Score_algorithms_sort <- function(x, decreasing = TRUE){
   
   x <- as.numeric(x)
@@ -460,11 +543,20 @@ Score_algorithms_sort <- function(x, decreasing = TRUE){
 #' @name Sampling_via_cluster
 #' @title Stratified sampling by clusters or types
 #' @param x A vector represents the cluster or type, only support numeric value now.
-#' @param num The number of sampling
-#' @param replace The way of sampling. See \code{help(sample)} for more details
+#' @param num The number of sampling.
+#' @param replace The way of sampling. See \code{help(sample)} for more details.
 #' @export
-#' @return List
+#' @return Result of \code{Sampling_via_cluster} is the index of sampled 
+#'   items from the input \code{x}.
 #' @family Algorithm assessment
+#' @examples 
+#' \dontrun{
+#' set.seed(1234)
+#' x = round(runif(100,1,10))
+#' table(x)
+#' w_sampled = Sampling_via_cluster(x, 20)
+#' table(x[w_sampled])
+#' }
 Sampling_via_cluster <- function(x, num, replace=FALSE){
   
   if(num > length(x))
@@ -530,9 +622,9 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' @name Getting_Asses_results
 #' @title Get the result of function Assessment_via_cluster
 #' @description This function mainly use function \code{Assessment_via_cluster} to get
-#'   assesments both from fuzzy and hard mode. Specifically, it will return fuzzy_MAE, 
-#'   fuzzy_MAPE, hard_Slope, Valid_percent, and hard_Rsquare which should be seemed as the 
-#'   input value of function \code{Scoring_system}.
+#'   assesments both from fuzzy and hard mode. Specifically, it will return the accuracy and precision of 
+#'   "MAE","SMAPE","BIAS", and "SMRPE" which would be seemed as the input value of 
+#'   function \code{Scoring_system}.
 #' @param sample.size Sample size. This supports a bootstrap way to run the function 
 #'   \code{Assessment_via_cluster}. The number should not be larger than the row number 
 #'   of pred or so.
@@ -549,6 +641,42 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' @export
 #' @return A list containing fuzzy and hard results from \code{Assessment_via_cluster}
 #' @family Algorithm assessment
+#' 
+#' @examples 
+#' \dontrun{
+#' library(FCMm) 
+#' library(ggplot2) 
+#' library(magrittr)
+#' library(stringr)
+#' data("Nechad2015")
+#' x <- Nechad2015[,3:11]
+#' wv <- gsub("X","",names(x)) %>% as.numeric
+#' set.seed(1234)
+#' w <- sample(1:nrow(x), 100)
+#' x <- x[w, ]
+#' names(x) <- wv
+#' nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
+#' set.seed(1234)
+#' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+#' result <- FCM.new(FD, nb, fast.mode = TRUE)
+#' p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+#' print(p.spec$p.cluster.spec)
+#' Chla <- Nechad2015$X.Chl_a..ug.L.[w]
+#' Chla[Chla >= 999] <- NA
+#' dt_Chla <- run_all_Chla_algorithms(x) %>% as.data.frame
+#' dt_Chla <- data.frame(Chla_true = Chla,
+#' BR_Gil10 = dt_Chla$BR_Gil10, 
+#' OC4_OLCI = dt_Chla$OC4_OLCI, 
+#' OCI_Hu12 = dt_Chla$OCI_Hu12, 
+#' NDCI_Mi12= dt_Chla$NDCI_Mi12) %>% round(3)
+#' w = which(!is.na(dt_Chla$Chla_true))
+#' dt_Chla = dt_Chla[w,]
+#' memb = result$res.FCM$u[w,] %>% round(4)
+#' cluster =  result$res.FCM$cluster[w]
+#' Asses_results <- Getting_Asses_results(sample.size=20, 
+#' pred = dt_Chla[,-1], meas = data.frame(dt_Chla[,1]), memb = memb, 
+#' cluster = cluster)
+#' }
 #' 
 Getting_Asses_results <- function(sample.size, replace=FALSE,
                                   pred, meas, memb, cluster, 
@@ -577,20 +705,20 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
                                       meas=meas_,
                                       memb=memb_,
                                       metrics = c("MAE","SMAPE","BIAS",'SMRPE'),
-                                      log10 = T,
-                                      hard.mode = F,
+                                      log10 = TRUE,
+                                      hard.mode = FALSE,
                                       na.process = TRUE,
-                                      plot.col = F)
+                                      plot.col = FALSE)
   
   Asses_p <-  Assessment_via_cluster(pred=pred_,
                                       meas=meas_,
                                       memb=memb_,
                                       metrics = c("MAE","SMAPE","BIAS",'SMRPE'),
-                                      log10 = T,
-                                      hard.mode = F,
-                                      cal.precision = T,
+                                      log10 = TRUE,
+                                      hard.mode = FALSE,
+                                      cal.precision = TRUE,
                                       na.process = TRUE,
-                                      plot.col = F)
+                                      plot.col = FALSE)
   
   # NOTE 2020-03-06: As the difination of Accuracy and Precision were changed, 
   #   we deleted the following codes and corresponding contexts in `Scoring_system` function
@@ -599,10 +727,10 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
   #                                     meas=meas_,
   #                                     memb=memb_,
   #                                     metrics = c("SLOPE", "R2_SMA"),
-  #                                     log10 = T,
-  #                                     hard.mode = T,
+  #                                     log10 = TRUE,
+  #                                     hard.mode = TRUE,
   #                                     na.process = TRUE,
-  #                                     plot.col = F)
+  #                                     plot.col = FALSE)
   
   result <- list(
                   # Asses_hd=Asses_hd, 
@@ -622,11 +750,47 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 #' @param param_interval The parameters of function \code{Score_algorithms_interval}
 #' @param remove.negative Option to replace the negative score as zero (Default as \code{FALSE})
 #' @export
-#' @return A list including Total_score, Accuracy, Precision, Effectiveness, Accuracy.list, 
-#'   Precision.list, and Total_score.melt.
+#' @return A list including \code{Total_score}, \code{Accuracy}, \code{Precision}, \code{Effectiveness},
+#'   \code{Accuracy.list}, \code{Precision.list}, and \code{Total_score.melt}.
 #' @family Algorithm assessment
 #' 
 #' @importFrom reshape2 melt
+#' 
+#' @examples 
+#' \dontrun{
+#' library(FCMm) 
+#' library(ggplot2) 
+#' library(magrittr)
+#' library(stringr)
+#' data("Nechad2015")
+#' x <- Nechad2015[,3:11]
+#' wv <- gsub("X","",names(x)) %>% as.numeric
+#' set.seed(1234)
+#' w <- sample(1:nrow(x), 100)
+#' x <- x[w, ]
+#' names(x) <- wv
+#' nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
+#' set.seed(1234)
+#' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+#' result <- FCM.new(FD, nb, fast.mode = TRUE)
+#' p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+#' print(p.spec$p.cluster.spec)
+#' Chla <- Nechad2015$X.Chl_a..ug.L.[w]
+#' Chla[Chla >= 999] <- NA
+#' dt_Chla <- run_all_Chla_algorithms(x) %>% as.data.frame
+#' dt_Chla <- data.frame(Chla_true = Chla, 
+#' BR_Gil10 = dt_Chla$BR_Gil10, 
+#' OC4_OLCI = dt_Chla$OC4_OLCI, 
+#' OCI_Hu12 = dt_Chla$OCI_Hu12, 
+#' NDCI_Mi12= dt_Chla$NDCI_Mi12) %>% round(3)
+#' w = which(!is.na(dt_Chla$Chla_true))
+#' dt_Chla = dt_Chla[w,]
+#' memb = result$res.FCM$u[w,] %>% round(4)
+#' cluster =  result$res.FCM$cluster[w]
+#' Asses_results <- Getting_Asses_results(sample.size=20, pred = dt_Chla[,-1], 
+#' meas = data.frame(dt_Chla[,1]), memb = memb, cluster = cluster)
+#' Score = Scoring_system(Asses_results)
+#' }
 Scoring_system <- function(Inputs, 
                            method = 'sort-based',
                            param_sort = list(decreasing = TRUE),
@@ -709,7 +873,7 @@ Scoring_system <- function(Inputs,
   Total_score <- (Accuracy + Precision) * Asses_fz$Valid_percent / 100
   
   if(remove.negative == TRUE){
-    w = which(Total_score < 0, arr.ind=T)
+    w = which(Total_score < 0, arr.ind=TRUE)
     for(i in 1:nrow(w))
       Total_score[w[i,1],w[i,2]] <- 0
   }

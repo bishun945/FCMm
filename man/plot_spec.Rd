@@ -28,7 +28,24 @@ A list of ggplot lists:
 Spectra plot for a FCM.new result
 }
 \examples{
-\dontrun{p.spec <- plot_spec(result, show.stand=FALSE, HABc=NULL)}
+\dontrun{
+library(FCMm) 
+library(ggplot2) 
+library(magrittr)
+data("Nechad2015")
+x <- Nechad2015[,3:11]
+wv <- gsub("X","",names(x)) \%>\% as.numeric
+set.seed(1234) # Set this seed so that you can re-produce them
+w <- sample(1:nrow(x), 100)
+x <- x[w, ]
+names(x) <- wv
+nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
+set.seed(1234)
+FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+result <- FCM.new(FD, nb, fast.mode = TRUE)
+p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+print(p.spec$p.cluster.spec)
+}
 
 }
 \references{

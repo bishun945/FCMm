@@ -93,6 +93,7 @@ FCM_m_Chla_estimation <- function(Rrs, U){
 #' @param Rrs709 Rrs709
 #' @export
 #' @family Algorithms: Chla concentration
+#' @return A list including the algorithm index and Chla concentration.
 #' @references Gilerson A A, Gitelson A A, Zhou J, et al. Algorithms for remote estimation of 
 #'   chlorophyll-a in coastal and inland waters using red and near infrared bands[J]. 
 #'   Optics Express, 2010, 18(23): 24109-24125.
@@ -112,6 +113,7 @@ BR_Gil10 <- function(Rrs665, Rrs709){
 #' @param Rrs709 Rrs709
 #' @param Rrs754 Rrs754
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references Gilerson A A, Gitelson A A, Zhou J, et al. Algorithms for remote estimation of 
 #'   chlorophyll-a in coastal and inland waters using red and near infrared bands[J]. 
@@ -132,6 +134,7 @@ TBA_Gil10 <- function(Rrs665, Rrs709, Rrs754){
 #' @param Rrs665 Rrs665
 #' @param Rrs754 Rrs754
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 C6 <- function(Rrs665, Rrs754){
   ind <- 1/Rrs665*Rrs754
@@ -148,6 +151,7 @@ C6 <- function(Rrs665, Rrs754){
 #' @param Rrs665 Rrs665
 #' @param Rrs754 Rrs754
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 Bloom <- function(Rrs665, Rrs754){
   ind <- 1/Rrs665*Rrs754
@@ -167,6 +171,7 @@ Bloom <- function(Rrs665, Rrs754){
 #' @param Rrs510 Rrs510
 #' @param Rrs560 Rrs560
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references O'Reilly J E, Werdell P J. Chlorophyll algorithms for ocean color
 #'   sensors-OC4, OC5 & OC6[J]. Remote sensing of environment, 2019, 229: 32-47.
@@ -190,6 +195,7 @@ OC4_OLCI <- function(Rrs443, Rrs490, Rrs510, Rrs560){
 #' @param Rrs510 Rrs510
 #' @param Rrs560 Rrs560
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references O'Reilly J E, Werdell P J. Chlorophyll algorithms for ocean color
 #'   sensors-OC4, OC5 & OC6[J]. Remote sensing of environment, 2019, 229: 32-47.
@@ -214,6 +220,7 @@ OC5_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560){
 #' @param Rrs560 Rrs560
 #' @param Rrs665 Rrs665
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references O'Reilly J E, Werdell P J. Chlorophyll algorithms for ocean color
 #'   sensors-OC4, OC5 & OC6[J]. Remote sensing of environment, 2019, 229: 32-47.
@@ -236,6 +243,7 @@ OC6_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
 #' @param Rrs560 Rrs560
 #' @param Rrs665 Rrs665
 #' @export
+#' @return A list including the algorithm indices and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references Hu C, Lee Z, Franz B. Chlorophyll a algorithms for oligotrophic oceans: 
 #'   A novel approach based on three band reflectance difference[J]. Journal of Geophysical 
@@ -272,6 +280,7 @@ OCI_Hu12 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
 #' @param Rrs665 Rrs665
 #' @param Rrs709 Rrs709
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references Gitelson A A, Gurlin D, Moses W J, et al. Remote Estimation of 
 #'   Chlorophyll-a Concentration[J]. Advances in environmental remote sensing: sensors, 
@@ -292,6 +301,7 @@ BR_Git11 <- function(Rrs665, Rrs709){
 #' @param Rrs709 Rrs709
 #' @param Rrs754 Rrs754
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references Gitelson A A, Gurlin D, Moses W J, et al. Remote Estimation of 
 #'   Chlorophyll-a Concentration[J]. Advances in environmental remote sensing: sensors, 
@@ -311,6 +321,7 @@ TBA_Git11 <- function(Rrs665, Rrs709, Rrs754){
 #' @param Rrs665 Rrs665
 #' @param Rrs709 Rrs709
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @note Chla_test as a test version of NDCI_Mi12 results parameterized by Bi
 #' @references Mishra S, Mishra D R. Normalized difference chlorophyll index:
@@ -336,6 +347,7 @@ NDCI_Mi12 <- function(Rrs665, Rrs709){
 #' @param Rrs681 Rrs681
 #' @param Rrs709 Rrs709
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references Le C, Hu C, Cannizzaro J, et al. Evaluation of chlorophyll-a remote
 #'   sensing algorithms for an optically complex estuary[J]. Remote Sensing of Environment, 
@@ -356,6 +368,7 @@ FBA_Le13 <- function(Rrs665, Rrs681, Rrs709){
 #' @param Rrs709 Rrs709
 #' @param Rrs754 Rrs754
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references Yang W, Matsushita B, Chen J, et al. An enhanced three-band index for estimating 
 #'   chlorophyll-a in turbid case-II waters: case studies of Lake Kasumigaura, Japan, and Lake 
@@ -377,6 +390,7 @@ FBA_Yang10 <- function(Rrs665, Rrs709, Rrs754){
 #' @param Rrs665 Rrs665
 #' @param Rrs681 Rrs681
 #' @export
+#' @return A list including the algorithm index and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references Shen F, Zhou Y X, Li D J, et al. Medium resolution imaging spectrometer 
 #'   (MERIS) estimation of chlorophyll-a concentration in the turbid sediment-laden waters 
@@ -405,6 +419,7 @@ SCI_Shen10 <- function(Rrs560, Rrs620, Rrs665, Rrs681){
 #' @param Rrs709 Rrs709
 #' @param Rrs779 Rrs779
 #' @export
+#' @return A list including the algorithm estimated bbp and Chla concentration.
 #' @family Algorithms: Chla concentration
 #' @references Gons H J, Auer M T, Effler S W. MERIS satellite chlorophyll mapping of 
 #'   oligotrophic and eutrophic waters in the Laurentian Great Lakes[J]. Remote Sensing 
@@ -429,7 +444,7 @@ Gons08 <- function(Rrs665, Rrs709, Rrs779){
 #' @param Rrs709 Rrs709
 #' @param Rrs754 Rrs754
 #' @export
-#' @return A list with names as Chla_final, Chla_clean, Chla_turbid, and flag
+#' @return A list including MCI index, Chla_final, Chla_clean, Chla_turbid, and flag.
 #' @family Algorithms: Chla concentration
 #' @references Liu G, Li L, Song K, et al. An OLCI-based algorithm for semi-empirically 
 #'   partitioning absorption coefficient and estimating chlorophyll a concentration in 
@@ -456,6 +471,7 @@ TC2 <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
 #' @param Rrs560 Rrs560
 #' @param Rrs665 Rrs665
 #' @param Rrs709 Rrs709
+#' @return Chla concentration.
 #' @family Algorithms: Chla concentration
 TC2_clean <- function(Rrs443, Rrs560, Rrs665, Rrs709){
   g0 = 0.089
@@ -491,6 +507,7 @@ TC2_clean <- function(Rrs443, Rrs560, Rrs665, Rrs709){
 #' @param Rrs665 Rrs665
 #' @param Rrs709 Rrs709
 #' @param Rrs754 Rrs754
+#' @return Chla concentration.
 #' @family Algorithms: Chla concentration 
 TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
   g0 = 0.089
@@ -529,13 +546,25 @@ TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
 #' @param wv667 Wavelength index of 667 nm
 #' @param verbose verbos (default as FASLE)
 #' @export
+#' @return Results of \code{QAA_v5} are the list including:
+#'   \item{input}{input list including \code{wv}, \code{Rrs}, \code{wv412},
+#'     \code{wv443}, \code{wv490}, \code{wv560}, and \code{wv667}}
+#'   \item{const}{constant values of \code{g0}, \code{g1}, and \code{lam0}}
+#'   \item{Var}{Indirect variables including \code{rrs}, \code{u}, \code{Chi},
+#'     \code{Yita}, \code{Zeta}, \code{S}, and \code{Xi}}
+#'   \item{IOP}{Inherent optical properties including \code{a0}, \code{bbp0},
+#'     \code{ag443}, \code{a}, \code{adg}, \code{aph}, and \code{bbp}}
+#'   \item{Chl}{Results of Chl concentration estimation including \code{Chl_Bricaud}, 
+#'     \code{Bricaud_A}, \code{Bricaud_B}, \code{Chl_Liu}, \code{aChla665_star}}
+#'   \item{residu}{Residual constrains including \code{Upper_lim_for_Rrs667}, \code{Lower_lim_for_Rrs667},
+#'     \code{Rrs667_revised}, and \code{Rrs667_final}}
 #' @family Algorithms: Chla concentration 
 #' @references Lee Z P, Carder K L, Arnone R A. Deriving inherent optical properties from water color: 
 #'   a multiband quasi-analytical algorithm for optically deep waters[J]. Applied optics, 2002, 41(27): 
 #'   5755-5772.
 QAA_v5 <- function(wv, Rrs,
                    wv412=NULL, wv443=NULL, wv490=NULL, wv560=NULL, wv667=NULL,
-                   verbose=F){
+                   verbose=FALSE){
   
   if(anyNA(Rrs) | anyNA(wv))
     stop("NA values in wv or Rrs as input, please check!")
@@ -659,17 +688,24 @@ QAA_v5 <- function(wv, Rrs,
 #'   the center wavelength of required band
 #' @details Please type \code{Chla_algorithm_name()} to see all Chla algorithms
 #' @export
-#' @return A list
+#' @return A list including Chla results by supported algorithms if Rrs includes the required wavelength.
+#'   Retrun \code{NA} values for algorithms of which required wavelength cannot be found.
 #' @family Algorithms: Chla concentration
 #' 
 #' @importFrom stringr str_subset
 run_all_Chla_algorithms <- function(Rrs, wv_range=3){
   wv <- str_subset(names(Rrs), '\\d') %>% as.numeric
   wv_need <- c(443, 490, 510, 560, 620, 665, 681, 709, 754, 779)
+  RrsNA <- rep(NA, nrow(Rrs))
   for(i in wv_need){
-    text <- sprintf('Rrs%s <- Rrs[,which(abs(wv-%s) <= wv_range)]',i,i)
-    # print(text)
-    eval(parse(text=text))
+    w = which(abs(wv-i) <= wv_range)
+    if(length(w) == 0){
+      text <- sprintf('Rrs%s <- RrsNA', i) # if cannot find this wavelength, give it NA values
+      eval(parse(text=text))
+    }else{
+      text <- sprintf('Rrs%s <- Rrs[,%s]', i, w)
+      eval(parse(text=text))
+    }
   }
   result <- list(
     BR_Gil10 = BR_Gil10(Rrs665=Rrs665, Rrs709=Rrs709)$Chla,
@@ -700,6 +736,7 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
 #' @name Chla_algorithms_name
 #' @title Pring all Chla algorithms name
 #' @export
+#' @return Character of the supported Chla algorithm names in this package.
 #' @family Algorithms: Chla concentration
 #' 
 Chla_algorithms_name <- function(){

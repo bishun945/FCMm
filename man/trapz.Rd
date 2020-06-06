@@ -12,7 +12,7 @@ trapz(wv, x)
 \item{x}{data.frame that need to be trapzed with ncol equal to length of\code{wv}}
 }
 \value{
-A vector presents the area result.
+A vector presenting the area result.
 }
 \description{
 Trapezoid integral calculation

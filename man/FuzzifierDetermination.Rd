@@ -36,18 +36,12 @@ To determine the optimized fuzzifier value for FCM running.
 }
 \examples{
 \dontrun{
-library(FCMm)
-library(tidyverse)
-data("Nechad2015")
-w <- Nechad2015 \%>\% names \%>\%
-    str_extract(.,pattern="\\\\d") \%>\%
-    is.na \%>\% {!.}
-wv <- w \%>\% names(Nechad2015)[.] \%>\%
-    gsub('X','',.) \%>\% as.numeric
-x <- w \%>\% Nechad2015[,.]
+library(FCMm) 
+x <- Nechad2015[,3:11]
+wv <- gsub("X","",names(x)) \%>\% as.numeric
+set.seed(1234)
 names(x) <- wv
-rm(w)
-FD <- FuzzifierDetermination(x, wv, stand=F)
+FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 }
 }
 \references{
@@ -64,6 +58,7 @@ Other Fuzzy cluster functions:
 \code{\link{FCM.new}()},
 \code{\link{apply_FCM_m}()},
 \code{\link{apply_to_image}()},
+\code{\link{generate_param}()},
 \code{\link{plot_spec_from_df}()}
 }
 \concept{Fuzzy cluster functions}

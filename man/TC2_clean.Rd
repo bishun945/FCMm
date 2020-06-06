@@ -15,6 +15,9 @@ TC2_clean(Rrs443, Rrs560, Rrs665, Rrs709)
 
 \item{Rrs709}{Rrs709}
 }
+\value{
+Chla concentration.
+}
 \description{
 TC2_clean
 }

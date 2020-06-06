@@ -1,3 +1,16 @@
+## FCMm 0.8.1 (2020-06-06)
+
+  0. This is a major update for FCMm.
+  1. Updated DESCRIPTION by adding fields `BugReports` and `Authors@R` for more meta infomation. The previous `Author` and `Maintainer` were deleted.
+  2. Rd files in folder `man` were updated including `apply_FCM_m`, `apply_to_image`, `Assessment_via_cluster`, `Bloom`, `BR_Gil10`, `BR_Git11`, `C6`, `cal.metrics.names`, `cal.metrics`, `cal.metrics.vector.names`, `cal.metrics.vector`, `Chla_algorithms_name`, `FBA_Le13`, `FBA_Yang10`, `FCM.new`, `FuzzifierDetermination`, `generate_param`, `Getting_Asses_results`, `Gons08`, `level_to_variable`, `lmodel2_`, `NDCI_Mi12`, `OC4_OLCI`, `OC5_OLCI`, `OC6_OLCI`, `plot_spec`, `plot_spec_from_df`, `QAA_v5`, `RdYlBu`, `read_srf_excel`, `run_all_Chla_algorithms`, `Sampling_via_cluster`, `SCI_Shen10`, `Score_algorithm_interval`, `Score_algorithm_sort`, `Scoring_system`, `show_sensor_names`, `Spectral`, `SRF_simulate`, `TBA_Gil10`, `TBA_Git11`, `TC2`,  `TC2_clean`, `TC2_turbid`, `trapz`, and `trim_sd`.
+  3. Updated README files by adding a new chunk for the assessment part.
+  4. Updated NAMESPACE.
+  5.  All logical varaible `T` and `F` were changed by `TRUE` and `FALSE`.
+  6. There were naming mistakes in `tools.R` for metrics functions `cal.metrics` and `cal.metrics.vector` which replace the `SAPE` (symmetric) series with the `CAPE` (compensated) series.
+  7. Updated `run_all_CHla_algorithms` which could run without stricts for wavelength settings as algorithms with missing wavelength will return NA values alternatively.
+  8. Renamed and updated vignettes for simplication `Assessment` (new), `Builtin_centrodis`,  and `Cluster_new_data`. 
+
+
 ## FCMm 0.7.5 (2020-06-02)
 
   # As the version 0.7.4 was submitted to CRAN, I updated `DESCRIPTION` file follow the requirement by the CRAN which also includes `LICENSE` updated by using `uesthis::use_mit_license(name="Shun Bi")`.

@@ -13,6 +13,9 @@ FBA_Le13(Rrs665, Rrs681, Rrs709)
 
 \item{Rrs709}{Rrs709}
 }
+\value{
+A list including the algorithm index and Chla concentration.
+}
 \description{
 Four-bands algorithm by Le et al. (2013)
 }

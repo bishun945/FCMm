@@ -32,22 +32,7 @@ An improved version of FCM for water spectra data sets.
 }
 \examples{
 \dontrun{
-library(FCMm)
-library(tidyverse)
-data("Nechad2015")
-w <- Nechad2015 \%>\% names \%>\%
-    str_extract(.,pattern="\\\\d") \%>\%
-    is.na \%>\% {!.}
-wv <- w \%>\% names(Nechad2015)[.] \%>\%
-    gsub('X','',.) \%>\% as.numeric
-x <- w \%>\% Nechad2015[,.]
-names(x) <- wv
-rm(w)
-FD <- FuzzifierDetermination(x, wv, stand=F)
-nb <- 4
-set.seed(54321)
-result <- FCM.new(FD, nb)
-print(result$p.jitter)
+  vignette("Cluster_new_data") # see vignetts for more details
 }
 
 }
@@ -65,6 +50,7 @@ Other Fuzzy cluster functions:
 \code{\link{FuzzifierDetermination}()},
 \code{\link{apply_FCM_m}()},
 \code{\link{apply_to_image}()},
+\code{\link{generate_param}()},
 \code{\link{plot_spec_from_df}()}
 }
 \concept{Fuzzy cluster functions}

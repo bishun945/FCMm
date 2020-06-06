@@ -13,6 +13,9 @@ TBA_Git11(Rrs665, Rrs709, Rrs754)
 
 \item{Rrs754}{Rrs754}
 }
+\value{
+A list including the algorithm index and Chla concentration.
+}
 \description{
 Three-bands algorithm by Gitelson et al. (2011)
 }

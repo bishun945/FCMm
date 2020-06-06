@@ -4,7 +4,7 @@
 \alias{trim_sd}
 \title{Standard deviation by trimmed values}
 \usage{
-trim_sd(x, trim = 0.05, na.rm = T)
+trim_sd(x, trim = 0.05, na.rm = TRUE)
 }
 \arguments{
 \item{x}{input numeric vector}
@@ -14,10 +14,18 @@ trim_sd(x, trim = 0.05, na.rm = T)
 \item{na.rm}{default as TRUE to remove NA values}
 }
 \value{
-sd value
+Trimmed standard value of the input data.
 }
 \description{
 Standard deviation by trimmed values
+}
+\examples{
+\dontrun{
+set.seed(1234)
+x = runif(100)
+sd(x)
+trim_sd(x)
+}
 }
 \seealso{
 Other Utils: 
@@ -26,7 +34,6 @@ Other Utils:
 \code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()},
-\code{\link{level_to_variable}()},
-\code{\link{lmodel2_}()}
+\code{\link{level_to_variable}()}
 }
 \concept{Utils}

@@ -4,15 +4,24 @@
 \alias{level_to_variable}
 \title{Convert dataframe with factor to character}
 \usage{
-level_to_variable(dt, warn = F)
+level_to_variable(dt, warn = FALSE)
 }
 \arguments{
 \item{dt}{dataframe}
 
 \item{warn}{warning option}
 }
+\value{
+The dataframe with the leveled columns converted to the character columns.
+}
 \description{
 Convert dataframe with factor to character
+}
+\examples{
+\dontrun{
+x = data.frame(x=seq(1,10), y=as.character(rep(c(1,2),5)))
+x_ = level_to_variable(x)
+}
 }
 \seealso{
 Other Utils: 
@@ -21,7 +30,6 @@ Other Utils:
 \code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()},
-\code{\link{lmodel2_}()},
 \code{\link{trim_sd}()}
 }
 \concept{Utils}

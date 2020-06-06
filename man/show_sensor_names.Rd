@@ -6,6 +6,12 @@
 \usage{
 show_sensor_names()
 }
+\value{
+A character string showing what sensors are supported in the package.
+}
 \description{
 show_sensor_names
+}
+\examples{
+\dontrun{show_sensor_names()}
 }

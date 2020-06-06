@@ -2,13 +2,40 @@
 % Please edit documentation in R/Image_application.R
 \name{generate_param}
 \alias{generate_param}
-\title{generate_param}
+\title{Generate the input param \code{res} of \code{apply_to_image} based on the built-in centroids}
 \usage{
 generate_param(wl)
 }
 \arguments{
 \item{wl}{wavelength of subsetting}
 }
-\description{
-generate_param
+\value{
+A list used for function \link{apply_to_image}.
 }
+\description{
+Generate the input param \code{res} of \code{apply_to_image} based on the built-in centroids
+}
+\note{
+This function only support the cluster centroids proposed by \code{Bi et al. (2019)}
+}
+\examples{
+library(FCMm)
+wl = c(413, 443, 490, 510, 560, 620, 665, 674, 681, 709, 754, 779, 865, 885)
+res = generate_param(wl)
+
+}
+\references{
+\itemize{
+  \item Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
+    an improved Fuzzy C-Means method[J]. Optics Express, 2019, 27(24): 34838-34856.
+}
+}
+\seealso{
+Other Fuzzy cluster functions: 
+\code{\link{FCM.new}()},
+\code{\link{FuzzifierDetermination}()},
+\code{\link{apply_FCM_m}()},
+\code{\link{apply_to_image}()},
+\code{\link{plot_spec_from_df}()}
+}
+\concept{Fuzzy cluster functions}

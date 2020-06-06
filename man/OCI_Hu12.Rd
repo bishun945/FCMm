@@ -17,6 +17,9 @@ OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)
 
 \item{Rrs665}{Rrs665}
 }
+\value{
+A list including the algorithm indices and Chla concentration.
+}
 \description{
 OCI algorithm by Hu et al. (2012)
 }

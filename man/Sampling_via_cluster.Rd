@@ -9,21 +9,32 @@ Sampling_via_cluster(x, num, replace = FALSE)
 \arguments{
 \item{x}{A vector represents the cluster or type, only support numeric value now.}
 
-\item{num}{The number of sampling}
+\item{num}{The number of sampling.}
 
-\item{replace}{The way of sampling. See \code{help(sample)} for more details}
+\item{replace}{The way of sampling. See \code{help(sample)} for more details.}
 }
 \value{
-List
+Result of \code{Sampling_via_cluster} is the index of sampled 
+  items from the input \code{x}.
 }
 \description{
 Stratified sampling by clusters or types
+}
+\examples{
+\dontrun{
+set.seed(1234)
+x = round(runif(100,1,10))
+table(x)
+w_sampled = Sampling_via_cluster(x, 20)
+table(x[w_sampled])
+}
 }
 \seealso{
 Other Algorithm assessment: 
 \code{\link{Assessment_via_cluster}()},
 \code{\link{Getting_Asses_results}()},
 \code{\link{Score_algorithms_interval}()},
+\code{\link{Score_algorithms_sort}()},
 \code{\link{Scoring_system}()}
 }
 \concept{Algorithm assessment}

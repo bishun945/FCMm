@@ -13,6 +13,9 @@ TBA_Gil10(Rrs665, Rrs709, Rrs754)
 
 \item{Rrs754}{Rrs754}
 }
+\value{
+A list including the algorithm index and Chla concentration.
+}
 \description{
 Three-bands algorithm by Gilerson et al. (2010)
 }

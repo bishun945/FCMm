@@ -25,7 +25,7 @@
 #'     \item \strong{K}  Cluster number
 #'     \item \strong{res.FCM}  Cluster center and used fuzzifier value.
 #'   }
-#'   For the convenience, function \code{generate_param()} supports to quickly
+#'   For the convenience, function \link{generate_param} supports to quickly
 #'     generate this \code{list}. See more in examples.
 #' @param output_image Logical, whether to produce image files
 #' @param output_resultpng Logical, whether to produce png files
@@ -78,7 +78,7 @@
 #' data("Bi_clusters")
 #' res <- generate_param(c(413,443,490,510,560,620,665,674,709,754,865,885))
 #' im_result <- apply_to_image(input=OLCI_TH, res=res,
-#'   title.name="Test_image", Chla_est=T, output_image=F)
+#'   title.name="Test_image", Chla_est=TRUE, output_image=FALSE)
 #' }
 #'   
 #' @references 
@@ -124,7 +124,7 @@ apply_to_image <- function(input, res,
 
   if(im@data@nlayers!=length(res$FD$wv))
     stop("The band number of image file is different from wavelength length!")
-  imdf <- as.data.frame(im,na.rm=T,xy=T)
+  imdf <- as.data.frame(im,na.rm=TRUE,xy=TRUE)
   
   x_name <- which(names(imdf) == "x")
   y_name <- which(names(imdf) == "y")
@@ -154,7 +154,7 @@ apply_to_image <- function(input, res,
   m <- res$res.FCM$m
   message('Apply fcm to image dataframe ......')
   res.FCM <- apply_FCM_m(Rrs=imRrs.n, wavelength=wv, Rrs_clusters=v,
-                         default.cluster=F)
+                         default.cluster=FALSE)
   res.im <- list()
   res.im$u <- res.FCM$u %>% as.data.frame
   res.im$cluster <- res.FCM$cluster
@@ -162,7 +162,7 @@ apply_to_image <- function(input, res,
   # Save true color image
   rgb <- brick(input[[10]],input[[7]],input[[5]],input[[2]])
   rgb_stretch <- stretch(x=rgb, minv=0, maxv=255)
-  rgb_df <- as.data.frame(rgb_stretch,xy=T)
+  rgb_df <- as.data.frame(rgb_stretch,xy=TRUE)
   rgb_df <- data.frame(x=rgb_df$x, y=rgb_df$y,
                        n=rgb_df[,3],r=rgb_df[,4], g=rgb_df[,5],b=rgb_df[,6]) %>% na.omit
   p.truecolor=ggplot(data=rgb_df) +
@@ -244,7 +244,7 @@ apply_to_image <- function(input, res,
       message(paste0("Chla concentration map was generated, named: ", fn_Chla))
     }
     message("Plotting Chla concentration ......")
-    options(scipen=1000)
+    oldoptions <- options(scipen=1000)
     p.Chla<- ggplot() +
       geom_raster(data=sub.Chla, aes(x=x,y=y,fill=Chla),
                   hjust=0.5, vjust=0.5) +
@@ -255,7 +255,7 @@ apply_to_image <- function(input, res,
             legend.justification='center',
             legend.key.height=unit(2.5,"lines"),
             strip.background=element_rect(fill='white',color='white'))
-    if(max(sub.Chla$Chla, na.rm=T) >= 800){
+    if(max(sub.Chla$Chla, na.rm=TRUE) >= 800){
       p.Chla <- p.Chla +
         scale_fill_viridis_c(na.value='gray', trans='log10',
                            limits=c(1,800),
@@ -264,7 +264,7 @@ apply_to_image <- function(input, res,
       p.Chla <- p.Chla +
         scale_fill_viridis_c(na.value='gray', trans='log10',
                            breaks=c(10^seq(0,2.9,0.5)) %>%
-                             .[. < max(sub.Chla$Chla, na.rm=T)] %>% round(.,2))
+                             .[. < max(sub.Chla$Chla, na.rm=TRUE)] %>% round(.,2))
     }
     print(p.Chla)
   }
@@ -298,13 +298,29 @@ apply_to_image <- function(input, res,
   result$res.Chla <- res.Chla
 
   message('Done!')
+  
+  on.exit(options(oldoptions))
+  
   return(result)
 }
 
-#' @title generate_param
+#' @title Generate the input param \code{res} of \code{apply_to_image} based on the built-in centroids
 #' @name generate_param
 #' @param wl wavelength of subsetting
 #' @export
+#' @note This function only support the cluster centroids proposed by \code{Bi et al. (2019)}
+#' @return A list used for function \link{apply_to_image}.
+#' @family Fuzzy cluster functions
+#' @references 
+#' \itemize{
+#'   \item Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
+#'     an improved Fuzzy C-Means method[J]. Optics Express, 2019, 27(24): 34838-34856.
+#' }
+#' @examples 
+#' library(FCMm)
+#' wl = c(413, 443, 490, 510, 560, 620, 665, 674, 681, 709, 754, 779, 865, 885)
+#' res = generate_param(wl)
+#' 
 generate_param <- function(wl){
   w <- (wavelength.default %in% wl)
   wavelength <- wavelength.default[w]

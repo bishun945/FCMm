@@ -10,7 +10,7 @@ plot_spec_from_df(df)
 \item{df}{Data.frame for Rrs plotting}
 }
 \value{
-A ggplot list
+A ggplot list showing spectra curve
 }
 \description{
 Spectra plot for a dataframe given numeric colnames
@@ -23,6 +23,7 @@ Other Fuzzy cluster functions:
 \code{\link{FCM.new}()},
 \code{\link{FuzzifierDetermination}()},
 \code{\link{apply_FCM_m}()},
-\code{\link{apply_to_image}()}
+\code{\link{apply_to_image}()},
+\code{\link{generate_param}()}
 }
 \concept{Fuzzy cluster functions}

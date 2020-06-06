@@ -17,6 +17,9 @@ OC5_OLCI(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560)
 
 \item{Rrs560}{Rrs560}
 }
+\value{
+A list including the algorithm index and Chla concentration.
+}
 \description{
 NASA standard ocean color algorithm (version 5) for the OLCI bands
 }

@@ -18,7 +18,7 @@ TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)
 \item{Rrs754}{Rrs754}
 }
 \value{
-A list with names as Chla_final, Chla_clean, Chla_turbid, and flag
+A list including MCI index, Chla_final, Chla_clean, Chla_turbid, and flag.
 }
 \description{
 Chla concentration method for turbid case-2 waters by Liu et al. (2020)

@@ -1,10 +1,12 @@
 Package: FCMm
 Type: Package
 Title: Fuzzy Cluster Method Based on the Optimized m Value (Fuzzifier)
-Version: 0.7.5
-Authors@R: c(person("Shun", "Bi", ,"bishun1994@foxmail.com", c("aut","cre")))
-Author: Shun Bi [aut, cre]
-Maintainer: Shun Bi <bishun1994@foxmail.com>
+Version: 0.8.1
+Authors@R: c(
+    person("Shun", "Bi", , "bishun1994@foxmail.com", role = c("aut","cre")),
+    person("Yunmei", "Li", , "liyunmei@njnu.edu.cn", role = c("aut","cph")),
+    person("Ge", "Liu", , "liugers@163.com", role = "ctb")
+    )
 Description: Functions provide an improved FCM method (FCMm) for optical classification
     of inland waters remote sensing (Bi et al, 2019) <doi:10.1364/OE.27.034838>. Users can 
     train their own high dimensional spectra data to obtain the centroid via FCMm or just use 
@@ -16,6 +18,7 @@ Description: Functions provide an improved FCM method (FCMm) for optical classif
 Depends: R (>= 3.6)
 License: MIT + file LICENSE
 URL: https://github.com/bishun945/FCMm
+BugReports: https://github.com/bishun945/FCMm/issues
 Imports: 
     readxl (>= 1.3.1),
     stringr (>= 1.4.0),

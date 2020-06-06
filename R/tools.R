@@ -1,15 +1,23 @@
-#' @title Assess the performance of algorithms
 #' @name cal.metrics
+#' @title Assess the performance of algorithms
 #' @usage cal.metrics(x,y,name="all",log10=FALSE)
 #' @param x True value OR Actual value
 #' @param y Estimated value OR Predict value
 #' @param name The name of metrics
 #' @param log10 Logical. Whether the input x and y should be log10-transformed
 #' @export
+#' @return Result of \code{cal.metrics} is a list of selected metric values.
 #' @family Utils
 #' @note (2020-02-09) All functions used log10 transformation was assigned to the 
-#'   Key parameter `log10`
-#' 
+#'   Key parameter `log10`.
+#' @examples 
+#' \dontrun{
+#' set.seed(1234)
+#' x = runif(20)
+#' y = runif(20)
+#' result = cal.metrics(x, y)
+#' print(result)
+#' }
 #' @importFrom stats cor cor.test median na.omit sd
 #' @importFrom stats confint cov lm qt var
 #' @importFrom magrittr %>% %<>%
@@ -24,90 +32,109 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
   
   # RMSE Series (Root mean squared error)
   .cal.rmse <- function(x,y){
-    return(sqrt(mean((x-y)^2, na.rm=T)))
+    return(sqrt(mean((x-y)^2, na.rm=TRUE)))
   }
   
   .cal.crmse<-function(x,y){
-    return(sqrt(mean((((x-mean(x, na.rm=T))-(y-mean(y, na.rm=T))))^2, na.rm=T)))
+    return(sqrt(mean((((x-mean(x, na.rm=TRUE))-(y-mean(y, na.rm=TRUE))))^2, na.rm=TRUE)))
   }
   
   # MAE Series (Mean absolute error)
   .cal.mae<-function(x,y){
-    return(mean(abs(y-x), na.rm=T))
+    return(mean(abs(y-x), na.rm=TRUE))
   }
   
   .cal.mdae<-function(x,y){
-    return(median(abs(y-x), na.rm=T))
+    return(median(abs(y-x), na.rm=TRUE))
   }
 
   .cal.nmae_sd <- function(x,y){
-    return(mean(abs(y-x), na.rm=T)/sd(y, na.rm=T))
+    return(mean(abs(y-x), na.rm=TRUE)/sd(y, na.rm=TRUE))
   }
   
   .cal.nmdae_sd <- function(x,y){
-    return(median(abs(y-x), na.rm=T)/sd(y, na.rm=T))
+    return(median(abs(y-x), na.rm=TRUE)/sd(y, na.rm=TRUE))
   }
   
   # MAPE Series (Mean absolute percent error)
   .cal.mape<-function(x,y){
-    return(mean(abs((y-x)/x), na.rm=T)*100)
+    return(mean(abs((y-x)/x), na.rm=TRUE)*100)
   }
   
+  ## Compensated series
+  .cal.cmape <- function(x,y){
+    return(mean(       abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=TRUE)))       , na.rm=TRUE)*100)
+  }
+  
+  .cal.cmdape <- function(x,y){
+    return(median(       abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=TRUE)))       , na.rm=TRUE)*100)
+  }
+  
+  .cal.cmrpe <- function(x,y){
+    return(mean(       (2*(y-x))/((x)+(mean(x, na.rm=TRUE)))       , na.rm=TRUE)*100)
+  }
+  
+  .cal.cmdrpe <- function(x,y){
+    return(median(       (2*(y-x))/((x)+(mean(x, na.rm=TRUE)))       , na.rm=TRUE)*100)
+  }
+  
+  ## Symmetric series
   .cal.smape <- function(x,y){
-    return(mean(       abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=T)))       , na.rm=T)*100)
+    return(mean(       abs(2*(y-x))/(abs(x)+abs(y))       , na.rm=TRUE)*100)
   }
   
   .cal.smdape <- function(x,y){
-    return(median(       abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=T)))       , na.rm=T)*100)
+    return(median(       abs(2*(y-x))/(abs(x)+abs(y))       , na.rm=TRUE)*100)
   }
   
   .cal.smrpe <- function(x,y){
-    return(mean(       (2*(y-x))/((x)+(mean(x, na.rm=T)))       , na.rm=T)*100)
+    return(mean(       (2*(y-x))/(x+y)       , na.rm=TRUE)*100)
   }
   
   .cal.smdrpe <- function(x,y){
-    return(median(       (2*(y-x))/((x)+(mean(x, na.rm=T)))       , na.rm=T)*100)
+    return(median(       (2*(y-x))/(x+y)       , na.rm=TRUE)*100)
   }
   
+  ## 
   .cal.mdape<-function(x,y){
-    return(median(abs((y-x)/x), na.rm=T)*100)
+    return(median(abs((y-x)/x), na.rm=TRUE)*100)
   }
   
   .cal.mrpe<-function(x,y){
-    return(mean((y-x)/x, na.rm=T)*100)
+    return(mean((y-x)/x, na.rm=TRUE)*100)
   }
   
   .cal.mdrpe<-function(x,y){
-    return(median((y-x)/x, na.rm=T)*100)
+    return(median((y-x)/x, na.rm=TRUE)*100)
   }
   
   .cal.umrpe <- function(x,y){
-    return(mean((y-x)/(0.5*x+0.5*y)*100, na.rm=T))
+    return(mean((y-x)/(0.5*x+0.5*y)*100, na.rm=TRUE))
   }
   
   .cal.umdrpe <- function(x,y){
-    return(median((y-x)/(0.5*x+0.5*y)*100, na.rm=T))
+    return(median((y-x)/(0.5*x+0.5*y)*100, na.rm=TRUE))
   }
   
   # Bias Series 
   .cal.bias<-function(x,y){
-    return(mean((y-x), na.rm=T))
+    return(mean((y-x), na.rm=TRUE))
   }
   
   .cal.md_bias<-function(x,y){
-    return(median((y-x), na.rm=T))
+    return(median((y-x), na.rm=TRUE))
   }
   
   .cal.ratio <- function(x,y){
-    return(mean(y/x, na.rm=T))
+    return(mean(y/x, na.rm=TRUE))
   }
   
   .cal.md_ratio <- function(x,y){
-    return(median(y/x, na.rm=T))
+    return(median(y/x, na.rm=TRUE))
   }
   
   .cal.cv<-function(x,y){
-    return(sd(y, na.rm=T) / mean(y, na.rm=T) * 100)
+    return(sd(y, na.rm=TRUE) / mean(y, na.rm=TRUE) * 100)
   }
   
   .cal.R<-function(x,y){
@@ -172,7 +199,7 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
   }
   
   .cal.chi2<-function(x,y){
-    return(sum((x-y)^2/y, na.rm=T))
+    return(sum((x-y)^2/y, na.rm=TRUE))
   }
 
   if(name == "RMSE"){
@@ -189,6 +216,7 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
     result <- .cal.nmdae_sd(x,y)
   }else if(name == "MAPE"){
     result <- .cal.mape(x,y)
+  # Symmetric series
   }else if(name == "SMAPE"){
     result <- .cal.smape(x,y)
   }else if(name == "SMDAPE"){
@@ -197,6 +225,16 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
     result <- .cal.smrpe(x,y)
   }else if(name == "SMDRPE"){
     result <- .cal.smdrpe(x,y)
+  # Compensated series
+  }else if(name == "CMAPE"){
+    result <- .cal.cmape(x,y)
+  }else if(name == "CMDAPE"){
+    result <- .cal.cmdape(x,y)
+  }else if(name == "CMRPE"){
+    result <- .cal.cmrpe(x,y)
+  }else if(name == "CMDRPE"){
+    result <- .cal.cmdrpe(x,y)
+  # 
   }else if(name == "MDAPE"){
     result <- .cal.mdape(x,y)
   }else if(name == "MRPE"){
@@ -240,10 +278,17 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
                    NMAE_SD   = .cal.nmae_sd(x,y),
                    NMDAE_SD  = .cal.nmdae_sd(x,y),
                    MAPE      = .cal.mape(x,y),
+                   # Symmetric seires
                    SMAPE     = .cal.smape(x,y),
                    SMDAPE    = .cal.smdape(x,y),
                    SMRPE     = .cal.smrpe(x,y),
                    SMDRPE    = .cal.smdrpe(x,y),
+                   # Compensated seires
+                   CMAPE     = .cal.cmape(x,y),
+                   CMDAPE    = .cal.cmdape(x,y),
+                   CMRPE     = .cal.cmrpe(x,y),
+                   CMDRPE    = .cal.cmdrpe(x,y),
+                   # 
                    MDAPE     = .cal.mdape(x,y),
                    MRPE      = .cal.mrpe(x,y),
                    MDRPE     = .cal.mdrpe(x,y),
@@ -269,13 +314,15 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
 #' @title List all metrics in function cal.metrics
 #' @name cal.metrics.names
 #' @export
-#' @return strings
+#' @return The string character presenting what metrics will be calculated via \code{cal.metrics()}
+#' @examples \dontrun{cal.metrics.names()}
 #' @family Utils
 cal.metrics.names <- function(){
   c('RMSE','CRMSE',
     'MAE','MDAE','NMAE_SD','NMDAE_SD',
     'MAPE', 'SMAPE', 'SMRPE', 'MDAPE',"MRPE",'MDRPE',"UMRPE",'UMDRPE',
     'SMDAPE','SMDRPE',
+    'CMAPE', 'CMRPE','CMDAPE','CMDRPE',
     'BIAS', 'MD_BIAS', 'RATIO', 'MD_RATIO',
     'CV','R','R2',
     'SLOPE', 'INTERCEPT', 'R2_SMA',
@@ -290,8 +337,16 @@ cal.metrics.names <- function(){
 #' @param name The name of metrics
 #' @param log10 Logical. Whether the input x and y should be log10-transformed
 #' @export
+#' @return Result of \code{cal.metrics.vector} is a list of selected metric values.
 #' @importFrom stats cor cor.test median na.omit sd
 #' @family Utils
+#' @examples 
+#' \dontrun{
+#' set.seed(1234)
+#' x = runif(100)
+#' y = runif(100)
+#' result = cal.metrics.vector(x,y)
+#' }
 #' 
 cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
 
@@ -307,23 +362,33 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
   }
   
   .cal.nmae<-function(x,y){
-    return(abs(y-x) / sd(y, na.rm=T))
+    return(abs(y-x) / sd(y, na.rm=TRUE))
   }
   
   .cal.mape<-function(x,y){
     return(abs((y-x)/x)*100)
   }
   
+  ## Symmetric sereis
   .cal.smape <- function(x,y){
-    return(abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=T)))*100)
+    return(abs(2*(y-x))/(abs(x)+abs(y))*100)
   }
   
   .cal.smrpe <- function(x,y){
-    return((2*(y-x))/((x)+(mean(x, na.rm=T)))*100)
+    return((2*(y-x))/((x)+(y))*100)
+  }
+  
+  ## Compensated sereis
+  .cal.cmape <- function(x,y){
+    return(abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=TRUE)))*100)
+  }
+  
+  .cal.cmrpe <- function(x,y){
+    return((2*(y-x))/((x)+(mean(x, na.rm=TRUE)))*100)
   }
   
   .cal.nmape<-function(x,y){
-    return(abs((y-x)/x) / sd(y, na.rm=T) *100)
+    return(abs((y-x)/x) / sd(y, na.rm=TRUE) *100)
   }
   
   .cal.mrpe<-function(x,y){
@@ -331,7 +396,7 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
   }
   
   .cal.nmrpe<-function(x,y){
-    return((y-x)/x / sd(y, na.rm=T) *100)
+    return((y-x)/x / sd(y, na.rm=TRUE) *100)
   }
   
   .cal.umrpe <- function(x,y){
@@ -352,10 +417,17 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
     result <- .cal.nmae(x,y)
   }else if(name == "MAPE"){
     result <- .cal.mape(x,y)
+  ## Symmetric
   }else if(name == "SMAPE"){
     result <- .cal.smape(x,y)
   }else if(name == "SMRPE"){
     result <- .cal.smrpe(x,y)
+  ## Compensated
+  }else if(name == "CMAPE"){
+    result <- .cal.cmape(x,y)
+  }else if(name == "CMRPE"){
+    result <- .cal.cmrpe(x,y)
+  ##
   }else if(name == "NMAPE"){
     result <- .cal.nmape(x,y)
   }else if(name == "MRPE"){
@@ -373,8 +445,13 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
     result <- list(MAE   = .cal.mae(x,y),
                    NMAE  = .cal.nmae(x,y),
                    MAPE  = .cal.mape(x,y),
+                   # symmetric
                    SMAPE = .cal.smape(x,y),
                    SMRPE = .cal.smrpe(x,y),
+                   # compensated
+                   CMAPE = .cal.cmape(x,y),
+                   CMRPE = .cal.cmrpe(x,y),
+                   # 
                    NMAPE = .cal.nmape(x,y),
                    MRPE  = .cal.mrpe(x,y),
                    NMRPE = .cal.nmrpe(x,y),
@@ -389,11 +466,12 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
 #' @title List all metrics in function cal.metrics
 #' @name cal.metrics.vector.names
 #' @export
-#' @return strings
+#' @return The string character presenting what metrics will be calculated via \code{cal.metrics.vector()}
 #' @family Utils
+#' @examples \dontrun{cal.metrics.vector.names()}
 cal.metrics.vector.names <- function(){
   c('MAE', 'NMAE',
-    'MAPE', 'SMAPE', 'NMAPE',
+    'MAPE', 'SMAPE', 'NMAPE', 'CMAPE','CMRPE',
     'MRPE', 'SMRPE', 'NMRPE', 'UMRPE',
     'BIAS', 'RATIO', 'all')
 }
@@ -404,9 +482,16 @@ cal.metrics.vector.names <- function(){
 #' @param trim percent of length(x) to be trimmed
 #' @param na.rm default as TRUE to remove NA values
 #' @export
-#' @return sd value
+#' @return Trimmed standard value of the input data.
+#' @examples 
+#' \dontrun{
+#' set.seed(1234)
+#' x = runif(100)
+#' sd(x)
+#' trim_sd(x)
+#' }
 #' @family Utils
-trim_sd <- function(x, trim=0.05, na.rm=T){
+trim_sd <- function(x, trim=0.05, na.rm=TRUE){
   
   stopifnot(is.vector(x) & is.numeric(x) & is.numeric(trim))
   
@@ -434,9 +519,15 @@ trim_sd <- function(x, trim=0.05, na.rm=T){
 #' @name level_to_variable
 #' @param dt dataframe
 #' @param warn warning option
+#' @return The dataframe with the leveled columns converted to the character columns. 
 #' @export
+#' @examples 
+#' \dontrun{
+#' x = data.frame(x=seq(1,10), y=as.character(rep(c(1,2),5)))
+#' x_ = level_to_variable(x)
+#' }
 #' @family Utils
-level_to_variable <- function(dt, warn=F){
+level_to_variable <- function(dt, warn=FALSE){
   if(!is.data.frame(dt))
     stop('Input must be a data.frame')
   w <- NULL
@@ -455,6 +546,15 @@ level_to_variable <- function(dt, warn=F){
   }
 }
 
+#' @name .compdist
+#' @title Compute distance of two vectors
+#' @param a One vector
+#' @param b Another vector
+#' @param demetric Metric of distance, default as \code{sqeuclidean}
+#' @param pw pw
+#' @return Distance of vectors.
+#' @noRd
+#' 
 .compdist <- function(a, b, dmetric="sqeuclidean", pw=2){
   if(missing(a))
     stop("Missing data arguments to compute the distances")
@@ -506,9 +606,9 @@ level_to_variable <- function(dt, warn=F){
 }
 
 
-#' @title Run SMA linear regression
 #' @name lmodel2_
-#' @export
+#' @title Run SMA linear regression
+#' @noRd
 #' @return A lmodel2 function list
 #' @param formula See package \code{lmodel2} for more details
 #' @param data See package \code{lmodel2} for more details
@@ -921,23 +1021,32 @@ SRF_simulate <- function(Rrs,
     for(sheet in names(result)){
       write.csv(result[[sheet]]$Rrs_simu,
                 file=sprintf('./Simulated_Rrs_%s.csv',sheet),
-                row.names=F)
+                row.names=FALSE)
     }
   }
   return(result)
 }
 
-
-
+#' @name cal_SRF
+#' @title Spectral response function calculation
+#' @param Rrs_single A vector presenting Rrs.
+#' @param srf Used srf data.
+#' @return  The simualted Rrs
+#' @noRd
+#' 
 cal_SRF <- function(Rrs_single, srf){
   result <- matrix(nrow=ncol(srf)-1, data=0) %>% as.data.frame()
   for(i in 2:(ncol(srf))){
-    result[i-1,] <- sum(Rrs_single * srf[,i], na.rm=T) / sum(srf[,i], na.rm=T)
+    result[i-1,] <- sum(Rrs_single * srf[,i], na.rm=TRUE) / sum(srf[,i], na.rm=TRUE)
   }
   return(result)
 }
 
-
+#' @name read_srf_excel
+#' @title Read srf data from excel file
+#' @param fn filename of excel file
+#' @return The list of SRF for different sensors.
+#' @export
 #' @importFrom readxl excel_sheets read_excel
 read_srf_excel <- function(fn){
   SRF_LIST <- list()
@@ -955,8 +1064,11 @@ read_srf_excel <- function(fn){
   return(SRF_LIST)
 }
 
-
-
+#' @name find_center_wavelength_med
+#' @title find_center_wavelength_med
+#' @param dt dataframe
+#' @return center wavelength
+#' @noRd
 find_center_wavelength_med <- function(dt){
   nm <- dt[,1]
   center_wv <- 2:dim(dt)[2]
@@ -970,8 +1082,11 @@ find_center_wavelength_med <- function(dt){
   return(center_wv)
 }
 
-
-
+#' @name find_center_wavelength_max
+#' @title find_center_wavelength_max
+#' @param dt dataframe
+#' @return center wavelength
+#' @noRd
 find_center_wavelength_max <- function(dt){
   nm <- dt[,1]
   center_wv <- 2:dim(dt)[2]
@@ -989,20 +1104,23 @@ find_center_wavelength_max <- function(dt){
 
 #' @title show_sensor_names
 #' @name show_sensor_names
-#' @description show_sensor_names
 #' @usage show_sensor_names()
+#' @examples \dontrun{show_sensor_names()}
+#' @return A character string showing what sensors are supported in the package.
 #' @export
 show_sensor_names <- function(){
   return(names(SRF_LIST))
 }
 
 
-# color platte
+
+## color platte
 
 #' @name Spectral
 #' @title Spectral
 #' @param n Number of colors
 #' @return Color codes
+#' @examples \dontrun{Spectral(7)}
 #' @export
 Spectral <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
 
@@ -1010,8 +1128,8 @@ Spectral <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral")
 #' @title RdYlBu
 #' @param n Number of colors
 #' @return Color codes
+#' @examples
+#' \dontrun{RdYlBu(7)}
 #' @export
 RdYlBu <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlBu"))
-
-
 

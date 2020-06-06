@@ -17,6 +17,9 @@ TC2_turbid(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)
 
 \item{Rrs754}{Rrs754}
 }
+\value{
+Chla concentration.
+}
 \description{
 TC2_turbid
 }

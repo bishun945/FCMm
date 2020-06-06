@@ -15,3 +15,6 @@ Color codes
 \description{
 Spectral
 }
+\examples{
+\dontrun{Spectral(7)}
+}

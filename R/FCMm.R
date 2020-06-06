@@ -23,18 +23,12 @@
 #' @export
 #' @examples 
 #' \dontrun{
-#' library(FCMm)
-#' library(tidyverse)
-#' data("Nechad2015")
-#' w <- Nechad2015 %>% names %>%
-#'     str_extract(.,pattern="\\d") %>%
-#'     is.na %>% {!.}
-#' wv <- w %>% names(Nechad2015)[.] %>%
-#'     gsub('X','',.) %>% as.numeric
-#' x <- w %>% Nechad2015[,.]
+#' library(FCMm) 
+#' x <- Nechad2015[,3:11]
+#' wv <- gsub("X","",names(x)) %>% as.numeric
+#' set.seed(1234)
 #' names(x) <- wv
-#' rm(w)
-#' FD <- FuzzifierDetermination(x, wv, stand=F)
+#' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 #' }
 #' @references 
 #' \itemize{
@@ -134,7 +128,7 @@ FuzzifierDetermination <- function(x, wv, max.m=10, stand=FALSE, dmetric="sqeucl
 #' @title Trapezoid integral calculation
 #' @param wv wavelength
 #' @param x data.frame that need to be trapzed with ncol equal to length of\code{wv}
-#' @return A vector presents the area result.
+#' @return A vector presenting the area result.
 #' @export
 #' @examples 
 #' \dontrun{
@@ -151,7 +145,6 @@ FuzzifierDetermination <- function(x, wv, max.m=10, stand=FALSE, dmetric="sqeucl
 #' rm(w)
 #' Area <- trapz(wv, x)
 #' }
-
 trapz <- function(wv,x){
   Area <-  as.matrix(x[,1])
   for(i in 1:dim(x)[1]){
@@ -162,7 +155,14 @@ trapz <- function(wv,x){
   return(as.matrix(Area))
 }
 
-.commub <- function(x,max.m){
+#' @name .commub
+#' @title Compute the upper boundary of m values
+#' @param x Input dataframe
+#' @param max.m The defined maxmium of m values
+#' @return The used m value.
+#' @noRd
+#' 
+.commub <- function(x, max.m){
   dismt <- .compdismt(x)
   ii <- 1
   Ym <- NULL
@@ -177,6 +177,12 @@ trapz <- function(wv,x){
   return(m.ub)
 }
 
+#' @name .compdismt
+#' @title Compute distance matrix
+#' @param x Input dataframe
+#' @return Distance matrix.
+#' @noRd
+#' 
 .compdismt <-function(x){
   x <- as.matrix(x)
   n <- dim(x)[1]
@@ -200,9 +206,7 @@ trapz <- function(wv,x){
 
 #' @name FCM.new
 #' @title Running the improved FCM by optimizing fuzzifier parameter
-#' @description
-#' An improved version of FCM for water spectra data sets.
-#'
+#' @description An improved version of FCM for water spectra data sets.
 #' @usage FCM.new(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE, stand=FALSE)
 #'
 #' @param FDlist A \code{list} from function \code{\link{FuzzifierDetermination}}
@@ -223,22 +227,7 @@ trapz <- function(wv,x){
 #' @export
 #' @examples 
 #' \dontrun{
-#' library(FCMm)
-#' library(tidyverse)
-#' data("Nechad2015")
-#' w <- Nechad2015 %>% names %>%
-#'     str_extract(.,pattern="\\d") %>%
-#'     is.na %>% {!.}
-#' wv <- w %>% names(Nechad2015)[.] %>%
-#'     gsub('X','',.) %>% as.numeric
-#' x <- w %>% Nechad2015[,.]
-#' names(x) <- wv
-#' rm(w)
-#' FD <- FuzzifierDetermination(x, wv, stand=F)
-#' nb <- 4
-#' set.seed(54321)
-#' result <- FCM.new(FD, nb)
-#' print(result$p.jitter)
+#'   vignette("Cluster_new_data") # see vignetts for more details
 #' }
 #' 
 #' @references 
@@ -304,7 +293,12 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 
 
 
-#' @importFrom ppclust is.ppclust
+#' @name .cal.new.membership
+#' @title Calculate the membership of results from \code{ppclust}
+#' @param x Result of \code{ppclust} object.
+#' @return The corrected membership values.
+#' @noRd
+#' 
 .cal.new.membership <- function(res){
   if(!is.ppclust(res))
     stop("The input value is not a ppclust list!")
@@ -312,7 +306,11 @@ FCM.new <- function(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
 }
 
 
-
+#' @name .plot.jitter
+#' @title .plot.jitter
+#' @param res Result of \code{ppclust} object.
+#' @return A ggplot list showing jitter.
+#' @noRd
 #' @importFrom ppclust is.ppclust
 #' @importFrom reshape2 melt
 .plot.jitter <- function(res){
@@ -532,7 +530,24 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
 #' @method plot spec
 #' 
 #' @examples 
-#' \dontrun{p.spec <- plot_spec(result, show.stand=FALSE, HABc=NULL)}
+#' \dontrun{
+#' library(FCMm) 
+#' library(ggplot2) 
+#' library(magrittr)
+#' data("Nechad2015")
+#' x <- Nechad2015[,3:11]
+#' wv <- gsub("X","",names(x)) %>% as.numeric
+#' set.seed(1234) # Set this seed so that you can re-produce them
+#' w <- sample(1:nrow(x), 100)
+#' x <- x[w, ]
+#' names(x) <- wv
+#' nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
+#' set.seed(1234)
+#' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+#' result <- FCM.new(FD, nb, fast.mode = TRUE)
+#' p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+#' print(p.spec$p.cluster.spec)
+#' }
 #' 
 #' @references
 #' Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
@@ -569,7 +584,7 @@ plot_spec <- function(res, show.stand=FALSE, HABc=NULL){
 #' @usage plot_spec_from_df(df)
 #' @param df Data.frame for Rrs plotting
 #' @note The colnames of input `df` should be numericalize (i.e. names(df) %>% as.numeric)
-#' @return A ggplot list
+#' @return A ggplot list showing spectra curve
 #'
 #' @export
 #' @family Fuzzy cluster functions
@@ -595,7 +610,13 @@ plot_spec_from_df <- function(df){
 }
 
 
-
+#' @name .plot.all.spec
+#' @title .plot.all.spec
+#' @param res Result of \code{FCM.new()} object.
+#' @param show.stand Whether show the spectra on standarized scale.
+#' @return A ggplot list showing all spectra.
+#' @noRd
+#' 
 .plot.all.spec <- function(res, show.stand){
   wavelength <- res$FD$wv %>% as.character
   if(show.stand==FALSE){
@@ -621,7 +642,13 @@ plot_spec_from_df <- function(df){
 }
 
 
-
+#' @name .plot.cluster.spec
+#' @title .plot.cluster.spec
+#' @param res Result of \code{FCM.new()} object.
+#' @param show.stand Whether show the spectra on standarized scale.
+#' @return A ggplot list showing the spectra of centroids.
+#' @noRd
+#' 
 .plot.cluster.spec <- function(res, show.stand){
   wavelength <- res$FD$wv
   p <- length(wavelength)
@@ -651,7 +678,16 @@ plot_spec_from_df <- function(df){
 }
 
 
-
+#' @name .plot.group.spec
+#' @title .plot.group.spec
+#' @param res Result of \code{FCM.new()} object.
+#' @param show.stand Whether show the spectra on standarized scale.
+#' @param HABc The defined cluster containing the HAB type (i.e., for the larger scale limit).
+#' @param mem.crisp Default as \code{TRUE} to decide to present spectra in two colors.
+#' @param mem.threshold Default as \code{0.8} as the threshold to show the different colors.
+#' @return A ggplot list showing the spectra by group
+#' @noRd
+#' 
 .plot.group.spec <- function(res, show.stand, HABc=NULL, mem.crisp=TRUE, mem.threshold=0.8){
   # HABc could be user-defined if checked by function .plot.cluster.spec
   

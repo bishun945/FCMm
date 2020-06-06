@@ -6,6 +6,9 @@
 \usage{
 Chla_algorithms_name()
 }
+\value{
+Character of the supported Chla algorithm names in this package.
+}
 \description{
 Pring all Chla algorithms name
 }

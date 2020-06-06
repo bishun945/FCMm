@@ -13,6 +13,9 @@ FBA_Yang10(Rrs665, Rrs709, Rrs754)
 
 \item{Rrs754}{Rrs754}
 }
+\value{
+A list including the algorithm index and Chla concentration.
+}
 \description{
 Four-bands algorithm by Yang et al. (2010)
 }

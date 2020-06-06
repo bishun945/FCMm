@@ -1,0 +1,119 @@
+---
+title: "Algorithms assessment via cluster"
+author: "Shun Bi"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Algorithms assessment via cluster}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+	fig.align = "center",
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+This vignette mainly shows how to use function `Assessment_via_cluster()` for comparing several algorithms if membership values (returned by `FCM.new()`) are given. I am also happy to introduce the function `run_all_Chla_algorithms()` for running all supported Chla estimation algorithms (run `Chla_algorithms_name()` to see the algorithm names). 
+
+Here we use the `Nechad2015` dataset as the example. Similarly, 100 samples are randomly selected from the original set to save the running time. You can test the whole set if you want. 
+
+# Preparing the data set
+
+Based on some prior knowledge (shown in other vignettes), we set the cluster number (i.e., `nb`) as `4` and run the `FCMm` with normalized spectra.
+
+```{r fig.height=3, fig.width=4, message=FALSE, warning=FALSE}
+library(FCMm) 
+library(ggplot2) 
+library(magrittr)
+library(stringr)
+data("Nechad2015")
+x <- Nechad2015[,3:11]
+wv <- gsub("X","",names(x)) %>% as.numeric
+set.seed(1234) # Set this seed so that you can re-produce them
+w <- sample(1:nrow(x), 100) # sample 100 rows of the orignal data, you can test the whole set if you like
+x <- x[w, ]
+names(x) <- wv
+nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
+set.seed(1234)
+FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+result <- FCM.new(FD, nb, fast.mode = TRUE)
+p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+print(p.spec$p.cluster.spec)
+Chla <- Nechad2015$X.Chl_a..ug.L.[w]
+Chla[Chla >= 999] <- NA
+```
+
+# Algorithm assessment via cluster
+
+`BR_Gil10`, `OC4_OLCI`, `OCI_Hu12`, and `NDCI_Mi12` are selected for estimating the Chla concentration. Since there are several `NA` values in the selected measured Chla concentration (also termed as actual value) from `Nechad2015`, observations including `NA` values are removed from the input set.
+
+## Chlorophyll a concentration estimation
+```{r}
+dt_Chla <- run_all_Chla_algorithms(x) %>% as.data.frame
+dt_Chla <- data.frame(
+  Chla_true = Chla, 
+  BR_Gil10 = dt_Chla$BR_Gil10,
+  OC4_OLCI = dt_Chla$OC4_OLCI,
+  OCI_Hu12 = dt_Chla$OCI_Hu12,
+  NDCI_Mi12= dt_Chla$NDCI_Mi12
+) %>% round(3)
+w = which(!is.na(dt_Chla$Chla_true))
+dt_Chla = dt_Chla[w,]
+memb = result$res.FCM$u[w,] %>% round(4)
+```
+
+## Scatter plot for the selected algorithms
+
+Shown in the scatter plots, the `OC4_OLCI` and `OCI_Hu12` performed better than other two algorithms across all water clusters.
+
+```{r fig.height=3, fig.width=4}
+data.frame(dt_Chla, cluster = result$res.FCM$cluster[w] %>% as.character) %>%
+  reshape2::melt(., id=c("Chla_true","cluster")) %>% 
+  ggplot() + 
+  geom_point(aes(Chla_true, value, color=cluster, group=variable)) + 
+  geom_abline(slope=1, intercept=0, linetype=2) + 
+  facet_wrap(~variable) + 
+  scale_x_log10(limits=c(0.1, 200), name="Actual value") + 
+  scale_y_log10(limits=c(0.1, 200), name="Predicted value") + 
+  scale_color_brewer(palette = "Set1", name="Cluster") + 
+  theme_bw() + 
+  theme(text = element_text(size=13))
+```
+
+## Algorithms assessment via cluster in soft and hard mode
+
+There is no need `cluster` information in the function `Assessment_via_cluster()` because the cluster will be found via membership matrix (i.e., the parameter `memb`). I fully recommend to set `na.process = TRUE` so that the function will count the valid result. `plot.col` is very useful when you want to visually see the performance comparison between different algorithms.
+
+```{r fig.height=3, fig.width=5, message=FALSE, warning=FALSE}
+colnames(memb) <- 1:4
+Asses_soft <- Assessment_via_cluster(pred = dt_Chla[,-1],
+                                     meas = dt_Chla[,1],
+                                     memb = memb,
+                                     log10 = TRUE,
+                                     hard.mode = FALSE,
+                                     na.process = TRUE,
+                                     plot.col = TRUE)
+
+Asses_hard <- Assessment_via_cluster(pred = dt_Chla[,-1],
+                                     meas = dt_Chla[,1],
+                                     memb = memb,
+                                     log10 = TRUE,
+                                     hard.mode = TRUE,
+                                     na.process = TRUE,
+                                     plot.col = TRUE)
+
+Asses_soft$res_plot_facet
+knitr::kable(Asses_soft$MAE %>% round(3))
+knitr::kable(Asses_soft$MAPE %>% round(2))
+
+Asses_hard$res_plot_facet
+knitr::kable(Asses_hard$MAE %>% round(3))
+knitr::kable(Asses_hard$MAPE %>% round(2))
+```
+

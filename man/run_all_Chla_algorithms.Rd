@@ -13,7 +13,8 @@ run_all_Chla_algorithms(Rrs, wv_range = 3)
 the center wavelength of required band}
 }
 \value{
-A list
+A list including Chla results by supported algorithms if Rrs includes the required wavelength.
+  Retrun \code{NA} values for algorithms of which required wavelength cannot be found.
 }
 \description{
 Run all Chla algorithms except for `QAA_v5`

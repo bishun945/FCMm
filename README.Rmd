@@ -54,7 +54,7 @@ devtools::install_github('bishun945/FCMm', build_vignettes=TRUE)
 
 ### 1. Classification of water spectra based on pre-defined cluster centers
 
-This chunk introduces the usage of applying the `FCMm` package (and its built-in centrodis) to cluster water spectra. The details of obtaining the centrodis could be found in [Bi *et al.* (2019)][Bi]. Also, run `vignette("Builtin_centrodis")` to see more about this applicaiton.
+This chunk introduces the usage of applying the `FCMm` package (and its built-in centrodis) to cluster water spectra. The details of obtaining the centrodis could be found in [Bi *et al.* (2019)][Bi]. Also, run `vignette("Builtin_centrodis")` to see more about this application.
 
 ```{r fig.align='center', fig.height=3, fig.width=4, message=FALSE, warning=FALSE}
 # Load testing data
@@ -108,7 +108,7 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
 
 ### 3. Assessment of Chla concentration algorithms
 
-`FCMm` provides an useful function to assess the performance of algorithms, i.e., `Assessment_via_cluster()`. Users can decide to select the `FCMm`-supported error measures (metrics) by themselves (run `cal.metrics.names()` or `cal.metrics.vector.names()` to see what metrics could be used). A more detailed vignette is given to introduce the usage of the assemssment work (run `vignette("Assessment")` to see more).
+`FCMm` provides an useful function to assess the performance of algorithms, i.e., `Assessment_via_cluster()`. Users can decide to select the `FCMm`-supported error measures (metrics) by themselves (run `cal.metrics.names()` or `cal.metrics.vector.names()` to see what metrics could be used). A more detailed vignette is given to introduce the usage of the assessment work (run `vignette("Assessment")` to see more).
 
 ```{r fig.height=3, fig.width=5}
 pred = dt_Chla[,c("BR","TBA","Bloom","conc.Blend")] %>% 

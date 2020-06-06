@@ -1,15 +1,15 @@
 ## FCMm 0.8.1 (2020-06-06)
 
   0. This is a major update for FCMm.
-  1. Updated DESCRIPTION by adding fields `BugReports` and `Authors@R` for more meta infomation. The previous `Author` and `Maintainer` were deleted.
+  1. Updated DESCRIPTION by adding fields `BugReports` and `Authors@R` for more meta information. The previous `Author` and `Maintainer` were deleted.
   2. Rd files in folder `man` were updated including `apply_FCM_m`, `apply_to_image`, `Assessment_via_cluster`, `Bloom`, `BR_Gil10`, `BR_Git11`, `C6`, `cal.metrics.names`, `cal.metrics`, `cal.metrics.vector.names`, `cal.metrics.vector`, `Chla_algorithms_name`, `FBA_Le13`, `FBA_Yang10`, `FCM.new`, `FuzzifierDetermination`, `generate_param`, `Getting_Asses_results`, `Gons08`, `level_to_variable`, `lmodel2_`, `NDCI_Mi12`, `OC4_OLCI`, `OC5_OLCI`, `OC6_OLCI`, `plot_spec`, `plot_spec_from_df`, `QAA_v5`, `RdYlBu`, `read_srf_excel`, `run_all_Chla_algorithms`, `Sampling_via_cluster`, `SCI_Shen10`, `Score_algorithm_interval`, `Score_algorithm_sort`, `Scoring_system`, `show_sensor_names`, `Spectral`, `SRF_simulate`, `TBA_Gil10`, `TBA_Git11`, `TC2`,  `TC2_clean`, `TC2_turbid`, `trapz`, and `trim_sd`.
   3. Updated README files by adding a new chunk for the assessment part.
   4. Updated NAMESPACE.
-  5.  All logical varaible `T` and `F` were changed by `TRUE` and `FALSE`.
+  5.  All logical variables `T` and `F` were changed by `TRUE` and `FALSE`.
   6. There were naming mistakes in `tools.R` for metrics functions `cal.metrics` and `cal.metrics.vector` which replace the `SAPE` (symmetric) series with the `CAPE` (compensated) series.
-  7. Updated `run_all_CHla_algorithms` which could run without stricts for wavelength settings as algorithms with missing wavelength will return NA values alternatively.
-  8. Renamed and updated vignettes for simplication `Assessment` (new), `Builtin_centrodis`,  and `Cluster_new_data`. 
-
+  7. Updated `run_all_Chla_algorithms` which could run without constrains for wavelength settings as algorithms with missing wavelength will return NA values alternatively.
+  8. Renamed and updated vignettes for simplification `Assessment` (new), `Builtin_centrodis`,  and `Cluster_new_data`. 
+  9. Codes about `options()` were removed or used by `on.exit()`.
 
 ## FCMm 0.7.5 (2020-06-02)
 
@@ -17,7 +17,7 @@
 
 ## FCMm 0.7.4 (2020-06-02)
 
-  Found and fixed an unicode `\u2010` in one Rd files of man which may result in the error check by rhub.
+  Found and fixed an Unicode `\u2010` in one Rd files of man which may result in the error check by rhub.
 
 ## FCMm 0.7.3 (2020-06-01)
 
@@ -34,11 +34,11 @@
 
 ## FCMm 0.7.1 (2020-05-30)
 
-  1. Updated README files of which superlinks for vigettes are deleted as the nexting version will include other vigettes or some modifications.
+  1. Updated README files of which superlinks for vignettes are deleted as the nexting version will include other vignettes or some modifications.
   2. Renamed the filename of vignettes, also, of which superlinks are deleted. Several old version vignettes on DOC folder are also deleted.
   3. Fixed spelling errors in Rd files.
-  4. In this version, the imported packge - `heatmaply` - was deleted as it would include warning information when `library(FCMm)`. Anyway, the functions supported by `heatmaply`, i.e., `Spectral()` and `RdYlBu()` are imported from packages `grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral")` and  ... ,"RdYlBu").
-  5. Added cran-comments.md file as I decide to release this packge to CRAN.
+  4. In this version, the imported package - `heatmaply` - was deleted as it would include warning information when `library(FCMm)`. Anyway, the functions supported by `heatmaply`, i.e., `Spectral()` and `RdYlBu()` are imported from packages `grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral")` and  ... ,"RdYlBu").
+  5. Added cran-comments.md file as I decide to release this package to CRAN.
   6. Updated man Rd files.
 
 ## FCMm 0.6.2 (2020-05-24)

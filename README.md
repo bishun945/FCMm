@@ -24,7 +24,7 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 
 **Author**: Shun Bi  
 **Date**: 2020-06-06  
-**Version**: 0.7.6  
+**Version**: 0.8.1  
 **E-mail**: <bishun1994@foxmail.com>
 
 ## Overview
@@ -70,7 +70,7 @@ built-in centrodis) to cluster water spectra. The details of obtaining
 the centrodis could be found in [Bi *et al.*
 (2019)](https://www.osapublishing.org/oe/abstract.cfm?uri=oe-27-24-34838).
 Also, run `vignette("Builtin_centrodis")` to see more about this
-applicaiton.
+application.
 
 ``` r
 # Load testing data
@@ -145,7 +145,7 @@ algorithms, i.e., `Assessment_via_cluster()`. Users can decide to select
 the `FCMm`-supported error measures (metrics) by themselves (run
 `cal.metrics.names()` or `cal.metrics.vector.names()` to see what
 metrics could be used). A more detailed vignette is given to introduce
-the usage of the assemssment work (run `vignette("Assessment")` to see
+the usage of the assessment work (run `vignette("Assessment")` to see
 more).
 
 ``` r
@@ -240,6 +240,6 @@ knitr::kable(Assess_soft$MAPE %>% round(2))
   - Spyrakos E, O’Donnell R, Hunter P D, et al. Optical types of inland
     and coastal waters\[J\]. Limnology and Oceanography, 2018, 63(2):
     846-870.
-  - Dembélé D. Multi-objective optimization for clustering 3-way gene
+  - Dembele D. Multi-objective optimization for clustering 3-way gene
     expression data\[J\]. Advances in Data Analysis and Classification,
     2008, 2(3): 211-225.

@@ -18,7 +18,7 @@ Assessment_via_cluster(
 )
 }
 \arguments{
-\item{pred}{prediciton of Chla}
+\item{pred}{prediction of Chla}
 
 \item{meas}{in-situ measurement of Chla}
 

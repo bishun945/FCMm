@@ -36,7 +36,7 @@ A list containing fuzzy and hard results from \code{Assessment_via_cluster}
 }
 \description{
 This function mainly use function \code{Assessment_via_cluster} to get
-  assesments both from fuzzy and hard mode. Specifically, it will return the accuracy and precision of 
+  assessments both from fuzzy and hard mode. Specifically, it will return the accuracy and precision of 
   "MAE","SMAPE","BIAS", and "SMRPE" which would be seemed as the input value of 
   function \code{Scoring_system}.
 }

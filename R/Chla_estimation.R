@@ -734,7 +734,7 @@ run_all_Chla_algorithms <- function(Rrs, wv_range=3){
 
 
 #' @name Chla_algorithms_name
-#' @title Pring all Chla algorithms name
+#' @title Print all Chla algorithms name
 #' @export
 #' @return Character of the supported Chla algorithm names in this package.
 #' @family Algorithms: Chla concentration

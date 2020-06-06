@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chla_estimation.R
 \name{Chla_algorithms_name}
 \alias{Chla_algorithms_name}
-\title{Pring all Chla algorithms name}
+\title{Print all Chla algorithms name}
 \usage{
 Chla_algorithms_name()
 }
@@ -10,7 +10,7 @@ Chla_algorithms_name()
 Character of the supported Chla algorithm names in this package.
 }
 \description{
-Pring all Chla algorithms name
+Print all Chla algorithms name
 }
 \seealso{
 Other Algorithms: Chla concentration: 

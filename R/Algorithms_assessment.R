@@ -1,6 +1,6 @@
 #' @name Assessment_via_cluster
 #' @title Assessment each algorithm for every cluster
-#' @param pred prediciton of Chla
+#' @param pred prediction of Chla
 #' @param meas in-situ measurement of Chla
 #' @param memb membership value matrix
 #' @param metrics metrics need to be calculated
@@ -622,7 +622,7 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' @name Getting_Asses_results
 #' @title Get the result of function Assessment_via_cluster
 #' @description This function mainly use function \code{Assessment_via_cluster} to get
-#'   assesments both from fuzzy and hard mode. Specifically, it will return the accuracy and precision of 
+#'   assessments both from fuzzy and hard mode. Specifically, it will return the accuracy and precision of 
 #'   "MAE","SMAPE","BIAS", and "SMRPE" which would be seemed as the input value of 
 #'   function \code{Scoring_system}.
 #' @param sample.size Sample size. This supports a bootstrap way to run the function 

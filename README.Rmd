@@ -152,4 +152,4 @@ knitr::kable(Assess_soft$MAPE %>% round(2))
  - Jackson T, Sathyendranath S, Mélin F. An improved optical classification scheme for the Ocean Colour Essential Climate Variable and its applications[J]. Remote Sensing of Environment, 2017, 203: 152-161.
  - Moore T S, Dowell M D, Bradt S, et al. An optical water type framework for selecting and blending retrievals from bio-optical algorithms in lakes and coastal waters[J]. Remote sensing of environment, 2014, 143: 97-111.
  - Spyrakos E, O'Donnell R, Hunter P D, et al. Optical types of inland and coastal waters[J]. Limnology and Oceanography, 2018, 63(2): 846-870.
- - Dembélé D. Multi-objective optimization for clustering 3-way gene expression data[J]. Advances in Data Analysis and Classification, 2008, 2(3): 211-225.
+ - Dembele D. Multi-objective optimization for clustering 3-way gene expression data[J]. Advances in Data Analysis and Classification, 2008, 2(3): 211-225.

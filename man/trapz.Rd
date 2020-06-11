@@ -18,9 +18,9 @@ A vector presenting the area result.
 Trapezoid integral calculation
 }
 \examples{
-\dontrun{
 library(FCMm)
-library(tidyverse)
+library(magrittr)
+library(stringr)
 data("Nechad2015")
 w <- Nechad2015 \%>\% names \%>\%
     str_extract(.,pattern="\\\\d") \%>\%
@@ -31,5 +31,5 @@ x <- w \%>\% Nechad2015[,.]
 names(x) <- wv
 rm(w)
 Area <- trapz(wv, x)
-}
+
 }

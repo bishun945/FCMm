@@ -35,14 +35,19 @@ FuzzifierDetermination(x, wv, max.m=10, stand=FALSE, dmetric='sqeuclidean')
 To determine the optimized fuzzifier value for FCM running.
 }
 \examples{
-\dontrun{
+
 library(FCMm) 
+library(magrittr)
+data("Nechad2015")
 x <- Nechad2015[,3:11]
 wv <- gsub("X","",names(x)) \%>\% as.numeric
 set.seed(1234)
+w <- sample(1:nrow(x), 100) 
+x <- x[w, ]
 names(x) <- wv
+set.seed(1234)
 FD <- FuzzifierDetermination(x, wv, stand=FALSE)
-}
+
 }
 \references{
 \itemize{

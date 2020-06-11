@@ -2,6 +2,7 @@
 % Please edit documentation in R/tools.R
 \name{SRF_simulate}
 \alias{SRF_simulate}
+\alias{show_sensor_names}
 \title{Simulation of hyperspectral data by SRF}
 \usage{
 SRF_simulate(
@@ -12,9 +13,12 @@ SRF_simulate(
   na.rm = TRUE,
   wv_as_column = TRUE
 )
+
+show_sensor_names()
 }
 \arguments{
-\item{Rrs}{A data.frame with colnames as Wavelength + SampleName, the first column is wavelength.}
+\item{Rrs}{A data.frame with colnames like "Wavelength and SampleNames" of which
+the first column is wavelength vector (such as \code{400:900}).}
 
 \item{select_sensor}{Character. Select sensors. Use \code{show_sensor_names()} to print
 all supported sensors. Default as \code{All}}
@@ -48,18 +52,14 @@ Simulate hyperspectral Rrs to multispectral bands
   via sensors SRF (Spectral response function).
 }
 \examples{
-\dontrun{
 library(FCMm)
 nm <- seq(400,900)
 Rrs <- data.frame(nm=nm,Site1=exp(nm/1000)+runif(501))
 result <- SRF_simulate(Rrs,select_sensor=c("OLCI","MODIS"))
-}
 
 }
 \seealso{
 Other Utils: 
-\code{\link{cal.metrics.names}()},
-\code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()},
 \code{\link{level_to_variable}()},

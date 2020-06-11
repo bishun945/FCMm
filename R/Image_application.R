@@ -64,7 +64,7 @@
 #' 
 #' @details
 #'   The section FCM running used the subset of default Rrs clusters.
-#'   Please see the section \strong{One more thing} in vignettes \strong{New_Data_Running_FCMm}
+#'   Please see the section \strong{Part II: New coming raster data} by running \code{vignette('Builtin_centrodis')}
 #'   if have not known how to do in that situation.
 #'   
 #'   Also, if it is your first time to get the image data into \strong{R}, you could
@@ -245,6 +245,7 @@ apply_to_image <- function(input, res,
     }
     message("Plotting Chla concentration ......")
     oldoptions <- options(scipen=1000)
+    on.exit(options(oldoptions))
     p.Chla<- ggplot() +
       geom_raster(data=sub.Chla, aes(x=x,y=y,fill=Chla),
                   hjust=0.5, vjust=0.5) +
@@ -298,9 +299,7 @@ apply_to_image <- function(input, res,
   result$res.Chla <- res.Chla
 
   message('Done!')
-  
-  on.exit(options(oldoptions))
-  
+
   return(result)
 }
 

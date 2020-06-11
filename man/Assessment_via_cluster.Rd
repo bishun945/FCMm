@@ -26,9 +26,9 @@ Assessment_via_cluster(
 
 \item{metrics}{metrics need to be calculated}
 
-\item{log10}{Should pred and meas be log10-transformed? (Default as FALSE)}
+\item{log10}{Should pred and meas be log10-transformed? (default as \code{FALSE})}
 
-\item{total}{logical}
+\item{total}{Whether to calculate summarized metrics (default as \code{TRUE})}
 
 \item{hard.mode}{If \code{FALSE}, the membership values are used to calculate validation metrics}
 
@@ -36,26 +36,25 @@ Assessment_via_cluster(
 
 \item{na.process}{na.process and choose to statistic na value percent}
 
-\item{plot.col}{option to plot col result for chosed metrics (Default as FALSE)}
+\item{plot.col}{option to plot col result for chosed metrics (default as \code{FALSE})}
 }
 \value{
-Results of \code{Algorithms_assessment()} are returned as a list including:
+Results of \code{Assessment_via_cluster} are returned as a list including:
 \item{Metrcs}{A list of the selected metric values for all algorithms. \code{Valid_percent} 
   would be included if \code{na.process} are set as \code{TRUE}}
 \item{res_plot}{Bar plots by using ggplot function for metrics value at every cluster.}
 \item{res_plot_dt}{Dataframe for plotting \code{res_plot}. I just keep it in case of plotting other types}
 \item{res_plot_facet}{\code{res_plot} added on \code{facet_wrap}.}
-\item{input}{input parameters of \code{Algorithms_assessment()}}
+\item{input}{input parameters of \link{Assessment_via_cluster}}
 }
 \description{
 Assessment each algorithm for every cluster
 }
 \note{
-If the cal.precision is running, the \code{hard.mode == TRUE} is used. In that case,
-  mean and sd calculation is conducted for hard mode based on result from cal.metrics.vector
+If the \code{cal.precision} is \code{TRUE}, the \code{hard.mode == TRUE} is used. In that case,
+  mean and sd calculation is conducted for hard mode based on result from \link{cal.metrics.vector}.
 }
 \examples{
-\dontrun{
 library(FCMm) 
 library(ggplot2) 
 library(magrittr)
@@ -71,7 +70,7 @@ nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 set.seed(1234)
 FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 result <- FCM.new(FD, nb, fast.mode = TRUE)
-p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+p.spec <- plot_spec(result, show.stand=TRUE)
 print(p.spec$p.cluster.spec)
 Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 Chla[Chla >= 999] <- NA
@@ -90,10 +89,7 @@ na.process = TRUE, plot.col = TRUE)
 Asses_soft$res_plot_facet
 knitr::kable(Asses_soft$MAE \%>\% round(3))
 knitr::kable(Asses_soft$MAPE \%>\% round(2))
-Asses_hard$res_plot_facet
-knitr::kable(Asses_hard$MAE \%>\% round(3))
-knitr::kable(Asses_hard$MAPE \%>\% round(2))
-}
+
 
 }
 \seealso{

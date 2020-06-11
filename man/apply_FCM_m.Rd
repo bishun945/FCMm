@@ -58,13 +58,11 @@ Application of FCM_m method for new Rrs data based on default cluster settings
   or user-defined clusters (trained by FCM.new).
 }
 \examples{
-\dontrun{
 library(FCMm)
 data("WaterSpec35")
 data("Bi_clusters")
 Rrs <- WaterSpec35[,3:17]
 result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
-}
 
 }
 \references{

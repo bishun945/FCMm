@@ -10,13 +10,20 @@ plot_spec_from_df(df)
 \item{df}{Data.frame for Rrs plotting}
 }
 \value{
-A ggplot list showing spectra curve
+The result of \code{plot_spec_from_df} is a \code{ggplot} object showing spectra curve.
 }
 \description{
 Spectra plot for a dataframe given numeric colnames
 }
 \note{
-The colnames of input `df` should be numericalize (i.e. names(df) %>% as.numeric)
+The colnames of input `df` should be numericalize.
+}
+\examples{
+data(WaterSpec35)
+plot_spec_from_df(WaterSpec35[, -c(1, 2)])
+# which is equal to 
+plot_spec_from_df(WaterSpec35)
+
 }
 \seealso{
 Other Fuzzy cluster functions: 

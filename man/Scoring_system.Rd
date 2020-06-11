@@ -14,13 +14,13 @@ Scoring_system(
 )
 }
 \arguments{
-\item{Inputs}{The list returned form function \code{Getting_Asses_results}}
+\item{Inputs}{The list returned form function \link{Getting_Asses_results}}
 
 \item{method}{The method selected to score algorithms: 'sort-based' (default) or 'interval-based'}
 
-\item{param_sort}{The parameters of function \code{Score_algorithms_sort}}
+\item{param_sort}{The parameters of function \link{Score_algorithms_sort}}
 
-\item{param_interval}{The parameters of function \code{Score_algorithms_interval}}
+\item{param_interval}{The parameters of function \link{Score_algorithms_interval}}
 
 \item{remove.negative}{Option to replace the negative score as zero (Default as \code{FALSE})}
 }
@@ -32,7 +32,6 @@ A list including \code{Total_score}, \code{Accuracy}, \code{Precision}, \code{Ef
 The main function for algorithms scoring
 }
 \examples{
-\dontrun{
 library(FCMm) 
 library(ggplot2) 
 library(magrittr)
@@ -48,7 +47,7 @@ nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 set.seed(1234)
 FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 result <- FCM.new(FD, nb, fast.mode = TRUE)
-p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+p.spec <- plot_spec(result, show.stand=TRUE)
 print(p.spec$p.cluster.spec)
 Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 Chla[Chla >= 999] <- NA
@@ -65,7 +64,7 @@ cluster =  result$res.FCM$cluster[w]
 Asses_results <- Getting_Asses_results(sample.size=20, pred = dt_Chla[,-1], 
 meas = data.frame(dt_Chla[,1]), memb = memb, cluster = cluster)
 Score = Scoring_system(Asses_results)
-}
+
 }
 \seealso{
 Other Algorithm assessment: 

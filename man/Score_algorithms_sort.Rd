@@ -21,11 +21,9 @@ Results of \code{Score_algorithms_sort()} are returned as a vector presenting sc
 Score a vector of error metrics for algorithms by the sort
 }
 \examples{
-\dontrun{
 set.seed(1234)
 x = runif(10)
 result = Score_algorithms_sort(x)
-}
 }
 \seealso{
 Other Algorithm assessment: 

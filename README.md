@@ -1,5 +1,3 @@
-README
-================
 
 # FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="139" /></a>
 
@@ -23,8 +21,8 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2020-06-06  
-**Version**: 0.8.1  
+**Date**: 2020-06-11  
+**Version**: 0.8.2  
 **E-mail**: <bishun1994@foxmail.com>
 
 ## Overview

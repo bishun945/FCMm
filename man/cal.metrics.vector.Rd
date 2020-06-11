@@ -2,9 +2,12 @@
 % Please edit documentation in R/tools.R
 \name{cal.metrics.vector}
 \alias{cal.metrics.vector}
+\alias{cal.metrics.vector.names}
 \title{Assess the performance of algorithms as vector}
 \usage{
 cal.metrics.vector(x,y,name="all",log10=FALSE)
+
+cal.metrics.vector.names()
 }
 \arguments{
 \item{x}{True value OR Actual value}
@@ -17,24 +20,23 @@ cal.metrics.vector(x,y,name="all",log10=FALSE)
 }
 \value{
 Result of \code{cal.metrics.vector} is a list of selected metric values.
+
+The call of \code{cal.metrics.vector.names} retunrs the metrics 
+  names in \link{cal.metrics.vector}
 }
 \description{
 Assess the performance of algorithms as vector
 }
 \examples{
-\dontrun{
 set.seed(1234)
 x = runif(100)
 y = runif(100)
 result = cal.metrics.vector(x,y)
-}
 
 }
 \seealso{
 Other Utils: 
 \code{\link{SRF_simulate}()},
-\code{\link{cal.metrics.names}()},
-\code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics}()},
 \code{\link{level_to_variable}()},
 \code{\link{trim_sd}()}

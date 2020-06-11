@@ -4,24 +4,24 @@
 #' @param meas in-situ measurement of Chla
 #' @param memb membership value matrix
 #' @param metrics metrics need to be calculated
-#' @param log10 Should pred and meas be log10-transformed? (Default as FALSE)
-#' @param total logical
+#' @param log10 Should pred and meas be log10-transformed? (default as \code{FALSE})
+#' @param total Whether to calculate summarized metrics (default as \code{TRUE})
 #' @param hard.mode If \code{FALSE}, the membership values are used to calculate validation metrics
 #' @param cal.precision Whether to calculate precision (only support for vectorized metrics), default as \code{FALSE}
 #' @param na.process na.process and choose to statistic na value percent
-#' @param plot.col option to plot col result for chosed metrics (Default as FALSE)
+#' @param plot.col option to plot col result for chosed metrics (default as \code{FALSE})
 #' 
-#' @note If the cal.precision is running, the \code{hard.mode == TRUE} is used. In that case,
-#'   mean and sd calculation is conducted for hard mode based on result from cal.metrics.vector
+#' @note If the \code{cal.precision} is \code{TRUE}, the \code{hard.mode == TRUE} is used. In that case,
+#'   mean and sd calculation is conducted for hard mode based on result from \link{cal.metrics.vector}.
 #'   
 #' @export
-#' @return Results of \code{Algorithms_assessment()} are returned as a list including:
+#' @return Results of \code{Assessment_via_cluster} are returned as a list including:
 #' \item{Metrcs}{A list of the selected metric values for all algorithms. \code{Valid_percent} 
 #'   would be included if \code{na.process} are set as \code{TRUE}}
 #' \item{res_plot}{Bar plots by using ggplot function for metrics value at every cluster.}
 #' \item{res_plot_dt}{Dataframe for plotting \code{res_plot}. I just keep it in case of plotting other types}
 #' \item{res_plot_facet}{\code{res_plot} added on \code{facet_wrap}.}
-#' \item{input}{input parameters of \code{Algorithms_assessment()}}
+#' \item{input}{input parameters of \link{Assessment_via_cluster}}
 #' 
 #' @family Algorithm assessment
 #' 
@@ -30,7 +30,6 @@
 #' @importFrom reshape2 melt
 #' 
 #' @examples 
-#' \dontrun{
 #' library(FCMm) 
 #' library(ggplot2) 
 #' library(magrittr)
@@ -46,7 +45,7 @@
 #' set.seed(1234)
 #' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 #' result <- FCM.new(FD, nb, fast.mode = TRUE)
-#' p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+#' p.spec <- plot_spec(result, show.stand=TRUE)
 #' print(p.spec$p.cluster.spec)
 #' Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 #' Chla[Chla >= 999] <- NA
@@ -65,10 +64,7 @@
 #' Asses_soft$res_plot_facet
 #' knitr::kable(Asses_soft$MAE %>% round(3))
 #' knitr::kable(Asses_soft$MAPE %>% round(2))
-#' Asses_hard$res_plot_facet
-#' knitr::kable(Asses_hard$MAE %>% round(3))
-#' knitr::kable(Asses_hard$MAPE %>% round(2))
-#' }
+#' 
 #' 
 Assessment_via_cluster <- function(pred, meas, memb,
                                    metrics = c('MAE','MAPE'),
@@ -381,11 +377,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
 #' @import ggplot2
 #' 
 #' @examples 
-#' \dontrun{
 #' set.seed(1234)
 #' x = runif(10)
 #' result = Score_algorithms_interval(x)
-#' }
+#' 
 
 Score_algorithms_interval <- function(x, trim=FALSE, reward.punishment=TRUE, 
                              decreasing=TRUE, hundred.percent=FALSE
@@ -506,11 +501,9 @@ Score_algorithms_interval <- function(x, trim=FALSE, reward.punishment=TRUE,
 #' @family Algorithm assessment
 #' 
 #' @examples 
-#' \dontrun{
 #' set.seed(1234)
 #' x = runif(10)
 #' result = Score_algorithms_sort(x)
-#' }
 Score_algorithms_sort <- function(x, decreasing = TRUE){
   
   x <- as.numeric(x)
@@ -550,13 +543,12 @@ Score_algorithms_sort <- function(x, decreasing = TRUE){
 #'   items from the input \code{x}.
 #' @family Algorithm assessment
 #' @examples 
-#' \dontrun{
 #' set.seed(1234)
 #' x = round(runif(100,1,10))
 #' table(x)
 #' w_sampled = Sampling_via_cluster(x, 20)
 #' table(x[w_sampled])
-#' }
+#' 
 Sampling_via_cluster <- function(x, num, replace=FALSE){
   
   if(num > length(x))
@@ -621,12 +613,12 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 
 #' @name Getting_Asses_results
 #' @title Get the result of function Assessment_via_cluster
-#' @description This function mainly use function \code{Assessment_via_cluster} to get
+#' @description This function mainly use function \link{Assessment_via_cluster} to get
 #'   assessments both from fuzzy and hard mode. Specifically, it will return the accuracy and precision of 
-#'   "MAE","SMAPE","BIAS", and "SMRPE" which would be seemed as the input value of 
-#'   function \code{Scoring_system}.
+#'   \code{MAE},\code{SMAPE},\code{BIAS}, and \code{SMRPE} which would be seemed as the input value of 
+#'   function \link{Scoring_system}.
 #' @param sample.size Sample size. This supports a bootstrap way to run the function 
-#'   \code{Assessment_via_cluster}. The number should not be larger than the row number 
+#'   \link{Assessment_via_cluster}. The number should not be larger than the row number 
 #'   of pred or so.
 #' @param replace Logical, replace, default as \code{FALSE}
 #' @param pred Prediction matrix
@@ -636,14 +628,13 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' @param seed Seed number for fixing the random process. See \code{help(set.seed)} for more details.
 #' @note The row number of \code{pred}, \code{meas}, \code{memb}, and \code{cluster} should be the same. 
 #'   This function is designed for bootstrapping process to get Chla algorithms assessment. Therefore, 
-#'   parameters of \code{Assessment_via_cluster} is set as fixed such as \code{log10 = TRUE}, 
+#'   parameters of \link{Assessment_via_cluster} is set as fixed such as \code{log10 = TRUE}, 
 #'   \code{na.process = TRUE}. Given that, I will not export this function in latter to avoid confuses.
 #' @export
-#' @return A list containing fuzzy and hard results from \code{Assessment_via_cluster}
+#' @return A list containing fuzzy and hard results from \link{Assessment_via_cluster}
 #' @family Algorithm assessment
 #' 
 #' @examples 
-#' \dontrun{
 #' library(FCMm) 
 #' library(ggplot2) 
 #' library(magrittr)
@@ -659,7 +650,7 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' set.seed(1234)
 #' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 #' result <- FCM.new(FD, nb, fast.mode = TRUE)
-#' p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+#' p.spec <- plot_spec(result, show.stand=TRUE)
 #' print(p.spec$p.cluster.spec)
 #' Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 #' Chla[Chla >= 999] <- NA
@@ -676,7 +667,6 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' Asses_results <- Getting_Asses_results(sample.size=20, 
 #' pred = dt_Chla[,-1], meas = data.frame(dt_Chla[,1]), memb = memb, 
 #' cluster = cluster)
-#' }
 #' 
 Getting_Asses_results <- function(sample.size, replace=FALSE,
                                   pred, meas, memb, cluster, 
@@ -744,10 +734,10 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 
 #' @name Scoring_system
 #' @title The main function for algorithms scoring
-#' @param Inputs The list returned form function \code{Getting_Asses_results}
+#' @param Inputs The list returned form function \link{Getting_Asses_results}
 #' @param method The method selected to score algorithms: 'sort-based' (default) or 'interval-based'
-#' @param param_sort The parameters of function \code{Score_algorithms_sort}
-#' @param param_interval The parameters of function \code{Score_algorithms_interval}
+#' @param param_sort The parameters of function \link{Score_algorithms_sort}
+#' @param param_interval The parameters of function \link{Score_algorithms_interval}
 #' @param remove.negative Option to replace the negative score as zero (Default as \code{FALSE})
 #' @export
 #' @return A list including \code{Total_score}, \code{Accuracy}, \code{Precision}, \code{Effectiveness},
@@ -757,7 +747,6 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 #' @importFrom reshape2 melt
 #' 
 #' @examples 
-#' \dontrun{
 #' library(FCMm) 
 #' library(ggplot2) 
 #' library(magrittr)
@@ -773,7 +762,7 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 #' set.seed(1234)
 #' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 #' result <- FCM.new(FD, nb, fast.mode = TRUE)
-#' p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+#' p.spec <- plot_spec(result, show.stand=TRUE)
 #' print(p.spec$p.cluster.spec)
 #' Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 #' Chla[Chla >= 999] <- NA
@@ -790,7 +779,7 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 #' Asses_results <- Getting_Asses_results(sample.size=20, pred = dt_Chla[,-1], 
 #' meas = data.frame(dt_Chla[,1]), memb = memb, cluster = cluster)
 #' Score = Scoring_system(Asses_results)
-#' }
+#' 
 Scoring_system <- function(Inputs, 
                            method = 'sort-based',
                            param_sort = list(decreasing = TRUE),

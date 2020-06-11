@@ -43,7 +43,7 @@ nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 set.seed(1234)
 FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 result <- FCM.new(FD, nb, fast.mode = TRUE)
-p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+p.spec <- plot_spec(result, show.stand=TRUE)
 print(p.spec$p.cluster.spec)
 Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 Chla[Chla >= 999] <- NA

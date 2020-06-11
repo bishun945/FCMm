@@ -5,7 +5,7 @@
   2. Functions `cal.metrics.names`, `cal.metircs.vector.names`, `Chla_algorithms_name`, and `show_sensor_names` now are alias of `cal.metrics`, `cal.metrics.vector`, `run_all_Chla_algorithms`, and `SRF_simulate` respectively.
   3. In this version, `on.exit` is used in the right position which is next to `oldoptions <- options(scipen=1000)` #247 of `Image_application.R`.
   4. The LICENSE and cph are fixed in this version.
-  5. Updated the function `plot_spec`. For convenience of plotting spectra by groupsNow the `facet_wrap` are used rather than restored in a list. Therefore, its argument `HABc` is deprecated in this version.
+  5. Updated the function `plot_spec`. For convenience of plotting spectra by groups. Now the `facet_wrap` are used rather than restored in a list. Therefore, its argument `HABc` is deprecated in this version.
   6. Documents are updated for grammer and spelling issues.
   7. TSM estimation algorithm `GAA_SPM` by Xiaolong Yu is supported in this verison.
 

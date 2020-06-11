@@ -50,11 +50,11 @@ Useful vignettes:
   }
 }
 \author{
-\strong{Maintainer}: Shun Bi \email{bishun1994@foxmail.com}
+\strong{Maintainer}: Shun Bi \email{bishun1994@foxmail.com} [copyright holder]
 
 Authors:
 \itemize{
-  \item Yunmei Li \email{liyunmei@njnu.edu.cn} [copyright holder]
+  \item Yunmei Li \email{liyunmei@njnu.edu.cn}
 }
 
 Other contributors:

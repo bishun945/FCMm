@@ -17,25 +17,22 @@ A list including the algorithm index and Chla concentration.
 \description{
 Chla estimation algorithm for the bloom water type
 }
+\examples{
+data(WaterSpec35)
+res = Bloom(WaterSpec35$`665`, WaterSpec35$`753.75`)
+}
 \seealso{
 Other Algorithms: Chla concentration: 
-\code{\link{BR_Gil10}()},
-\code{\link{BR_Git11}()},
 \code{\link{C6}()},
-\code{\link{Chla_algorithms_name}()},
-\code{\link{FBA_Le13}()},
-\code{\link{FBA_Yang10}()},
+\code{\link{Chla_FBA}},
+\code{\link{Chla_Gil10_Git11}},
+\code{\link{Chla_OC_OLCI}},
 \code{\link{FCM_m_Chla_estimation}()},
 \code{\link{Gons08}()},
 \code{\link{NDCI_Mi12}()},
-\code{\link{OC4_OLCI}()},
-\code{\link{OC5_OLCI}()},
-\code{\link{OC6_OLCI}()},
 \code{\link{OCI_Hu12}()},
 \code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{TBA_Gil10}()},
-\code{\link{TBA_Git11}()},
 \code{\link{TC2_clean}()},
 \code{\link{TC2_turbid}()},
 \code{\link{TC2}()},

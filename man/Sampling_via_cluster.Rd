@@ -21,13 +21,12 @@ Result of \code{Sampling_via_cluster} is the index of sampled
 Stratified sampling by clusters or types
 }
 \examples{
-\dontrun{
 set.seed(1234)
 x = round(runif(100,1,10))
 table(x)
 w_sampled = Sampling_via_cluster(x, 20)
 table(x[w_sampled])
-}
+
 }
 \seealso{
 Other Algorithm assessment: 

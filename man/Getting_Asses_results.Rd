@@ -16,7 +16,7 @@ Getting_Asses_results(
 }
 \arguments{
 \item{sample.size}{Sample size. This supports a bootstrap way to run the function 
-\code{Assessment_via_cluster}. The number should not be larger than the row number 
+\link{Assessment_via_cluster}. The number should not be larger than the row number 
 of pred or so.}
 
 \item{replace}{Logical, replace, default as \code{FALSE}}
@@ -32,22 +32,21 @@ of pred or so.}
 \item{seed}{Seed number for fixing the random process. See \code{help(set.seed)} for more details.}
 }
 \value{
-A list containing fuzzy and hard results from \code{Assessment_via_cluster}
+A list containing fuzzy and hard results from \link{Assessment_via_cluster}
 }
 \description{
-This function mainly use function \code{Assessment_via_cluster} to get
+This function mainly use function \link{Assessment_via_cluster} to get
   assessments both from fuzzy and hard mode. Specifically, it will return the accuracy and precision of 
-  "MAE","SMAPE","BIAS", and "SMRPE" which would be seemed as the input value of 
-  function \code{Scoring_system}.
+  \code{MAE},\code{SMAPE},\code{BIAS}, and \code{SMRPE} which would be seemed as the input value of 
+  function \link{Scoring_system}.
 }
 \note{
 The row number of \code{pred}, \code{meas}, \code{memb}, and \code{cluster} should be the same. 
   This function is designed for bootstrapping process to get Chla algorithms assessment. Therefore, 
-  parameters of \code{Assessment_via_cluster} is set as fixed such as \code{log10 = TRUE}, 
+  parameters of \link{Assessment_via_cluster} is set as fixed such as \code{log10 = TRUE}, 
   \code{na.process = TRUE}. Given that, I will not export this function in latter to avoid confuses.
 }
 \examples{
-\dontrun{
 library(FCMm) 
 library(ggplot2) 
 library(magrittr)
@@ -63,7 +62,7 @@ nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 set.seed(1234)
 FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 result <- FCM.new(FD, nb, fast.mode = TRUE)
-p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+p.spec <- plot_spec(result, show.stand=TRUE)
 print(p.spec$p.cluster.spec)
 Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 Chla[Chla >= 999] <- NA
@@ -80,7 +79,6 @@ cluster =  result$res.FCM$cluster[w]
 Asses_results <- Getting_Asses_results(sample.size=20, 
 pred = dt_Chla[,-1], meas = data.frame(dt_Chla[,1]), memb = memb, 
 cluster = cluster)
-}
 
 }
 \seealso{

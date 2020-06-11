@@ -4,31 +4,32 @@
 \alias{plot_spec}
 \title{Plot the result of FCM_m}
 \usage{
-plot_spec(res, show.stand=FALSE, HABc=NULL)
+plot_spec(res, show.stand = NULL, show.ribbon = FALSE)
 }
 \arguments{
-\item{res}{The result of function `FCM.new`}
+\item{res}{The result of function \link{FCM.new}}
 
-\item{show.stand}{Logical option to show the standardized spectra (default as False)}
+\item{show.stand}{Whether to show the spectra on standarized scale (default as \code{NULL} 
+and assigned by \code{res$FD$stand}).}
 
-\item{HABc}{Numeric value to specify which cluster owning larger magnitude}
+\item{show.ribbon}{Whether to show the ribbon defined by sd values calculated from samples 
+in each cluster (default as \code{FALSE}).}
 }
 \value{
-A list of ggplot lists:
+The result of \code{plot_spec} is a list including:
   \itemize{
     \item \strong{p.all.spec} Spectra of all data.
     \item \strong{p.cluster.spec} Spectra of clusters.
     \item \strong{p.group.spec.1} Spectra of groups in mode 1
     \item \strong{p.group.spec.2} Spectra of groups in mode 2
-    \item \strong{res} Result list of \code{FCM.new}
+    \item \strong{res} Result list of \link{FCM.new}
     \item \strong{show.stand} Logical value whether use standardized y-axis
   }
 }
 \description{
-Spectra plot for a FCM.new result
+Spectra plots for a \code{FCM.new} result
 }
 \examples{
-\dontrun{
 library(FCMm) 
 library(ggplot2) 
 library(magrittr)
@@ -43,9 +44,8 @@ nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 set.seed(1234)
 FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 result <- FCM.new(FD, nb, fast.mode = TRUE)
-p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+p.spec <- plot_spec(result, show.stand = TRUE)
 print(p.spec$p.cluster.spec)
-}
 
 }
 \references{

@@ -79,7 +79,7 @@ This function could apply the defined water cluster to corrected image files.
 }
 \details{
 The section FCM running used the subset of default Rrs clusters.
-  Please see the section \strong{One more thing} in vignettes \strong{New_Data_Running_FCMm}
+  Please see the section \strong{Part II: New coming raster data} by running \code{vignette('Builtin_centrodis')}
   if have not known how to do in that situation.
   
   Also, if it is your first time to get the image data into \strong{R}, you could

@@ -27,5 +27,8 @@ utils::globalVariables(c('.',
                          "SRF_LIST",
                          "dt_water",
                          "permutest.lmodel2",
-                         "wavelength.default"
+                         "wavelength.default",
+                         "cluster",
+                         "ids",
+                         "number"
                          ))

@@ -2,9 +2,12 @@
 % Please edit documentation in R/tools.R
 \name{cal.metrics}
 \alias{cal.metrics}
+\alias{cal.metrics.names}
 \title{Assess the performance of algorithms}
 \usage{
 cal.metrics(x,y,name="all",log10=FALSE)
+
+cal.metrics.names()
 }
 \arguments{
 \item{x}{True value OR Actual value}
@@ -17,6 +20,8 @@ cal.metrics(x,y,name="all",log10=FALSE)
 }
 \value{
 Result of \code{cal.metrics} is a list of selected metric values.
+
+The call of \code{cal.metrics.names} retunrs the metrics names in \link{cal.metrics}
 }
 \description{
 Assess the performance of algorithms
@@ -26,19 +31,15 @@ Assess the performance of algorithms
   Key parameter `log10`.
 }
 \examples{
-\dontrun{
 set.seed(1234)
 x = runif(20)
 y = runif(20)
 result = cal.metrics(x, y)
 print(result)
 }
-}
 \seealso{
 Other Utils: 
 \code{\link{SRF_simulate}()},
-\code{\link{cal.metrics.names}()},
-\code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{level_to_variable}()},
 \code{\link{trim_sd}()}

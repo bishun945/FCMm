@@ -66,7 +66,7 @@ In the raw scale of Rrs, the difference between the spectra is mainly manifested
 
 ```{r fig.height=3, fig.width=4}
 # Here used is the function `trapz()` to normalized the raw spectra. However, if you could use the normalize function of which you like. See more details in the package `scales`.
-x.stand <- x / FCMm::trapz(wv, x)
+x.stand <- x / trapz(wv, x)
 p.spec.stand <- plot_spec_from_df(x.stand) + 
   labs(x='Wavelength (nm)',y=expression(Normalized~Rrs)) + 
   theme_bw() + 
@@ -166,19 +166,15 @@ A `result` list contains several result by `FCM.new()`:
 
 ## FCM plotting
 
-This part shows how to obtain the visualization results in the package `FCMm`. Function `plot_spec()` is used for spectral plotting the related FCM-m result. Meanwhile, I recommend the package `cowplot` to help merging produced plots.
+This part shows how to obtain the visualization results in the package `FCMm`. Function `plot_spec()` is used for spectral plotting the related FCM-m result.
 
 ```{r message=FALSE, warning=FALSE, include=TRUE, fig.height=3, fig.width=4}
-p.spec <- plot_spec(result, show.stand=TRUE, HABc=NULL)
+p.spec <- plot_spec(result, show.stand=TRUE, show.ribbon = TRUE)
 print(p.spec$p.cluster.spec)
 ```
 
 ```{r fig.height=4, fig.width=5}
-if(library('cowplot', logical.return = TRUE)){
-  cowplot::plot_grid(plotlist = p.spec$p.group.spec.2)
-}else{
-  message("Recommend you to install 'cowplot' package by running: `install.packages('cowplot')`")
-}
+p.spec$p.group.spec.2
 ```
 
 

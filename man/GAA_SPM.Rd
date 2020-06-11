@@ -35,6 +35,11 @@ Globally applicable algorithm to seamlessly retrieve the
 The input wavelength are at OLCI bandset but this function will
   transform these wavelengthes to the GAA required bands.
 }
+\examples{
+res = GAA_SPM(WaterSpec35$`490`, WaterSpec35$`560`, 
+WaterSpec35$`673.75`, WaterSpec35$`753.75`, WaterSpec35$`865`) 
+
+}
 \references{
 Yu X, Lee Z, Shen F, et al. An empirical algorithm to seamlessly retrieve the 
   concentration of suspended particulate matter from water color across ocean to 

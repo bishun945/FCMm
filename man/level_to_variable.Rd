@@ -18,16 +18,13 @@ The dataframe with the leveled columns converted to the character columns.
 Convert dataframe with factor to character
 }
 \examples{
-\dontrun{
 x = data.frame(x=seq(1,10), y=as.character(rep(c(1,2),5)))
 x_ = level_to_variable(x)
-}
+
 }
 \seealso{
 Other Utils: 
 \code{\link{SRF_simulate}()},
-\code{\link{cal.metrics.names}()},
-\code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()},
 \code{\link{trim_sd}()}

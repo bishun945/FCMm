@@ -27,7 +27,7 @@ The input of \code{Rrs} must have bands with wavelength at 665, 709 and 754 nm.
   (2020-02-28) The \code{C6} model was replaced by \code{Bloom} model.
 }
 \examples{
-\dontrun{
+
 library(FCMm)
 data("WaterSpec35")
 data("Bi_clusters")
@@ -35,7 +35,7 @@ Rrs <- WaterSpec35[,3:17]
 result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
 dt_Chla <- FCM_m_Chla_estimation(Rrs=data.frame(Rrs665=Rrs$`665`, 
   Rrs709=Rrs$`708.75`,Rrs754=Rrs$`753.75`),U=result$u)
-}
+
 }
 \references{
 \itemize{
@@ -48,23 +48,16 @@ dt_Chla <- FCM_m_Chla_estimation(Rrs=data.frame(Rrs665=Rrs$`665`,
 }
 \seealso{
 Other Algorithms: Chla concentration: 
-\code{\link{BR_Gil10}()},
-\code{\link{BR_Git11}()},
 \code{\link{Bloom}()},
 \code{\link{C6}()},
-\code{\link{Chla_algorithms_name}()},
-\code{\link{FBA_Le13}()},
-\code{\link{FBA_Yang10}()},
+\code{\link{Chla_FBA}},
+\code{\link{Chla_Gil10_Git11}},
+\code{\link{Chla_OC_OLCI}},
 \code{\link{Gons08}()},
 \code{\link{NDCI_Mi12}()},
-\code{\link{OC4_OLCI}()},
-\code{\link{OC5_OLCI}()},
-\code{\link{OC6_OLCI}()},
 \code{\link{OCI_Hu12}()},
 \code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{TBA_Gil10}()},
-\code{\link{TBA_Git11}()},
 \code{\link{TC2_clean}()},
 \code{\link{TC2_turbid}()},
 \code{\link{TC2}()},

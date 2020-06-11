@@ -41,11 +41,10 @@ Results of \code{Score_algorithms_interval()} are returned as a list including:
 Score a vector of error metrics for algorithms by the interval
 }
 \examples{
-\dontrun{
 set.seed(1234)
 x = runif(10)
 result = Score_algorithms_interval(x)
-}
+
 }
 \seealso{
 Other Algorithm assessment: 

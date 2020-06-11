@@ -20,18 +20,15 @@ Trimmed standard value of the input data.
 Standard deviation by trimmed values
 }
 \examples{
-\dontrun{
 set.seed(1234)
 x = runif(100)
 sd(x)
 trim_sd(x)
-}
+
 }
 \seealso{
 Other Utils: 
 \code{\link{SRF_simulate}()},
-\code{\link{cal.metrics.names}()},
-\code{\link{cal.metrics.vector.names}()},
 \code{\link{cal.metrics.vector}()},
 \code{\link{cal.metrics}()},
 \code{\link{level_to_variable}()}

@@ -11,17 +11,15 @@
 #' @note (2020-02-09) All functions used log10 transformation was assigned to the 
 #'   Key parameter `log10`.
 #' @examples 
-#' \dontrun{
 #' set.seed(1234)
 #' x = runif(20)
 #' y = runif(20)
 #' result = cal.metrics(x, y)
 #' print(result)
-#' }
 #' @importFrom stats cor cor.test median na.omit sd
 #' @importFrom stats confint cov lm qt var
 #' @importFrom magrittr %>% %<>%
-cal.metrics <- function(x,y,name="all",log10=FALSE){
+cal.metrics <- function(x, y, name = "all", log10 = FALSE){
 
   name <- match.arg(name, cal.metrics.names())
   
@@ -311,12 +309,10 @@ cal.metrics <- function(x,y,name="all",log10=FALSE){
   return(result)
 }
 
-#' @title List all metrics in function cal.metrics
-#' @name cal.metrics.names
 #' @export
-#' @return The string character presenting what metrics will be calculated via \code{cal.metrics()}
-#' @examples \dontrun{cal.metrics.names()}
-#' @family Utils
+#' @return The call of \code{cal.metrics.names} retunrs the metrics names in \link{cal.metrics}
+#' @rdname cal.metrics
+#' 
 cal.metrics.names <- function(){
   c('RMSE','CRMSE',
     'MAE','MDAE','NMAE_SD','NMDAE_SD',
@@ -341,14 +337,12 @@ cal.metrics.names <- function(){
 #' @importFrom stats cor cor.test median na.omit sd
 #' @family Utils
 #' @examples 
-#' \dontrun{
 #' set.seed(1234)
 #' x = runif(100)
 #' y = runif(100)
 #' result = cal.metrics.vector(x,y)
-#' }
 #' 
-cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
+cal.metrics.vector <- function(x, y, name = "all", log10 = FALSE){
 
   name <- match.arg(name, cal.metrics.vector.names())
   
@@ -463,12 +457,13 @@ cal.metrics.vector <- function(x,y,name="all",log10=FALSE){
   return(result)
 }
 
-#' @title List all metrics in function cal.metrics
-#' @name cal.metrics.vector.names
+
+
 #' @export
-#' @return The string character presenting what metrics will be calculated via \code{cal.metrics.vector()}
-#' @family Utils
-#' @examples \dontrun{cal.metrics.vector.names()}
+#' @return The call of \code{cal.metrics.vector.names} retunrs the metrics 
+#'   names in \link{cal.metrics.vector}
+#' @rdname cal.metrics.vector
+#' 
 cal.metrics.vector.names <- function(){
   c('MAE', 'NMAE',
     'MAPE', 'SMAPE', 'NMAPE', 'CMAPE','CMRPE',
@@ -484,12 +479,11 @@ cal.metrics.vector.names <- function(){
 #' @export
 #' @return Trimmed standard value of the input data.
 #' @examples 
-#' \dontrun{
 #' set.seed(1234)
 #' x = runif(100)
 #' sd(x)
 #' trim_sd(x)
-#' }
+#' 
 #' @family Utils
 trim_sd <- function(x, trim=0.05, na.rm=TRUE){
   
@@ -522,10 +516,9 @@ trim_sd <- function(x, trim=0.05, na.rm=TRUE){
 #' @return The dataframe with the leveled columns converted to the character columns. 
 #' @export
 #' @examples 
-#' \dontrun{
 #' x = data.frame(x=seq(1,10), y=as.character(rep(c(1,2),5)))
 #' x_ = level_to_variable(x)
-#' }
+#' 
 #' @family Utils
 level_to_variable <- function(dt, warn=FALSE){
   if(!is.data.frame(dt))
@@ -925,7 +918,8 @@ CLsma <-
 #' @description 
 #' Simulate hyperspectral Rrs to multispectral bands
 #'   via sensors SRF (Spectral response function).
-#' @param Rrs A data.frame with colnames as Wavelength + SampleName, the first column is wavelength.
+#' @param Rrs A data.frame with colnames like "Wavelength and SampleNames" of which
+#'   the first column is wavelength vector (such as \code{400:900}).
 #' @param select_sensor Character. Select sensors. Use \code{show_sensor_names()} to print
 #'   all supported sensors. Default as \code{All}
 #' @param output_wavelength Character. \code{MED} (default) or \code{MAX}.
@@ -951,12 +945,10 @@ CLsma <-
 #'   }
 #' 
 #' @examples 
-#' \dontrun{
 #' library(FCMm)
 #' nm <- seq(400,900)
 #' Rrs <- data.frame(nm=nm,Site1=exp(nm/1000)+runif(501))
 #' result <- SRF_simulate(Rrs,select_sensor=c("OLCI","MODIS"))
-#' }
 #' 
 #' @family Utils
 #' 
@@ -1048,6 +1040,13 @@ cal_SRF <- function(Rrs_single, srf){
 #' @return The list of SRF for different sensors.
 #' @export
 #' @importFrom readxl excel_sheets read_excel
+#' @examples 
+#' \dontrun{
+#' # Suppose fn is a MS spread file of which sheetnames as sensor names.
+#' # For each sheet, it includes the data with colnames as bands, 
+#' #   rownames as wavelength, and cell values as SRF.
+#' SRF_LIST = read_srf_excel(fn)
+#' }
 read_srf_excel <- function(fn){
   SRF_LIST <- list()
   sheets <- excel_sheets(fn)
@@ -1102,12 +1101,9 @@ find_center_wavelength_max <- function(dt){
 
 
 
-#' @title show_sensor_names
-#' @name show_sensor_names
-#' @usage show_sensor_names()
-#' @examples \dontrun{show_sensor_names()}
-#' @return A character string showing what sensors are supported in the package.
 #' @export
+#' @rdname SRF_simulate
+#' 
 show_sensor_names <- function(){
   return(names(SRF_LIST))
 }
@@ -1116,20 +1112,18 @@ show_sensor_names <- function(){
 
 ## color platte
 
-#' @name Spectral
-#' @title Spectral
-#' @param n Number of colors
-#' @return Color codes
-#' @examples \dontrun{Spectral(7)}
-#' @export
-Spectral <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
-
-#' @name RdYlBu
-#' @title RdYlBu
+#' @name Color_plattes
+#' @title Color plattes including Spectral and RdYlBu
 #' @param n Number of colors
 #' @return Color codes
 #' @examples
-#' \dontrun{RdYlBu(7)}
+#' Spectral(7)
+#' RdYlBu(7)
 #' @export
+Spectral <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))
+
+#' @export
+#' @rdname Color_plattes
 RdYlBu <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlBu"))
+
 

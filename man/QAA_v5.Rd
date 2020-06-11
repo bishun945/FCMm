@@ -16,9 +16,9 @@ QAA_v5(
 )
 }
 \arguments{
-\item{wv}{wv}
+\item{wv}{Wavelength vector}
 
-\item{Rrs}{Rrs}
+\item{Rrs}{Rrs matrix}
 
 \item{wv412}{Wavelength index of 412 nm}
 
@@ -49,6 +49,14 @@ Results of \code{QAA_v5} are the list including:
 \description{
 Quasi-analytical algorithm by Lee et al. (2002)
 }
+\examples{
+data(WaterSpec35)
+Rrs = WaterSpec35[,-c(1,2)]
+wv = as.numeric(names(Rrs))
+print(wv)
+res = QAA_v5(wv, Rrs, wv412 = 2, wv443 = 3, wv490 = 4, wv560 = 6, wv667 = 9)
+
+}
 \references{
 Lee Z P, Carder K L, Arnone R A. Deriving inherent optical properties from water color: 
   a multiband quasi-analytical algorithm for optically deep waters[J]. Applied optics, 2002, 41(27): 
@@ -56,23 +64,16 @@ Lee Z P, Carder K L, Arnone R A. Deriving inherent optical properties from water
 }
 \seealso{
 Other Algorithms: Chla concentration: 
-\code{\link{BR_Gil10}()},
-\code{\link{BR_Git11}()},
 \code{\link{Bloom}()},
 \code{\link{C6}()},
-\code{\link{Chla_algorithms_name}()},
-\code{\link{FBA_Le13}()},
-\code{\link{FBA_Yang10}()},
+\code{\link{Chla_FBA}},
+\code{\link{Chla_Gil10_Git11}},
+\code{\link{Chla_OC_OLCI}},
 \code{\link{FCM_m_Chla_estimation}()},
 \code{\link{Gons08}()},
 \code{\link{NDCI_Mi12}()},
-\code{\link{OC4_OLCI}()},
-\code{\link{OC5_OLCI}()},
-\code{\link{OC6_OLCI}()},
 \code{\link{OCI_Hu12}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{TBA_Gil10}()},
-\code{\link{TBA_Git11}()},
 \code{\link{TC2_clean}()},
 \code{\link{TC2_turbid}()},
 \code{\link{TC2}()},

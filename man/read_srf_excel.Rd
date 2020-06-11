@@ -15,3 +15,11 @@ The list of SRF for different sensors.
 \description{
 Read srf data from excel file
 }
+\examples{
+\dontrun{
+# Suppose fn is a MS spread file of which sheetnames as sensor names.
+# For each sheet, it includes the data with colnames as bands, 
+#   rownames as wavelength, and cell values as SRF.
+SRF_LIST = read_srf_excel(fn)
+}
+}

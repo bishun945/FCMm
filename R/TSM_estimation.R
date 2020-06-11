@@ -19,6 +19,9 @@
 #'   Rrs754 -> Rrs745
 #'   Rrs865 -> Rrs862
 #'
+#' @examples Rrs_new = Rrs_trans(WaterSpec35$`490`, WaterSpec35$`560`, 
+#' WaterSpec35$`673.75`, WaterSpec35$`753.75`, WaterSpec35$`865`) 
+#' 
 #' @noRd
 #' 
 Rrs_trans <- function(Rrs490, Rrs560, Rrs674, Rrs754, Rrs865){
@@ -61,6 +64,9 @@ Rrs_trans <- function(Rrs490, Rrs560, Rrs674, Rrs754, Rrs865){
 #' @note The input wavelength are at OLCI bandset but this function will
 #'   transform these wavelengthes to the GAA required bands.
 #' 
+#' @examples res = GAA_SPM(WaterSpec35$`490`, WaterSpec35$`560`, 
+#' WaterSpec35$`673.75`, WaterSpec35$`753.75`, WaterSpec35$`865`) 
+#' 
 #' @references 
 #' Yu X, Lee Z, Shen F, et al. An empirical algorithm to seamlessly retrieve the 
 #'   concentration of suspended particulate matter from water color across ocean to 
@@ -94,7 +100,7 @@ GAA_SPM <- function(Rrs490, Rrs560, Rrs674, Rrs754, Rrs865){
   SPM = a1 * GI ^ a2
   
   return(list(
-    param = list(C0, C1, C2, C3, a1, a2),
+    param = list(C0 = C0, C1 = C1, C2 = C2, C3 = C3, a1 = a1, a2 = a2),
     W  = W,
     GI = GI,
     SPM = SPM

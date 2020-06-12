@@ -1,3 +1,9 @@
+## FCMm 0.8.3 (2020-06-12)
+
+  1. Thanks for the bug report by Xiaolan Cai, a new return `centroids` of function `FCM.new` is supported now, which indicates the cluster centroids of your training data set.
+  2. Add a new `ifnotstop` for function `Assessment_via_cluster` that ZERO values in measured vector will introduce `Inf` metric results for `cal.metrics` or `cal.metrics.vector`.
+  3. Add a new color palette function `scales::hue_pal` which is the default palette of package `ggplot2`.
+
 ## FCMm 0.8.2 (2020-06-11)
 
   0. This update is for revision from CRAN manual inspection.

@@ -83,11 +83,14 @@ Assessment_via_cluster <- function(pred, meas, memb,
   
   if(!na.process){
     if(anyNA(pred) | anyNA(meas) | anyNA(memb)){
-      stop('Not choose to process NA values. Predicted, measured or membership values including NA values!')
+      stop('Not choose to process NA values. However, predicted, measured or membership values including NA values!')
     }
   }else{
     if(anyNA(meas)){
-      stop('Choose to process NA values. Measured values including NA values!')
+      stop('Choose to process NA values. But measured values including NA values!')
+    }
+    if(length(which(meas == 0)) > 0){
+      stop('Choose to process NA values. But measured values including ZERO values!')
     }
   }
   
@@ -246,7 +249,8 @@ Assessment_via_cluster <- function(pred, meas, memb,
           y <- pred[, j]
           
           if(na.process){
-            w <- which(is.na(y) == FALSE)
+            w <- which(is.finite(y))
+            # w <- which(is.na(y) == FALSE)
             x <- x[w]
             y <- y[w]
             memb_ <- memb[w,]

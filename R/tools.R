@@ -1126,4 +1126,6 @@ Spectral <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral")
 #' @rdname Color_plattes
 RdYlBu <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlBu"))
 
-
+#' @export
+#' @rdname Color_plattes
+HUE <- scales::hue_pal()

@@ -74,7 +74,7 @@ A \code{list()} of all results and several inputs:
 }
 \description{
 This function could apply the defined water cluster to corrected image files.
-  Should run \code{generate_param()} to generate a \code{res} list as an input
+  Should run \link{generate_param} to generate a \code{res} list as an input
   of function \code{apply_to_image}
 }
 \details{

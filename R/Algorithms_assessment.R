@@ -152,10 +152,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
       num_raw <- length(x)
       
       if(na.process){
-        tmp <- cbind(x,y) %>% na.omit
-        x <- tmp[,1]
-        y <- tmp[,2]
-        num_new <- length(x)
+        w_finite <- which(is.finite(y) & y > 0)
+        x <- x[w_finite]
+        y <- y[w_finite]
+        num_new <- length(w_finite)
         if(num_new > num_raw)
           stop("Error! The subseted sample number is smaller the raw.")
       }
@@ -190,10 +190,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
       num_raw <- length(x)
       
       if(na.process){
-        tmp <- cbind(x,y) %>% na.omit
-        x <- tmp[,1]
-        y <- tmp[,2]
-        num_new <- length(x)
+        w_finite <- which(is.finite(y) & y > 0)
+        x <- x[w_finite]
+        y <- y[w_finite]
+        num_new <- length(w_finite)
       }
       
       for(metric in metrics){
@@ -619,16 +619,16 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' @title Get the result of function Assessment_via_cluster
 #' @description This function mainly use function \link{Assessment_via_cluster} to get
 #'   assessments both from fuzzy and hard mode. Specifically, it will return the accuracy and precision of 
-#'   \code{MAE},\code{SMAPE},\code{BIAS}, and \code{SMRPE} which would be seemed as the input value of 
+#'   \code{MAE},\code{CMAPE},\code{BIAS}, and \code{CMRPE} which would be seemed as the input value of 
 #'   function \link{Scoring_system}.
 #' @param sample.size Sample size. This supports a bootstrap way to run the function 
 #'   \link{Assessment_via_cluster}. The number should not be larger than the row number 
 #'   of pred or so.
 #' @param replace Logical, replace, default as \code{FALSE}
-#' @param pred Prediction matrix
-#' @param meas Measured (actual) vector
+#' @param pred Prediction matrix or data.frame
+#' @param meas Measured (actual) matrix or data.frame
 #' @param memb Membership matrix
-#' @param cluster Cluster vector
+#' @param cluster Cluster vector. Could be calculated by the parameter \code{memb}. Will be deprecated later.
 #' @param seed Seed number for fixing the random process. See \code{help(set.seed)} for more details.
 #' @note The row number of \code{pred}, \code{meas}, \code{memb}, and \code{cluster} should be the same. 
 #'   This function is designed for bootstrapping process to get Chla algorithms assessment. Therefore, 
@@ -672,15 +672,18 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' pred = dt_Chla[,-1], meas = data.frame(dt_Chla[,1]), memb = memb, 
 #' cluster = cluster)
 #' 
-Getting_Asses_results <- function(sample.size, replace=FALSE,
-                                  pred, meas, memb, cluster, 
-                                  seed=NULL){
+Getting_Asses_results <- function(sample.size, replace = FALSE,
+                                  pred, meas, memb,
+                                  cluster = apply(memb, 1, which.max), 
+                                  seed = NULL){
+  
+  meas <- data.frame(meas)
   
   if(sample.size > nrow(pred))
     stop("Enter a smaller sample size to subset the data set.")
   
   if(var(c(nrow(pred), nrow(meas), nrow(memb), nrow(cluster))) != 0)
-    stop("Row number of pred, meas, memb and cluster is different.")
+    stop("Row numbers of pred, meas, and memb are different.")
   
   # Stratified sampling by cluster
   if(is.null(seed)){
@@ -698,7 +701,7 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
   Asses_fz <-  Assessment_via_cluster(pred=pred_,
                                       meas=meas_,
                                       memb=memb_,
-                                      metrics = c("MAE","SMAPE","BIAS",'SMRPE'),
+                                      metrics = c("MAE","CMAPE","BIAS",'CMRPE'),
                                       log10 = TRUE,
                                       hard.mode = FALSE,
                                       na.process = TRUE,
@@ -707,24 +710,12 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
   Asses_p <-  Assessment_via_cluster(pred=pred_,
                                       meas=meas_,
                                       memb=memb_,
-                                      metrics = c("MAE","SMAPE","BIAS",'SMRPE'),
+                                      metrics = c("MAE","CMAPE","BIAS",'CMRPE'),
                                       log10 = TRUE,
                                       hard.mode = FALSE,
                                       cal.precision = TRUE,
                                       na.process = TRUE,
                                       plot.col = FALSE)
-  
-  # NOTE 2020-03-06: As the difination of Accuracy and Precision were changed, 
-  #   we deleted the following codes and corresponding contexts in `Scoring_system` function
-  # 
-  # Asses_hd <-  Assessment_via_cluster(pred=pred_,
-  #                                     meas=meas_,
-  #                                     memb=memb_,
-  #                                     metrics = c("SLOPE", "R2_SMA"),
-  #                                     log10 = TRUE,
-  #                                     hard.mode = TRUE,
-  #                                     na.process = TRUE,
-  #                                     plot.col = FALSE)
   
   result <- list(
                   # Asses_hd=Asses_hd, 
@@ -737,18 +728,86 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 
 
 #' @name Scoring_system
-#' @title The main function for algorithms scoring
+#' 
+#' @title The main function for algorithms scoring based on accuracy, precision, and effectiveness.
+#' 
 #' @param Inputs The list returned form function \link{Getting_Asses_results}
-#' @param method The method selected to score algorithms: 'sort-based' (default) or 'interval-based'
+#' @param method The method selected to score algorithms: 
+#'   \itemize{
+#'     \item \code{sort-based} (default) which is scored by the sort of accuracy and precision 
+#'       metrics (see more in \link{Score_algorithms_sort}). 
+#'     \item \code{interval-based} which is relatively scored by the interval of accuracy and 
+#'       precision (used by Brewin et al. (2015) and Neil et al. (2019)). 
+#'       See more in \link{Score_algorithms_interval}).
+#'   }
 #' @param param_sort The parameters of function \link{Score_algorithms_sort}
 #' @param param_interval The parameters of function \link{Score_algorithms_interval}
-#' @param remove.negative Option to replace the negative score as zero (Default as \code{FALSE})
+#' @param remove.negative Option to replace the negative score as zero (default as \code{FALSE})
+#' @param Times Parameter of \code{Scoring_system_bootstrap}. The bootstrap time for running 
+#'   \code{Scoring_system} (default as \code{1000})
+#' 
 #' @export
-#' @return A list including \code{Total_score}, \code{Accuracy}, \code{Precision}, \code{Effectiveness},
-#'   \code{Accuracy.list}, \code{Precision.list}, and \code{Total_score.melt}.
+#' 
+#' @return The result of \code{Scoring_system} are including:
+#' \itemize{
+#'   \item \strong{Total_score} Data.frame of final score result with algorithm as column and cluster as row.
+#'   \item \strong{Accuracy} Data.frame of \code{Accuracy} score with algorithm as column and cluster as row.
+#'   \item \strong{Precision} Data.frame of \code{Precision} score with algorithm as column and cluster as row.
+#'   \item \strong{Effectiveness} Data.frame of \code{Effectiveness} score with algorithm as column and cluster as row.
+#'   \item \strong{Accuracy.list} List including data.frames of used \code{Accuracy} metrics.
+#'   \item \strong{Precision.list} List including data.frames of used \code{Precision} metrics.
+#'   \item \strong{Total_score.melt} Melted data.frame of \strong{Total_score} for plotting.
+#'   \item \strong{opt_algorithm} The optimal algorithm names for each cluster.
+#'   \item \strong{Inputs} Inputs of this function.
+#' } 
+#' 
+#' @note 
+#'   \code{Scoring_system_bootstrap} is the bootstrap mode of \code{Scoring_system} which is useful when
+#'     the outcome is unstable for large number of samples. The default boostrap time in \code{Scoring_system_bootstrap}
+#'     is set as \code{1000} and the result of it is the list of several aggregated data.frames and standard deviations.
+#'   
+#' @details  
+#' The \code{Accuracy} and \code{Precision} is newly defined in \code{FCMm} package (referred by 
+#'   Hooker et al. (2005)):
+#' \itemize{
+#'   \item \code{Accuracy} is the estimation of how close the result of the experiment is to the 
+#'     true value.
+#'   \item \code{Precision} is the estimation of how excatly the result is determined independently 
+#'     of any true value.
+#' }
+#' In other words, \code{Accuracy} is telling a story truthfully and precision is how similarly
+#'   the story is represented over and over again.
+#' Here we use AE, a vector for each sample, for instance:
+#' \itemize{
+#'   \item \code{Accuracy} is the aggregation (no matter mean or median, in fuzzy calculation process), 
+#'     we use mean to some extent. 
+#'   \item \code{Precision} is acutally the \strong{stability} of AE (reproducebility) which means the error
+#'     produced by the algorithm is under certain control.
+#' }
+#' Finally, the functon will multiply the total score (\code{Accuracy} + \code{Precision}) by the 
+#'   effectiveness (i.e., Valid_percent returned by \link{Assessment_via_cluster}).
+#' 
 #' @family Algorithm assessment
 #' 
 #' @importFrom reshape2 melt
+#' @importFrom magrittr %>%
+#' 
+#' @references
+#' \itemize{
+#'   \item Hooker S B. Second SeaWiFS HPLC analysis round-robin experiment (SeaHARRE-2)[M]. 
+#'     National Aeronautics and Space Administration, Goddard Space Flight Center, 2005. 
+#'   \item Seegers B N, Stumpf R P, Schaeffer B A, et al. Performance metrics for the assessment 
+#'     of satellite data products: an ocean color case study[J]. Optics express, 2018, 26(6): 7404-7422.
+#'   \item Neil C, Spyrakos E, Hunter P D, et al. A global approach for chlorophyll-a retrieval 
+#'     across optically complex inland waters based on optical water types[J]. Remote Sensing of 
+#'     Environment, 2019, 229: 159-178.
+#'   \item Brewin R J W, Sathyendranath S, Müller D, et al. The Ocean Colour Climate Change 
+#'     Initiative: III. A round-robin comparison on in-water bio-optical algorithms[J]. Remote Sensing of 
+#'     Environment, 2015, 162: 271-294.
+#'   \item Moore T S, Dowell M D, Bradt S, et al. An optical water type framework for selecting and 
+#'     blending retrievals from bio-optical algorithms in lakes and coastal waters[J]. Remote sensing of 
+#'     environment, 2014, 143: 97-111.
+#' } 
 #' 
 #' @examples 
 #' library(FCMm) 
@@ -764,9 +823,9 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 #' names(x) <- wv
 #' nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 #' set.seed(1234)
-#' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+#' FD <- FuzzifierDetermination(x, wv, stand = FALSE)
 #' result <- FCM.new(FD, nb, fast.mode = TRUE)
-#' p.spec <- plot_spec(result, show.stand=TRUE)
+#' p.spec <- plot_spec(result, show.stand = TRUE, show.ribbon = TRUE)
 #' print(p.spec$p.cluster.spec)
 #' Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 #' Chla[Chla >= 999] <- NA
@@ -781,7 +840,7 @@ Getting_Asses_results <- function(sample.size, replace=FALSE,
 #' memb = result$res.FCM$u[w,] %>% round(4)
 #' cluster =  result$res.FCM$cluster[w]
 #' Asses_results <- Getting_Asses_results(sample.size=20, pred = dt_Chla[,-1], 
-#' meas = data.frame(dt_Chla[,1]), memb = memb, cluster = cluster)
+#' meas = data.frame(dt_Chla[,1]), memb = memb)
 #' Score = Scoring_system(Asses_results)
 #' 
 Scoring_system <- function(Inputs, 
@@ -789,7 +848,7 @@ Scoring_system <- function(Inputs,
                            param_sort = list(decreasing = TRUE),
                            param_interval = list(trim=FALSE, reward.punishment=TRUE,
                                              decreasing=TRUE, hundred.percent=FALSE),
-                           remove.negative=FALSE){
+                           remove.negative = FALSE){
   
   Asses_fz <- Inputs$Asses_fz
   Asses_p  <- Inputs$Asses_p # If on precision, the mode is hard
@@ -811,58 +870,28 @@ Scoring_system <- function(Inputs,
   }
 
   # Note 2020-03-06:
-  # The accuracy and precision is newly defined in this package (referred by Hooker):
-  # Accuracy is the estimation of how close the result of the experiment is to the 
-  #   true value.
-  # Precision is the estimation of how excatly the result is determined independently 
-  #   of any true value.
-  # In other words, accuracy is telling a story truthfully and precision is how similarly
-  #   the story is represented over and over again.
-  # 
-  # Here we use AE, a vector for each sample, for instance.
-  # Accuracy is the aggregation (no matter mean or median, in fuzzy calculation process), 
-  #   we use mean to some extent. 
-  # While, precision is acutally the stability of AE (reproducebility) which means the error
-  #   produced by the algorithm is under certain control.
+
   #
-  Accuracy_SMRPE <- Accuracy_BIAS <- Accuracy_MAE <- Accuracy_SMAPE <- Asses_fz$MAE * NA
+  Accuracy_CMRPE <- Accuracy_BIAS <- Accuracy_MAE <- Accuracy_CMAPE <- Asses_fz$MAE * NA
   for(i in 1:nrow(Accuracy_MAE)){
-    # Accuracy_MAE[i,]  <- Score_algorithms(Asses_fz$MAE[i,], trim=trim)$score
-    # Note 2020-03-06:
-    # Bias was banned as it sometimes has the issue that may arise at the aggregation the phase, 
-    #   when the positive and negative errors will be cancelling each other. The use of this relatve
-    #   (not absolute) often demonstrate a falsely high accuracy.
-    # Note 2020-03-07:
-    # I think Bias is okay now.
-    # Accuracy_BIAS[i,]  <- Score_algorithms(abs(Asses_fz$BIAS[i,]), trim=trim)$score
-    # Accuracy_SMAPE[i,] <- Score_algorithms(Asses_fz$SMAPE[i,], trim=trim)$score
-    # Accuracy_SMRPE[i,] <- Score_algorithms(abs(Asses_fz$SMRPE[i,]), trim=trim)$score
-    
-    # Test in 2020-03-08 using sorted score
     Accuracy_MAE[i,]   <- Score_algorithms(Asses_fz$MAE[i,])
     Accuracy_BIAS[i,]  <- Score_algorithms(abs(Asses_fz$BIAS[i,]))
-    Accuracy_SMAPE[i,] <- Score_algorithms(Asses_fz$SMAPE[i,])
-    Accuracy_SMRPE[i,] <- Score_algorithms(abs(Asses_fz$SMRPE[i,]))
+    Accuracy_CMAPE[i,] <- Score_algorithms(Asses_fz$CMAPE[i,])
+    Accuracy_CMRPE[i,] <- Score_algorithms(abs(Asses_fz$CMRPE[i,]))
   }
-  Accuracy <- Accuracy_MAE + Accuracy_BIAS + Accuracy_SMRPE + Accuracy_SMAPE
+  Accuracy <- Accuracy_MAE + Accuracy_BIAS + Accuracy_CMRPE + Accuracy_CMAPE
   
   
   # Precision part
-  Precision_SMRPE <- Precision_BIAS <- Precision_MAE <- Precision_SMAPE <- Asses_p$MAE_p * NA
+  Precision_CMRPE <- Precision_BIAS <- Precision_MAE <- Precision_CMAPE <- Asses_p$MAE_p * NA
   for(i in 1:nrow(Precision_MAE)){
-    # Precision_MAE[i,]    <- Score_algorithms(Asses_p$MAE_p[i,], trim=trim)$score
-    # Precision_BIAS[i,]    <- Score_algorithms(Asses_p$BIAS_p[i,], trim=trim)$score
-    # Precision_SMAPE[i,]  <- Score_algorithms(Asses_p$SMAPE_p[i,], trim=trim)$score
-    # Precision_SMRPE[i,]  <- Score_algorithms(Asses_p$SMRPE_p[i,], trim=trim)$score
-    
-    # Test in 2020-03-08 using sorted score
     Precision_MAE[i,]   <- Score_algorithms(Asses_p$MAE_p[i,])
     Precision_BIAS[i,]  <- Score_algorithms(abs(Asses_p$BIAS_p[i,]))
-    Precision_SMAPE[i,] <- Score_algorithms(Asses_p$SMAPE_p[i,])
-    Precision_SMRPE[i,] <- Score_algorithms(abs(Asses_p$SMRPE_p[i,]))
+    Precision_CMAPE[i,] <- Score_algorithms(Asses_p$CMAPE_p[i,])
+    Precision_CMRPE[i,] <- Score_algorithms(abs(Asses_p$CMRPE_p[i,]))
   }
-  Precision <- Precision_MAE + Precision_BIAS + Precision_SMRPE + Precision_SMAPE
-
+  Precision <- Precision_MAE + Precision_BIAS + Precision_CMRPE + Precision_CMAPE
+  
   Total_score <- (Accuracy + Precision) * Asses_fz$Valid_percent / 100
   
   if(remove.negative == TRUE){
@@ -871,21 +900,29 @@ Scoring_system <- function(Inputs,
       Total_score[w[i,1],w[i,2]] <- 0
   }
   
+  # output optimal algorithm names
+  opt_algorithm <- Total_score %>% apply(., 1, which.max) %>% 
+    names(Total_score)[.] %>% 
+    setNames(., rownames(Total_score)) %>%
+    .[-length(.)]
+  
   Total_score.melt <- melt(cbind(x=rownames(Total_score), Total_score), id='x')
   
   result <- list(
                  Total_score           = Total_score,
                  Accuarcy              = Accuracy,
                  Precision             = Precision,
+                 Effectiveness         = Asses_fz$Valid_percent,
                  Accuracy.list         = list(Accuracy_MAE = Accuracy_MAE,
-                                              Accuracy_SMAPE = Accuracy_SMAPE,
+                                              Accuracy_CMAPE = Accuracy_CMAPE,
                                               Accuracy_BIAS = Accuracy_BIAS,
-                                              Accuracy_SMRPE = Accuracy_SMRPE),
+                                              Accuracy_CMRPE = Accuracy_CMRPE),
                  Precision.list        = list(Precision_MAE = Precision_MAE,
-                                              Precision_SMAPE = Precision_SMAPE,
+                                              Precision_CMAPE = Precision_CMAPE,
                                               Precision_BIAS = Precision_BIAS,
-                                              Precision_SMRPE = Precision_SMRPE),
+                                              Precision_CMRPE = Precision_CMRPE),
                  Total_score.melt      = Total_score.melt,
+                 opt_algorithm         = opt_algorithm,
                  Inputs                = Inputs
                 )
   
@@ -893,3 +930,101 @@ Scoring_system <- function(Inputs,
   
 }
 
+
+
+#' @export
+#' @rdname Scoring_system
+#' @return The result of \code{Scoring_system_bootstrap} are including:
+#' \itemize{
+#'   \item \strong{Times} The times of bootstrap running.
+#'   \item \strong{Score_all_clusters} The total score for algorithms across all clusters.
+#'   \item \strong{Score_list} All times of bootstrapping results are saved in it.
+#'   \item \strong{Score_list_melt} Melted \code{Score_list}.
+#'   \item \strong{plot_col} The col plot of \code{Score_list_melt}.
+#' } 
+#' 
+Scoring_system_bootstrap <- function(Times = 1000,
+                                     Inputs, 
+                                     method = 'sort-based',
+                                     param_sort = list(decreasing = TRUE),
+                                     param_interval = list(trim=FALSE, reward.punishment=TRUE,
+                                                           decreasing=TRUE, hundred.percent=FALSE),
+                                     remove.negative = FALSE){
+  
+  pred = Inputs$Asses_fz$input$pred
+  meas = Inputs$Asses_fz$input$meas
+  memb = Inputs$Asses_fz$input$memb
+  
+  Score_list <- NULL
+
+  for(i in 1:Times){
+    
+    cat(i, "/", Times, "\n")
+    Asses_list <- Getting_Asses_results(sample.size= nrow(memb),
+                                        pred, meas, memb, replace = T)
+    Score <- Scoring_system(Inputs = Asses_list,
+                           method = method,
+                           param_sort = param_sort,
+                           param_interval = param_interval,
+                           remove.negative = remove.negative)
+    
+    if(i == 1){
+      Score_list <- Score$Total_score.melt
+      names(Score_list)[ncol(Score_list)] <- i
+    }else{
+      Score_list <- cbind(Score_list, Score$Total_score.melt[,3])
+      names(Score_list)[ncol(Score_list)] <- i
+    }
+  }
+  
+  u_arr   = apply(Score_list[, 3:ncol(Score_list)], 1, mean) %>% round(2)
+  sig_arr = apply(Score_list[, 3:ncol(Score_list)], 1, sd) %>% round(2)
+  ymin    = u_arr - sig_arr
+  ymax    = u_arr + sig_arr
+  
+  res_Score <- cbind(Score_list[,1:2],
+                     value    = u_arr,
+                     sig_arr  = sig_arr) %>% level_to_variable
+  
+  # plot Score_list
+  num.model <- Score_list$variable %>% unique %>% length
+  set.seed(1234)
+  ind = runif(num.model) %>% sort.int(., index.return=T) %>% .$ix
+  
+  dodge <- position_dodge(width=0.9)
+  
+  res_Score = res_Score[!(res_Score$x %in% 'SUM'),]
+  res_Score$x_f = factor(res_Score$x, levels = paste("Cluster", (1:res$K)))
+  
+  Score_all_clusters = stats::aggregate(res_Score[,3:4], list(res_Score$variable), sum)
+  
+  plot_col <- ggplot(data=res_Score) +
+    geom_col(aes(x=x_f, y=value, group=variable, fill=variable), position=dodge) + 
+    geom_errorbar(aes(x=x_f, ymin=value-sig_arr, ymax=value+sig_arr, group=variable),
+                  position=dodge, width=0.6) + 
+    scale_fill_manual(values=Spectral(num.model)[ind]) +
+    labs(y='Score', fill='Algorithm', x=NULL)+
+    facet_wrap(~x_f, scales='free_x') + 
+    theme_bw() + 
+    theme(axis.text.x.bottom = element_blank(),
+          axis.ticks.x.bottom = element_blank(),
+          strip.background = element_rect(fill='white', color='white'),
+          strip.text = element_text(face='bold'),
+          text = element_text(size=13),
+          legend.position = "right")
+  
+  result = list(
+    Times              = Times,
+    Score_all_clusters = Score_all_clusters,
+    Score_list         = Score_list, 
+    Score_list_melt    = res_Score,
+    plot_col           = plot_col
+  )
+  
+  return(result)
+  
+}
+  
+  
+  
+  

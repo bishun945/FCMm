@@ -1128,4 +1128,6 @@ RdYlBu <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlBu"))
 
 #' @export
 #' @rdname Color_plattes
+#' @importFrom scales hue_pal
+#' @importFrom farver encode_colour
 HUE <- scales::hue_pal()

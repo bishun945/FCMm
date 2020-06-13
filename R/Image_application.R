@@ -2,7 +2,7 @@
 #' @name apply_to_image
 #' @description
 #'   This function could apply the defined water cluster to corrected image files.
-#'   Should run \code{generate_param()} to generate a \code{res} list as an input
+#'   Should run \link{generate_param} to generate a \code{res} list as an input
 #'   of function \code{apply_to_image}
 #'
 #' @usage apply_to_image(input, res,
@@ -87,12 +87,13 @@
 #' @family Fuzzy cluster functions
 #' 
 #' @import ggplot2
-#' @import raster
+#' @importFrom raster raster brick as.data.frame rasterFromXYZ stretch rasterFromXYZ 
+#'   crs crs<-
 #' @importFrom reshape2 melt
 #' @importFrom magrittr %>% %<>%
 #' @importFrom ggthemes theme_map
+#' @importClassesFrom raster Raster RasterBrick RasterStack
 #' 
-
 apply_to_image <- function(input, res,
                            output_image=TRUE, output_resultpng=FALSE, output_imRrs.n=FALSE,
                            Chla_est=FALSE,
@@ -124,7 +125,7 @@ apply_to_image <- function(input, res,
 
   if(im@data@nlayers!=length(res$FD$wv))
     stop("The band number of image file is different from wavelength length!")
-  imdf <- as.data.frame(im,na.rm=TRUE,xy=TRUE)
+  imdf <- raster::as.data.frame(im,na.rm=TRUE,xy=TRUE)
   
   x_name <- which(names(imdf) == "x")
   y_name <- which(names(imdf) == "y")
@@ -134,7 +135,7 @@ apply_to_image <- function(input, res,
   names(imRrs.raw) <- paste0("Rrs",wv)
   Rrs <- as.matrix(imRrs.raw)
   Area <- trapz(wv,Rrs)
-  Area <- as.data.frame(Area)
+  Area <- base::as.data.frame(Area)
   imRrs.n <- imRrs.raw
   for(i in 1:ncol(imRrs.raw))
     imRrs.n[,i] = imRrs.raw[,i] / Area
@@ -156,13 +157,13 @@ apply_to_image <- function(input, res,
   res.FCM <- apply_FCM_m(Rrs=imRrs.n, wavelength=wv, Rrs_clusters=v,
                          default.cluster=FALSE)
   res.im <- list()
-  res.im$u <- res.FCM$u %>% as.data.frame
+  res.im$u <- base::as.data.frame(res.FCM$u)
   res.im$cluster <- res.FCM$cluster
 
   # Save true color image
   rgb <- brick(input[[10]],input[[7]],input[[5]],input[[2]])
   rgb_stretch <- stretch(x=rgb, minv=0, maxv=255)
-  rgb_df <- as.data.frame(rgb_stretch,xy=TRUE)
+  rgb_df <- raster::as.data.frame(rgb_stretch, xy=TRUE)
   rgb_df <- data.frame(x=rgb_df$x, y=rgb_df$y,
                        n=rgb_df[,3],r=rgb_df[,4], g=rgb_df[,5],b=rgb_df[,6]) %>% na.omit
   p.truecolor=ggplot(data=rgb_df) +

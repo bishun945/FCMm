@@ -2,9 +2,20 @@
 % Please edit documentation in R/Algorithms_assessment.R
 \name{Scoring_system}
 \alias{Scoring_system}
-\title{The main function for algorithms scoring}
+\alias{Scoring_system_bootstrap}
+\title{The main function for algorithms scoring based on accuracy, precision, and effectiveness.}
 \usage{
 Scoring_system(
+  Inputs,
+  method = "sort-based",
+  param_sort = list(decreasing = TRUE),
+  param_interval = list(trim = FALSE, reward.punishment = TRUE, decreasing = TRUE,
+    hundred.percent = FALSE),
+  remove.negative = FALSE
+)
+
+Scoring_system_bootstrap(
+  Times = 1000,
   Inputs,
   method = "sort-based",
   param_sort = list(decreasing = TRUE),
@@ -16,20 +27,75 @@ Scoring_system(
 \arguments{
 \item{Inputs}{The list returned form function \link{Getting_Asses_results}}
 
-\item{method}{The method selected to score algorithms: 'sort-based' (default) or 'interval-based'}
+\item{method}{The method selected to score algorithms: 
+\itemize{
+  \item \code{sort-based} (default) which is scored by the sort of accuracy and precision 
+    metrics (see more in \link{Score_algorithms_sort}). 
+  \item \code{interval-based} which is relatively scored by the interval of accuracy and 
+    precision (used by Brewin et al. (2015) and Neil et al. (2019)). 
+    See more in \link{Score_algorithms_interval}).
+}}
 
 \item{param_sort}{The parameters of function \link{Score_algorithms_sort}}
 
 \item{param_interval}{The parameters of function \link{Score_algorithms_interval}}
 
-\item{remove.negative}{Option to replace the negative score as zero (Default as \code{FALSE})}
+\item{remove.negative}{Option to replace the negative score as zero (default as \code{FALSE})}
+
+\item{Times}{Parameter of \code{Scoring_system_bootstrap}. The bootstrap time for running 
+\code{Scoring_system} (default as \code{1000})}
 }
 \value{
-A list including \code{Total_score}, \code{Accuracy}, \code{Precision}, \code{Effectiveness},
-  \code{Accuracy.list}, \code{Precision.list}, and \code{Total_score.melt}.
+The result of \code{Scoring_system} are including:
+\itemize{
+  \item \strong{Total_score} Data.frame of final score result with algorithm as column and cluster as row.
+  \item \strong{Accuracy} Data.frame of \code{Accuracy} score with algorithm as column and cluster as row.
+  \item \strong{Precision} Data.frame of \code{Precision} score with algorithm as column and cluster as row.
+  \item \strong{Effectiveness} Data.frame of \code{Effectiveness} score with algorithm as column and cluster as row.
+  \item \strong{Accuracy.list} List including data.frames of used \code{Accuracy} metrics.
+  \item \strong{Precision.list} List including data.frames of used \code{Precision} metrics.
+  \item \strong{Total_score.melt} Melted data.frame of \strong{Total_score} for plotting.
+  \item \strong{opt_algorithm} The optimal algorithm names for each cluster.
+  \item \strong{Inputs} Inputs of this function.
+}
+
+The result of \code{Scoring_system_bootstrap} are including:
+\itemize{
+  \item \strong{Times} The times of bootstrap running.
+  \item \strong{Score_all_clusters} The total score for algorithms across all clusters.
+  \item \strong{Score_list} All times of bootstrapping results are saved in it.
+  \item \strong{Score_list_melt} Melted \code{Score_list}.
+  \item \strong{plot_col} The col plot of \code{Score_list_melt}.
+}
 }
 \description{
-The main function for algorithms scoring
+The main function for algorithms scoring based on accuracy, precision, and effectiveness.
+}
+\details{
+The \code{Accuracy} and \code{Precision} is newly defined in \code{FCMm} package (referred by 
+  Hooker et al. (2005)):
+\itemize{
+  \item \code{Accuracy} is the estimation of how close the result of the experiment is to the 
+    true value.
+  \item \code{Precision} is the estimation of how excatly the result is determined independently 
+    of any true value.
+}
+In other words, \code{Accuracy} is telling a story truthfully and precision is how similarly
+  the story is represented over and over again.
+Here we use AE, a vector for each sample, for instance:
+\itemize{
+  \item \code{Accuracy} is the aggregation (no matter mean or median, in fuzzy calculation process), 
+    we use mean to some extent. 
+  \item \code{Precision} is acutally the \strong{stability} of AE (reproducebility) which means the error
+    produced by the algorithm is under certain control.
+}
+Finally, the functon will multiply the total score (\code{Accuracy} + \code{Precision}) by the 
+  effectiveness (i.e., Valid_percent returned by \link{Assessment_via_cluster}).
+}
+\note{
+\code{Scoring_system_bootstrap} is the bootstrap mode of \code{Scoring_system} which is useful when
+    the outcome is unstable for large number of samples. The default boostrap time in \code{Scoring_system_bootstrap}
+    is set as \code{1000} and the result of it is the list of several aggregated data.frames and standard deviations.
 }
 \examples{
 library(FCMm) 
@@ -45,9 +111,9 @@ x <- x[w, ]
 names(x) <- wv
 nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 set.seed(1234)
-FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+FD <- FuzzifierDetermination(x, wv, stand = FALSE)
 result <- FCM.new(FD, nb, fast.mode = TRUE)
-p.spec <- plot_spec(result, show.stand=TRUE)
+p.spec <- plot_spec(result, show.stand = TRUE, show.ribbon = TRUE)
 print(p.spec$p.cluster.spec)
 Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 Chla[Chla >= 999] <- NA
@@ -62,9 +128,26 @@ dt_Chla = dt_Chla[w,]
 memb = result$res.FCM$u[w,] \%>\% round(4)
 cluster =  result$res.FCM$cluster[w]
 Asses_results <- Getting_Asses_results(sample.size=20, pred = dt_Chla[,-1], 
-meas = data.frame(dt_Chla[,1]), memb = memb, cluster = cluster)
+meas = data.frame(dt_Chla[,1]), memb = memb)
 Score = Scoring_system(Asses_results)
 
+}
+\references{
+\itemize{
+  \item Hooker S B. Second SeaWiFS HPLC analysis round-robin experiment (SeaHARRE-2)[M]. 
+    National Aeronautics and Space Administration, Goddard Space Flight Center, 2005. 
+  \item Seegers B N, Stumpf R P, Schaeffer B A, et al. Performance metrics for the assessment 
+    of satellite data products: an ocean color case study[J]. Optics express, 2018, 26(6): 7404-7422.
+  \item Neil C, Spyrakos E, Hunter P D, et al. A global approach for chlorophyll-a retrieval 
+    across optically complex inland waters based on optical water types[J]. Remote Sensing of 
+    Environment, 2019, 229: 159-178.
+  \item Brewin R J W, Sathyendranath S, Müller D, et al. The Ocean Colour Climate Change 
+    Initiative: III. A round-robin comparison on in-water bio-optical algorithms[J]. Remote Sensing of 
+    Environment, 2015, 162: 271-294.
+  \item Moore T S, Dowell M D, Bradt S, et al. An optical water type framework for selecting and 
+    blending retrievals from bio-optical algorithms in lakes and coastal waters[J]. Remote sensing of 
+    environment, 2014, 143: 97-111.
+}
 }
 \seealso{
 Other Algorithm assessment: 

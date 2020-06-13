@@ -1,3 +1,19 @@
+## FCMm 0.8.4 (2020-06-13)
+
+  1. Import two required packages into `FCMm`, i.e., `scales` and `farver`.
+  2. Update documents in the man folder: `apply_to_image`, `FCM.new`, `Getting_Asses_results`, `Scoring_system`.
+  3. I have changed the import way of the package `raster` since it has a confict with `base::aggregate`. Thus, the `raster` functions are used by the way `importFrom`.
+  4. Improve the function `Assessment_via_cluster`. The valid percent observation is defined by values greater than zero and `is.finite` function.
+  5. Fix the bug of wrongly using `SMAPE` (actually is `CMAPE`) and so on.
+  6. Update the document of function `Scoring_system`. More and more details now! Non-related comments were removed.
+  7. Although the function `Scoring_system` could be used in the boostrap way by users, in this version, I add a function `Scoring_system_bootstrap` to do that. The default sample time is set as 1000.
+  8. Fix the bug in function `FCM.new`. Previously, `x.stand` is `x` when `stand = TRUE` which is unfriendly for further usage. Now, both raw and normalized data are calculated in the correct way! The centroids are saved on both raw and normalized scales.
+  9. Add the function `HUE` which is the default color pallete of the package `ggplot2`.
+  10. Delete `rm(list=ls())` in `Builtin_centroids.Rmd`.
+  11. Update documents in `Cluster_new_data.Rmd`.
+  12. Update README files.
+
+
 ## FCMm 0.8.3 (2020-06-12)
 
   1. Thanks for the bug report by Xiaolan Cai, a new return `centroids` of function `FCM.new` is supported now, which indicates the cluster centroids of your training data set.

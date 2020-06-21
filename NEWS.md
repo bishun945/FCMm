@@ -19,7 +19,7 @@
   6. Update the document of function `Scoring_system`. More and more details now! Non-related comments were removed.
   7. Although the function `Scoring_system` could be used in the boostrap way by users, in this version, I add a function `Scoring_system_bootstrap` to do that. The default sample time is set as 1000.
   8. Fix the bug in function `FCM.new`. Previously, `x.stand` is `x` when `stand = TRUE` which is unfriendly for further usage. Now, both raw and normalized data are calculated in the correct way! The centroids are saved on both raw and normalized scales.
-  9. Add the function `HUE` which is the default color pallete of the package `ggplot2`.
+  9. Add the function `HUE` which is the default color palette of the package `ggplot2`.
   10. Delete `rm(list=ls())` in `Builtin_centroids.Rmd`.
   11. Update documents in `Cluster_new_data.Rmd`.
   12. Update README files.

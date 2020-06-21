@@ -10,7 +10,7 @@ Getting_Asses_results(
   pred,
   meas,
   memb,
-  cluster,
+  cluster = apply(memb, 1, which.max),
   seed = NULL
 )
 }
@@ -21,13 +21,13 @@ of pred or so.}
 
 \item{replace}{Logical, replace, default as \code{FALSE}}
 
-\item{pred}{Prediction matrix}
+\item{pred}{Prediction matrix or data.frame}
 
-\item{meas}{Measured (actual) vector}
+\item{meas}{Measured (actual) matrix or data.frame}
 
 \item{memb}{Membership matrix}
 
-\item{cluster}{Cluster vector}
+\item{cluster}{Cluster vector. Could be calculated by the parameter \code{memb}. Will be deprecated later.}
 
 \item{seed}{Seed number for fixing the random process. See \code{help(set.seed)} for more details.}
 }
@@ -37,7 +37,7 @@ A list containing fuzzy and hard results from \link{Assessment_via_cluster}
 \description{
 This function mainly use function \link{Assessment_via_cluster} to get
   assessments both from fuzzy and hard mode. Specifically, it will return the accuracy and precision of 
-  \code{MAE},\code{SMAPE},\code{BIAS}, and \code{SMRPE} which would be seemed as the input value of 
+  \code{MAE},\code{CMAPE},\code{BIAS}, and \code{CMRPE} which would be seemed as the input value of 
   function \link{Scoring_system}.
 }
 \note{

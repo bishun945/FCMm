@@ -30,5 +30,10 @@ utils::globalVariables(c('.',
                          "wavelength.default",
                          "cluster",
                          "ids",
-                         "number"
+                         "number",
+                         "Score",
+                         "x_f",
+                         "res",
+                         "writeRaster",
+                         "Chla_true"
                          ))

@@ -4,7 +4,12 @@
 \alias{plot_spec}
 \title{Plot the result of FCM_m}
 \usage{
-plot_spec(res, show.stand = NULL, show.ribbon = FALSE)
+plot_spec(
+  res,
+  show.stand = NULL,
+  show.ribbon = FALSE,
+  color_palette = RdYlBu(res$K)
+)
 }
 \arguments{
 \item{res}{The result of function \link{FCM.new}}
@@ -14,6 +19,10 @@ and assigned by \code{res$FD$stand}).}
 
 \item{show.ribbon}{Whether to show the ribbon defined by sd values calculated from samples 
 in each cluster (default as \code{FALSE}).}
+
+\item{color_palette}{The palette of cluster color. Default as \code{RdYlBu(res$K)}.
+In \code{FCMm}, it could be \link{RdYlBu}, \link{Spectral}, \link{HUE} or other color values
+with same length of cluster number.}
 }
 \value{
 The result of \code{plot_spec} is a list including:

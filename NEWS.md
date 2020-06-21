@@ -1,3 +1,36 @@
+## FCMm 0.8.5 (2020-06-21)
+
+  1. Fix the bug in `Assessment_via_cluster` when metric values is extremely biased.
+  2. Fix the bug in `Sampling_via_cluster` when the input `x` has uncontinuous numeric names.
+  3. Fix the bug in `Scoring_system` when the `Total_score` has full NA values (for some cluster have few observation to calculate metrics.
+  4. Now, the parameter `Times` of `Scoring_system_bootstrap` must be larger than 1 to avoid errors.
+  5. New features! The `Scoring_system_bootstrap` now support algorithms blending by optimized candidates. 
+  6. New features! `FCM.new` now support assign cluster names by sorting based on specific constrains (new parameters `sort.pos` and `sort.decreasing`).
+  7. New features! Added parameter `color_palette` for spectra plotting functions, i.e., `plot_spec` and `apply_to_image`. Users could use builtin color palettes or pre-defined color codes.
+  8. Documents updated.
+
+## FCMm 0.8.4 (2020-06-13)
+
+  1. Import two required packages into `FCMm`, i.e., `scales` and `farver`.
+  2. Update documents in the man folder: `apply_to_image`, `FCM.new`, `Getting_Asses_results`, `Scoring_system`.
+  3. I have changed the import way of the package `raster` since it has a confict with `base::aggregate`. Thus, the `raster` functions are used by the way `importFrom`.
+  4. Improve the function `Assessment_via_cluster`. The valid percent observation is defined by values greater than zero and `is.finite` function.
+  5. Fix the bug of wrongly using `SMAPE` (actually is `CMAPE`) and so on.
+  6. Update the document of function `Scoring_system`. More and more details now! Non-related comments were removed.
+  7. Although the function `Scoring_system` could be used in the boostrap way by users, in this version, I add a function `Scoring_system_bootstrap` to do that. The default sample time is set as 1000.
+  8. Fix the bug in function `FCM.new`. Previously, `x.stand` is `x` when `stand = TRUE` which is unfriendly for further usage. Now, both raw and normalized data are calculated in the correct way! The centroids are saved on both raw and normalized scales.
+  9. Add the function `HUE` which is the default color palette of the package `ggplot2`.
+  10. Delete `rm(list=ls())` in `Builtin_centroids.Rmd`.
+  11. Update documents in `Cluster_new_data.Rmd`.
+  12. Update README files.
+
+
+## FCMm 0.8.3 (2020-06-12)
+
+  1. Thanks for the bug report by Xiaolan Cai, a new return `centroids` of function `FCM.new` is supported now, which indicates the cluster centroids of your training data set.
+  2. Add a new `ifnotstop` for function `Assessment_via_cluster` that ZERO values in measured vector will introduce `Inf` metric results for `cal.metrics` or `cal.metrics.vector`.
+  3. Add a new color palette function `scales::hue_pal` which is the default palette of package `ggplot2`.
+
 ## FCMm 0.8.2 (2020-06-11)
 
   0. This update is for revision from CRAN manual inspection.

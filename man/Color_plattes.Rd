@@ -4,11 +4,14 @@
 \alias{Color_plattes}
 \alias{Spectral}
 \alias{RdYlBu}
+\alias{HUE}
 \title{Color plattes including Spectral and RdYlBu}
 \usage{
 Spectral(n)
 
 RdYlBu(n)
+
+HUE(n)
 }
 \arguments{
 \item{n}{Number of colors}

@@ -4,16 +4,23 @@
 \alias{apply_to_image}
 \title{Apply FCM_m to raster data}
 \usage{
-apply_to_image(input, res,
-  output_image=TRUE, output_resultpng=FALSE, output_imRrs.n=FALSE,
-  Chla_est=FALSE,
-  title.name = NULL, png_scale=50,
-  fn_memb="output_membership",
-  fn_cluster="output_cluster",
-  fn_imRrs.n='output_imRrs_normalized',
-  fn_truecolorpng='output_truecolor',
-  fn_Chla = 'output_Chla',
-  output_format='GTiff')
+apply_to_image(
+  input,
+  res,
+  color_palette = RdYlBu(res$K),
+  output_image = TRUE,
+  output_resultpng = FALSE,
+  output_imRrs.n = FALSE,
+  Chla_est = FALSE,
+  title.name = NULL,
+  png_scale = 50,
+  fn_memb = "output_membership",
+  fn_cluster = "output_cluster",
+  fn_imRrs.n = "output_imRrs_normalized",
+  fn_truecolorpng = "output_truecolor",
+  fn_Chla = "output_Chla",
+  output_format = "GTiff"
+)
 }
 \arguments{
 \item{input}{A \strong{raster} or a \strong{character} linking
@@ -28,6 +35,10 @@ to the raster file on the disk.}
 }
 For the convenience, function \link{generate_param} supports to quickly
   generate this \code{list}. See more in examples.}
+
+\item{color_palette}{The palette of cluster color. Default as \code{RdYlBu(res$K)}.
+In \code{FCMm}, it could be \link{RdYlBu}, \link{Spectral}, \link{HUE} or other color values
+with same length of cluster number.}
 
 \item{output_image}{Logical, whether to produce image files}
 
@@ -74,7 +85,7 @@ A \code{list()} of all results and several inputs:
 }
 \description{
 This function could apply the defined water cluster to corrected image files.
-  Should run \code{generate_param()} to generate a \code{res} list as an input
+  Should run \link{generate_param} to generate a \code{res} list as an input
   of function \code{apply_to_image}
 }
 \details{

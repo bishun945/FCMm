@@ -176,7 +176,6 @@ This demo shows how to apply `FCMm` to raster data sets if users just want to ru
 The `OLCI_TH` is a `RasterBrick` of package `raster`. For running in `FCMm`, this `RasterBrick` should be converted as `ImageDataframe` so-called as `imdf`.
 
 ```{r message=FALSE, warning=FALSE}
-rm(list=ls())
 library(FCMm)
 library(ggplot2)
 library(magrittr)

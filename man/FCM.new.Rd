@@ -4,12 +4,26 @@
 \alias{FCM.new}
 \title{Running the improved FCM by optimizing fuzzifier parameter}
 \usage{
-FCM.new(FDlist, K, plot.jitter=TRUE, fast.mode=FALSE, stand=FALSE)
+FCM.new(
+  FDlist,
+  K,
+  sort.pos = length(FDlist$wv),
+  sort.decreasing = FALSE,
+  plot.jitter = TRUE,
+  fast.mode = FALSE,
+  stand = FALSE
+)
 }
 \arguments{
 \item{FDlist}{A \code{list} from function \code{\link{FuzzifierDetermination}}}
 
 \item{K}{Number, cluster number}
+
+\item{sort.pos}{The position to sort the cluster number. Default as the end position of the 
+input training matrix. It can be \code{NULL} if there is no need to re-sort the cluster index.}
+
+\item{sort.decreasing}{Default as \code{FALSE} which means the sort are assigned from small values
+to large values.}
 
 \item{plot.jitter}{Logical, choose to plot jitter plot using \code{ggplot2} functions}
 

@@ -65,7 +65,16 @@ The result of \code{Scoring_system_bootstrap} are including:
   \item \strong{Score_all_clusters} The total score for algorithms across all clusters.
   \item \strong{Score_list} All times of bootstrapping results are saved in it.
   \item \strong{Score_list_melt} Melted \code{Score_list}.
+  \item \strong{Opt_algorithm_list} The optimal algorithm for every runing.
+  \item \strong{Opt_algorithm} The optimal algorithm defined by mode of \code{Opt_algorithm_list}
+    for each cluster.
   \item \strong{plot_col} The col plot of \code{Score_list_melt}.
+  \item \strong{plot_scatter} The scatter plot of measured and predicted Chla concentration
+    colored by clusters.
+  \item \strong{plot_scatter_opt} The scatter plot of measured and predicted Chla concentration
+    colored by clusters for optimized algorithms.
+  \item \strong{dt_Chla} Data.frame with combination of candidate algortihms and blended results.
+  \item \strong{Chla_blend} The blended Chla concentration by score results.
 }
 }
 \description{

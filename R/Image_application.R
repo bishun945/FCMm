@@ -5,17 +5,6 @@
 #'   Should run \link{generate_param} to generate a \code{res} list as an input
 #'   of function \code{apply_to_image}
 #'
-#' @usage apply_to_image(input, res,
-#'   output_image=TRUE, output_resultpng=FALSE, output_imRrs.n=FALSE,
-#'   Chla_est=FALSE,
-#'   title.name = NULL, png_scale=50,
-#'   fn_memb="output_membership",
-#'   fn_cluster="output_cluster",
-#'   fn_imRrs.n='output_imRrs_normalized',
-#'   fn_truecolorpng='output_truecolor',
-#'   fn_Chla = 'output_Chla',
-#'   output_format='GTiff')
-#'
 #' @param input A \strong{raster} or a \strong{character} linking
 #'   to the raster file on the disk.
 #' @param res A required list that used for clustering the image data including:
@@ -27,6 +16,9 @@
 #'   }
 #'   For the convenience, function \link{generate_param} supports to quickly
 #'     generate this \code{list}. See more in examples.
+#' @param color_palette The palette of cluster color. Default as \code{RdYlBu(res$K)}.
+#'   In \code{FCMm}, it could be \link{RdYlBu}, \link{Spectral}, \link{HUE} or other color values
+#'   with same length of cluster number.
 #' @param output_image Logical, whether to produce image files
 #' @param output_resultpng Logical, whether to produce png files
 #' @param output_imRrs.n Logical, whether to produce normalized Rrs files
@@ -94,7 +86,8 @@
 #' @importFrom ggthemes theme_map
 #' @importClassesFrom raster Raster RasterBrick RasterStack
 #' 
-apply_to_image <- function(input, res,
+apply_to_image <- function(input, res, 
+                           color_palette = RdYlBu(res$K),
                            output_image=TRUE, output_resultpng=FALSE, output_imRrs.n=FALSE,
                            Chla_est=FALSE,
                            title.name = NULL, png_scale=50,
@@ -109,7 +102,10 @@ apply_to_image <- function(input, res,
     stop("The input of image file is missing!")
   if(missing(res))
     stop("FCM results is missing")
-
+  
+  if(length(color_palette) != res$K)
+    stop("The length of color_palette shoud be same with cluster number!")
+  
   message("Since we have not check the input image file,")
   message("  please make sure the wavelength of image file and cluster dataframe match correspondingly.")
   message("The normalization of spectra is default in thie version!")
@@ -209,7 +205,7 @@ apply_to_image <- function(input, res,
     message(paste0("Cluster map was generated, named: ", fn_cluster))
   }
   message("Plotting clusters ......")
-  cp <- RdYlBu(nrow(v))
+  cp <- color_palette
   cp.sub <- cp[(unique(res.im$cluster)) %>% sort]
   p.cluster <- ggplot() +
     geom_raster(data=im.cluster,aes(x=x,y=y,fill=as.character(res.im.cluster)),

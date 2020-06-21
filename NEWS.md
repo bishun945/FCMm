@@ -1,3 +1,14 @@
+## FCMm 0.8.5 (2020-06-21)
+
+  1. Fix the bug in `Assessment_via_cluster` when metric values is extremely biased.
+  2. Fix the bug in `Sampling_via_cluster` when the input `x` has uncontinuous numeric names.
+  3. Fix the bug in `Scoring_system` when the `Total_score` has full NA values (for some cluster have few observation to calculate metrics.
+  4. Now, the parameter `Times` of `Scoring_system_bootstrap` must be larger than 1 to avoid errors.
+  5. New features! The `Scoring_system_bootstrap` now support algorithms blending by optimized candidates. 
+  6. New features! `FCM.new` now support assign cluster names by sorting based on specific constrains (new parameters `sort.pos` and `sort.decreasing`).
+  7. New features! Added parameter `color_palette` for spectra plotting functions, i.e., `plot_spec` and `apply_to_image`. Users could use builtin color palettes or pre-defined color codes.
+  8. Documents updated.
+
 ## FCMm 0.8.4 (2020-06-13)
 
   1. Import two required packages into `FCMm`, i.e., `scales` and `farver`.

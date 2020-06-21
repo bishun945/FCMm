@@ -34,5 +34,6 @@ utils::globalVariables(c('.',
                          "Score",
                          "x_f",
                          "res",
-                         "writeRaster"
+                         "writeRaster",
+                         "Chla_true"
                          ))

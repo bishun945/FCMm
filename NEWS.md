@@ -1,23 +1,39 @@
+## FCMm 0.8.6 (2020-07-01)
+  1. `Assessment_via_cluster`: update the precision calculation process which now produce NA values for extreme difference between actual and predicted values.
+  2. `Assessment_via_cluster`: for total precision calculation, it is unfair when outliers are included (which may result in extremely precision values). A quantile calculation for limiting the range of values to be calculated.
+  3. `Assessment_via_cluster`: the function will return NA values if all prediction from j algorithm in cluster i are NA values, i.e., the algorithm to be assessed is basically failed.
+  4. `Getting_Asses_result`:  add a new parameter `replace` to control the function `sample` for using replacement or non-replacement.
+  5. `Scoring_system_bootstrap`: add a parameter `replace` to control the function `sample`.
+  6. `Scoring_system_bootstrap`:  add an output `Results_of_scoring_system` to restore the all outputs from `Scoring_system`.
+  7. `Scoring_system_bootstrap`: fix bug of determining `Opt_algorithm`. Now it is determined by maximum of score values.
+  8. `Scoring_system_bootstrap`: add new item `Remove_algorithm` which is used for removing algorithms with huge errors when blending.
+  9. `Scoring_system_bootstrap`: update the col plotting.
+  10. `Scoring_system_bootstrap`: add Chla blending process and its corresponding plots.
+  11. Add a new internal function `Chla_algorithm_blend` which is used for blending work.
+  12. `apply_FCM_m`: fix the bug of using `color_palette`.
+  13. `apply_to_image`: the default setting and output control of parameters is now more reasonable. 
+  14. Add a new function `generate_param_ex`, which is used for generating input for `apply_to_image`when user-defined centroids come in.
+
 ## FCMm 0.8.5 (2020-06-21)
 
   1. Fix the bug in `Assessment_via_cluster` when metric values is extremely biased.
-  2. Fix the bug in `Sampling_via_cluster` when the input `x` has uncontinuous numeric names.
+  2. Fix the bug in `Sampling_via_cluster` when the input `x` has noncontinuous numeric names.
   3. Fix the bug in `Scoring_system` when the `Total_score` has full NA values (for some cluster have few observation to calculate metrics.
   4. Now, the parameter `Times` of `Scoring_system_bootstrap` must be larger than 1 to avoid errors.
   5. New features! The `Scoring_system_bootstrap` now support algorithms blending by optimized candidates. 
   6. New features! `FCM.new` now support assign cluster names by sorting based on specific constrains (new parameters `sort.pos` and `sort.decreasing`).
-  7. New features! Added parameter `color_palette` for spectra plotting functions, i.e., `plot_spec` and `apply_to_image`. Users could use builtin color palettes or pre-defined color codes.
+  7. New features! Added parameter `color_palette` for spectra plotting functions, i.e., `plot_spec` and `apply_to_image`. Users could use built-in color palettes or pre-defined color codes.
   8. Documents updated.
 
 ## FCMm 0.8.4 (2020-06-13)
 
   1. Import two required packages into `FCMm`, i.e., `scales` and `farver`.
   2. Update documents in the man folder: `apply_to_image`, `FCM.new`, `Getting_Asses_results`, `Scoring_system`.
-  3. I have changed the import way of the package `raster` since it has a confict with `base::aggregate`. Thus, the `raster` functions are used by the way `importFrom`.
+  3. I have changed the import way of the package `raster` since it has a conflict with `base::aggregate`. Thus, the `raster` functions are used by the way `importFrom`.
   4. Improve the function `Assessment_via_cluster`. The valid percent observation is defined by values greater than zero and `is.finite` function.
   5. Fix the bug of wrongly using `SMAPE` (actually is `CMAPE`) and so on.
   6. Update the document of function `Scoring_system`. More and more details now! Non-related comments were removed.
-  7. Although the function `Scoring_system` could be used in the boostrap way by users, in this version, I add a function `Scoring_system_bootstrap` to do that. The default sample time is set as 1000.
+  7. Although the function `Scoring_system` could be used in the bootstrap way by users, in this version, I add a function `Scoring_system_bootstrap` to do that. The default sample time is set as 1000.
   8. Fix the bug in function `FCM.new`. Previously, `x.stand` is `x` when `stand = TRUE` which is unfriendly for further usage. Now, both raw and normalized data are calculated in the correct way! The centroids are saved on both raw and normalized scales.
   9. Add the function `HUE` which is the default color palette of the package `ggplot2`.
   10. Delete `rm(list=ls())` in `Builtin_centroids.Rmd`.
@@ -39,8 +55,8 @@
   3. In this version, `on.exit` is used in the right position which is next to `oldoptions <- options(scipen=1000)` #247 of `Image_application.R`.
   4. The LICENSE and cph are fixed in this version.
   5. Updated the function `plot_spec`. For convenience of plotting spectra by groups. Now the `facet_wrap` are used rather than restored in a list. Therefore, its argument `HABc` is deprecated in this version.
-  6. Documents are updated for grammer and spelling issues.
-  7. TSM estimation algorithm `GAA_SPM` by Xiaolong Yu is supported in this verison.
+  6. Documents are updated for grammar and spelling issues.
+  7. TSM estimation algorithm `GAA_SPM` by Xiaolong Yu is supported in this version.
 
 ## FCMm 0.8.1 (2020-06-06)
 

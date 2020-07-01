@@ -59,10 +59,15 @@ Rrs_trans <- function(Rrs490, Rrs560, Rrs674, Rrs754, Rrs865){
 #'   \item \strong{GI} Generalized index for SPM.
 #'   \item \strong{SPM} The predicted suspended particulate matter.
 #' }
-#' @export
+#' @noRd
 #' 
-#' @note The input wavelength are at OLCI bandset but this function will
+#' @note 
+#' The input wavelength are at OLCI bandset but this function will
 #'   transform these wavelengthes to the GAA required bands.
+#' 
+#' 2020-06-27
+#' 
+#' The TSM functions are under test and will be exported in the next few versions.
 #' 
 #' @examples res = GAA_SPM(WaterSpec35$`490`, WaterSpec35$`560`, 
 #' WaterSpec35$`673.75`, WaterSpec35$`753.75`, WaterSpec35$`865`) 

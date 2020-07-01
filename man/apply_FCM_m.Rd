@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCMm.R
 \name{apply_FCM_m}
 \alias{apply_FCM_m}
-\title{Apply FCM_m to new input Rrs}
+\title{Apply FCM_m (improved Fuzzy Cluster Method) to new input Rrs}
 \usage{
 apply_FCM_m(
   Rrs,
@@ -12,7 +12,8 @@ apply_FCM_m(
   stand = FALSE,
   default.cluster = TRUE,
   quality_check = FALSE,
-  option.plot = FALSE
+  option.plot = FALSE,
+  color_palette = NULL
 )
 }
 \arguments{
@@ -26,7 +27,8 @@ Default use the data from \code{Bi_clusters.rda}}
 
 \item{m_used}{Number, Used fuzzifier value}
 
-\item{stand}{Logical, whether to normalized the Rrs data. Default as \code{FALSE} means do not.}
+\item{stand}{Logical, whether to normalized the Rrs data (both for Input and Centroids).
+Default as \code{FALSE} means do not.}
 
 \item{default.cluster}{Logical, whether to use the default clusters.
 Default use the data from \code{Bi_clusters.rda}}
@@ -34,6 +36,10 @@ Default use the data from \code{Bi_clusters.rda}}
 \item{quality_check}{Logical, quality chech option (default as \code{FALSE})}
 
 \item{option.plot}{Logical, whether to plot the result. Default as \code{FALSE}}
+
+\item{color_palette}{The palette of cluster color. Default as \code{RdYlBu(res$K)} if \code{NULL}.
+It could be \code{RdYlBu(k)}, \code{Spectral(k)}, \code{HUE(k)} or other color values
+with same length of cluster number. \code{k} means the cluster number.}
 }
 \value{
 A \code{list} including several results of function \code{apply_FCM_m()}
@@ -48,14 +54,14 @@ A \code{list} including several results of function \code{apply_FCM_m()}
     \item \strong{m.used}  The used value of fuzzifier(m)
     \item \strong{K}  Cluster number
     \item \strong{p.group}  A ggplot list for plotting the cluster result
-    \item \strong{p.group.facet} \code{p.group} with facet to see each cluster results
+    \item \strong{p.group.facet} Recommened! \code{p.group} with facet to see each cluster results
       more clearly
-    \item \strong{dt.melt}  Dataframe used for ggplot
+    \item \strong{dt.melt} Dataframe used for ggplot including \code{dt_plot_x}, \code{dt_plot_v}, and \code{cp}.
   }
 }
 \description{
-Application of FCM_m method for new Rrs data based on default cluster settings
-  or user-defined clusters (trained by FCM.new).
+Application of FCM_m (improved Fuzzy Cluster Method) method for new Rrs data based on 
+  default cluster settings or user-defined clusters (trained by FCM.new).
 }
 \examples{
 library(FCMm)

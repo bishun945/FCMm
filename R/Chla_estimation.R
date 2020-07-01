@@ -633,7 +633,7 @@ QAA_v5 <- function(wv, Rrs,
   aChla665_star = 0.017
   Chl_Liu = aph[,wv667] / aChla665_star
   
-  # save results
+  # return results
   result = list()
   result$input  = list(wv    = wv,
                        Rrs   = Rrs,
@@ -694,7 +694,7 @@ QAA_v5 <- function(wv, Rrs,
 #' 
 #' @importFrom stringr str_subset
 run_all_Chla_algorithms <- function(Rrs, wv_range=3){
-  wv <- str_subset(names(Rrs), '\\d') %>% as.numeric
+  wv <- str_subset(names(Rrs), '\\d') %>% as.numeric # to be updated from `plot_spec_from_df`
   wv_need <- c(443, 490, 510, 560, 620, 665, 681, 709, 754, 779)
   RrsNA <- rep(NA, nrow(Rrs))
   for(i in wv_need){

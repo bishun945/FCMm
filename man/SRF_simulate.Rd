@@ -10,6 +10,7 @@ SRF_simulate(
   select_sensor = "All",
   output_wavelength = "MED",
   save_as_csv = FALSE,
+  save_csv_dir = ".",
   na.rm = TRUE,
   wv_as_column = TRUE
 )
@@ -30,6 +31,9 @@ position at the maximun of SRF peak.}
 
 \item{save_as_csv}{Logical. Choose to save the simulation results as single csv for each
 sensor. Default with \code{FALSE}}
+
+\item{save_csv_dir}{The directory used for saving ouput csv files. Default as current working
+directory (\code{"."}).}
 
 \item{na.rm}{Logical. Should NA values be removed? Default as \code{TRUE}}
 
@@ -53,9 +57,13 @@ Simulate hyperspectral Rrs to multispectral bands
 }
 \examples{
 library(FCMm)
-nm <- seq(400,900)
-Rrs <- data.frame(nm=nm,Site1=exp(nm/1000)+runif(501))
+nm <- seq(400, 900)
+Rrs <- data.frame(nm=nm, Site1=exp(nm/1000)+runif(501))
+# save simulations in the variable `result` 
 result <- SRF_simulate(Rrs,select_sensor=c("OLCI","MODIS"))
+# save simulations in the disk
+result <- SRF_simulate(Rrs,select_sensor=c("OLCI","MODIS"),
+  save_as_csv = TRUE, save_csv_dir = tempdir())
 
 }
 \seealso{

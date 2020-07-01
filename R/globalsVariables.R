@@ -35,5 +35,10 @@ utils::globalVariables(c('.',
                          "x_f",
                          "res",
                          "writeRaster",
-                         "Chla_true"
+                         "Chla_true",
+                         "cluster_f",
+                         "box",
+                         "pos_opt",
+                         "pos_removed",
+                         "value_opt"
                          ))

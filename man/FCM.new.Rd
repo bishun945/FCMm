@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCMm.R
 \name{FCM.new}
 \alias{FCM.new}
-\title{Running the improved FCM by optimizing fuzzifier parameter}
+\title{Running the improved Fuzzy Cluster Method (FCM) by optimizing fuzzifier parameter}
 \usage{
 FCM.new(
   FDlist,
@@ -44,7 +44,7 @@ A \code{list} of FCM:
   }
 }
 \description{
-An improved version of FCM for water spectra data sets.
+An improved version of Fuzzy Cluster Method (FCM) for water spectra data sets.
 }
 \examples{
 library(FCMm) 

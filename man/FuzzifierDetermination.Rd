@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCMm.R
 \name{FuzzifierDetermination}
 \alias{FuzzifierDetermination}
-\title{Determine the optimized fuzzifier for FCM running}
+\title{Determine the optimized fuzzifier for Fuzzy Cluster Method (FCM) running}
 \usage{
 FuzzifierDetermination(x, wv, max.m=10, stand=FALSE, dmetric='sqeuclidean')
 }
@@ -32,7 +32,7 @@ FuzzifierDetermination(x, wv, max.m=10, stand=FALSE, dmetric='sqeuclidean')
   }
 }
 \description{
-To determine the optimized fuzzifier value for FCM running.
+To determine the optimized fuzzifier value for Fuzzy Cluster Method (FCM)running.
 }
 \examples{
 

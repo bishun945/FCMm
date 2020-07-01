@@ -8,9 +8,11 @@ apply_to_image(
   input,
   res,
   color_palette = RdYlBu(res$K),
-  output_image = TRUE,
+  output_image = FALSE,
   output_resultpng = FALSE,
   output_imRrs.n = FALSE,
+  output_dir = ".",
+  output_format = "GTiff",
   Chla_est = FALSE,
   title.name = NULL,
   png_scale = 50,
@@ -18,8 +20,7 @@ apply_to_image(
   fn_cluster = "output_cluster",
   fn_imRrs.n = "output_imRrs_normalized",
   fn_truecolorpng = "output_truecolor",
-  fn_Chla = "output_Chla",
-  output_format = "GTiff"
+  fn_Chla = "output_Chla"
 )
 }
 \arguments{
@@ -40,47 +41,59 @@ For the convenience, function \link{generate_param} supports to quickly
 In \code{FCMm}, it could be \link{RdYlBu}, \link{Spectral}, \link{HUE} or other color values
 with same length of cluster number.}
 
-\item{output_image}{Logical, whether to produce image files}
+\item{output_image}{Logical, whether to save images as raster files to your disk. Default as \code{FALSE}.}
 
-\item{output_resultpng}{Logical, whether to produce png files}
+\item{output_resultpng}{Logical, whether to save png files to your disk. Default as \code{FALSE}.}
 
-\item{output_imRrs.n}{Logical, whether to produce normalized Rrs files}
+\item{output_imRrs.n}{Logical, whether to produce normalized Rrs files. Default as \code{FALSE}. 
+This parameter is used for inspection of FCM trainning. Will be \strong{deprecated} in the following version.}
 
-\item{Chla_est}{Logical, whether to estimate Chla concentration}
+\item{output_dir}{The directory of output files. Default as the current working directory (\code{"."})}
 
-\item{title.name}{Character, the title name of ggplot for plotting}
-
-\item{png_scale}{Numeric, scale of png}
-
-\item{fn_memb}{A string, filename of membership raster file}
-
-\item{fn_cluster}{A string, filename of cluster raster file}
-
-\item{fn_imRrs.n}{A string, filename of normalized Rrs raster file}
-
-\item{fn_truecolorpng}{A string, file name of truecolor png}
-
-\item{fn_Chla}{A string, file name of estimated Chla raster file}
-
-\item{output_format}{A string, the format of raster file, default as \code{GTiff}.
+\item{output_format}{A string, the format of raster file, default as \code{"GTiff"}.
 See more in \code{\link[raster:writeRaster]{writeRaster}}}
+
+\item{Chla_est}{Logical, whether to estimate Chla concentration using the function \link{FCM_m_Chla_estimation}.
+Default as \code{FALSE}.}
+
+\item{title.name}{Character, the title name of ggplot for plotting. Default as \code{NULL}.}
+
+\item{png_scale}{Numeric, scale of png. Recommended as \code{50}.}
+
+\item{fn_memb}{A string, filename of membership raster file. Default as \code{"output_membership"}.}
+
+\item{fn_cluster}{A string, filename of cluster raster file. Default as \code{"output_cluster"}.}
+
+\item{fn_imRrs.n}{A string, filename of normalized Rrs raster file. Default as \code{"output_imRrs_normalized"}.}
+
+\item{fn_truecolorpng}{A string, file name of truecolor png. Default as \code{"output_truecolor"}.}
+
+\item{fn_Chla}{A string, file name of estimated Chla raster file. Default as \code{"output_Chla"}.}
 }
 \value{
 A \code{list()} of all results and several inputs:
   \itemize{
     \item \strong{input}  What we input character link to image file or raster object
     \item \strong{res}  Condition input of apply_to_image
-    \item \strong{raster.memb}  Raster object of membership value
-    \item \strong{raster.cluster}  Raster object of cluster
+    
+    \item \strong{res.FCM}  List of FCM.new result
+    \item \strong{res.Chla}  Data.frame includes the template and final Chla estimation results
+    
+    \item \strong{coord}  Dataframe of xy coordinates
+    \item \strong{imRrs.raw}  Dataframe of raw Rrs excluding NA pixels. Thus, it may have less pixels than 
+      that of \code{input}
+    \item \strong{imRrs.n}  Dataframe of normalized Rrs. Same as \code{imRrs.raw} but in the normalized scale
+    \item \strong{im.cluster} Dataframe of cluster with coordinates.
+    \item \strong{im.memb} Dataframe of membership returned by \link{apply_FCM_m}. It includes coordinates.
+    
+    \item \strong{raster.memb}  Raster object of membership value. \code{NULL} if \code{output_image} is \code{FALSE}.
+    \item \strong{raster.cluster}  Raster object of cluster. \code{NULL} if \code{output_image} is \code{FALSE}.
+    \item \strong{raster.Chla} Raster object of Chla concentration. \code{NULL} if \code{output_image} is \code{FALSE}.
+    
     \item \strong{p.memb}  A ggplot list of membership value map
     \item \strong{p.cluster}  A ggplot list of cluster map
     \item \strong{p.truecolor} A ggplot list of truecolor map
     \item \strong{p.Chla}  A ggplot list of Chla map
-    \item \strong{imdf}  Data.frame of raw Rrs including xy coordinates
-    \item \strong{imRrs.raw}  Data.frame of raw Rrs
-    \item \strong{imRrs.n}  Data.frame of normalized Rrs
-    \item \strong{res.FCM}  List of FCM.new result
-    \item \strong{res.Chla}  Data.frame includes the template and final Chla estimation results
   }
 }
 \description{
@@ -88,23 +101,28 @@ This function could apply the defined water cluster to corrected image files.
   Should run \link{generate_param} to generate a \code{res} list as an input
   of function \code{apply_to_image}
 }
-\details{
-The section FCM running used the subset of default Rrs clusters.
+\note{
+\strong{2019-12-12}: 
+
+  The section FCM running used the subset of default Rrs clusters.
   Please see the section \strong{Part II: New coming raster data} by running \code{vignette('Builtin_centrodis')}
   if have not known how to do in that situation.
   
   Also, if it is your first time to get the image data into \strong{R}, you could
   load the raster data by typing \code{raster::brick(filename)} which filename
   is the path of your data such as '/data/Test.dat' or 'E://data//Test.tiff' or so.
+  
+  \strong{2020-06-27}: 
+  
+  Note that the inputs of \code{apply_to_image} support the file path of raster file.
 }
 \examples{
-\dontrun{
+\donttest{
 library(FCMm)
 data("OLCI_TH")
 data("Bi_clusters")
 res <- generate_param(c(413,443,490,510,560,620,665,674,709,754,865,885))
-im_result <- apply_to_image(input=OLCI_TH, res=res,
-  title.name="Test_image", Chla_est=TRUE, output_image=FALSE)
+im_result <- apply_to_image(input=OLCI_TH, res=res, title.name="Test_image", Chla_est=TRUE)
 }
   
 }

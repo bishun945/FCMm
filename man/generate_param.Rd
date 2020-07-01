@@ -2,21 +2,33 @@
 % Please edit documentation in R/Image_application.R
 \name{generate_param}
 \alias{generate_param}
-\title{Generate the input param \code{res} of \code{apply_to_image} based on the built-in centroids}
+\alias{generate_param_ex}
+\title{Generate the input param \code{res} of \code{apply_to_image} based on 
+  the built-in or user-defined centroids}
 \usage{
 generate_param(wl)
+
+generate_param_ex(centroids, m = 1.36)
 }
 \arguments{
 \item{wl}{wavelength of subsetting}
+
+\item{centroids}{The centorids values required for fuzzy clustering on images. Its colnames should
+be converted to numeric wavelength. The format should be like \code{Rrs_clusters.default}.}
+
+\item{m}{The fuzzifier value of FCM. Default as \code{1.36}.}
 }
 \value{
-A list used for function \link{apply_to_image}.
+The return of \code{generate_param} or \code{generate_param_ex} is a list used for 
+  function \link{apply_to_image}.
 }
 \description{
-Generate the input param \code{res} of \code{apply_to_image} based on the built-in centroids
+Generate the input param \code{res} of \code{apply_to_image} based on 
+  the built-in or user-defined centroids
 }
 \note{
-This function only support the cluster centroids proposed by \code{Bi et al. (2019)}
+\code{generate_param} only support the cluster centroids proposed by \code{Bi et al. (2019)}.
+  However, the \code{generate_param_ex} could be used for user-defined centroids if you want.
 }
 \examples{
 library(FCMm)

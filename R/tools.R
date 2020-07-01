@@ -928,6 +928,8 @@ CLsma <-
 #'   position at the maximun of SRF peak.
 #' @param save_as_csv Logical. Choose to save the simulation results as single csv for each
 #'   sensor. Default with \code{FALSE}
+#' @param save_csv_dir The directory used for saving ouput csv files. Default as current working
+#'   directory (\code{"."}).
 #' @param na.rm Logical. Should NA values be removed? Default as \code{TRUE}
 #' @param wv_as_column Logical. If \code{TRUE} (default), the output result is a dataframe
 #'   with wavelength as column names.
@@ -946,9 +948,13 @@ CLsma <-
 #' 
 #' @examples 
 #' library(FCMm)
-#' nm <- seq(400,900)
-#' Rrs <- data.frame(nm=nm,Site1=exp(nm/1000)+runif(501))
+#' nm <- seq(400, 900)
+#' Rrs <- data.frame(nm=nm, Site1=exp(nm/1000)+runif(501))
+#' # save simulations in the variable `result` 
 #' result <- SRF_simulate(Rrs,select_sensor=c("OLCI","MODIS"))
+#' # save simulations in the disk
+#' result <- SRF_simulate(Rrs,select_sensor=c("OLCI","MODIS"),
+#'   save_as_csv = TRUE, save_csv_dir = tempdir())
 #' 
 #' @family Utils
 #' 
@@ -959,6 +965,7 @@ SRF_simulate <- function(Rrs,
                          select_sensor="All",
                          output_wavelength="MED",
                          save_as_csv=FALSE,
+                         save_csv_dir = ".", 
                          na.rm=TRUE,
                          wv_as_column=TRUE){
   
@@ -971,7 +978,9 @@ SRF_simulate <- function(Rrs,
     for(i in 1:length(sensors))
       sensors[i] <- match.arg(sensors[i], show_sensor_names())
   }
-  print(sensors)
+  
+  cat("Sensor(s) to be simulated:", paste(sensors, collapse = " "), "\n")
+
   result <- list()
   for(sensor in sensors){
     
@@ -1010,10 +1019,19 @@ SRF_simulate <- function(Rrs,
     result[[sensor]] <- SRF
   }
   if(save_as_csv){
+    
+    if(!dir.exists(save_csv_dir)){
+      stop("Could not find the specified directory!")
+    }
+    
+    cat("Simulated files are saved at:\n")
+    
     for(sheet in names(result)){
+      file = sprintf(file.path(save_csv_dir, 'Simulated_Rrs_%s.csv'), sheet)
       write.csv(result[[sheet]]$Rrs_simu,
-                file=sprintf('./Simulated_Rrs_%s.csv',sheet),
+                file = file,
                 row.names=FALSE)
+      cat(file, "\n")
     }
   }
   return(result)

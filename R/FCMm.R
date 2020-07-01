@@ -1,7 +1,7 @@
 #' @name FuzzifierDetermination
-#' @title Determine the optimized fuzzifier for FCM running
+#' @title Determine the optimized fuzzifier for Fuzzy Cluster Method (FCM) running
 #' @description
-#' To determine the optimized fuzzifier value for FCM running.
+#' To determine the optimized fuzzifier value for Fuzzy Cluster Method (FCM)running.
 #' @usage FuzzifierDetermination(x, wv, max.m=10, stand=FALSE, dmetric='sqeuclidean')
 #' @param x Data.frame. the input Rrs data
 #' @param wv Wavelength of X
@@ -210,8 +210,8 @@ trapz <- function(wv,x){
 
 
 #' @name FCM.new
-#' @title Running the improved FCM by optimizing fuzzifier parameter
-#' @description An improved version of FCM for water spectra data sets.
+#' @title Running the improved Fuzzy Cluster Method (FCM) by optimizing fuzzifier parameter
+#' @description An improved version of Fuzzy Cluster Method (FCM) for water spectra data sets.
 #'
 #' @param FDlist A \code{list} from function \code{\link{FuzzifierDetermination}}
 #' @param K Number, cluster number
@@ -396,23 +396,27 @@ FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = F
 
 
 #' @name apply_FCM_m
-#' @title Apply FCM_m to new input Rrs
+#' @title Apply FCM_m (improved Fuzzy Cluster Method) to new input Rrs
 #' @description
-#' Application of FCM_m method for new Rrs data based on default cluster settings
-#'   or user-defined clusters (trained by FCM.new).
+#' Application of FCM_m (improved Fuzzy Cluster Method) method for new Rrs data based on 
+#'   default cluster settings or user-defined clusters (trained by FCM.new).
 #'
 #' @param Rrs Data.frame, the input Rrs of FCM.
 #' @param wavelength Numeric vector, used for applying FCM.
 #'   Default use the data from \code{Bi_clusters.rda}
 #' @param Rrs_clusters Data.frame, used for applying FCM.
 #'   Default use the data from \code{Bi_clusters.rda}
-#' @param stand Logical, whether to normalized the Rrs data. Default as \code{FALSE} means do not.
+#' @param stand Logical, whether to normalized the Rrs data (both for Input and Centroids).
+#'   Default as \code{FALSE} means do not.
 #' @param default.cluster Logical, whether to use the default clusters.
 #'   Default use the data from \code{Bi_clusters.rda}
 #' @param m_used Number, Used fuzzifier value
 #' @param quality_check Logical, quality chech option (default as \code{FALSE})
 #' @param option.plot Logical, whether to plot the result. Default as \code{FALSE}
-#'
+#' @param color_palette The palette of cluster color. Default as \code{RdYlBu(res$K)} if \code{NULL}.
+#'   It could be \code{RdYlBu(k)}, \code{Spectral(k)}, \code{HUE(k)} or other color values
+#'   with same length of cluster number. \code{k} means the cluster number.
+#'   
 #' @export
 #'
 #' @return A \code{list} including several results of function \code{apply_FCM_m()}
@@ -427,9 +431,9 @@ FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = F
 #'     \item \strong{m.used}  The used value of fuzzifier(m)
 #'     \item \strong{K}  Cluster number
 #'     \item \strong{p.group}  A ggplot list for plotting the cluster result
-#'     \item \strong{p.group.facet} \code{p.group} with facet to see each cluster results
+#'     \item \strong{p.group.facet} Recommened! \code{p.group} with facet to see each cluster results
 #'       more clearly
-#'     \item \strong{dt.melt}  Dataframe used for ggplot
+#'     \item \strong{dt.melt} Dataframe used for ggplot including \code{dt_plot_x}, \code{dt_plot_v}, and \code{cp}.
 #'   }
 #' 
 #' @examples
@@ -453,7 +457,8 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
                         stand = FALSE,
                         default.cluster = TRUE,
                         quality_check = FALSE,
-                        option.plot = FALSE){
+                        option.plot = FALSE,
+                        color_palette = NULL){
   
   if(default.cluster){
     v <- Rrs_clusters.default
@@ -477,6 +482,17 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   v <- as.matrix(v)
   
   k <- nrow(v)
+  
+  if(is.null(color_palette)){
+    cp = RdYlBu(k)
+    names(cp) <- paste("Cluster", 1:k)
+  }else{
+    if(length(color_palette) != k){
+      stop("The length of color_palette shoud be same with cluster number!")
+    }
+    cp = color_palette
+  }
+  
   x <- as.matrix(Rrs)
   Area_x <- trapz(wavelength, x)
   x.stand <- x
@@ -489,15 +505,17 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   if(stand==FALSE){
     x_ <- x.stand
     v_ <- v.stand
+    y.lab <- "Normalized Rrs"
   }else{
     x_ <- x
     v_ <- v
+    y.lab <- expression(Rrs~group("[",sr^-1,"]"))
   }
   
   # Build distance and membership matrix
   d <- matrix(ncol=nrow(v_), nrow=nrow(x_))
   for(j in 1:ncol(d)){
-    v_tmp <- rep(as.matrix(v_[j,]),nrow(x_)) %>% matrix(.,ncol=ncol(v_), byrow=T)
+    v_tmp <- rep(as.matrix(v_[j,]),nrow(x_)) %>% matrix(.,ncol=ncol(v_), byrow=TRUE)
     x_tmp <- x_ %>% as.matrix %>% as.data.frame
     row.names(x_tmp) <- row.names(v_tmp)
     d_tmp <- (x_tmp - v_tmp)^2 %>% apply(.,1,sum) %>% as.matrix
@@ -528,30 +546,59 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   result$K <- k
   
   if(option.plot){
-    cp <- RdYlBu(k)
-    cp.sub <- cp[(unique(cluster)) %>% sort]
-    names(Rrs) <- as.character(wavelength)
-    dt <- cbind(nm=rownames(Rrs), Rrs, cluster = as.character(cluster))
-    dt.melt <- melt(dt, id=c("nm","cluster"), variable.name='band', value.name='Rrs')
-    dt.melt <- level_to_variable(dt.melt)
-    dt.melt$band %<>% as.numeric
-    p.group <- ggplot(data=dt.melt)+
-      geom_line(aes(x=band,y=Rrs,color=cluster,group=nm),
-                size=1, alpha=0.8) +
-      scale_color_manual(values=cp.sub) +
-      labs(x='Wavelength (nm)', y=expression(bold(Rrs~(sr^-1))), color = 'Cluster') +
-      theme_bw() +
-      theme(text = element_text(face='bold',size=16), legend.position='right')
+
+    # plot preparation of input data
+    dt_plot_x <- cbind(stringsAsFactors = FALSE,
+                            data.frame(x_) %>% setNames(., wavelength),
+                            cluster = cluster %>% as.character,
+                            ids = seq(1, nrow(x_)) %>% as.character) %>%
+      melt(., id=c("ids","cluster"), factorsAsStrings = FALSE)
+    dt_plot_x$variable %<>% levels(.)[.] %>% as.numeric
+    dt_plot_x$cluster_f <- factor(paste("Cluster", dt_plot_x$cluster), 
+                                  levels=paste("Cluster", 1:nrow(v_)), ordered = TRUE)
+    dt_plot_x$cluster <- factor(dt_plot_x$cluster, levels=1:nrow(v_), ordered = TRUE)
+    
+    # plot preparation of centroids data
+    dt_plot_v <- cbind(stringsAsFactors = FALSE,
+                       data.frame(v_) %>% setNames(., wavelength),
+                       cluster = 1:nrow(v_) %>% as.character,
+                       ids = 1:nrow(v_) %>% as.character) %>%
+      melt(., id=c("ids","cluster"), factorsAsStrings = FALSE)
+    dt_plot_v$variable %<>% levels(.)[.] %>% as.numeric
+    dt_plot_v$cluster_f <- factor(paste("Cluster", dt_plot_v$cluster), 
+                                  levels=paste("Cluster", 1:nrow(v_)), ordered = TRUE)
+    dt_plot_v$cluster <- factor(dt_plot_v$cluster, levels=1:nrow(v_), ordered = TRUE)
+    
+    # ggplot 
+    p.group.facet <- ggplot() + 
+      geom_path(data=dt_plot_x, aes(variable, value, group=ids), color="gray", alpha=0.3) + 
+      geom_path(data=dt_plot_v, aes(variable, value, group=ids, color=cluster_f), alpha=1.0, size=1) +
+      facet_wrap(~cluster_f) + 
+      scale_color_manual(values=cp) + 
+      labs(x='Wavelength [nm]', y=y.lab) + 
+      theme_bw() + 
+      theme(text=element_text(size=13),
+            legend.position = "none")
+    
+    p.group <- ggplot() + 
+      geom_path(data=dt_plot_x, aes(variable, value, group=ids, color=cluster_f), alpha=0.5) + 
+      # geom_path(data=dt_plot_v, aes(variable, value, group=ids, color=cluster_f), alpha=1.0, size=1) +
+      scale_color_manual(values=cp) + 
+      # facet_wrap(~cluster_f) + 
+      labs(x='Wavelength [nm]', y=y.lab, color = "Legend") + 
+      theme_bw() + 
+      theme(text=element_text(size=13))
     
     result$p.group <- p.group
-    result$p.group.facet <- p.group + 
-      facet_wrap(~cluster) + 
-      theme(strip.text = element_blank())
-    result$dt.melt <- dt.melt
+    result$p.group.facet <- p.group.facet
+    result$dt.melt <- list(dt_plot_x = dt_plot_x, dt_plot_v = dt_plot_v, cp = cp)
+    
   }else{
+    
     result$p.group <- NULL
     result$p.group.facet <- NULL
     result$dt.melt <- NULL
+    
   }
   
   return(result)
@@ -617,7 +664,7 @@ plot_spec_from_df <- function(df){
 
 
 #' @name plot_spec
-#' @title Plot the result of FCM_m
+#' @title Plot the result of FCM_m (improved Fuzzy Cluster Method)
 #' @description
 #' Spectra plots for a \code{FCM.new} result
 #'

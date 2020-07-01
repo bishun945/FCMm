@@ -164,10 +164,30 @@ Assessment_via_cluster <- function(pred, meas, memb,
       if(cal.precision == TRUE){
       
         for(metric in metrics){
-          metric_value <- cal.metrics.vector(x,y,metric,log10=log10)
-          result[[metric]][cluster, model] <- mean(metric_value, na.rm=TRUE)
           precision_name <- paste0(metric, '_p')
-          result[[precision_name]][cluster, model] <- trim_sd(metric_value, na.rm=TRUE)
+          metric_value <- cal.metrics.vector(x,y,metric,log10=log10)
+          if(log10){
+            x_ = log10(x)
+          }else{
+            x_ = x
+          }
+          # quant <- quantile(metric_value, c(0.001, 0.999))
+          # metric_value_ = metric_value[metric_value > quant[1] & metric_value < quant[2]]
+          metric_value_ = metric_value # for cluster specific metrics, their point numbers are too small to limit
+          result[[metric]][cluster, model] <- mean(metric_value_, na.rm=TRUE)
+          if(length(metric_value) == 0){
+            result[[precision_name]][cluster, model] <- NA
+          }else{
+            if(median(metric_value, na.rm=TRUE) / median(x_, na.rm=TRUE) > 10){
+              # if the error are extremely biased, for instance, 10 fold than measurement,
+              #   the precision (standard deviation) will reduce since they are uncorrectly high.
+              #   Given that, the precision for this condition is assigned to NA values.
+              #   Same as total calculation.
+              result[[precision_name]][cluster, model] <- NA
+            }else{
+              result[[precision_name]][cluster, model] <- sd(metric_value_, na.rm=TRUE)
+            }
+          }
         }
            
       }else{ # no need for precision
@@ -214,11 +234,23 @@ Assessment_via_cluster <- function(pred, meas, memb,
           
           for(metric in metrics){
             metric_value <- cal.metrics.vector(x,y,metric,log10=log10)
+            # Fot total calculation, it is unfair when outliers are included.
+            # I add a quantile calculation to limit the statistic range which is betwene 0.1% and 99.9%
             quant <- quantile(metric_value, c(0.001, 0.999))
             metric_value_ = metric_value[metric_value > quant[1] & metric_value < quant[2]]
             result[[metric]]['SUM', model] <- mean(metric_value_, na.rm=TRUE)
             precision_name <- paste0(metric, '_p')
-            result[[precision_name]]['SUM', model] <- sd(metric_value_, na.rm=TRUE)
+            if(log10){
+              x_ = log10(x)
+            }else{
+              x_ = x
+            }
+            if(median(metric_value, na.rm=TRUE) / median(x_, na.rm=TRUE) > 10){
+              result[[precision_name]]['SUM', model] <- NA
+            }else{
+              result[[precision_name]]['SUM', model] <- sd(metric_value_, na.rm=TRUE)
+            }
+            
           }
           
         }else{ # no need for precision  total
@@ -250,20 +282,29 @@ Assessment_via_cluster <- function(pred, meas, memb,
           x <- meas[, 1]
           y <- pred[, j]
           
-          if(na.process){
-            w <- which(is.finite(y))
-            # w <- which(is.na(y) == FALSE)
-            x <- x[w]
-            y <- y[w]
-            memb_ <- memb[w,]
-          }
+          w_cluster <- which(cluster_crisp == i)
           
-          if(dim(memb_)[1] != length(x))
-            stop("The fuzzy metrics are calculated with different rows from memb and pred")
-          
-          Er <- cal.metrics.vector(x,y,metric,log10)
-          result_fz[[metric]][i,j] <- sum(memb_[,i] * Er, na.rm=TRUE)/sum(memb_[,i], na.rm=TRUE)
-          
+          if(all(is.na(y[w_cluster]))){ # all prediction from j model in cluster i are NA values. Return metrics as NA
+            
+            result_fz[[metric]][i,j] <- NA
+            
+          }else{
+            
+            if(na.process){
+              w <- which(is.finite(y))
+              x <- x[w]
+              y <- y[w]
+              memb_ <- memb[w,]
+            }
+            
+            if(dim(memb_)[1] != length(x))
+              stop("The fuzzy metrics are calculated with different rows from memb and pred")
+            
+            Er <- cal.metrics.vector(x,y,metric,log10)
+            result_fz[[metric]][i,j] <- sum(memb_[,i] * Er, na.rm=TRUE) / sum(memb_[,i], na.rm=TRUE)
+            
+          } # ENDIF
+    
         }
       }
     }
@@ -691,6 +732,8 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
     w <- Sampling_via_cluster(cluster, num=sample.size, replace=replace)
   }
   
+  w <- sort(w)
+  
   pred_ <- pred[w,]
   meas_ <- meas[w,]
   memb_ <- memb[w,]
@@ -705,7 +748,7 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
                                       na.process = TRUE,
                                       plot.col = FALSE)
   
-  Asses_p <-  Assessment_via_cluster(pred=pred_,
+  Asses_p <-   Assessment_via_cluster(pred=pred_,
                                       meas=meas_,
                                       memb=memb_,
                                       metrics = c("MAE","CMAPE","BIAS",'CMRPE'),
@@ -743,6 +786,8 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #' @param remove.negative Option to replace the negative score as zero (default as \code{FALSE})
 #' @param Times Parameter of \code{Scoring_system_bootstrap}. The bootstrap time for running 
 #'   \code{Scoring_system} (default as \code{1000})
+#' @param replace Parameter of \code{Scoring_system_bootstrap}. The sample method for bootstrap running.
+#'   Default as \code{TRUE}. See more details in \link{sample}.
 #' 
 #' @export
 #' 
@@ -942,22 +987,28 @@ Scoring_system <- function(Inputs,
 #' \itemize{
 #'   \item \strong{Times} The times of bootstrap running.
 #'   \item \strong{Score_all_clusters} The total score for algorithms across all clusters.
-#'   \item \strong{Score_list} All times of bootstrapping results are saved in it.
+#'   \item \strong{Score_list} All times of bootstrapping results are recorded in it.
 #'   \item \strong{Score_list_melt} Melted \code{Score_list}.
 #'   \item \strong{Opt_algorithm_list} The optimal algorithm for every runing.
 #'   \item \strong{Opt_algorithm} The optimal algorithm defined by mode of \code{Opt_algorithm_list}
 #'     for each cluster.
+#'   \item \strong{Remove_algorithm} The algortihms to be removed when blending.
 #'   \item \strong{plot_col} The col plot of \code{Score_list_melt}.
 #'   \item \strong{plot_scatter} The scatter plot of measured and predicted Chla concentration
 #'     colored by clusters.
 #'   \item \strong{plot_scatter_opt} The scatter plot of measured and predicted Chla concentration
 #'     colored by clusters for optimized algorithms.
+#'   \item \strong{Blend_result} The results from the inherent function \code{Chla_algorithms_blend}.
 #'   \item \strong{dt_Chla} Data.frame with combination of candidate algortihms and blended results.
 #'   \item \strong{Chla_blend} The blended Chla concentration by score results.
+#'   \item \strong{Results_of_scoring_system} A list including all results of \link{Scoring_system} function.
 #' } 
 #' 
-Scoring_system_bootstrap <- function(Times = 1000,
-                                     Inputs, 
+#' @importFrom stats aggregate
+#' @importFrom stringr str_split
+#' 
+Scoring_system_bootstrap <- function(Times = 1000, 
+                                     Inputs, replace = TRUE, 
                                      method = 'sort-based',
                                      param_sort = list(decreasing = TRUE),
                                      param_interval = list(trim=FALSE, reward.punishment=TRUE,
@@ -966,24 +1017,28 @@ Scoring_system_bootstrap <- function(Times = 1000,
   
   if(Times <= 1) stop("Times should be larger than 1")
   
-  pred = Inputs$Asses_fz$input$pred
-  meas = Inputs$Asses_fz$input$meas
-  memb = Inputs$Asses_fz$input$memb
+  pred = round(Inputs$Asses_fz$input$pred, 4)
+  meas = round(Inputs$Asses_fz$input$meas, 4)
+  memb = round(Inputs$Asses_fz$input$memb, 4)
   cluster = apply(memb, 1, which.max)
+  K = ncol(memb)
   
   Score_list <- NULL
   Opt_algorithm_list <- NULL
+  Results_of_scoring_system <- list()
   
   for(i in 1:Times){
     
     cat(i, "/", Times, "\n")
     Asses_list <- Getting_Asses_results(sample.size= nrow(memb),
-                                        pred, meas, memb, replace = TRUE)
+                                        pred, meas, memb, replace = replace)
     Score <- Scoring_system(Inputs = Asses_list,
                            method = method,
                            param_sort = param_sort,
                            param_interval = param_interval,
                            remove.negative = remove.negative)
+    
+    Results_of_scoring_system[[i]] <- Score
     
     if(i == 1){
       Score_list <- Score$Total_score.melt
@@ -1002,8 +1057,6 @@ Scoring_system_bootstrap <- function(Times = 1000,
   Opt_algorithm_list <- data.frame(Opt_algorithm_list, stringsAsFactors = FALSE)
   colnames(Opt_algorithm_list) <- c("Times", names(Score$opt_algorithm))
   
-  # The mode algorithm for all times
-  Opt_algorithm <- apply(Opt_algorithm_list[, -1], 2, function(x) names(which.max(table(x))))
 
   # Calculate the score statistic information
   u_arr   = apply(Score_list[, 3:ncol(Score_list)], 1, mean) %>% round(2)
@@ -1014,6 +1067,56 @@ Scoring_system_bootstrap <- function(Times = 1000,
   res_Score <- cbind(Score_list[,1:2],
                      value    = u_arr,
                      sig_arr  = sig_arr) %>% level_to_variable
+  Score_all_clusters = res_Score[res_Score$x == "SUM", -1]
+  res_Score = res_Score[!(res_Score$x %in% 'SUM'),]
+  res_Score$x_f = factor(res_Score$x, levels = paste("Cluster", (1:ncol(memb))))
+  
+  # The optimal algorithm defined by maximum scores per cluster
+  tmpdt = stats::aggregate(res_Score$value, list(res_Score$x), which.max)
+  tmpdt = tmpdt[tmpdt$Group.1 != "SUM",]
+  Opt_algorithm = rep("", K) %>% setNames(., paste("Cluster", 1:K))
+  for(i in 1:K){
+    tmptmp = res_Score[which(res_Score$x == names(Opt_algorithm)[i]),]
+    Opt_algorithm[i] <- tmptmp$variable[which.max(tmptmp$value)]
+  }
+  
+  ## To-do: 
+  ## In some extents, the optimal could not return finite value especially for image rasters,
+  ##   mostly because of inappropriate atmospheric correction. Given that, it is necessary to select 
+  ##   several (two or more) substitutes as a reinforcement.
+  
+  # define the position of optimal and removed algorithms
+  res_Score$pos_opt <- res_Score$pos_removed <- res_Score$sig_arr * NA
+  for(i in 1:length(Opt_algorithm)){
+    w = which(res_Score$x == names(Opt_algorithm)[i] & res_Score$variable == Opt_algorithm[i])
+    res_Score$pos_opt[w] = res_Score$value[w]
+  }
+  
+  # The removed algorithms defined by the lower half res_Score per cluster
+  remove_ratio = 1/2
+  if(remove_ratio > 1) stop("The remove ratio should be between zero and one!")
+  for(i in levels(res_Score$x_f)){
+    tmpdt = res_Score[res_Score$x == i, ]
+    tmpdt = tmpdt[tmpdt$variable %in% Opt_algorithm, ]
+    num_removed = floor(length(unique(tmpdt$variable)) * remove_ratio)
+    w_removed = which(res_Score$x == i & res_Score$value <= sort(tmpdt$value)[num_removed])
+    res_Score$pos_removed[w_removed] = res_Score$value[w_removed]
+  }
+  ws_removed <- which(!is.na(res_Score$pos_removed))
+  w_cancel <- which(!(res_Score$variable[ws_removed] %in% Opt_algorithm))
+  res_Score$pos_removed[ws_removed][w_cancel] <- NA
+ 
+  # For these algorithms, they are not taken into account when blending
+  Remove_algorithm <- list()
+  for(i in 1:length(unique(res_Score$x))){
+    Remove_algorithm[[i]] <- res_Score$variable[which(!is.na(res_Score$pos_removed) & res_Score$x == unique(res_Score$x)[i])]
+  }
+  
+  # add box
+  res_Score$box <- res_Score$sig_arr * NA
+  w_box <- which(res_Score$variable %in% Opt_algorithm)
+  res_Score$box[w_box] <- res_Score$value[w_box]
+  
   
   # plot Score_list
   num.model <- Score_list$variable %>% unique %>% length
@@ -1022,74 +1125,142 @@ Scoring_system_bootstrap <- function(Times = 1000,
   
   dodge <- position_dodge(width=0.9)
   
-  Score_all_clusters = res_Score[res_Score$x == "SUM", -1]
-  
-  res_Score = res_Score[!(res_Score$x %in% 'SUM'),]
-  res_Score$x_f = factor(res_Score$x, levels = paste("Cluster", (1:ncol(memb))))
-
-  plot_col <- ggplot(data=res_Score) +
-    geom_col(aes(x=x_f, y=value, group=variable, fill=variable), position=dodge) + 
-    geom_errorbar(aes(x=x_f, ymin=value-sig_arr, ymax=value+sig_arr, group=variable),
-                  position=dodge, width=0.6) + 
+  # plot_col <- ggplot(data=res_Score) +
+  #   geom_col(aes(x=x_f, y=value, group=variable, fill=variable), position=dodge) + 
+  #   geom_errorbar(aes(x=x_f, ymin=value-sig_arr, ymax=value+sig_arr, group=variable),
+  #                 position=dodge, width=0.6) + 
+  #   scale_fill_manual(values=Spectral(num.model)[ind]) +
+  #   labs(y='Score', fill='Algorithm', x=NULL)+
+  #   facet_wrap(~x_f, scales='free_x') + 
+  #   theme_bw() + 
+  #   theme(axis.text.x.bottom = element_blank(),
+  #         axis.ticks.x.bottom = element_blank(),
+  #         strip.background = element_rect(fill='white', color='white'),
+  #         strip.text = element_text(face='bold'),
+  #         text = element_text(size=13),
+  #         legend.position = "right")
+  plot_col <- 
+    ggplot() +
+    geom_col(data=res_Score, 
+             aes(x=x_f, y=value, group=variable, fill=variable),
+             alpha=0.75, position=dodge) + 
+    geom_col(data=res_Score, 
+             aes(x=x_f, y=box, group=variable, fill=variable), color="gray20",
+             position=dodge) +
+    geom_errorbar(data=res_Score, 
+                  aes(x=x_f, ymin=value-sig_arr, ymax=value+sig_arr, group=variable),
+                  position=dodge, width=0.6, alpha=1) + 
+    geom_point(data=res_Score, 
+               aes(x=x_f, y=pos_opt, group=variable),
+               position=dodge, color="green", fill=NA, shape="diamond", stroke = 0.5, size=2) + 
+    geom_point(data=res_Score, 
+               aes(x=x_f, y=pos_removed, group=variable),
+               position=dodge, color="red", fill=NA, shape="cross", stroke = 1) + 
     scale_fill_manual(values=Spectral(num.model)[ind]) +
+    scale_y_continuous(limits=c(0, NA)) + 
     labs(y='Score', fill='Algorithm', x=NULL)+
-    facet_wrap(~x_f, scales='free_x') + 
+    facet_wrap(~x_f, scales='free_x', nrow=3) + 
     theme_bw() + 
     theme(axis.text.x.bottom = element_blank(),
           axis.ticks.x.bottom = element_blank(),
+          panel.grid.major.x = element_blank(),
           strip.background = element_rect(fill='white', color='white'),
           strip.text = element_text(face='bold'),
+          panel.spacing.y = unit(0.5, "lines"),
           text = element_text(size=13),
-          legend.position = "right")
+          # legend.position = c(1,0),
+          legend.position = "right",
+          # legend.justification = c(1,0),
+          legend.justification = c(0.5, 0.5),
+          legend.text = element_text(size=8),
+          legend.title = element_text(size=9, face="bold")) +
+    # guides(fill = guide_legend(ncol=3))
+    guides(fill = guide_legend(ncol=1))
   
-  # blend work
   
-  # Blending work
-  Chla_opt_ <- Chla_opt <- pred[, Opt_algorithm]
-  memb_     <- memb
+  #-----------------------#
+  #                       #
+  #     Blending work     #
+  #                       #
+  #-----------------------#
   
-  w_na = which(is.na(Chla_opt * memb) | (Chla_opt * memb) < 0, arr.ind = TRUE)
-  for(i in 1:nrow(w_na)){
-    if(memb[w_na[i,1], w_na[i,2]] == 0){ # if the memb of na index is equal to zero
-      Chla_opt_[w_na[i,1], w_na[i,2]] <- 0 # then the Chla_opt could be zero too as no affect it will be
-    }else{
-      memb_[w_na[i,1], w_na[i,2]] = 0 # otherwise, the rest of memb should be assigned to the domain cluster
-      memb_[w_na[i,1], cluster[i]] <- memb_[w_na[i,1], cluster[i]] + memb[w_na[i,1], w_na[i,2]]
-      Chla_opt_[w_na[i,1], w_na[i,2]] <- 0 # Also, dont forget to reset the NA Chla values
-    }
-  }
+  dt_Chla_opt <- pred[, Opt_algorithm]
+  Blend_result <- Chla_algorithms_blend(dt_Chla_opt, memb, Opt_algorithm, Remove_algorithm)
+  Chla_blend <- Blend_result$Chla_blend
   
-  Chla_blend <- apply(Chla_opt_ * memb_, 1, sum) 
-
   # draw a scatter plot colored by clusters
-  cluster <- apply(memb_, 1, which.max)
   Chla_limits <- (range(meas) * c(0.9, 1.1)) %>% round(4)
   if(Chla_limits[1] <= 0) Chla_limits[1] = 0.1
-  Chla_plots <- data.frame(Chla_true=meas, cluster = as.character(cluster), pred, Chla_blend,
-                           stringsAsFactors = FALSE)
+  Chla_plots <- data.frame(Chla_true=meas, cluster = cluster, pred, Chla_blend)
+  Chla_plots$cluster <- factor(as.character(Chla_plots$cluster), levels = 1:K, ordered = TRUE)
   names(Chla_plots)[1] <- "Chla_true"
-  plot_scatter <- reshape2::melt(Chla_plots, id=c("Chla_true", "cluster")) %>%
-    ggplot() + 
-    geom_abline(slope=1, intercept=0, linetype=2) + 
-    geom_point(aes(x=Chla_true, y=value, color=cluster), alpha=0.5) + 
-    facet_wrap(~variable) + 
-    scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) + 
-    scale_color_manual(values=RdYlBu(ncol(memb)), breaks=seq(1, ncol(memb))) + 
-    theme_bw()
+  dt_Chla_ <- reshape2::melt(Chla_plots, id=c("Chla_true", "cluster"))
+  dt_Chla_$value_opt <- NA
+  for(i in 1:K){
+    w = which(dt_Chla_$cluster == i & dt_Chla_$variable == Opt_algorithm[i])
+    dt_Chla_$value_opt[w] <- dt_Chla_$value[w]
+  }
+  w = which(dt_Chla_$variable == "Chla_blend")
+  dt_Chla_$value_opt[w] <- dt_Chla_$value[w]
   
+  cp = RdYlBu(K)
+  names(cp) <- levels(dt_Chla_$cluster)
+  plot_scatter <- 
+    ggplot() + 
+    geom_abline(intercept=0, slope=1, linetype=2) + 
+    geom_point(data=dt_Chla_, 
+               aes(x=Chla_true, y=value, color=cluster), 
+               # shape = "circle open", stroke = 1, 
+               alpha=0.3) + 
+    geom_point(data=dt_Chla_, 
+               aes(x=Chla_true, y=value_opt, fill=cluster), 
+               shape = "circle filled", color = "black",
+               alpha=1) + 
+    geom_rug(data=dt_Chla_, 
+             aes(x=Chla_true, y=value, color=cluster), alpha=0.2, show.legend = F) + 
+    scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) +
+    labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='Cluster', fill="Cluster") + 
+    scale_color_manual(values=cp) +
+    scale_fill_manual(values=cp) + 
+    theme_bw() + 
+    facet_wrap(~variable) +
+    # facet_grid(variable~cluster) + 
+    theme(legend.position = "right",
+          strip.background = element_rect(fill='white', color='white'),
+          strip.text = element_text(face='bold'),
+          text = element_text(size=13)) + 
+    guides(col = guide_legend(ncol=1))
+  
+  dt_Chla_sub <- dt_Chla_[dt_Chla_$variable %in% c(
+    "Chla_blend", unique(Opt_algorithm)
+  ),]
   plot_scatter_opt <- 
-    reshape2::melt(Chla_plots[, names(Chla_plots) %in% 
-                                c("Chla_true", "cluster", "Chla_blend", unique(Opt_algorithm))], 
-                   id=c("Chla_true", "cluster")) %>%
     ggplot() + 
-    geom_abline(slope=1, intercept=0, linetype=2) + 
-    geom_point(aes(x=Chla_true, y=value, color=cluster), alpha=0.5) + 
-    facet_grid(variable~cluster) + 
-    scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) + 
-    scale_color_manual(values=RdYlBu(ncol(memb)), breaks=seq(1, ncol(memb))) + 
-    theme_bw()
+    geom_abline(intercept=0, slope=1, linetype=2) + 
+    geom_point(data=dt_Chla_sub, 
+               aes(x=Chla_true, y=value, color=cluster), 
+               # shape = "circle open", stroke = 1, 
+               alpha=0.3) + 
+    geom_point(data=dt_Chla_sub, 
+               aes(x=Chla_true, y=value_opt, fill=cluster), 
+               shape = "circle filled", color = "black",
+               alpha=1) + 
+    geom_rug(data=dt_Chla_sub, 
+             aes(x=Chla_true, y=value, color=cluster), alpha=0.2, show.legend = F) + 
+    scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) +
+    labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='Cluster', fill="Cluster") + 
+    scale_color_manual(values=cp) +
+    scale_fill_manual(values=cp) + 
+    theme_bw() + 
+    # facet_wrap(~variable) +
+    facet_grid(variable~cluster) +
+    theme(legend.position = "right",
+          strip.background = element_rect(fill='white', color='white'),
+          strip.text = element_text(face='bold'),
+          text = element_text(size=13)) + 
+    guides(col = guide_legend(ncol=1))
   
-  # save outputs
+  # return outputs
   result = list(
     Times              = Times,
     Score_all_clusters = Score_all_clusters,
@@ -1097,17 +1268,109 @@ Scoring_system_bootstrap <- function(Times = 1000,
     Score_list_melt    = res_Score,
     Opt_algorithm_list = Opt_algorithm_list,
     Opt_algorithm      = Opt_algorithm,
+    Remove_algorithm   = Remove_algorithm,
     plot_col           = plot_col,
     plot_scatter       = plot_scatter,
     plot_scatter_opt   = plot_scatter_opt,
+    Blend_result       = Blend_result, 
     dt_Chla            = Chla_plots,
-    Chla_blend         = Chla_blend
+    Chla_blend         = Chla_blend,
+    Results_of_scoring_system = Results_of_scoring_system
   )
   
   return(result)
   
 }
   
+
+#' @name Chla_algorithms_blend
+#' 
+#' @title Algorithms blending via membership values based on optimal candidates
+#' 
+#' @param dt_Chla_opt The data.frame includes estimation by optimal algorithms per cluster
+#' @param memb Membership values
+#' @param Opt_algorithm Optimal algorithm name
+#' @param Remove_algorithm Removed algorithm name
+#' 
+#' @noRd
+#' @return The result of \code{Chla_algorithm_blend} is a list including:
+#'   \itemize{
+#'     \item \strong{modified_memb_list} The vector recording the modified membership values across all samples.
+#'     \item \strong{Chla_blend} The final blended Chla result after modification.
+#'     \item \strong{new_memb} The new membership values after modification.
+#'   }
+#' 
+#' @importFrom stringr str_split
+#' @importFrom magrittr %>%
+Chla_algorithms_blend <- function(dt_Chla_opt, memb, Opt_algorithm, Remove_algorithm){
   
+  if(!all.equal(
+    length(Opt_algorithm),
+    ncol(dt_Chla_opt),
+    ncol(memb)
+  )){
+    stop("The input dt_Chla_opt, memb, and Opt_algorithm should have same length or column number!")
+  }
   
+  if(nrow(dt_Chla_opt) != nrow(memb)) 
+    stop("The row number of dt_Chla_opt and memb should be equal!")
+
+  # if(all(Opt_algorithm %in% names(dt_Chla_opt))){
+  #   stop("The Opt_algorithm should be parts of dt_Chla_opt colnames")
+  # }
+  
+  if(!(is.list(Remove_algorithm) | is.null(Remove_algorithm))){
+    stop("Remove_algorithm should be a list or NULL.")
+  }
+  
+  cluster <- apply(memb, 1, which.max)
+  
+  dt_Chla_opt <- round(dt_Chla_opt, 4)
+  memb        <- round(memb, 4)
+  
+  dt_Chla_opt_ <- dt_Chla_opt
+  memb_     <- memb
+  modified_memb_list <- rep(NA, nrow(memb_))
+  
+  # modify the membership values
+  for(i in 1:nrow(memb_)){
+    # removed algorithms
+    if(!is.null(Remove_algorithm)){
+      w_rm <- which(str_split(names(dt_Chla_opt_), "\\.", simplify = TRUE)[, 1] %in%
+                      Remove_algorithm[[cluster[i]]])
+      modified_memb <- sum(memb_[i, w_rm])
+    }else{
+      w_rm = NULL
+      modified_memb <- 0
+    }
+    modified_memb_list[i] <- modified_memb
+    memb_[i, w_rm] <- 0
+    cluster_pos <- as.numeric(cluster[i])
+    memb_[i, cluster_pos] <- memb_[i, cluster_pos] + modified_memb
+    
+    # failure avoid
+    w_fail <- which(is.na(dt_Chla_opt[i,] * memb_[i, ]) | (dt_Chla_opt[i,] * memb_[i, ]) <= 0)
+    if(length(w_fail) == 0){
+      modified_memb <- 0
+    }else{
+      modified_memb <- sum(memb_[i, w_fail])
+    }
+    modified_memb_list[i] <- modified_memb_list[i] + modified_memb
+    memb_[i, w_fail] <- 0
+    memb_[i, cluster_pos] <- memb_[i, cluster_pos] + modified_memb
+    
+    # compensate the sum of membership to one
+    memb_bias = 1 - sum(memb_[i, ])
+    memb_[i, cluster_pos] = memb_[i, cluster_pos] + memb_bias
+  }
+  
+  Chla_blend <- apply(dt_Chla_opt_ * memb_, 1, function(x) sum(x, na.rm=TRUE)) 
+  
+  result <- list(
+    modified_memb_list = modified_memb_list,
+    Chla_blend         = Chla_blend,
+    new_memb           = memb_
+  )
+  
+}  
   

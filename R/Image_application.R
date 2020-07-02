@@ -184,7 +184,17 @@ apply_to_image <- function(input, res,
   res.im$cluster <- res.FCM$cluster
 
   # Save true color image
-  rgb <- brick(im[[10]],im[[7]],im[[5]],im[[2]])
+  pos_nir = which.min(abs(wv - 709))
+  pos_r   = which.min(abs(wv - 665))
+  pos_g   = which.min(abs(wv - 560))
+  pos_b   = which.min(abs(wv - 443))
+  if(length(pos_nir) == 0) pos_nir = pos_r
+  if(length(pos_r) == 0 | length(pos_g) == 0 | length(pos_b) == 0){
+    rgb <- brick(im[[pos_nir]],im[[pos_r]],im[[pos_g]],im[[pos_b]])
+  }else{
+    rgb <- brick(im[[4]],im[[3]],im[[2]],im[[1]])
+  }
+  # rgb <- brick(im[[10]],im[[7]],im[[5]],im[[2]]) # 681 620 510 413
   rgb_stretch <- stretch(x=rgb, minv=0, maxv=255)
   rgb_df <- raster::as.data.frame(rgb_stretch, xy=TRUE)
   rgb_df <- data.frame(x=rgb_df$x, y=rgb_df$y,

@@ -25,7 +25,7 @@ The cw_med and cw_max are different since
   All included sensors are Sentinel-2A, Landsat-8, GF1-WFV1, GF1-WFV2, GF1-WFV3, GF1-WFV4, 
     GF2-PMS1, GF2-PMS2, GF4-PMI, HJ1A-CCD1, HJ1A-CCD2, HJ1B-CCD1, HJ1B-CCD2, MODISA, MERIS, 
     VIIRS, OLCI, GOCI, and GF5-VIMS.
-  The data are collected from their corresponding official websits (see in references).
+  The data are collected from their corresponding official websites (see in references).
 }
 \references{
 \itemize{

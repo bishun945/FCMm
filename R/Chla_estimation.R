@@ -532,7 +532,7 @@ TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
 #' @param wv490 Wavelength index of 490 nm
 #' @param wv560 Wavelength index of 560 nm
 #' @param wv667 Wavelength index of 667 nm
-#' @param verbose verbos (default as FASLE)
+#' @param verbose Print process information (default as FASLE)
 #' @export
 #' @return Results of \code{QAA_v5} are the list including:
 #'   \item{input}{input list including \code{wv}, \code{Rrs}, \code{wv412},

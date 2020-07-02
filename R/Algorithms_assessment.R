@@ -824,10 +824,10 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #' \itemize{
 #'   \item \code{Accuracy} is the aggregation (no matter mean or median, in fuzzy calculation process), 
 #'     we use mean to some extent. 
-#'   \item \code{Precision} is acutally the \strong{stability} of AE (reproducebility) which means the error
+#'   \item \code{Precision} is actually the \strong{stability} of AE (reproducebility) which means the error
 #'     produced by the algorithm is under certain control.
 #' }
-#' Finally, the functon will multiply the total score (\code{Accuracy} + \code{Precision}) by the 
+#' Finally, the function will multiply the total score (\code{Accuracy} + \code{Precision}) by the 
 #'   effectiveness (i.e., Valid_percent returned by \link{Assessment_via_cluster}).
 #' 
 #' @family Algorithm assessment
@@ -992,7 +992,7 @@ Scoring_system <- function(Inputs,
 #'   \item \strong{Opt_algorithm_list} The optimal algorithm for every runing.
 #'   \item \strong{Opt_algorithm} The optimal algorithm defined by mode of \code{Opt_algorithm_list}
 #'     for each cluster.
-#'   \item \strong{Remove_algorithm} The algortihms to be removed when blending.
+#'   \item \strong{Remove_algorithm} The algorithms to be removed when blending.
 #'   \item \strong{plot_col} The col plot of \code{Score_list_melt}.
 #'   \item \strong{plot_scatter} The scatter plot of measured and predicted Chla concentration
 #'     colored by clusters.

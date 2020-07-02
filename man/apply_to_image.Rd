@@ -46,7 +46,7 @@ with same length of cluster number.}
 \item{output_resultpng}{Logical, whether to save png files to your disk. Default as \code{FALSE}.}
 
 \item{output_imRrs.n}{Logical, whether to produce normalized Rrs files. Default as \code{FALSE}. 
-This parameter is used for inspection of FCM trainning. Will be \strong{deprecated} in the following version.}
+This parameter is used for inspection of FCM training. Will be \strong{deprecated} in the following version.}
 
 \item{output_dir}{The directory of output files. Default as the current working directory (\code{"."})}
 

@@ -22,7 +22,7 @@
 #' @param output_image Logical, whether to save images as raster files to your disk. Default as \code{FALSE}.
 #' @param output_resultpng Logical, whether to save png files to your disk. Default as \code{FALSE}.
 #' @param output_imRrs.n Logical, whether to produce normalized Rrs files. Default as \code{FALSE}. 
-#'   This parameter is used for inspection of FCM trainning. Will be \strong{deprecated} in the following version.
+#'   This parameter is used for inspection of FCM training. Will be \strong{deprecated} in the following version.
 #' @param output_dir The directory of output files. Default as the current working directory (\code{"."})
 #' @param output_format A string, the format of raster file, default as \code{"GTiff"}.
 #'   See more in \code{\link[raster:writeRaster]{writeRaster}}

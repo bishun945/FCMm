@@ -30,7 +30,7 @@ QAA_v5(
 
 \item{wv667}{Wavelength index of 667 nm}
 
-\item{verbose}{verbos (default as FASLE)}
+\item{verbose}{Print process information (default as FASLE)}
 }
 \value{
 Results of \code{QAA_v5} are the list including:

@@ -3,7 +3,7 @@
 \name{run_all_Chla_algorithms}
 \alias{run_all_Chla_algorithms}
 \alias{Chla_algorithms_name}
-\title{Run all Chla algorithms except for `QAA_v5`}
+\title{Run all Chla algorithms}
 \usage{
 run_all_Chla_algorithms(Rrs, wv_range = 3)
 
@@ -20,7 +20,7 @@ A list including Chla results by supported algorithms if Rrs includes the requir
   Retrun \code{NA} values for algorithms of which required wavelength cannot be found.
 }
 \description{
-Run all Chla algorithms except for `QAA_v5`
+Run all Chla algorithms
 }
 \details{
 Run \link{Chla_algorithms_name} to see all Chla algorithms
@@ -44,8 +44,6 @@ Other Algorithms: Chla concentration:
 \code{\link{OCI_Hu12}()},
 \code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{TC2_clean}()},
-\code{\link{TC2_turbid}()},
 \code{\link{TC2}()}
 }
 \concept{Algorithms: Chla concentration}

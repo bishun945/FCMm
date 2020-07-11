@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chla_estimation.R
 \name{OCI_Hu12}
 \alias{OCI_Hu12}
-\title{OCI algorithm by Hu et al. (2012)}
+\title{Ocean Color Index (OCI) algorithm by Hu et al. (2012)}
 \usage{
 OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)
 }
@@ -21,7 +21,7 @@ OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)
 A list including the algorithm indices and Chla concentration.
 }
 \description{
-OCI algorithm by Hu et al. (2012)
+Ocean Color Index (OCI) algorithm by Hu et al. (2012)
 }
 \examples{
 data(WaterSpec35)
@@ -45,8 +45,6 @@ Other Algorithms: Chla concentration:
 \code{\link{NDCI_Mi12}()},
 \code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{TC2_clean}()},
-\code{\link{TC2_turbid}()},
 \code{\link{TC2}()},
 \code{\link{run_all_Chla_algorithms}()}
 }

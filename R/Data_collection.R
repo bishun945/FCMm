@@ -30,7 +30,7 @@ NULL
 
 
 #' @name OLCI_TH
-#' @title A test OLCI image raster in Lake Taihu
+#' @title A test Ocean and Land Color Instrument (OLCI) image raster in Lake Taihu
 #' @description A dataframe contains OLCI_TH data
 #' @docType data
 #' @keywords datasets
@@ -78,7 +78,7 @@ NULL
 
 
 #' @name AeronetOC2019
-#' @title Collection of coastal AeronetOC water spectra till 2019
+#' @title Collection of coastal Aeronmet Ocean Color (AeronetOC) water spectra till 2019
 #' @description A dataframe contains AeronetOC data
 #' @docType data
 #' @keywords datasets

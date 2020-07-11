@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chla_estimation.R
 \name{SCI_Shen10}
 \alias{SCI_Shen10}
-\title{SCI algorithm by Shen et al. (2010)}
+\title{Synthetic Chlorophyll Index (SCI) algorithm by Shen et al. (2010)}
 \usage{
 SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681)
 }
@@ -19,7 +19,7 @@ SCI_Shen10(Rrs560, Rrs620, Rrs665, Rrs681)
 A list including the algorithm index and Chla concentration.
 }
 \description{
-SCI algorithm by Shen et al. (2010)
+Synthetic Chlorophyll Index (SCI) algorithm by Shen et al. (2010)
 }
 \examples{
 data(WaterSpec35)
@@ -44,8 +44,6 @@ Other Algorithms: Chla concentration:
 \code{\link{NDCI_Mi12}()},
 \code{\link{OCI_Hu12}()},
 \code{\link{QAA_v5}()},
-\code{\link{TC2_clean}()},
-\code{\link{TC2_turbid}()},
 \code{\link{TC2}()},
 \code{\link{run_all_Chla_algorithms}()}
 }

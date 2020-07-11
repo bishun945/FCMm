@@ -192,7 +192,8 @@ Bloom <- function(Rrs665, Rrs754){
 
 
 #' @name Chla_OC_OLCI
-#' @title NASA standard ocean color algorithm (version 4, 5, and 6) for the OLCI bands
+#' @title NASA standard ocean color algorithm (version 4, 5, and 6) for the Ocean and Land 
+#'   Color Instrument (OLCI) bands
 #' @param Rrs412 Rrs412
 #' @param Rrs443 Rrs443
 #' @param Rrs490 Rrs490
@@ -246,7 +247,7 @@ OC6_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
 }
 
 #' @name OCI_Hu12
-#' @title OCI algorithm by Hu et al. (2012)
+#' @title Ocean Color Index (OCI) algorithm by Hu et al. (2012)
 #' @param Rrs443 Rrs443
 #' @param Rrs490 Rrs490
 #' @param Rrs510 Rrs510
@@ -289,7 +290,7 @@ OCI_Hu12 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
 
 
 #' @name NDCI_Mi12
-#' @title Normalized difference Chlorophyll index method by Mishra et al. (2012)
+#' @title Normalized Difference Chlorophyll Index (NDCI) algorithm by Mishra et al. (2012)
 #' @param Rrs665 Rrs665
 #' @param Rrs709 Rrs709
 #' @export
@@ -360,7 +361,7 @@ FBA_Yang10 <- function(Rrs665, Rrs709, Rrs754){
 
 
 #' @name SCI_Shen10
-#' @title SCI algorithm by Shen et al. (2010)
+#' @title Synthetic Chlorophyll Index (SCI) algorithm by Shen et al. (2010)
 #' @param Rrs560 Rrs560
 #' @param Rrs620 Rrs620
 #' @param Rrs665 Rrs665
@@ -420,7 +421,7 @@ Gons08 <- function(Rrs665, Rrs709, Rrs779){
 
 
 #' @name TC2
-#' @title Chla concentration method for turbid case-2 waters by Liu et al. (2020)
+#' @title Chla concentration algorithm for Turbid Case-2 (TC2) waters by Liu et al. (2020)
 #' @param Rrs443 Rrs443
 #' @param Rrs560 Rrs560
 #' @param Rrs665 Rrs665
@@ -461,6 +462,7 @@ TC2 <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
 #' @param Rrs709 Rrs709
 #' @return Chla concentration.
 #' @family Algorithms: Chla concentration
+#' @noRd
 TC2_clean <- function(Rrs443, Rrs560, Rrs665, Rrs709){
   g0 = 0.089
   g1 = 0.125
@@ -497,6 +499,7 @@ TC2_clean <- function(Rrs443, Rrs560, Rrs665, Rrs709){
 #' @param Rrs754 Rrs754
 #' @return Chla concentration.
 #' @family Algorithms: Chla concentration 
+#' @noRd
 TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
   g0 = 0.089
   g1 = 0.125
@@ -524,7 +527,7 @@ TC2_turbid <- function(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754){
 }
 
 #' @name QAA_v5
-#' @title Quasi-analytical algorithm by Lee et al. (2002)
+#' @title Quasi-Analytical Algorithm version 5 (QAA_v5) by Lee et al. (2002)
 #' @param wv Wavelength vector
 #' @param Rrs Rrs matrix
 #' @param wv412 Wavelength index of 412 nm
@@ -677,7 +680,7 @@ QAA_v5 <- function(wv, Rrs,
 
 
 #' @name run_all_Chla_algorithms
-#' @title Run all Chla algorithms except for `QAA_v5`
+#' @title Run all Chla algorithms
 #' @param Rrs Dataframe that should with required colnames 443, 490, 510, 560, 620, 665, 681, 709, 754, 779
 #' @param wv_range Number that used to define the range of wavelength to capture
 #'   the center wavelength of required band

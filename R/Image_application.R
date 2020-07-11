@@ -1,8 +1,8 @@
-#' @title Apply FCM_m to raster data
+#' @title Apply the improved Fuzzy Cluster Method (FCMm) to raster data
 #' @name apply_to_image
 #' @description
 #'   This function could apply the defined water cluster to corrected image files.
-#'   Should run \link{generate_param} to generate a \code{res} list as an input
+#'   Should run \link{generate_param} or \link{generate_param_ex} to generate a \code{res} list as an input
 #'   of function \code{apply_to_image}
 #'
 #' @param input A \strong{raster} or a \strong{character} linking
@@ -19,6 +19,9 @@
 #' @param color_palette The palette of cluster color. Default as \code{RdYlBu(res$K)}.
 #'   In \code{FCMm}, it could be \link{RdYlBu}, \link{Spectral}, \link{HUE} or other color values
 #'   with same length of cluster number.
+#' @param pos_rgb The position of RGB channels, default as \code{NULL} to search the nearest band with 
+#'   665 (n), 560 (g), and 443 (b). Also could be a vector with three elements meaning the positions of 
+#'   required bands.
 #' @param output_image Logical, whether to save images as raster files to your disk. Default as \code{FALSE}.
 #' @param output_resultpng Logical, whether to save png files to your disk. Default as \code{FALSE}.
 #' @param output_imRrs.n Logical, whether to produce normalized Rrs files. Default as \code{FALSE}. 
@@ -80,6 +83,11 @@
 #'   \strong{2020-06-27}: 
 #'   
 #'   Note that the inputs of \code{apply_to_image} support the file path of raster file.
+#'   
+#'   \strong{2020-07-03}:
+#'   
+#'   Reported by Xiaolan Cai, the required RGB bands for plotting the true color image are defined by 
+#'     inputted wavelength now.
 #'
 #' @examples 
 #' \donttest{
@@ -105,6 +113,7 @@
 #' 
 apply_to_image <- function(input, res, 
                            color_palette = RdYlBu(res$K),
+                           pos_rgb = NULL, 
                            output_image=FALSE, output_resultpng=FALSE, output_imRrs.n=FALSE,
                            output_dir = ".", output_format="GTiff",
                            Chla_est=FALSE,
@@ -184,21 +193,30 @@ apply_to_image <- function(input, res,
   res.im$cluster <- res.FCM$cluster
 
   # Save true color image
-  pos_nir = which.min(abs(wv - 709))
-  pos_r   = which.min(abs(wv - 665))
-  pos_g   = which.min(abs(wv - 560))
-  pos_b   = which.min(abs(wv - 443))
-  if(length(pos_nir) == 0) pos_nir = pos_r
-  if(length(pos_r) == 0 | length(pos_g) == 0 | length(pos_b) == 0){
-    rgb <- brick(im[[pos_nir]],im[[pos_r]],im[[pos_g]],im[[pos_b]])
+  if(is.null(pos_rgb)){
+    pos_r = which.min(abs(wv - 665))
+    pos_g = which.min(abs(wv - 560))
+    pos_b = which.min(abs(wv - 443))
+    if(length(pos_r) == 0 | length(pos_g) == 0 | length(pos_b) == 0){
+      rgb <- brick(im[[pos_r]],im[[pos_g]],im[[pos_b]])
+    }else{
+      rgb <- brick(im[[3]],im[[2]],im[[1]])
+    }
   }else{
-    rgb <- brick(im[[4]],im[[3]],im[[2]],im[[1]])
+    if(all(pos_rgb <= 0) | all(pos_rgb > length(im))){
+      stop("The positions of RGB channels are out of the range of the input raster file!")
+    }else{
+      pos_r = pos_rgb[1]
+      pos_g = pos_rgb[2]
+      pos_b = pos_rgb[3]
+      rgb <- brick(im[[pos_r]],im[[pos_g]],im[[pos_b]])
+    }
   }
   # rgb <- brick(im[[10]],im[[7]],im[[5]],im[[2]]) # 681 620 510 413
   rgb_stretch <- stretch(x=rgb, minv=0, maxv=255)
   rgb_df <- raster::as.data.frame(rgb_stretch, xy=TRUE)
   rgb_df <- data.frame(x=rgb_df$x, y=rgb_df$y,
-                       n=rgb_df[,3],r=rgb_df[,4], g=rgb_df[,5],b=rgb_df[,6]) %>% na.omit
+                       r=rgb_df[,3], g=rgb_df[,4],b=rgb_df[,5]) %>% na.omit
   p.truecolor = ggplot(data=rgb_df) +
     geom_raster(aes(x=x,y=y,fill=rgb(r,g,b, maxColorValue=255)), hjust=0.5, vjust=0.5) +
     scale_fill_identity() +
@@ -359,7 +377,7 @@ apply_to_image <- function(input, res,
   return(result)
 }
 
-#' @title Generate the input param \code{res} of \code{apply_to_image} based on 
+#' @title Generate the input parameter of apply_to_image based on 
 #'   the built-in or user-defined centroids
 #' @name generate_param
 #' @param wl wavelength of subsetting

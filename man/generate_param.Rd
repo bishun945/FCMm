@@ -3,7 +3,7 @@
 \name{generate_param}
 \alias{generate_param}
 \alias{generate_param_ex}
-\title{Generate the input param \code{res} of \code{apply_to_image} based on 
+\title{Generate the input parameter of apply_to_image based on 
   the built-in or user-defined centroids}
 \usage{
 generate_param(wl)
@@ -23,7 +23,7 @@ The return of \code{generate_param} or \code{generate_param_ex} is a list used f
   function \link{apply_to_image}.
 }
 \description{
-Generate the input param \code{res} of \code{apply_to_image} based on 
+Generate the input parameter of apply_to_image based on 
   the built-in or user-defined centroids
 }
 \note{

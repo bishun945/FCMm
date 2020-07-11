@@ -59,7 +59,7 @@ The result of \code{Scoring_system} are including:
   \item \strong{Accuracy.list} List including data.frames of used \code{Accuracy} metrics.
   \item \strong{Precision.list} List including data.frames of used \code{Precision} metrics.
   \item \strong{Total_score.melt} Melted data.frame of \strong{Total_score} for plotting.
-  \item \strong{opt_algorithm} The optimal algorithm names for each cluster.
+  \item \strong{Opt_algorithm} The optimal algorithm names for each cluster.
   \item \strong{Inputs} Inputs of this function.
 }
 

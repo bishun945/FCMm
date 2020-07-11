@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCMm.R
 \name{plot_spec}
 \alias{plot_spec}
-\title{Plot the result of FCM_m (improved Fuzzy Cluster Method)}
+\title{Plot results of the improved Fuzzy Cluster Method (FCMm)}
 \usage{
 plot_spec(
   res,

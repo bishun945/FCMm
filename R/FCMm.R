@@ -210,7 +210,7 @@ trapz <- function(wv,x){
 
 
 #' @name FCM.new
-#' @title Running the improved Fuzzy Cluster Method (FCM) by optimizing fuzzifier parameter
+#' @title Running the improved Fuzzy Cluster Method (FCMm) by optimizing the fuzzifier m
 #' @description An improved version of Fuzzy Cluster Method (FCM) for water spectra data sets.
 #'
 #' @param FDlist A \code{list} from function \code{\link{FuzzifierDetermination}}
@@ -396,9 +396,9 @@ FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = F
 
 
 #' @name apply_FCM_m
-#' @title Apply FCM_m (improved Fuzzy Cluster Method) to new input Rrs
+#' @title Apply the improved Fuzzy Cluster Method (FCMm) to new data based on the defined centroids
 #' @description
-#' Application of FCM_m (improved Fuzzy Cluster Method) method for new Rrs data based on 
+#' Application of the improved Fuzzy Cluster Method (FCMm) for new Rrs data based on 
 #'   default cluster settings or user-defined clusters (trained by FCM.new).
 #'
 #' @param Rrs Data.frame, the input Rrs of FCM.
@@ -606,7 +606,7 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
 
 
 
-#' @title plot_spec_from_df
+#' @title Plot spectra from dataframe
 #' @name plot_spec_from_df
 #' @description
 #' Spectra plot for a dataframe given numeric colnames
@@ -664,7 +664,7 @@ plot_spec_from_df <- function(df){
 
 
 #' @name plot_spec
-#' @title Plot the result of FCM_m (improved Fuzzy Cluster Method)
+#' @title Plot results of the improved Fuzzy Cluster Method (FCMm)
 #' @description
 #' Spectra plots for a \code{FCM.new} result
 #'

@@ -5,7 +5,8 @@
 \alias{OC4_OLCI}
 \alias{OC5_OLCI}
 \alias{OC6_OLCI}
-\title{NASA standard ocean color algorithm (version 4, 5, and 6) for the OLCI bands}
+\title{NASA standard ocean color algorithm (version 4, 5, and 6) for the Ocean and Land 
+  Color Instrument (OLCI) bands}
 \usage{
 OC4_OLCI(Rrs443, Rrs490, Rrs510, Rrs560)
 
@@ -30,7 +31,8 @@ OC6_OLCI(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)
 A list including the algorithm index and Chla concentration.
 }
 \description{
-NASA standard ocean color algorithm (version 4, 5, and 6) for the OLCI bands
+NASA standard ocean color algorithm (version 4, 5, and 6) for the Ocean and Land 
+  Color Instrument (OLCI) bands
 }
 \examples{
 data(WaterSpec35)
@@ -58,8 +60,6 @@ Other Algorithms: Chla concentration:
 \code{\link{OCI_Hu12}()},
 \code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{TC2_clean}()},
-\code{\link{TC2_turbid}()},
 \code{\link{TC2}()},
 \code{\link{run_all_Chla_algorithms}()}
 }

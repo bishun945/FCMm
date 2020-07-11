@@ -2,12 +2,13 @@
 % Please edit documentation in R/Image_application.R
 \name{apply_to_image}
 \alias{apply_to_image}
-\title{Apply FCM_m to raster data}
+\title{Apply the improved Fuzzy Cluster Method (FCMm) to raster data}
 \usage{
 apply_to_image(
   input,
   res,
   color_palette = RdYlBu(res$K),
+  pos_rgb = NULL,
   output_image = FALSE,
   output_resultpng = FALSE,
   output_imRrs.n = FALSE,
@@ -40,6 +41,10 @@ For the convenience, function \link{generate_param} supports to quickly
 \item{color_palette}{The palette of cluster color. Default as \code{RdYlBu(res$K)}.
 In \code{FCMm}, it could be \link{RdYlBu}, \link{Spectral}, \link{HUE} or other color values
 with same length of cluster number.}
+
+\item{pos_rgb}{The position of RGB channels, default as \code{NULL} to search the nearest band with 
+665 (n), 560 (g), and 443 (b). Also could be a vector with three elements meaning the positions of 
+required bands.}
 
 \item{output_image}{Logical, whether to save images as raster files to your disk. Default as \code{FALSE}.}
 
@@ -98,7 +103,7 @@ A \code{list()} of all results and several inputs:
 }
 \description{
 This function could apply the defined water cluster to corrected image files.
-  Should run \link{generate_param} to generate a \code{res} list as an input
+  Should run \link{generate_param} or \link{generate_param_ex} to generate a \code{res} list as an input
   of function \code{apply_to_image}
 }
 \note{
@@ -115,6 +120,11 @@ This function could apply the defined water cluster to corrected image files.
   \strong{2020-06-27}: 
   
   Note that the inputs of \code{apply_to_image} support the file path of raster file.
+  
+  \strong{2020-07-03}:
+  
+  Reported by Xiaolan Cai, the required RGB bands for plotting the true color image are defined by 
+    inputted wavelength now.
 }
 \examples{
 \donttest{

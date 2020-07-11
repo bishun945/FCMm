@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCMm.R
 \name{FCM.new}
 \alias{FCM.new}
-\title{Running the improved Fuzzy Cluster Method (FCM) by optimizing fuzzifier parameter}
+\title{Running the improved Fuzzy Cluster Method (FCMm) by optimizing the fuzzifier m}
 \usage{
 FCM.new(
   FDlist,

@@ -1,16 +1,16 @@
 Package: FCMm
 Type: Package
 Title: Fuzzy Cluster Method Based on the Optimized m Value (Fuzzifier)
-Version: 0.8.6
+Version: 0.8.7
 Authors@R: c(
     person("Shun", "Bi", , "bishun1994@foxmail.com", role = c("aut","cre","cph")),
     person("Yunmei", "Li", , "liyunmei@njnu.edu.cn", role = "aut"),
     person("Ge", "Liu", , "liugers@163.com", role = "ctb")
     )
-Description: Functions provide an improved FCM method (FCMm) for optical classification
+Description: Functions provide an improved Fuzzy Clustering Method (FCMm) for optical classification
     of inland waters remote sensing (Bi et al, 2019) <doi:10.1364/OE.27.034838>. Users can 
-    train their own high dimensional spectra data to obtain the centroid via FCMm or just use 
-    the built-in centroids for the inland water system. The package also supports the Chla 
+    train their own high dimensional spectra data to obtain centroids or apply 
+    the built-in centroids to new data from inland water systems. The package supports the Chla 
     concentration estimation through published algorithms and finally to return the blending 
     results by assigning optimized algorithm results to specific water types. Spectra plot by
     the package 'ggplot2', application to image data by the package 'raster', and other practical

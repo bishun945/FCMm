@@ -913,7 +913,7 @@ CLsma <-
   }
 
 
-#' @title Simulation of hyperspectral data by SRF
+#' @title Simulation of hyperspectral data by spectral response function (SRF)
 #' @name SRF_simulate
 #' @description 
 #' Simulate hyperspectral Rrs to multispectral bands
@@ -1056,15 +1056,8 @@ cal_SRF <- function(Rrs_single, srf){
 #' @title Read srf data from excel file
 #' @param fn filename of excel file
 #' @return The list of SRF for different sensors.
-#' @export
 #' @importFrom readxl excel_sheets read_excel
-#' @examples 
-#' \dontrun{
-#' # Suppose fn is a MS spread file of which sheetnames as sensor names.
-#' # For each sheet, it includes the data with colnames as bands, 
-#' #   rownames as wavelength, and cell values as SRF.
-#' SRF_LIST = read_srf_excel(fn)
-#' }
+#' @noRd
 read_srf_excel <- function(fn){
   SRF_LIST <- list()
   sheets <- excel_sheets(fn)

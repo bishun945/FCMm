@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chla_estimation.R
 \name{QAA_v5}
 \alias{QAA_v5}
-\title{Quasi-analytical algorithm by Lee et al. (2002)}
+\title{Quasi-Analytical Algorithm version 5 (QAA_v5) by Lee et al. (2002)}
 \usage{
 QAA_v5(
   wv,
@@ -47,7 +47,7 @@ Results of \code{QAA_v5} are the list including:
     \code{Rrs667_revised}, and \code{Rrs667_final}}
 }
 \description{
-Quasi-analytical algorithm by Lee et al. (2002)
+Quasi-Analytical Algorithm version 5 (QAA_v5) by Lee et al. (2002)
 }
 \examples{
 data(WaterSpec35)
@@ -74,8 +74,6 @@ Other Algorithms: Chla concentration:
 \code{\link{NDCI_Mi12}()},
 \code{\link{OCI_Hu12}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{TC2_clean}()},
-\code{\link{TC2_turbid}()},
 \code{\link{TC2}()},
 \code{\link{run_all_Chla_algorithms}()}
 }

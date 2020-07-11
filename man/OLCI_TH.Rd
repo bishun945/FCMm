@@ -3,7 +3,7 @@
 \docType{data}
 \name{OLCI_TH}
 \alias{OLCI_TH}
-\title{A test OLCI image raster in Lake Taihu}
+\title{A test Ocean and Land Color Instrument (OLCI) image raster in Lake Taihu}
 \format{
 A RasterBrick with 791136 elements
 }

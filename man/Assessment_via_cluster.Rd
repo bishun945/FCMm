@@ -2,7 +2,7 @@
 % Please edit documentation in R/Algorithms_assessment.R
 \name{Assessment_via_cluster}
 \alias{Assessment_via_cluster}
-\title{Assessment each algorithm for every cluster}
+\title{Calculate error metrics for all algorithm per cluster}
 \usage{
 Assessment_via_cluster(
   pred,
@@ -48,7 +48,7 @@ Results of \code{Assessment_via_cluster} are returned as a list including:
 \item{input}{input parameters of \link{Assessment_via_cluster}}
 }
 \description{
-Assessment each algorithm for every cluster
+Calculate error metrics for all algorithm per cluster
 }
 \note{
 If the \code{cal.precision} is \code{TRUE}, the \code{hard.mode == TRUE} is used. In that case,

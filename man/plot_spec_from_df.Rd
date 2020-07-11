@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCMm.R
 \name{plot_spec_from_df}
 \alias{plot_spec_from_df}
-\title{plot_spec_from_df}
+\title{Plot spectra from dataframe}
 \usage{
 plot_spec_from_df(df)
 }

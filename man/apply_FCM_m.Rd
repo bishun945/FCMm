@@ -2,7 +2,7 @@
 % Please edit documentation in R/FCMm.R
 \name{apply_FCM_m}
 \alias{apply_FCM_m}
-\title{Apply FCM_m (improved Fuzzy Cluster Method) to new input Rrs}
+\title{Apply the improved Fuzzy Cluster Method (FCMm) to new data based on the defined centroids}
 \usage{
 apply_FCM_m(
   Rrs,
@@ -60,7 +60,7 @@ A \code{list} including several results of function \code{apply_FCM_m()}
   }
 }
 \description{
-Application of FCM_m (improved Fuzzy Cluster Method) method for new Rrs data based on 
+Application of the improved Fuzzy Cluster Method (FCMm) for new Rrs data based on 
   default cluster settings or user-defined clusters (trained by FCM.new).
 }
 \examples{

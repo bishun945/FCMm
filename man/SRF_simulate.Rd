@@ -3,7 +3,7 @@
 \name{SRF_simulate}
 \alias{SRF_simulate}
 \alias{show_sensor_names}
-\title{Simulation of hyperspectral data by SRF}
+\title{Simulation of hyperspectral data by spectral response function (SRF)}
 \usage{
 SRF_simulate(
   Rrs,

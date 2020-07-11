@@ -1,3 +1,11 @@
+## FCMm 0.8.7 (2020-07-10)
+  1. Updates documents in man.
+  2. Cancel the export of function `read_srf_excel`.
+  3. One of outputs by `Scoring_system` is changed from `opt_algorithm` to `Opt_algorithm` which is used to match with `Scoring_system_bootstrap`.
+  4. Cancel the export of functions `TC2_clean` and `TC2_turbid` since their outputs could be found in `TC2_Liu20`.
+  5. Add a new parameter `pos_rgb` to `apply_to_image` for definition of RGB channels.
+  6. Update README.
+
 ## FCMm 0.8.6 (2020-07-01)
   1. `Assessment_via_cluster`: update the precision calculation process which now produce NA values for extreme difference between actual and predicted values.
   2. `Assessment_via_cluster`: for total precision calculation, it is unfair when outliers are included (which may result in extremely precision values). A quantile calculation for limiting the range of values to be calculated.

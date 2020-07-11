@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chla_estimation.R
 \name{TC2}
 \alias{TC2}
-\title{Chla concentration method for turbid case-2 waters by Liu et al. (2020)}
+\title{Chla concentration algorithm for Turbid Case-2 (TC2) waters by Liu et al. (2020)}
 \usage{
 TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)
 }
@@ -21,7 +21,7 @@ TC2(Rrs443, Rrs560, Rrs665, Rrs709, Rrs754)
 A list including MCI index, Chla_final, Chla_clean, Chla_turbid, and flag.
 }
 \description{
-Chla concentration method for turbid case-2 waters by Liu et al. (2020)
+Chla concentration algorithm for Turbid Case-2 (TC2) waters by Liu et al. (2020)
 }
 \examples{
 data(WaterSpec35)
@@ -47,8 +47,6 @@ Other Algorithms: Chla concentration:
 \code{\link{OCI_Hu12}()},
 \code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{TC2_clean}()},
-\code{\link{TC2_turbid}()},
 \code{\link{run_all_Chla_algorithms}()}
 }
 \concept{Algorithms: Chla concentration}

@@ -5,19 +5,23 @@
 #' @description 
 #' \code{FCMm} is a package for fuzzy clustering water spectra (or called water color). 
 #'   Given that the most of water color spectra data sets are considered as the high dimensional 
-#'   set, the advantage of this method is making FCM assign the membership (sum as 1) harder, 
-#'   ensuring the desired water type are restricted to its belongings (not too soft). It is 
+#'   set, the advantage of this method is making Fuzzy Cluster Method (FCM) assign the membership (sum as 1) harder.
+#'   Then, it ensures that the desired water types are restricted to their belongings (not too soft). It is 
 #'   possible to cluster the harm algal bloom water type which can not be produced by FCM with \code{m=2}.
 #' 
 #' \itemize{
 #'   \item If you want to cluster your own data sets, it provides an improved Fuzzy Cluster 
-#'     Method (FCM) by optimizing the fuzzifier value (default but not good being 2). 
-#'   \item You can also use the built-in cluster of inland waters produced by Bi et al. (2019) 
+#'     Method (FCMm) by optimizing the fuzzifier value (default but not good being 2). See \link{FCM.new}. 
+#'   \item You can also use the built-in centroids of typical inland waters produced by Bi et al. (2019) 
 #'     and can simply obtain the Chlorophyll-a concentration by blending three algorithms with 
-#'     relatively low bias.  
-#'   \item It supports raster (or called imagery) processing (see more details in help documents 
-#'     or vignettes).
-#'   \item It includes several data sets about water color spectra and corresponding water quality 
+#'     relatively low bias. See \link{apply_FCM_m} and \link{FCM_m_Chla_estimation}.
+#'   \item More than ten algorithms are supported for estimating Chla concentration by remote sensing of 
+#'     reflectance. See \link{run_all_Chla_algorithms}.
+#'   \item For the sustainable development of algorithm blending, we have also designed a bootstraping assessment 
+#'     method to find the optimal algorithm for each type of waters. See \link{Scoring_system}.
+#'   \item It supports the processing of raster or image data, and can use built-in or user-defined centroids.
+#'     See \link{apply_to_image}.
+#'   \item It also includes several data sets about water color spectra and corresponding water quality 
 #'     parameters and a testing image raster (see help documents for details).
 #'   \item Please see NEWS to get changes in each version.
 #' }

@@ -1,5 +1,5 @@
 #' @name Assessment_via_cluster
-#' @title Assessment each algorithm for every cluster
+#' @title Calculate error metrics for all algorithm per cluster
 #' @param pred prediction of Chla
 #' @param meas in-situ measurement of Chla
 #' @param memb membership value matrix
@@ -800,7 +800,7 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #'   \item \strong{Accuracy.list} List including data.frames of used \code{Accuracy} metrics.
 #'   \item \strong{Precision.list} List including data.frames of used \code{Precision} metrics.
 #'   \item \strong{Total_score.melt} Melted data.frame of \strong{Total_score} for plotting.
-#'   \item \strong{opt_algorithm} The optimal algorithm names for each cluster.
+#'   \item \strong{Opt_algorithm} The optimal algorithm names for each cluster.
 #'   \item \strong{Inputs} Inputs of this function.
 #' } 
 #' 
@@ -971,7 +971,7 @@ Scoring_system <- function(Inputs,
                                               Precision_BIAS = Precision_BIAS,
                                               Precision_CMRPE = Precision_CMRPE),
                  Total_score.melt      = Total_score.melt,
-                 opt_algorithm         = opt_algorithm,
+                 Opt_algorithm         = opt_algorithm,
                  Inputs                = Inputs
                 )
   

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chla_estimation.R
 \name{NDCI_Mi12}
 \alias{NDCI_Mi12}
-\title{Normalized difference Chlorophyll index method by Mishra et al. (2012)}
+\title{Normalized Difference Chlorophyll Index (NDCI) algorithm by Mishra et al. (2012)}
 \usage{
 NDCI_Mi12(Rrs665, Rrs709)
 }
@@ -15,7 +15,7 @@ NDCI_Mi12(Rrs665, Rrs709)
 A list including the algorithm index and Chla concentration.
 }
 \description{
-Normalized difference Chlorophyll index method by Mishra et al. (2012)
+Normalized Difference Chlorophyll Index (NDCI) algorithm by Mishra et al. (2012)
 }
 \note{
 Chla_test as a test version of NDCI_Mi12 results parameterized by Bi
@@ -41,8 +41,6 @@ Other Algorithms: Chla concentration:
 \code{\link{OCI_Hu12}()},
 \code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{TC2_clean}()},
-\code{\link{TC2_turbid}()},
 \code{\link{TC2}()},
 \code{\link{run_all_Chla_algorithms}()}
 }

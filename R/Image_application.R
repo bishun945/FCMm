@@ -209,10 +209,10 @@ apply_to_image <- function(input, res,
       pos_r = pos_rgb[1]
       pos_g = pos_rgb[2]
       pos_b = pos_rgb[3]
-      rgb <- brick(im[[pos_r]],im[[pos_g]],im[[pos_b]])
+      rgb <- brick(im[[pos_r]], im[[pos_g]], im[[pos_b]])
     }
   }
-  # rgb <- brick(im[[10]],im[[7]],im[[5]],im[[2]]) # 681 620 510 413
+  # rgb <- brick(im[[7]], im[[6]], im[[2]]) 
   rgb_stretch <- stretch(x=rgb, minv=0, maxv=255)
   rgb_df <- raster::as.data.frame(rgb_stretch, xy=TRUE)
   rgb_df <- data.frame(x=rgb_df$x, y=rgb_df$y,

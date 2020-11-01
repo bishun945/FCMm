@@ -88,7 +88,7 @@ plot_spec_from_df(Rrs) +
 
 ``` r
 # Applying FCMm
-result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
+result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE, do.stand=TRUE)
 plot(result$p.group + theme(text=element_text(size=13)))
 ```
 
@@ -162,7 +162,6 @@ Assess_soft <- Assessment_via_cluster(pred = pred,
                                       na.process = TRUE,
                                       plot.col = TRUE)
 Assess_soft$res_plot_facet
-#> Warning: Removed 36 rows containing missing values (geom_col).
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" />
@@ -173,29 +172,29 @@ knitr::kable(Assess_soft$MAE %>% round(3))
 
 |     |    BR |   TBA | Bloom | Blend |
 |:----|------:|------:|------:|------:|
-| 1   | 0.317 | 0.256 | 1.118 | 0.255 |
-| 2   | 0.213 | 0.087 | 0.536 | 0.093 |
-| 3   |    NA |    NA |    NA |    NA |
-| 4   | 0.180 | 0.233 | 0.998 | 0.159 |
-| 5   |    NA |    NA |    NA |    NA |
-| 6   |    NA |    NA |    NA |    NA |
-| 7   | 0.289 | 0.272 | 0.855 | 0.263 |
+| 1   | 0.256 | 0.229 | 0.857 | 0.229 |
+| 2   | 0.212 | 0.091 | 0.499 | 0.091 |
+| 3   | 0.243 | 0.292 | 1.374 | 0.125 |
+| 4   | 0.201 | 0.274 | 0.927 | 0.201 |
+| 5   | 0.573 | 0.452 | 1.747 | 0.452 |
+| 6   | 0.460 | 0.081 | 0.163 | 0.163 |
+| 7   | 0.145 | 0.187 | 0.976 | 0.144 |
 | SUM | 0.254 | 0.225 | 0.928 | 0.199 |
 
 ``` r
 knitr::kable(Assess_soft$MAPE %>% round(2))
 ```
 
-|     |    BR |   TBA |  Bloom | Blend |
-|:----|------:|------:|-------:|------:|
-| 1   | 43.34 | 36.18 | 141.42 | 36.50 |
-| 2   | 10.52 |  4.48 |  28.43 |  4.79 |
-| 3   |    NA |    NA |     NA |    NA |
-| 4   | 12.12 | 17.86 |  76.83 | 10.64 |
-| 5   |    NA |    NA |     NA |    NA |
-| 6   |    NA |    NA |     NA |    NA |
-| 7   | 20.44 | 19.40 |  65.49 | 18.74 |
-| SUM | 23.96 | 22.39 |  88.10 | 20.01 |
+|     |     BR |    TBA |  Bloom |  Blend |
+|:----|-------:|-------:|-------:|-------:|
+| 1   |  15.06 |  13.91 |  58.31 |  13.91 |
+| 2   |  10.40 |   4.62 |  25.74 |   4.64 |
+| 3   |  20.94 |  36.04 | 141.78 |  15.40 |
+| 4   |  12.65 |  19.25 |  64.93 |  12.64 |
+| 5   | 129.52 | 104.64 | 362.56 | 104.83 |
+| 6   |  17.30 |   3.09 |   6.18 |   6.15 |
+| 7   |   9.80 |  13.09 |  67.38 |   9.70 |
+| SUM |  23.96 |  22.39 |  88.10 |  19.80 |
 
 ## Getting help
 

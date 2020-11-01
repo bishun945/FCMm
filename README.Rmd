@@ -68,7 +68,7 @@ plot_spec_from_df(Rrs) +
   theme_bw() + 
   theme(legend.position='none', text=element_text(size=13))
 # Applying FCMm
-result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
+result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE, do.stand=TRUE)
 plot(result$p.group + theme(text=element_text(size=13)))
 # plot(result$p.group+facet_wrap(~cluster, ncol=2))
 ```

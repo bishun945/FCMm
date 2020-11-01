@@ -4,7 +4,7 @@
 \alias{FuzzifierDetermination}
 \title{Determine the optimized fuzzifier for Fuzzy Cluster Method (FCM) running}
 \usage{
-FuzzifierDetermination(x, wv, max.m=10, stand=FALSE, dmetric='sqeuclidean')
+FuzzifierDetermination(x, wv, max.m=10, do.stand=TRUE, stand=NULL, dmetric="sqeuclidean")
 }
 \arguments{
 \item{x}{Data.frame. the input Rrs data}
@@ -13,7 +13,11 @@ FuzzifierDetermination(x, wv, max.m=10, stand=FALSE, dmetric='sqeuclidean')
 
 \item{max.m}{Set max.m as for determination of m.mub. Default as 10}
 
-\item{stand}{Whether the data set is standardized (T needs not standardization)}
+\item{do.stand}{Whether run standarization for the input data set. Default as \code{TRUE}.
+Note that the do.stand only be used for calculating the fuzzifier as both raw and standarzied 
+spectra will be restored in the return value. This is benifit to the spectra plotting.}
+
+\item{stand}{Deprecated; Now \code{stand = !do.stand}}
 
 \item{dmetric}{Distance method. Default as 'sqeuclidean'}
 }
@@ -21,10 +25,10 @@ FuzzifierDetermination(x, wv, max.m=10, stand=FALSE, dmetric='sqeuclidean')
 \code{FD} list contains several result by \code{FuzzifierDetermination}:
   \itemize{
     \item \strong{x} The raw input Rrs dataframe with unit sr^-1
-    \item \strong{x.stand} The standardized Rrs dataframe, if \code{stand=F}
+    \item \strong{x.stand} The standardized Rrs dataframe, if \code{do.stand=TRUE}
     \item \strong{wv} Wavelength with unit nm
     \item \strong{max.m} The maximum fuzzifier of FCM as a restriction
-    \item \strong{stand} A logic value for choosing whether to use standardization
+    \item \strong{do.stand} A logic value for whether we standardized the input data
     \item \strong{dmetric} A string value for choosing which distance metric to be used
     \item \strong{Area} A numeric vector for trapezoidal integral values
     \item \strong{m.ub} The upper boundary of fuzzifier(m) value

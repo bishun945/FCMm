@@ -83,9 +83,9 @@ Before optimizing the best cluster number, we have to obtain an FD list produced
 
 ```{r}
 set.seed(1234)
-FD <- FuzzifierDetermination(x, wv, stand=FALSE)
-# stand = F means the input x has not been normalized yet, telling the function to normalize x at first. 
-# Otherwise, use FuzzifierDetermination(x.stand, wv, stand=TRUE) which means the x.stand has been normalized.
+FD <- FuzzifierDetermination(x, wv, do.stand=TRUE)
+# do.stand = TRUE means the input x will be normalized in this function. 
+# Otherwise, FuzzifierDetermination(x, wv, do.stand=FALSE) which means the input data will not be normalized.
 summary(FD)
 ```
 
@@ -147,7 +147,7 @@ The input of the function `FCM.new()` is a `FD` list which includes the informat
 
 ```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=4}
 set.seed(54321) 
-result <- FCM.new(FD, nb, fast.mode = T)
+result <- FCM.new(FD, nb, fast.mode = TRUE, do.stand = TRUE)
 summary(result)
 result$p.jitter + theme(text = element_text(size=13)) 
 ```

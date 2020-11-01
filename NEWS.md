@@ -1,3 +1,10 @@
+## FCMm 0.9.1 (2020-11-01)
+
+  1. Parameter `stand` in function `FuzzifierDetermination`, `apply_FCM_m` or so has been deprecated now as users reported that it has some **ambiguity** about the standardized operation in FCMm. As an alternative, I set another parameter called `do.stand`. If `do.stand == TRUE` then the function will standardize the input data. The `stand` parameter is still be supported as before.
+  2. A new function (Schwammle2010) to obtain optimal m value is added, namely `fDN`, but it has not been exported it. Call `FCMm:::fDN` to run it.
+  3. An improved `Fuzzifierdetermination` version `Fuzzifierdetermination2` has been created which run much faster than the former one.
+  4. Corresponding documents have been updated.
+
 ## FCMm 0.8.7 (2020-07-10)
   1. Updates documents in man.
   2. Cancel the export of function `read_srf_excel`.

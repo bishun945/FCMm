@@ -2,19 +2,22 @@
 #' @title Determine the optimized fuzzifier for Fuzzy Cluster Method (FCM) running
 #' @description
 #' To determine the optimized fuzzifier value for Fuzzy Cluster Method (FCM)running.
-#' @usage FuzzifierDetermination(x, wv, max.m=10, stand=FALSE, dmetric='sqeuclidean')
+#' @usage FuzzifierDetermination(x, wv, max.m=10, do.stand=TRUE, stand=NULL, dmetric="sqeuclidean")
 #' @param x Data.frame. the input Rrs data
 #' @param wv Wavelength of X
 #' @param max.m Set max.m as for determination of m.mub. Default as 10
-#' @param stand Whether the data set is standardized (T needs not standardization)
+#' @param do.stand Whether run standarization for the input data set. Default as \code{TRUE}.
+#'   Note that the do.stand only be used for calculating the fuzzifier as both raw and standarzied 
+#'   spectra will be restored in the return value. This is benifit to the spectra plotting.
+#' @param stand Deprecated; Now \code{stand = !do.stand}
 #' @param dmetric Distance method. Default as 'sqeuclidean'
 #' @return \code{FD} list contains several result by \code{FuzzifierDetermination}:
 #'   \itemize{
 #'     \item \strong{x} The raw input Rrs dataframe with unit sr^-1
-#'     \item \strong{x.stand} The standardized Rrs dataframe, if \code{stand=F}
+#'     \item \strong{x.stand} The standardized Rrs dataframe, if \code{do.stand=TRUE}
 #'     \item \strong{wv} Wavelength with unit nm
 #'     \item \strong{max.m} The maximum fuzzifier of FCM as a restriction
-#'     \item \strong{stand} A logic value for choosing whether to use standardization
+#'     \item \strong{do.stand} A logic value for whether we standardized the input data
 #'     \item \strong{dmetric} A string value for choosing which distance metric to be used
 #'     \item \strong{Area} A numeric vector for trapezoidal integral values
 #'     \item \strong{m.ub} The upper boundary of fuzzifier(m) value
@@ -47,7 +50,8 @@
 #' 
 #' @importFrom stats sd
 
-FuzzifierDetermination <- function(x, wv, max.m=10, stand=FALSE, dmetric="sqeuclidean"){
+FuzzifierDetermination <- function(x, wv, max.m=10, do.stand=TRUE,
+                                   stand=NULL, dmetric="sqeuclidean"){
   
   # about x
   if(missing(x))
@@ -85,21 +89,28 @@ FuzzifierDetermination <- function(x, wv, max.m=10, stand=FALSE, dmetric="sqeucl
   if(max.m > 50)
     stop("Are you kidding me? The max.m is too large!")
   
-  # stand
-  if(!is.logical(stand))
-    stop("Stand must be TRUE or FALSE")
+  # do.stand
+  if(!is.logical(do.stand))
+    stop("do.stand must be TRUE or FALSE")
   
   # demteric
   if(dmetric != "sqeuclidean")
     stop("Sorry, this function could only support sqeuclidean distance metric!")
+  
+  # convert tag stand to do.stand
+  # do.stand == TRUE means we gonna do standarization for input data
+  if(is.logical(stand)){
+    do.stand = !stand
+    warning("Parameter stand has been deprecated. Please use do.stand!")
+  }
   
   x.stand <- x
   Area <- trapz(wv,x)
   for(i in 1:ncol(x)){
     x.stand[,i] = x[,i] / Area
   }
-  
-  if(stand==FALSE){ # input data has not been standarized
+
+  if(do.stand==TRUE){
     m.ub <- .commub(x.stand, max.m)
   }else{
     m.ub <- .commub(x, max.m)
@@ -119,7 +130,7 @@ FuzzifierDetermination <- function(x, wv, max.m=10, stand=FALSE, dmetric="sqeucl
   result$x.stand <- x.stand
   result$wv <- wv
   result$max.m <- max.m
-  result$stand <- stand
+  result$do.stand <- do.stand
   result$dmetric <- dmetric
   result$Area <- Area
   result$m.ub <- m.ub
@@ -128,6 +139,108 @@ FuzzifierDetermination <- function(x, wv, max.m=10, stand=FALSE, dmetric="sqeucl
   return(result)
   
 }
+
+#' @name fDN
+#' @title Determining m value by the method of Schwammle and Jensen (2010)
+#' @param x data.frame x
+#' @return m value
+#' @references 
+#'   Schwammle V, Jensen O N. A simple and fast method to determine the parameters for 
+#'     fuzzy c–means cluster analysis[J]. Bioinformatics, 2010, 26(22): 2841-2848.
+#' @noRd
+fDN <- function(x){
+  stopifnot({
+    is.data.frame(x)
+    is.matrix(x)
+  })
+  N = nrow(x)
+  D = ncol(x)
+  1 + (1418 / N + 22.05)*D^(-2) + (12.33 / N + 0.243) * D ^ (-0.0406*log(N) - 0.1134)
+}
+
+#' @name FuzzifierDetermination2
+#' @title The version 2 of FuzzifierDetermination
+#' @param x data.frame x.
+#' @param iter.max the max of iteration number. defualt as 300.
+#' @param m_ini_method the initialization m value. 2 (default) or "Schwammle2010". 
+#' @return m_ub and m_used
+#' @export
+#' @importFrom stats dist approx
+#' @references 
+#' \itemize{
+#'   \item Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
+#'     an improved Fuzzy C-Means method[J]. Optics Express, 2019, 27(24): 34838-34856.
+#'   \item Dembele D. Multi-objective optimization for clustering 3-way gene
+#'     expression data[J]. Advances in Data Analysis and Classification, 2008, 2(3):
+#'     211-225.
+#'   \item Schwammle V, Jensen O N. A simple and fast method to determine the parameters for 
+#'     fuzzy c–means cluster analysis[J]. Bioinformatics, 2010, 26(22): 2841-2848.
+#' }
+FuzzifierDetermination2 <- function(x, iter.max = 300, m_ini_method = 2){
+  
+  find_minus <- function(m_ini, m_step){
+    for(i in 1:iter.max){
+      
+      if(i == 1){
+        m = round(m_ini, 2)
+        Y = dist(x)^(2/(m-1))
+      }else{
+        Y = dist(x)^(2/(m-1))
+      }
+      jud <- sd(Y)/mean(Y) - 0.03*ncol(x)
+      if(jud > 0){
+        m = m + m_step
+      }else{
+        m_cen <- m
+        break
+      }
+      if(i == iter.max){
+        m_cen <- m
+      }
+    }
+    return(list(m_cen=m_cen, m_step=m_step))
+  }
+  
+  for(j in 1:iter.max){
+    if(j == 1){
+      if(m_ini_method == 2){
+        m_cen_res <- find_minus(2, 0.5)
+      }else if(m_ini_method == "Schwammle2010"){
+        m_cen_res <- find_minus((fDN(x)-1) * 10, 0.2)
+      }
+      m_step = m_cen_res$m_step/2
+      m_ini  = m_cen_res$m_cen - m_cen_res$m_step
+    }else{
+      m_cen_res <- find_minus(m_ini, m_step)
+      m_step = m_cen_res$m_step/2
+      m_ini  = m_cen_res$m_cen - m_cen_res$m_step
+    }
+    if(round(m_step, 2) == 0.01){
+      break
+    }
+  }
+  
+  m_cen = m_cen_res$m_cen %>% round(2)
+  
+  m_range <- seq(m_cen-0.03, m_cen+0.03, 0.01)
+  jud = rep(NA, length(m_range))
+  for(i in 1:length(m_range)){
+    Y = dist(x)^(2/(m_range[i]-1))
+    jud[i] = (sd(Y)/mean(Y) - 0.03*ncol(x))
+  }
+  
+  m_ub = approx(x=jud, y=m_range, xout=0)$y %>% round(2)
+  
+  if(m_ub >= 10){
+    m_used <- 2
+  }else{
+    m_used <- 1 + m_ub / 10
+  }
+  
+  return(list(m_ub=m_ub, m_used=m_used))
+  
+}
+
 
 #' @name trapz
 #' @title Trapezoid integral calculation
@@ -221,7 +334,8 @@ trapz <- function(wv,x){
 #'   to large values.
 #' @param plot.jitter Logical, choose to plot jitter plot using \code{ggplot2} functions
 #' @param fast.mode Logical, \code{FALSE} (default)
-#' @param stand Logical, choose to do normalization of input data
+#' @param do.stand Whether to use standarized data for FCM. Default as \code{TRUE}
+#' @param stand Deprecated; Now \code{stand = !do.stand}
 #'
 #' @return A \code{list} of FCM:
 #'   \itemize{
@@ -270,7 +384,7 @@ trapz <- function(wv,x){
 #' @importFrom magrittr %>%
 #' 
 FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = FALSE, 
-                    plot.jitter=TRUE, fast.mode=FALSE,stand=FALSE){
+                    plot.jitter=TRUE, fast.mode=FALSE, do.stand = TRUE, stand=NULL){
   # K is the cluster number
   if(missing(FDlist)){
     warning("Have your run the function `FuzzifierDetermination` sucessfully?")
@@ -288,9 +402,17 @@ FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = F
       stop("The wrong sort.pos! It should be a number between 1 and ncol of input matrix.")
   }
   
-  if(stand==FALSE){
+  if(is.logical(stand)){
+    do.stand = !stand
+    warning("Parameter stand has been deprecated. Please use do.stand!")
+  }
+  
+  if(do.stand==TRUE){
+    if(anyNA(FDlist$x.stand)){
+      stop("NA found in FDlist$x.stand! Make sure FuzzifierDetermination run with do.stand == TRUE")
+    }
     x <- FDlist$x.stand
-  }else if(stand==TRUE){
+  }else{
     x <- FDlist$x
   }
   
@@ -406,7 +528,8 @@ FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = F
 #'   Default use the data from \code{Bi_clusters.rda}
 #' @param Rrs_clusters Data.frame, used for applying FCM.
 #'   Default use the data from \code{Bi_clusters.rda}
-#' @param stand Logical, whether to normalized the Rrs data (both for Input and Centroids).
+#' @param stand Deprecated; same to \code{do.stand}.
+#' @param do.stand Logical, whether to normalized the Rrs data (both for Input and Centroids).
 #'   Default as \code{FALSE} means do not.
 #' @param default.cluster Logical, whether to use the default clusters.
 #'   Default use the data from \code{Bi_clusters.rda}
@@ -454,11 +577,22 @@ FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = F
 #' @importFrom reshape2 melt
 apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
                         m_used = 1.36,
-                        stand = FALSE,
+                        do.stand = FALSE,
+                        stand = NULL,
                         default.cluster = TRUE,
                         quality_check = FALSE,
                         option.plot = FALSE,
                         color_palette = NULL){
+  
+  
+  if(is.logical(stand)){
+    do.stand = stand
+    warning("Parameter stand has been deprecated. Please use do.stand!")
+  }
+  
+  if(is.null(stand)){
+    stand = !do.stand
+  }
   
   if(default.cluster){
     v <- Rrs_clusters.default
@@ -718,7 +852,7 @@ plot_spec <- function(res,
                       show.stand = NULL, show.ribbon = FALSE, 
                       color_palette = RdYlBu(res$K)){
   
-  if(is.null(show.stand)) show.stand = !res$FD$stand
+  if(is.null(show.stand)) show.stand = !res$FD$do.stand
   
   if(length(color_palette) != res$K)
     stop("The length of color_palette shoud be same with cluster number!")

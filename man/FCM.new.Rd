@@ -11,7 +11,8 @@ FCM.new(
   sort.decreasing = FALSE,
   plot.jitter = TRUE,
   fast.mode = FALSE,
-  stand = FALSE
+  do.stand = TRUE,
+  stand = NULL
 )
 }
 \arguments{
@@ -29,7 +30,9 @@ to large values.}
 
 \item{fast.mode}{Logical, \code{FALSE} (default)}
 
-\item{stand}{Logical, choose to do normalization of input data}
+\item{do.stand}{Whether to use standarized data for FCM. Default as \code{TRUE}}
+
+\item{stand}{Deprecated; Now \code{stand = !do.stand}}
 }
 \value{
 A \code{list} of FCM:

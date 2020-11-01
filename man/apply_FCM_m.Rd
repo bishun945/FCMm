@@ -9,7 +9,8 @@ apply_FCM_m(
   wavelength = NULL,
   Rrs_clusters = NULL,
   m_used = 1.36,
-  stand = FALSE,
+  do.stand = FALSE,
+  stand = NULL,
   default.cluster = TRUE,
   quality_check = FALSE,
   option.plot = FALSE,
@@ -27,8 +28,10 @@ Default use the data from \code{Bi_clusters.rda}}
 
 \item{m_used}{Number, Used fuzzifier value}
 
-\item{stand}{Logical, whether to normalized the Rrs data (both for Input and Centroids).
+\item{do.stand}{Logical, whether to normalized the Rrs data (both for Input and Centroids).
 Default as \code{FALSE} means do not.}
+
+\item{stand}{Deprecated; same to \code{do.stand}.}
 
 \item{default.cluster}{Logical, whether to use the default clusters.
 Default use the data from \code{Bi_clusters.rda}}

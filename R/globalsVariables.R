@@ -40,5 +40,6 @@ utils::globalVariables(c('.',
                          "box",
                          "pos_opt",
                          "pos_removed",
-                         "value_opt"
+                         "value_opt",
+                         "x"
                          ))

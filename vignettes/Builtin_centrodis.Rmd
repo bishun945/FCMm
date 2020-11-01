@@ -70,7 +70,7 @@ print(p.spec)
 
 Function `apply_FCM_m()` provides many parameters for users to decide the process for their desired results. In the following case, `result <- apply_FCM_m(Rrs=Rrs)` is equal to `apply_FCM_m(Rrs=Rrs, wavelength=wavelength.default, Rrs_clusters=Rrs_clusters.default, stand=FALSE, default.cluster=TRUE, m_used=1.36, option.plot=TRUE)`. You can see more details by typing `help(FCMm::apply_FCM_m)`.
 
-```{r message=FALSE, warning=FALSE, fig.height=3, fig.width=4}
+```{r fig.height=3, fig.width=4, message=FALSE, warning=FALSE}
 result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
 summary(result)
 result$p.group

@@ -9,3 +9,5 @@ os:
   - linux
 
 warnings_are_errors: false
+
+osx_image: xcode9.2

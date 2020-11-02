@@ -39,7 +39,7 @@ head(Nechad2015)   # to see the structrue of Nechad2015
 x <- Nechad2015[,3:11] # subset Rrs data
 wv <- gsub("X","",names(x)) %>% as.numeric # remove the "X" character of x names (to make them numeric)
 set.seed(1234) # Set this seed so that you can re-produce them
-w = sample(1:nrow(x), 100) # sample 100 rows of the orignal data, you can test the whole set if you like
+w = sample(1:nrow(x), 150) # sample some rows of the orignal data, you can test the whole set if you like
 x <- x[w, ]
 names(x) <- wv
 
@@ -177,6 +177,20 @@ print(p.spec$p.cluster.spec)
 ```{r fig.height=4, fig.width=5}
 p.spec$p.group.spec.2
 ```
+For use of function `plot_spec_group` see codes in the chunk as follows.
+
+```{r fig.height=4, fig.width=5}
+plot_spec_group(
+  x = x.stand,
+  group = result$res.FCM$cluster
+) + 
+  labs(x= "Wavelength [nm]",
+       y = "Normazlied Rrs",
+       color = "Cluster") + 
+  theme_bw()
+```
+
+
 
 
 ## Short result analysis

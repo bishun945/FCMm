@@ -166,7 +166,8 @@ apply_to_image <- function(input, res,
   imRrs.raw <- imdf[,-c(1,2)]
   names(imRrs.raw) <- paste0("Rrs",wv)
   Rrs <- as.matrix(imRrs.raw)
-  Area <- trapz(wv,Rrs)
+  # Area <- trapz(wv,Rrs)
+  Area <- trapz2(Rrs)
   Area <- base::as.data.frame(Area)
   imRrs.n <- imRrs.raw
   for(i in 1:ncol(imRrs.raw))

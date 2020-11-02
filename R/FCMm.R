@@ -105,7 +105,8 @@ FuzzifierDetermination <- function(x, wv, max.m=10, do.stand=TRUE,
   }
   
   x.stand <- x
-  Area <- trapz(wv,x)
+  # Area <- trapz(wv,x)
+  Area <- trapz2(x)
   for(i in 1:ncol(x)){
     x.stand[,i] = x[,i] / Area
   }
@@ -245,8 +246,12 @@ FuzzifierDetermination2 <- function(x, iter.max = 300, m_ini_method = 2){
 #' @name trapz
 #' @title Trapezoid integral calculation
 #' @param wv wavelength
-#' @param x data.frame that need to be trapzed with ncol equal to length of\code{wv}
+#' @param x data.frame that need to be trapzed with ncol equal to length of \code{wv}.
+#'   Note that the colnames of \code{x} should be converted to numbers for \code{trapz}.
+#'   Do not name them as "Rrs560", "560nm" or so. Just set as "560".
 #' @return A vector presenting the area result.
+#' @details In 2020-11-02, I created an improved version of \code{trapz}, say \code{trapz}.
+#'   So better to use \code{trapz} as it calculates much faster than before.
 #' @export
 #' @examples 
 #' library(FCMm)
@@ -262,6 +267,7 @@ FuzzifierDetermination2 <- function(x, iter.max = 300, m_ini_method = 2){
 #' names(x) <- wv
 #' rm(w)
 #' Area <- trapz(wv, x)
+#' Area2 <- trapz2(x) # the results are indentical to that from trapz
 #' 
 trapz <- function(wv,x){
   Area <-  as.matrix(x[,1])
@@ -271,6 +277,21 @@ trapz <- function(wv,x){
     Area[i] <- 0.5 * sum(diff(wv,1)*(y[1:(len-1)]+y[2:len]))
   }
   return(as.matrix(Area))
+}
+
+#' @rdname trapz
+#' @export
+trapz2 <- function(x){
+  wv <- names(x)
+  if(any(as.numeric(wv) %>% is.na)) 
+    stop("Be sure the colname of x can be converted to number!")
+  wv <- as.numeric(wv)
+  wv_diff_arr <- matrix(data=rep(diff(wv), nrow(x)), ncol=ncol(x)-1, byrow=TRUE)
+  wv_diff_arr <- as.data.frame(wv_diff_arr)
+  x <- as.data.frame(x)
+  tmp <- wv_diff_arr * (x[,1:(ncol(x)-1)] + x[,2:ncol(x)]) * 0.5
+  Area <- apply(tmp, 1, sum)
+  return(Area)
 }
 
 #' @name .commub
@@ -628,11 +649,13 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   }
   
   x <- as.matrix(Rrs)
-  Area_x <- trapz(wavelength, x)
+  # Area_x <- trapz(wavelength, x)
+  Area_x <- trapz2(x)
   x.stand <- x
   for(i in 1:ncol(x)){x.stand[,i] <- x[,i]/Area_x}
   
-  Area_v <- trapz(wavelength, v)
+  # Area_v <- trapz(wavelength, v)
+  Area_v <- trapz2(v)
   v.stand <- v
   for(i in 1:ncol(v)){v.stand[,i] <- v[,i]/Area_v}
   
@@ -753,6 +776,8 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
 #' @export
 #' @family Fuzzy cluster functions
 #' 
+#' @seealso plot_spec_group
+#' 
 #' @examples 
 #' data(WaterSpec35)
 #' plot_spec_from_df(WaterSpec35[, -c(1, 2)])
@@ -795,6 +820,47 @@ plot_spec_from_df <- function(df){
   return(result)
 }
 
+#' @title Plot spectra from dataframe by group
+#' @name plot_spec_group
+#' @description This function will help you quick plot the spectra if you have a data.frame
+#'   that could be used for \link{plot_spec_from_df} and have a \code{group} parameter which indicates
+#'   the different groups for spectra in your \code{x}.
+#' @param x The input matrix with colnames could be converted to numeric values.
+#' @param group The vector indicate the group-belongings for x
+#' @param palette Color palette function. The default is \link{RdYlBu}
+#' @param facet Whether to plot by \link{facet_wrap}. The default is \code{TRUE}.
+#' @param group_num Whether to add sample numbers of each group in strip.text. The default is \code{TRUE}.
+#' @return A ggplot list.
+#' @seealso plot_spec_from_df
+#' @importFrom reshape2 melt
+#' @importFrom magrittr %>% %<>%
+#' @importFrom stats aggregate
+#' @export
+plot_spec_group <- function(x, group, palette = RdYlBu, facet = TRUE, group_num = TRUE){
+  wv <- names(x)
+  if(any(as.numeric(wv) %>% is.na)) stop("Be sure the colname of x can be converted to number!")
+  if(length(group) != nrow(x)) stop("The length of group should be same as the row number of x!")
+  x <- cbind(id=1:nrow(x), group=group, x)
+  x_melt <- melt(x, id=c("id", "group"), variable.name="wv") %>% level_to_variable()
+  x_melt$wv <- as.numeric(x_melt$wv)
+  x_melt$group <- as.character(x_melt$group)
+  # add number
+  num <- aggregate(x[,1], list(group), length)[,2]
+  x_melt$group_f <- factor(x_melt$group, levels = sort(unique(x_melt$group)))
+  levels(x_melt$group_f) <- sprintf("%s\nN=%s", levels(x_melt$group_f), num)
+  p <- ggplot() + 
+    geom_path(data = x_melt, alpha=0.5, 
+              aes(x=wv, y=value, group=id, color=group)) + 
+    scale_color_manual(values=palette(length(unique(group))))
+  if(facet == TRUE){
+    if(group_num == TRUE){
+      p <- p + facet_wrap(~group_f)
+    }else{
+      p <- p + facet_wrap(~group)
+    }
+  }
+  return(p)
+}
 
 
 #' @name plot_spec

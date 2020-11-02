@@ -1,3 +1,8 @@
+## FCMm 0.9.3 (2020-11-02)
+
+  1. Improve the `trapz` function. Now better to use the `trapz2` function. Much faster!
+  2. Add a new usefull function namely `plot_spec_group` which helps to plot spectra lines by means of `ggplot2` with facet in different colors.
+
 ## FCMm 0.9.2 (2020-11-02)
 
   Not sure why is error report from travis so I just comment the travis lines in my readme page.

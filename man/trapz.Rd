@@ -2,20 +2,29 @@
 % Please edit documentation in R/FCMm.R
 \name{trapz}
 \alias{trapz}
+\alias{trapz2}
 \title{Trapezoid integral calculation}
 \usage{
 trapz(wv, x)
+
+trapz2(x)
 }
 \arguments{
 \item{wv}{wavelength}
 
-\item{x}{data.frame that need to be trapzed with ncol equal to length of\code{wv}}
+\item{x}{data.frame that need to be trapzed with ncol equal to length of \code{wv}.
+Note that the colnames of \code{x} should be converted to numbers for \code{trapz}.
+Do not name them as "Rrs560", "560nm" or so. Just set as "560".}
 }
 \value{
 A vector presenting the area result.
 }
 \description{
 Trapezoid integral calculation
+}
+\details{
+In 2020-11-02, I created an improved version of \code{trapz}, say \code{trapz}.
+  So better to use \code{trapz} as it calculates much faster than before.
 }
 \examples{
 library(FCMm)
@@ -31,5 +40,6 @@ x <- w \%>\% Nechad2015[,.]
 names(x) <- wv
 rm(w)
 Area <- trapz(wv, x)
+Area2 <- trapz2(x) # the results are indentical to that from trapz
 
 }

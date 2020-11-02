@@ -26,6 +26,8 @@ plot_spec_from_df(WaterSpec35)
 
 }
 \seealso{
+plot_spec_group
+
 Other Fuzzy cluster functions: 
 \code{\link{FCM.new}()},
 \code{\link{FuzzifierDetermination}()},

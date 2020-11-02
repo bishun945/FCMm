@@ -1,3 +1,7 @@
+## FCMm 0.9.2 (2020-11-02)
+
+  Not sure why is error report from travis so I just comment the travis lines in my readme page.
+
 ## FCMm 0.9.1 (2020-11-01)
 
   1. Parameter `stand` in function `FuzzifierDetermination`, `apply_FCM_m` or so has been deprecated now as users reported that it has some **ambiguity** about the standardized operation in FCMm. As an alternative, I set another parameter called `do.stand`. If `do.stand == TRUE` then the function will standardize the input data. The `stand` parameter is still be supported as before.

@@ -253,6 +253,7 @@ FuzzifierDetermination2 <- function(x, iter.max = 300, m_ini_method = 2){
 #' @details In 2020-11-02, I created an improved version of \code{trapz}, say \code{trapz}.
 #'   So better to use \code{trapz} as it calculates much faster than before.
 #' @export
+#' @importFrom stringr str_extract_all str_c
 #' @examples 
 #' library(FCMm)
 #' library(magrittr)
@@ -282,13 +283,13 @@ trapz <- function(wv,x){
 #' @rdname trapz
 #' @export
 trapz2 <- function(x){
-  wv <- names(x)
-  if(any(as.numeric(wv) %>% is.na)) 
-    stop("Be sure the colname of x can be converted to number!")
+  wv <- colnames(x)
+  wv <- str_extract_all(wv, "[:digit:]|\\.", simplify = TRUE) %>% 
+    apply(., 1, function(x) str_c(x, collapse = ""))
+  if(any(is.na(as.numeric(wv)))) stop("Be sure the colname of x can be converted to number!")
   wv <- as.numeric(wv)
   wv_diff_arr <- matrix(data=rep(diff(wv), nrow(x)), ncol=ncol(x)-1, byrow=TRUE)
   wv_diff_arr <- as.data.frame(wv_diff_arr)
-  x <- as.data.frame(x)
   tmp <- wv_diff_arr * (x[,1:(ncol(x)-1)] + x[,2:ncol(x)]) * 0.5
   Area <- apply(tmp, 1, sum)
   return(Area)
@@ -652,12 +653,14 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   # Area_x <- trapz(wavelength, x)
   Area_x <- trapz2(x)
   x.stand <- x
-  for(i in 1:ncol(x)){x.stand[,i] <- x[,i]/Area_x}
+  # for(i in 1:ncol(x)){x.stand[,i] <- x[,i]/Area_x}
+  x.stand = x / Area_x
   
   # Area_v <- trapz(wavelength, v)
   Area_v <- trapz2(v)
   v.stand <- v
-  for(i in 1:ncol(v)){v.stand[,i] <- v[,i]/Area_v}
+  # for(i in 1:ncol(v)){v.stand[,i] <- v[,i]/Area_v}
+  v.stand <- v / Area_v
   
   if(stand==FALSE){
     x_ <- x.stand
@@ -823,7 +826,7 @@ plot_spec_from_df <- function(df){
 #' @title Plot spectra from dataframe by group
 #' @name plot_spec_group
 #' @description This function will help you quick plot the spectra if you have a data.frame
-#'   that could be used for \link{plot_spec_from_df} and have a \code{group} parameter which indicates
+#'   that could be used for \link{plot_spec_from_df} and have a \code{group} paramter which indicates
 #'   the different groups for spectra in your \code{x}.
 #' @param x The input matrix with colnames could be converted to numeric values.
 #' @param group The vector indicate the group-belongings for x

@@ -22,7 +22,7 @@ A ggplot list.
 }
 \description{
 This function will help you quick plot the spectra if you have a data.frame
-  that could be used for \link{plot_spec_from_df} and have a \code{group} parameter which indicates
+  that could be used for \link{plot_spec_from_df} and have a \code{group} paramter which indicates
   the different groups for spectra in your \code{x}.
 }
 \seealso{

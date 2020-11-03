@@ -10,7 +10,8 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-<!-- [![Travis build status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm) -->
+[![Travis build
+status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/bishun945/FCMm?branch=master&svg=true)](https://ci.appveyor.com/project/bishun945/FCMm)
 [![CircleCI build
@@ -20,7 +21,7 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2020-11-02  
+**Date**: 2020-11-03  
 **Version**: 0.9.3  
 **E-mail**: <bishun1994@foxmail.com>
 

@@ -825,20 +825,22 @@ plot_spec_from_df <- function(df){
 
 #' @title Plot spectra from dataframe by group
 #' @name plot_spec_group
-#' @description This function will help you quick plot the spectra if you have a data.frame
-#'   that could be used for \link{plot_spec_from_df} and have a \code{group} paramter which indicates
+#' @description 
+#'   This function will help you quick plot the spectra if you have a data.frame
+#'   that could be used for \link{plot_spec_from_df} and have a \code{group} parameter which indicates
 #'   the different groups for spectra in your \code{x}.
 #' @param x The input matrix with colnames could be converted to numeric values.
 #' @param group The vector indicate the group-belongings for x
 #' @param palette Color palette function. The default is \link{RdYlBu}
 #' @param facet Whether to plot by \link{facet_wrap}. The default is \code{TRUE}.
-#' @param group_num Whether to add sample numbers of each group in strip.text. The default is \code{TRUE}.
+#' @param group_num Whether to add sample numbers of each group in strip.text. Also support 
+#'   character as the input.
 #' @return A ggplot list.
-#' @seealso plot_spec_from_df
 #' @importFrom reshape2 melt
 #' @importFrom magrittr %>% %<>%
 #' @importFrom stats aggregate
 #' @export
+#' 
 plot_spec_group <- function(x, group, palette = RdYlBu, facet = TRUE, group_num = TRUE){
   wv <- names(x)
   if(any(as.numeric(wv) %>% is.na)) stop("Be sure the colname of x can be converted to number!")
@@ -846,21 +848,33 @@ plot_spec_group <- function(x, group, palette = RdYlBu, facet = TRUE, group_num 
   x <- cbind(id=1:nrow(x), group=group, x)
   x_melt <- melt(x, id=c("id", "group"), variable.name="wv") %>% level_to_variable()
   x_melt$wv <- as.numeric(x_melt$wv)
-  x_melt$group <- as.character(x_melt$group)
+  if(all(is.numeric(group))){
+    x_melt$group <- as.numeric(x_melt$group)
+  }else{
+    x_melt$group <- as.character(x_melt$group)
+  }
   # add number
   num <- aggregate(x[,1], list(group), length)[,2]
-  x_melt$group_f <- factor(x_melt$group, levels = sort(unique(x_melt$group)))
-  levels(x_melt$group_f) <- sprintf("%s\nN=%s", levels(x_melt$group_f), num)
+  x_melt$group_f <- factor(x_melt$group, 
+                           levels = sort(unique(x_melt$group)), 
+                           ordered = TRUE)
   p <- ggplot() + 
     geom_path(data = x_melt, alpha=0.5, 
-              aes(x=wv, y=value, group=id, color=group)) + 
-    scale_color_manual(values=palette(length(unique(group))))
+              aes(x=wv, y=value, group=id, color=group_f)) + 
+    scale_color_manual(values=palette(length(unique(x_melt$group_f))))
   if(facet == TRUE){
     if(group_num == TRUE){
-      p <- p + facet_wrap(~group_f)
-    }else{
-      p <- p + facet_wrap(~group)
+      levels(x_melt$group_f) <- sprintf("%s\nN=%s", levels(x_melt$group_f), num)
+    }else if(group_num == FALSE){
+      levels(x_melt$group_f) <- sprintf("%s", levels(x_melt$group_f))
+    }else if(is.character(group_num)){
+      levels(x_melt$group_f) <- sprintf(group_num, levels(x_melt$group_f))
     }
+    p <- ggplot() + 
+      geom_path(data = x_melt, alpha=0.5, 
+                aes(x=wv, y=value, group=id, color=group_f)) + 
+      scale_color_manual(values=palette(length(unique(x_melt$group_f)))) + 
+      facet_wrap(~group_f)
   }
   return(p)
 }

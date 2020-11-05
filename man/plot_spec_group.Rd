@@ -15,16 +15,14 @@ plot_spec_group(x, group, palette = RdYlBu, facet = TRUE, group_num = TRUE)
 
 \item{facet}{Whether to plot by \link{facet_wrap}. The default is \code{TRUE}.}
 
-\item{group_num}{Whether to add sample numbers of each group in strip.text. The default is \code{TRUE}.}
+\item{group_num}{Whether to add sample numbers of each group in strip.text. Also support 
+character as the input.}
 }
 \value{
 A ggplot list.
 }
 \description{
 This function will help you quick plot the spectra if you have a data.frame
-  that could be used for \link{plot_spec_from_df} and have a \code{group} paramter which indicates
+  that could be used for \link{plot_spec_from_df} and have a \code{group} parameter which indicates
   the different groups for spectra in your \code{x}.
-}
-\seealso{
-plot_spec_from_df
 }

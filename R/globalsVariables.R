@@ -42,5 +42,6 @@ utils::globalVariables(c('.',
                          "pos_removed",
                          "value_opt",
                          "x",
-                         "id"
+                         "id",
+                         "group_f"
                          ))

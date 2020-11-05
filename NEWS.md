@@ -1,3 +1,7 @@
+## FCMm 0.9.4 (2020-11-05)
+
+  Fix bugs in `plot_spec_group`. Parameter `group_num` could be inputted as characters such as "%s %s".
+
 ## FCMm 0.9.3 (2020-11-02)
 
   1. Improve the `trapz` function. Now better to use the `trapz2` function. Much faster!

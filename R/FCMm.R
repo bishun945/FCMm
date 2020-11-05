@@ -868,7 +868,7 @@ plot_spec_group <- function(x, group, palette = RdYlBu, facet = TRUE, group_num 
     }else if(group_num == FALSE){
       levels(x_melt$group_f) <- sprintf("%s", levels(x_melt$group_f))
     }else if(is.character(group_num)){
-      levels(x_melt$group_f) <- sprintf(group_num, levels(x_melt$group_f))
+      levels(x_melt$group_f) <- sprintf(group_num, levels(x_melt$group_f), num)
     }
     p <- ggplot() + 
       geom_path(data = x_melt, alpha=0.5, 

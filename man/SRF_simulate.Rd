@@ -12,7 +12,8 @@ SRF_simulate(
   save_as_csv = FALSE,
   save_csv_dir = ".",
   na.rm = TRUE,
-  wv_as_column = TRUE
+  wv_as_column = TRUE,
+  verbose = FALSE
 )
 
 show_sensor_names()
@@ -39,6 +40,8 @@ directory (\code{"."}).}
 
 \item{wv_as_column}{Logical. If \code{TRUE} (default), the output result is a dataframe
 with wavelength as column names.}
+
+\item{verbose}{Whether to print information to console. Default as \code{FALSE}.}
 }
 \value{
 A \code{list} with names as all selected sensors from parameters \code{select_sensor}.

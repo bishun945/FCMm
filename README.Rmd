@@ -45,7 +45,13 @@ knitr::opts_chunk$set(
 The GitHub version requires the package devtools
 
 ```{r, eval=FALSE}
-install.packages("devtools") # install devtools require
+# install it from GitHub quickly by `devtools` package
+devtools::install_github('bishun945/FCMm')
+
+# or use `remotes` package
+remotes::install_github('bishun945/FCMm')
+
+# install it and build vignettes 
 devtools::install_github('bishun945/FCMm', build_vignettes=TRUE)
 ```
 

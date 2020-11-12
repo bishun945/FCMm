@@ -21,8 +21,8 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2020-11-03  
-**Version**: 0.9.3  
+**Date**: 2020-11-12  
+**Version**: 0.9.4  
 **E-mail**: <bishun1994@foxmail.com>
 
 ## Overview
@@ -55,7 +55,13 @@ produced by FCM with `m=2`.
 The GitHub version requires the package devtools
 
 ``` r
-install.packages("devtools") # install devtools require
+# install it from GitHub quickly by `devtools` package
+devtools::install_github('bishun945/FCMm')
+
+# or use `remotes` package
+remotes::install_github('bishun945/FCMm')
+
+# install it and build vignettes 
 devtools::install_github('bishun945/FCMm', build_vignettes=TRUE)
 ```
 

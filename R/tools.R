@@ -1,6 +1,5 @@
 #' @name cal.metrics
 #' @title Assess the performance of algorithms
-#' @usage cal.metrics(x,y,name="all",log10=FALSE)
 #' @param x True value OR Actual value
 #' @param y Estimated value OR Predict value
 #' @param name The name of metrics
@@ -327,7 +326,6 @@ cal.metrics.names <- function(){
 
 #' @title Assess the performance of algorithms as vector
 #' @name cal.metrics.vector
-#' @usage cal.metrics.vector(x,y,name="all",log10=FALSE)
 #' @param x True value OR Actual value
 #' @param y Estimated value OR Predict value
 #' @param name The name of metrics
@@ -933,6 +931,7 @@ CLsma <-
 #' @param na.rm Logical. Should NA values be removed? Default as \code{TRUE}
 #' @param wv_as_column Logical. If \code{TRUE} (default), the output result is a dataframe
 #'   with wavelength as column names.
+#' @param verbose Whether to print information to console. Default as \code{FALSE}.
 #' 
 #' @export
 #' @return 
@@ -967,7 +966,8 @@ SRF_simulate <- function(Rrs,
                          save_as_csv=FALSE,
                          save_csv_dir = ".", 
                          na.rm=TRUE,
-                         wv_as_column=TRUE){
+                         wv_as_column=TRUE,
+                         verbose = FALSE){
   
   Rrs <- as.data.frame(Rrs)
   
@@ -979,7 +979,9 @@ SRF_simulate <- function(Rrs,
       sensors[i] <- match.arg(sensors[i], show_sensor_names())
   }
   
-  cat("Sensor(s) to be simulated:", paste(sensors, collapse = " "), "\n")
+  if(verbose){
+    cat("Sensor(s) to be simulated:", paste(sensors, collapse = " "), "\n")
+  }
 
   result <- list()
   for(sensor in sensors){
@@ -1024,14 +1026,18 @@ SRF_simulate <- function(Rrs,
       stop("Could not find the specified directory!")
     }
     
-    cat("Simulated files are saved at:\n")
+    if(verbose){
+      cat("Simulated files are saved at:\n")
+    }
     
     for(sheet in names(result)){
       file = sprintf(file.path(save_csv_dir, 'Simulated_Rrs_%s.csv'), sheet)
       write.csv(result[[sheet]]$Rrs_simu,
                 file = file,
                 row.names=FALSE)
-      cat(file, "\n")
+      if(verbose){
+        cat(file, "\n")
+      }
     }
   }
   return(result)

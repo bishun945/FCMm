@@ -5,7 +5,7 @@
 \alias{cal.metrics.names}
 \title{Assess the performance of algorithms}
 \usage{
-cal.metrics(x,y,name="all",log10=FALSE)
+cal.metrics(x, y, name = "all", log10 = FALSE)
 
 cal.metrics.names()
 }

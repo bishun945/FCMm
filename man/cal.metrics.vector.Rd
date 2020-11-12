@@ -5,7 +5,7 @@
 \alias{cal.metrics.vector.names}
 \title{Assess the performance of algorithms as vector}
 \usage{
-cal.metrics.vector(x,y,name="all",log10=FALSE)
+cal.metrics.vector(x, y, name = "all", log10 = FALSE)
 
 cal.metrics.vector.names()
 }

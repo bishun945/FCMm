@@ -675,10 +675,9 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   # Build distance and membership matrix
   d <- matrix(ncol=nrow(v_), nrow=nrow(x_))
   for(j in 1:ncol(d)){
-    v_tmp <- rep(as.matrix(v_[j,]),nrow(x_)) %>% matrix(.,ncol=ncol(v_), byrow=TRUE)
-    x_tmp <- x_ %>% as.matrix %>% as.data.frame
-    row.names(x_tmp) <- row.names(v_tmp)
-    d_tmp <- (x_tmp - v_tmp)^2 %>% apply(.,1,sum) %>% as.matrix
+    v_tmp <- t(t(rep(1, nrow(d)))) %*% as.numeric(v_[j,])
+    x_tmp <- as.matrix(x_)
+    d_tmp <- (x_tmp - v_tmp)^2 %>% rowSums
     d[,j] <- d_tmp
   }
   

@@ -1,3 +1,8 @@
+## FCMm 0.9.5 (2020-11-12)
+
+  1. `apply_FCM_m`: the calculation of distance for large matrix has been improved.
+  2. `SRF_simulate`: add a parameter `verbose` to control the message to console.
+
 ## FCMm 0.9.4 (2020-11-05)
 
   Fix bugs in `plot_spec_group`. Parameter `group_num` could be inputted as characters such as "%s %s".

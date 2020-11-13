@@ -812,9 +812,8 @@ plot_spec_from_df <- function(df){
   spectra.p <- melt(tmp.spec, id=1, variable.name='band', value.name='value')
   spectra.p$band %<>% levels(.)[.] %>% as.numeric
   
-  result <- ggplot(data=spectra.p,
-                   aes(x=band,y=value,group=name,color=name)) +
-    geom_path(alpha=0.5) +
+  result <- ggplot() +
+    geom_path(data=spectra.p, aes(x=band,y=value,group=name,color=name), alpha=0.5) +
     scale_colour_viridis_d(option = "D") +
     theme_bw() +
     theme(legend.position='none')

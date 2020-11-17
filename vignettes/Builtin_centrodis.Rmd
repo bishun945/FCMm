@@ -231,7 +231,7 @@ summary(im_result)
  - *raster.cluster*: raster object of cluster
  - *p.memb*: ggplot list of membership value map
  - *p.cluster*: ggplot list of cluster map
- - *p.truecolor*: ggplot list of truecolor map
+ - *p.rgb*: ggplot list of rgbcolor map
  - *p.Chla*: ggplot list of Chla map
  - *imdf*: data.frame of raw Rrs including xy coordinates
  - *imRrs.raw*: data.frame of raw Rrs

@@ -8,11 +8,12 @@
 SRF_simulate(
   Rrs,
   select_sensor = "All",
+  input_wv_as_column = FALSE,
   output_wavelength = "MED",
   save_as_csv = FALSE,
   save_csv_dir = ".",
   na.rm = TRUE,
-  wv_as_column = TRUE,
+  output_wv_as_column = TRUE,
   verbose = FALSE
 )
 
@@ -24,6 +25,9 @@ the first column is wavelength vector (such as \code{400:900}).}
 
 \item{select_sensor}{Character. Select sensors. Use \code{show_sensor_names()} to print
 all supported sensors. Default as \code{All}}
+
+\item{input_wv_as_column}{Logical. If \code{FALSE} (default), the input data.frame has
+wavelength as its column names.}
 
 \item{output_wavelength}{Character. \code{MED} (default) or \code{MAX}.
 Define the center wavelength. \code{MED} means the center wavelength is 
@@ -38,7 +42,7 @@ directory (\code{"."}).}
 
 \item{na.rm}{Logical. Should NA values be removed? Default as \code{TRUE}}
 
-\item{wv_as_column}{Logical. If \code{TRUE} (default), the output result is a dataframe
+\item{output_wv_as_column}{Logical. If \code{TRUE} (default), the output result is a dataframe
 with wavelength as column names.}
 
 \item{verbose}{Whether to print information to console. Default as \code{FALSE}.}

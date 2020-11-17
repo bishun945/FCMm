@@ -920,6 +920,8 @@ CLsma <-
 #'   the first column is wavelength vector (such as \code{400:900}).
 #' @param select_sensor Character. Select sensors. Use \code{show_sensor_names()} to print
 #'   all supported sensors. Default as \code{All}
+#' @param input_wv_as_column Logical. If \code{FALSE} (default), the input data.frame has
+#'   wavelength as its column names.
 #' @param output_wavelength Character. \code{MED} (default) or \code{MAX}.
 #'   Define the center wavelength. \code{MED} means the center wavelength is 
 #'   middle position of half maximun of max peak. While \code{MAX} means the 
@@ -929,7 +931,7 @@ CLsma <-
 #' @param save_csv_dir The directory used for saving ouput csv files. Default as current working
 #'   directory (\code{"."}).
 #' @param na.rm Logical. Should NA values be removed? Default as \code{TRUE}
-#' @param wv_as_column Logical. If \code{TRUE} (default), the output result is a dataframe
+#' @param output_wv_as_column Logical. If \code{TRUE} (default), the output result is a dataframe
 #'   with wavelength as column names.
 #' @param verbose Whether to print information to console. Default as \code{FALSE}.
 #' 
@@ -962,15 +964,27 @@ CLsma <-
 #' 
 SRF_simulate <- function(Rrs,
                          select_sensor="All",
+                         input_wv_as_column = FALSE,
                          output_wavelength="MED",
                          save_as_csv=FALSE,
                          save_csv_dir = ".", 
                          na.rm=TRUE,
-                         wv_as_column=TRUE,
+                         output_wv_as_column=TRUE,
                          verbose = FALSE){
   
   Rrs <- as.data.frame(Rrs)
   
+  if(input_wv_as_column){
+    if(verbose) cat("The input dataframe has wavelength as columns. \n")
+    wv <- names(Rrs)[-1] %>% as.numeric
+    stname <- Rrs[, 1]
+    tmp <- t(Rrs[, -1]) %>% cbind(nm = wv, .) %>%
+      as.data.frame %>%
+      setNames(., c("nm", stname))
+    Rrs = tmp
+    rm(tmp, stname, wv)
+  }
+
   if(select_sensor[1] == "All" & length(select_sensor) == 1){
     sensors <- show_sensor_names()
   }else{
@@ -1014,7 +1028,7 @@ SRF_simulate <- function(Rrs,
       SRF$Rrs_simu <- Rrs_simu
     }
     
-    if(wv_as_column){
+    if(output_wv_as_column){
       SRF$Rrs_simu <- t(SRF$Rrs_simu)[-1,] %>% setNames(., SRF$Rrs_simu[,1])
     }
     

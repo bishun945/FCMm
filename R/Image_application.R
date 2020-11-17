@@ -36,7 +36,7 @@
 #' @param fn_memb A string, filename of membership raster file. Default as \code{"output_membership"}.
 #' @param fn_cluster A string, filename of cluster raster file. Default as \code{"output_cluster"}.
 #' @param fn_imRrs.n A string, filename of normalized Rrs raster file. Default as \code{"output_imRrs_normalized"}.
-#' @param fn_truecolorpng A string, file name of truecolor png. Default as \code{"output_truecolor"}.
+#' @param fn_rgbpng A string, file name of rgb png. Default as \code{"output_rgb"}.
 #' @param fn_Chla A string, file name of estimated Chla raster file. Default as \code{"output_Chla"}.
 #'
 #' @return A \code{list()} of all results and several inputs:
@@ -60,7 +60,7 @@
 #'     
 #'     \item \strong{p.memb}  A ggplot list of membership value map
 #'     \item \strong{p.cluster}  A ggplot list of cluster map
-#'     \item \strong{p.truecolor} A ggplot list of truecolor map
+#'     \item \strong{p.rgb} A ggplot list of rgb map
 #'     \item \strong{p.Chla}  A ggplot list of Chla map
 #'   }
 #'
@@ -109,6 +109,7 @@
 #' @importFrom reshape2 melt
 #' @importFrom magrittr %>% %<>%
 #' @importFrom ggthemes theme_map
+#' @importFrom grDevices rgb
 #' @importClassesFrom raster Raster RasterBrick RasterStack
 #' 
 apply_to_image <- function(input, res, 
@@ -121,7 +122,7 @@ apply_to_image <- function(input, res,
                            fn_memb="output_membership",
                            fn_cluster="output_cluster",
                            fn_imRrs.n="output_imRrs_normalized",
-                           fn_truecolorpng="output_truecolor",
+                           fn_rgbpng="output_rgb",
                            fn_Chla = "output_Chla"){
 
   if(missing(input))
@@ -138,7 +139,7 @@ apply_to_image <- function(input, res,
   fn_memb <- file.path(output_dir, fn_memb)
   fn_cluster <- file.path(output_dir, fn_cluster)
   fn_imRrs.n <- file.path(output_dir, fn_imRrs.n)
-  fn_truecolorpng <- file.path(output_dir, fn_truecolorpng)
+  fn_rgbpng <- file.path(output_dir, fn_rgbpng)
   fn_Chla <- file.path(output_dir, fn_Chla)
   
   message("Since we have not check the input image file,")
@@ -194,38 +195,36 @@ apply_to_image <- function(input, res,
   res.im$cluster <- res.FCM$cluster
 
   # Save true color image
-  if(is.null(pos_rgb)){
-    pos_r = which.min(abs(wv - 665))
-    pos_g = which.min(abs(wv - 560))
-    pos_b = which.min(abs(wv - 443))
-    if(length(pos_r) == 0 | length(pos_g) == 0 | length(pos_b) == 0){
-      rgb <- brick(im[[pos_r]],im[[pos_g]],im[[pos_b]])
+  wv_nrgb <- c(865, 665, 560, 442)
+  wv_pos <- wv_nrgb
+  for(i in 1:length(wv_pos)){
+    diff_wv <- abs(abs(wv - wv_nrgb[i]))
+    pos_min <- which.min(diff_wv)
+    if(diff_wv[pos_min] <= 10){
+      wv_pos[i] = pos_min
     }else{
-      rgb <- brick(im[[3]],im[[2]],im[[1]])
+      wv_pos[i] = NA
     }
-  }else{
-    if(all(pos_rgb <= 0) | all(pos_rgb > length(im))){
-      stop("The positions of RGB channels are out of the range of the input raster file!")
-    }else{
-      pos_r = pos_rgb[1]
-      pos_g = pos_rgb[2]
-      pos_b = pos_rgb[3]
-      rgb <- brick(im[[pos_r]], im[[pos_g]], im[[pos_b]])
-    }
+    rm(diff_wv, pos_min)
   }
+  
+  im_nrgb <- brick(im[[wv_pos[1]]],
+                   im[[wv_pos[2]]],
+                   im[[wv_pos[3]]],
+                   im[[wv_pos[4]]])
+  
   # rgb <- brick(im[[7]], im[[6]], im[[2]]) 
-  rgb_stretch <- stretch(x=rgb, minv=0, maxv=255)
-  rgb_df <- raster::as.data.frame(rgb_stretch, xy=TRUE)
-  rgb_df <- data.frame(x=rgb_df$x, y=rgb_df$y,
-                       r=rgb_df[,3], g=rgb_df[,4],b=rgb_df[,5]) %>% na.omit
-  p.truecolor = ggplot(data=rgb_df) +
-    geom_raster(aes(x=x,y=y,fill=rgb(r,g,b, maxColorValue=255)), hjust=0.5, vjust=0.5) +
+  nrgb_stretch <- stretch(x=im_nrgb, minv=0, maxv=255, minq=0.02, maxq=0.98)
+  nrgb_imdf <- raster::as.data.frame(nrgb_stretch, xy=TRUE, na.rm=TRUE) %>%
+    setNames(., c("x", "y", "n", "r", "g", "b"))
+  
+  p.rgb <- ggplot(nrgb_imdf) + 
+    geom_raster(aes(x=x, y=y, fill=rgb(n,r,g, maxColorValue = 255)), hjust=0.5, vjust=0.5)+
     scale_fill_identity() +
-    labs(title=title.name) +
-    coord_equal() + theme_map() +
-    theme(plot.title=element_text(hjust=0.5),
-          text = element_text(size=13))
-  print(p.truecolor)
+    coord_equal() + 
+    ggthemes::theme_map() + 
+    theme(plot.margin = margin())
+  print(p.rgb)
 
   # Save membership rasters
   sub.memb <- data.frame(imdf$x,imdf$y, res.im$u)
@@ -336,7 +335,7 @@ apply_to_image <- function(input, res,
   if(output_resultpng){
     ggsave(paste0(fn_memb,'.png'), plot=p.memb, device='png')
     ggsave(paste0(fn_cluster,'.png'), plot=p.cluster, device='png', width=width, height=height, units='in')
-    ggsave(paste0(fn_truecolorpng, '.png'), plot=p.truecolor, device='png', width=width, height=height, units='in')
+    ggsave(paste0(fn_rgbpng, '.png'), plot=p.rgb, device='png', width=width, height=height, units='in')
     ggsave(paste0(fn_Chla, '.png'), plot=p.Chla, device='png', width=width, height=height, units='in')
   }
 
@@ -370,7 +369,7 @@ apply_to_image <- function(input, res,
   # plots
   result$p.memb <- p.memb
   result$p.cluster <- p.cluster
-  result$p.truecolor <- p.truecolor
+  result$p.rgb <- p.rgb
   result$p.Chla <- p.Chla
 
   message('Done!')

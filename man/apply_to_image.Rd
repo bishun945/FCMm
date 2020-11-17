@@ -20,7 +20,7 @@ apply_to_image(
   fn_memb = "output_membership",
   fn_cluster = "output_cluster",
   fn_imRrs.n = "output_imRrs_normalized",
-  fn_truecolorpng = "output_truecolor",
+  fn_rgbpng = "output_rgb",
   fn_Chla = "output_Chla"
 )
 }
@@ -71,7 +71,7 @@ Default as \code{FALSE}.}
 
 \item{fn_imRrs.n}{A string, filename of normalized Rrs raster file. Default as \code{"output_imRrs_normalized"}.}
 
-\item{fn_truecolorpng}{A string, file name of truecolor png. Default as \code{"output_truecolor"}.}
+\item{fn_rgbpng}{A string, file name of rgb png. Default as \code{"output_rgb"}.}
 
 \item{fn_Chla}{A string, file name of estimated Chla raster file. Default as \code{"output_Chla"}.}
 }
@@ -97,7 +97,7 @@ A \code{list()} of all results and several inputs:
     
     \item \strong{p.memb}  A ggplot list of membership value map
     \item \strong{p.cluster}  A ggplot list of cluster map
-    \item \strong{p.truecolor} A ggplot list of truecolor map
+    \item \strong{p.rgb} A ggplot list of rgb map
     \item \strong{p.Chla}  A ggplot list of Chla map
   }
 }

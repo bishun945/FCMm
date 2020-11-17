@@ -1,3 +1,9 @@
+## FCMm 0.9.6 (2020-11-17)
+  
+  1. `SRF_simulate`: add a parameter `input_wv_as_column`. Now you can directly simulate your Rrs data.frame with wavelength as column names.
+  2. The rgb png file output from `apply_to_image` has been set as false color NIR-R-G. And add a 2% linear stretch method to make the image looks more clear.
+  
+
 ## FCMm 0.9.5 (2020-11-12)
 
   1. `apply_FCM_m`: the calculation of distance for large matrix has been improved.

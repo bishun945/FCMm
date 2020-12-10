@@ -37,8 +37,7 @@ ggplot(dt_p) +
 
 ggplot(dt_p) + 
   geom_point(aes(x=x, y=value, color=variable)) + 
-  geom_abline(slope=1, intercept=0) +
-  scale_x_log10() + scale_y_log10()
+  geom_abline(slope=1, intercept=0)
 
 memb = rep(1, length(x_true)) %>% as.matrix
 

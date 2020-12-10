@@ -72,7 +72,9 @@ er
 
 score_sort <- apply(er, 2, Score_algorithms_sort) %>% rowSums()
 
-score_inte <- apply(er, 2, function(x) Score_algorithms_interval(x, reward.punishment=FALSE)$score) %>% rowSums()
+score_inte <- apply(er, 2, function(x){
+  Score_algorithms_interval(x, reward.punishment=FALSE)$score
+}) %>% rowSums()
 
 
 score_sort

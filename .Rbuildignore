@@ -11,3 +11,4 @@
 ^pkgdown$
 ^CRAN-RELEASE$
 ^LICENSE\.md$
+^test$

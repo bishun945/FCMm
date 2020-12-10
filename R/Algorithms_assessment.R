@@ -564,7 +564,7 @@ Score_algorithms_sort <- function(x, decreasing = TRUE){
   
   r <- sort.int(x, decreasing=decreasing, index.return = TRUE, na.last = na.last)
   
-  score <- NULL
+  score <- rep(NA, length(x))
 
   for(i in 1:length(x)){
     if(is.na(x[i])){

@@ -21,8 +21,8 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2020-11-12  
-**Version**: 0.9.4  
+**Date**: 2020-12-12  
+**Version**: 0.9.7  
 **E-mail**: <bishun1994@foxmail.com>
 
 ## Overview
@@ -35,20 +35,20 @@ water type are restricted to its belongings (not too soft). It is
 possible to cluster the harm algal bloom water type which can not be
 produced by FCM with `m=2`.
 
--   If you want to cluster your own data sets, it provides an improved
+  - If you want to cluster your own data sets, it provides an improved
     Fuzzy Cluster Method (FCM) by optimizing the fuzzifier value
     (default but not good being 2).
--   You can also use the built-in cluster of inland waters produced by
-    [Bi *et
-    al.* (2019)](https://www.osapublishing.org/oe/abstract.cfm?uri=oe-27-24-34838)
+  - You can also use the built-in cluster of inland waters produced by
+    [Bi *et al.*
+    (2019)](https://www.osapublishing.org/oe/abstract.cfm?uri=oe-27-24-34838)
     and can simply obtain the Chlorophyll-a concentration by blending
     three algorithms with relatively low bias.  
--   It supports raster (or called imagery) processing (see more details
+  - It supports raster (or called imagery) processing (see more details
     in help documents or vignettes).
--   It includes several data sets about water color spectra and
+  - It includes several data sets about water color spectra and
     corresponding water quality parameters and a testing image raster
     (see help documents for details).
--   Please see [NEWS](./NEWS.md) to get changes in each version.
+  - Please see [NEWS](./NEWS.md) to get changes in each version.
 
 ## Installation
 
@@ -67,7 +67,7 @@ devtools::install_github('bishun945/FCMm', build_vignettes=TRUE)
 
 ## Usage
 
-### 1. Classification of water spectra based on pre-defined cluster centers
+### 1\. Classification of water spectra based on pre-defined cluster centers
 
 This chunk introduces the usage of applying the `FCMm` package (and its
 built-in centrodis) to cluster water spectra. The details of obtaining
@@ -104,7 +104,7 @@ plot(result$p.group + theme(text=element_text(size=13)))
 # plot(result$p.group+facet_wrap(~cluster, ncol=2))
 ```
 
-### 2. Algorithms blending via membership values from FCMm
+### 2\. Algorithms blending via membership values from FCMm
 
 ``` r
 library(magrittr)
@@ -138,10 +138,11 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" />
 
 ``` r
+
 # on.exit(options(oldoptions))
 ```
 
-### 3. Assessment of Chla concentration algorithms
+### 3\. Assessment of Chla concentration algorithms
 
 `FCMm` provides an useful function to assess the performance of
 algorithms, i.e., `Assessment_via_cluster()`. Users can decide to select
@@ -177,7 +178,7 @@ knitr::kable(Assess_soft$MAE %>% round(3))
 ```
 
 |     |    BR |   TBA | Bloom | Blend |
-|:----|------:|------:|------:|------:|
+| :-- | ----: | ----: | ----: | ----: |
 | 1   | 0.256 | 0.229 | 0.857 | 0.229 |
 | 2   | 0.212 | 0.091 | 0.499 | 0.091 |
 | 3   | 0.243 | 0.292 | 1.374 | 0.125 |
@@ -192,7 +193,7 @@ knitr::kable(Assess_soft$MAPE %>% round(2))
 ```
 
 |     |     BR |    TBA |  Bloom |  Blend |
-|:----|-------:|-------:|-------:|-------:|
+| :-- | -----: | -----: | -----: | -----: |
 | 1   |  15.07 |  13.91 |  58.31 |  13.91 |
 | 2   |  10.40 |   4.62 |  25.73 |   4.64 |
 | 3   |  20.94 |  36.04 | 141.78 |  15.40 |
@@ -204,45 +205,45 @@ knitr::kable(Assess_soft$MAPE %>% round(2))
 
 ## Getting help
 
--   About this package, I have written several vignettes to present the
+  - About this package, I have written several vignettes to present the
     usage of `FCMm`. Please read them carefully if you want to use this
     package for your research. Also, e-mail me via
     `bishun1994@foxmail.com` without hesitation if you have any
     questions or find any bug about it.
--   If you are more interested in the application of FCM-m about inland
-    water spectra, I recommend you to read [Bi *et
-    al.* (2019)](https://www.osapublishing.org/oe/abstract.cfm?uri=oe-27-24-34838)
+  - If you are more interested in the application of FCM-m about inland
+    water spectra, I recommend you to read [Bi *et al.*
+    (2019)](https://www.osapublishing.org/oe/abstract.cfm?uri=oe-27-24-34838)
     for more details.
--   If you want to know some theoretical knowledge about FCM in
-    mathematics, you could read some researches like [Dembele *et
-    al.* (2018)](https://link.springer.com/article/10.1007/s11634-008-0032-5).
--   More about FCM in remote sensing applications, you can read [Moore
-    *et
-    al.* (2014)](https://www.sciencedirect.com/science/article/pii/S0034425713004434)
-    and [Jackson *et
-    al.* (2017)](https://www.sciencedirect.com/science/article/pii/S0034425717301396)
+  - If you want to know some theoretical knowledge about FCM in
+    mathematics, you could read some researches like [Dembele *et al.*
+    (2018)](https://link.springer.com/article/10.1007/s11634-008-0032-5).
+  - More about FCM in remote sensing applications, you can read [Moore
+    *et al.*
+    (2014)](https://www.sciencedirect.com/science/article/pii/S0034425713004434)
+    and [Jackson *et al.*
+    (2017)](https://www.sciencedirect.com/science/article/pii/S0034425717301396)
     which focus on Case-II and Case-I waters, respectively.
--   See more details about optical water types of inland waters in
-    [Spyrakos *et
-    al.* (2018)](https://aslopubs.onlinelibrary.wiley.com/doi/abs/10.1002/lno.10674)
--   Hope you will enjoy using this package and have a nice day.
+  - See more details about optical water types of inland waters in
+    [Spyrakos *et al.*
+    (2018)](https://aslopubs.onlinelibrary.wiley.com/doi/abs/10.1002/lno.10674)
+  - Hope you will enjoy using this package and have a nice day.
 
 ## References
 
--   Bi S, Li Y, Xu J, et al. Optical classification of inland waters
+  - Bi S, Li Y, Xu J, et al. Optical classification of inland waters
     based on an improved Fuzzy C-Means method\[J\]. Optics Express,
     2019, 27(24): 34838-34856.
--   Jackson T, Sathyendranath S, Mélin F. An improved optical
+  - Jackson T, Sathyendranath S, Mélin F. An improved optical
     classification scheme for the Ocean Colour Essential Climate
     Variable and its applications\[J\]. Remote Sensing of Environment,
     2017, 203: 152-161.
--   Moore T S, Dowell M D, Bradt S, et al. An optical water type
+  - Moore T S, Dowell M D, Bradt S, et al. An optical water type
     framework for selecting and blending retrievals from bio-optical
     algorithms in lakes and coastal waters\[J\]. Remote sensing of
     environment, 2014, 143: 97-111.
--   Spyrakos E, O’Donnell R, Hunter P D, et al. Optical types of inland
+  - Spyrakos E, O’Donnell R, Hunter P D, et al. Optical types of inland
     and coastal waters\[J\]. Limnology and Oceanography, 2018, 63(2):
     846-870.
--   Dembele D. Multi-objective optimization for clustering 3-way gene
+  - Dembele D. Multi-objective optimization for clustering 3-way gene
     expression data\[J\]. Advances in Data Analysis and Classification,
     2008, 2(3): 211-225.

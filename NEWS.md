@@ -1,3 +1,7 @@
+## FCMm 0.9.7 (2020-12-12)
+
+  1. Add new Chla function `Smith18`.
+
 ## FCMm 0.9.6 (2020-11-17)
   
   1. `SRF_simulate`: add a parameter `input_wv_as_column`. Now you can directly simulate your Rrs data.frame with wavelength as column names.

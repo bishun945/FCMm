@@ -420,6 +420,49 @@ Gons08 <- function(Rrs665, Rrs709, Rrs779){
 
 
 
+#' @name Smith18
+#' @title Smith algorithm by Smith et al. (2018)
+#' @param Rrs443 Rrs443
+#' @param Rrs490 Rrs490
+#' @param Rrs510 Rrs510
+#' @param Rrs560 Rrs560
+#' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
+#' @export
+#' @return A list including the algorithm estimated CHL_G2B, CHL_OCI, 
+#'   CHL_BLEND concentration. PHI index. a1 and a2 coefficients.
+#' @family Algorithms: Chla concentration
+#' @examples 
+#' data(WaterSpec35)
+#' res = Smith18(WaterSpec35$`442.5`, WaterSpec35$`490`, WaterSpec35$`510`, 
+#' WaterSpec35$`560`, WaterSpec35$`665`, WaterSpec35$`708.75`)
+#' @references Smith M E, Lain L R, Bernard S. An optimized chlorophyll a switching 
+#'   algorithm for MERIS and OLCI in phytoplankton-dominated waters[J]. 
+#'   Remote Sensing of Environment, 2018, 215: 217-227.
+Smith18 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665, Rrs709) {
+  CHL_G2B = BR_Gil10(Rrs665, Rrs709)$Chla
+  CHL_OCI = OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)$Chl_OCI
+  r   = Rrs709 / Rrs665
+  PHI = r * NA
+  PHI[r < 0.75] = 0.75
+  PHI[r > 1.15] = 1.15
+  PHI[r <= 1.15 & r >= 0.75] = r[r <= 1.15 & r >= 0.75]
+  a1 = (PHI - 0.75) / (1.15 - 0.75)
+  a2 = abs(a1 - 1)
+  CHL_BLEND <- a1 * CHL_G2B + a2 * CHL_OCI
+  result <- list(
+    CHL_G2B   = CHL_G2B,
+    CHL_OCI   = CHL_OCI,
+    CHL_BLEND = CHL_BLEND,
+    PHI = PHI,
+    a1  = a1,
+    a2  = a2
+  )
+  return(result)
+}
+
+
+
 #' @name TC2
 #' @title Chla concentration algorithm for Turbid Case-2 (TC2) waters by Liu et al. (2020)
 #' @param Rrs443 Rrs443

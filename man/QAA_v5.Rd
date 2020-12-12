@@ -74,6 +74,7 @@ Other Algorithms: Chla concentration:
 \code{\link{NDCI_Mi12}()},
 \code{\link{OCI_Hu12}()},
 \code{\link{SCI_Shen10}()},
+\code{\link{Smith18}()},
 \code{\link{TC2}()},
 \code{\link{run_all_Chla_algorithms}()}
 }

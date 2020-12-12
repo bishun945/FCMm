@@ -40,6 +40,7 @@ Other Algorithms: Chla concentration:
 \code{\link{OCI_Hu12}()},
 \code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
+\code{\link{Smith18}()},
 \code{\link{TC2}()},
 \code{\link{run_all_Chla_algorithms}()}
 }

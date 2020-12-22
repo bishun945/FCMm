@@ -537,6 +537,34 @@ FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = F
   return(p)
 }
 
+#' @name cal_memb
+#' @title calculate membership values based on x, v, and m
+#' @param x Input matrix
+#' @param v Input centroids
+#' @param m Fuzzifier parameter. Default is 2.
+#' @return A list including x, v, m, u (membership), d (distance)
+#' @family Fuzzy cluster functions
+cal_memb <- function(x, v, m=2) {
+  u <- d <- matrix(NA, ncol=nrow(v), nrow=nrow(x))
+  for(j in 1:ncol(d)) {
+    v_tmp <- t(t(rep(1, nrow(d)))) %*% as.numeric(v[j,])
+    x_tmp <- as.matrix(x)
+    d_tmp <- rowSums((x_tmp - v_tmp)^2)
+    d[, j] <- d_tmp
+  }
+  for(j in 1:ncol(d)) {
+    for(i in 1:nrow(d)) {
+      u[i, j] <- 1/(sum( (d[i,j]/d[i,])^(1/(m-1)) ))
+    }
+  }
+  return(list(
+    x = x,
+    v = v,
+    m = m,
+    u = u,
+    d = d
+  ))
+}
 
 
 #' @name apply_FCM_m
@@ -673,7 +701,7 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   }
   
   # Build distance and membership matrix
-  d <- matrix(ncol=nrow(v_), nrow=nrow(x_))
+  u <- d <- matrix(ncol=nrow(v_), nrow=nrow(x_))
   for(j in 1:ncol(d)){
     v_tmp <- t(t(rep(1, nrow(d)))) %*% as.numeric(v_[j,])
     x_tmp <- as.matrix(x_)
@@ -682,7 +710,13 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   }
   
   m <- m_used
-  u <- 1/d^(2/(m-1))/(apply(1/d^(2/(m-1)),1,sum))
+  
+  for(j in 1:ncol(d)) {
+    for(i in 1:nrow(d)) {
+      u[i, j] <- 1/(sum( (d[i,j]/d[i,])^(1/(m-1)) ))
+    }
+  }
+  
   cluster <- as.numeric(apply(u,1,which.max))
   
   if(quality_check == TRUE){

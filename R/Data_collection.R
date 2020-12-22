@@ -17,7 +17,11 @@
 #'     GF2-PMS1, GF2-PMS2, GF4-PMI, HJ1A-CCD1, HJ1A-CCD2, HJ1B-CCD1, HJ1B-CCD2, MODISA, MERIS, 
 #'     VIIRS, OLCI, GOCI, and GF5-VIMS.
 #'   The data are collected from their corresponding official websites (see in references).
-#'   
+#' 
+#' @examples 
+#' library(FCMm)
+#' names(SRF_LIST)
+#'       
 #' @references 
 #'   \itemize{
 #'     \item http://www.cresda.com/CN/

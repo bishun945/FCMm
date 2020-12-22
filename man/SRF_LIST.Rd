@@ -27,6 +27,11 @@ The cw_med and cw_max are different since
     VIIRS, OLCI, GOCI, and GF5-VIMS.
   The data are collected from their corresponding official websites (see in references).
 }
+\examples{
+library(FCMm)
+names(SRF_LIST)
+      
+}
 \references{
 \itemize{
     \item http://www.cresda.com/CN/

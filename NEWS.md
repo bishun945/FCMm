@@ -1,3 +1,9 @@
+## FCMm 0.9.8 (2020-12-22)
+
+  1. Add a tiny example for `SRF_LIST`.
+  2. Fix a bug in `apply_FCM_m` about membership calculation.
+  3. Add a new function `cal_memb` to calculate distance and membership matrix but without export.
+
 ## FCMm 0.9.7 (2020-12-12)
 
   1. Add new Chla function `Smith18`.

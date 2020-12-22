@@ -83,6 +83,7 @@ Other Fuzzy cluster functions:
 \code{\link{FCM.new}()},
 \code{\link{FuzzifierDetermination}()},
 \code{\link{apply_to_image}()},
+\code{\link{cal_memb}()},
 \code{\link{generate_param}()},
 \code{\link{plot_spec_from_df}()}
 }

@@ -9,7 +9,7 @@ FuzzifierDetermination(x, wv, max.m=10, do.stand=TRUE, stand=NULL, dmetric="sqeu
 \arguments{
 \item{x}{Data.frame. the input Rrs data}
 
-\item{wv}{Wavelength of X}
+\item{wv}{Wavelength of X. If \code{NULL}, given by colnames of x.}
 
 \item{max.m}{Set max.m as for determination of m.mub. Default as 10}
 

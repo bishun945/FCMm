@@ -4,7 +4,7 @@
 #' To determine the optimized fuzzifier value for Fuzzy Cluster Method (FCM)running.
 #' @usage FuzzifierDetermination(x, wv, max.m=10, do.stand=TRUE, stand=NULL, dmetric="sqeuclidean")
 #' @param x Data.frame. the input Rrs data
-#' @param wv Wavelength of X
+#' @param wv Wavelength of X. If \code{NULL}, given by colnames of x.
 #' @param max.m Set max.m as for determination of m.mub. Default as 10
 #' @param do.stand Whether run standarization for the input data set. Default as \code{TRUE}.
 #'   Note that the do.stand only be used for calculating the fuzzifier as both raw and standarzied 
@@ -50,7 +50,7 @@
 #' 
 #' @importFrom stats sd
 
-FuzzifierDetermination <- function(x, wv, max.m=10, do.stand=TRUE,
+FuzzifierDetermination <- function(x, wv=NULL, max.m=10, do.stand=TRUE,
                                    stand=NULL, dmetric="sqeuclidean"){
   
   # about x
@@ -68,10 +68,10 @@ FuzzifierDetermination <- function(x, wv, max.m=10, do.stand=TRUE,
     stop("Data set must be a numeric vector, data frame or matrix")
   
   # about wv
-  if(missing(wv))
-    stop("Missing wavelength!")
-  if(is.null(wv))
-    stop("Wavelength is null")
+  
+  if(is.null(wv)) {
+    wv <- as.numeric(colnames(x))  
+  }
   if(!is.vector(wv)){
     if(dim(wv)[2] != dim(x)[2]){
       stop("the dimension of wavelength and input data set is different! --A")}
@@ -150,10 +150,8 @@ FuzzifierDetermination <- function(x, wv, max.m=10, do.stand=TRUE,
 #'     fuzzy c–means cluster analysis[J]. Bioinformatics, 2010, 26(22): 2841-2848.
 #' @noRd
 fDN <- function(x){
-  stopifnot({
-    is.data.frame(x)
-    is.matrix(x)
-  })
+  if(!(is.data.frame(x) | is.matrix(x))) 
+    stop("Input should be a data.frame or matrix")
   N = nrow(x)
   D = ncol(x)
   1 + (1418 / N + 22.05)*D^(-2) + (12.33 / N + 0.243) * D ^ (-0.0406*log(N) - 0.1134)

@@ -10,6 +10,7 @@ Getting_Asses_results(
   pred,
   meas,
   memb,
+  metrics_used = 2,
   cluster = apply(memb, 1, which.max),
   seed = NULL
 )
@@ -26,6 +27,12 @@ of pred or so.}
 \item{meas}{Measured (actual) matrix or data.frame}
 
 \item{memb}{Membership matrix}
+
+\item{metrics_used}{The metric combination used in the function. Default is \code{1}.
+
+If \code{metrics_used = 1} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
+
+If \code{metrics_used = 2} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE", "RATIO")}}
 
 \item{cluster}{Cluster vector. Could be calculated by the parameter \code{memb}. Will be deprecated later.}
 

@@ -1,3 +1,13 @@
+## FCMm 0.10.1 (2021-01-03)
+
+1. `cal.metrics` and `cal.metrics.vector` add new parameter `c.value` which is the compensated value for CAPE and CRPE series metrics. This could be useful when user wants to fix the compensated value.
+2. Now the definition of `valid.prediciton` has been updated. The new parameter `valid.definition` is a list for function `Assessment_via_cluster`. See documents for more details.
+3. I have added a new metric (temporailly) RATIO to score the candidate algorithms. So to identify the predicion with error density distribution. The center.value has been added in `Assessment_via_cluster` for calcluating the CAPE series metrics for RATIO.
+4. A new scoring method has been added that is based on the previous `sort-based` method but with rescale the error metric values to avoid hidden the step values between algorithms. The function is called `Scoring_algorithm_sort2` and has been coupled to `Scroing_system` series functions.
+5. Update the calculation of `Scoring_system`. Now the score of accuracy and precision are restored in each of list rather the variable with XX_XXX.
+6. For `Scoring_system_bootstrap`, I add a metric statistic for final blending result and candidates.
+7. Happy new year!
+
 ## FCMm 0.9.8 (2020-12-22)
 
   1. Add a tiny example for `SRF_LIST`.

@@ -5,7 +5,13 @@
 \alias{cal.metrics.vector.names}
 \title{Assess the performance of algorithms as vector}
 \usage{
-cal.metrics.vector(x, y, name = "all", log10 = FALSE)
+cal.metrics.vector(
+  x,
+  y,
+  name = "all",
+  log10 = FALSE,
+  c.value = mean(x, na.rm = TRUE)
+)
 
 cal.metrics.vector.names()
 }
@@ -17,6 +23,8 @@ cal.metrics.vector.names()
 \item{name}{The name of metrics}
 
 \item{log10}{Logical. Whether the input x and y should be log10-transformed}
+
+\item{c.value}{Compensated value for CMAPE and CMRPE. Default is the mean of x.}
 }
 \value{
 Result of \code{cal.metrics.vector} is a list of selected metric values.
@@ -28,7 +36,6 @@ The call of \code{cal.metrics.vector.names} retunrs the metrics
 Assess the performance of algorithms as vector
 }
 \examples{
-set.seed(1234)
 x = runif(100)
 y = runif(100)
 result = cal.metrics.vector(x,y)

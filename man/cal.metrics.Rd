@@ -5,7 +5,7 @@
 \alias{cal.metrics.names}
 \title{Assess the performance of algorithms}
 \usage{
-cal.metrics(x, y, name = "all", log10 = FALSE)
+cal.metrics(x, y, name = "all", log10 = FALSE, c.value = mean(x, na.rm = TRUE))
 
 cal.metrics.names()
 }
@@ -17,6 +17,8 @@ cal.metrics.names()
 \item{name}{The name of metrics}
 
 \item{log10}{Logical. Whether the input x and y should be log10-transformed}
+
+\item{c.value}{Compensated value for CMAPE and CMRPE. Default is the mean of x.}
 }
 \value{
 Result of \code{cal.metrics} is a list of selected metric values.
@@ -31,11 +33,10 @@ Assess the performance of algorithms
   Key parameter `log10`.
 }
 \examples{
-set.seed(1234)
 x = runif(20)
 y = runif(20)
 result = cal.metrics(x, y)
-print(result)
+str(result)
 }
 \seealso{
 Other Utils: 

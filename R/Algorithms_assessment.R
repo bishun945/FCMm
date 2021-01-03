@@ -8,8 +8,14 @@
 #' @param total Whether to calculate summarized metrics (default as \code{TRUE})
 #' @param hard.mode If \code{FALSE}, the membership values are used to calculate validation metrics
 #' @param cal.precision Whether to calculate precision (only support for vectorized metrics), default as \code{FALSE}
-#' @param na.process na.process and choose to statistic na value percent
-#' @param plot.col option to plot col result for chosed metrics (default as \code{FALSE})
+#' @param valid.definition The definition of valid prediction, default as \code{list(negative=FALSE, percent = 0.6)}.
+#'   The invalid prediction will not be removed to calculate error metrics.
+#' 
+#' \code{negative=FALSE} means the negative values are considered as invalid predictions while \code{percent} means
+#'   the tolerance of error-percentage that only the predictions between \code{(y-y*percent), y+y*percent)} are valid.
+#' 
+#' @param na.process na.process and choose to statistic NA value percent
+#' @param plot.col option to plot col result for selected metrics (default as \code{FALSE})
 #' 
 #' @note If the \code{cal.precision} is \code{TRUE}, the \code{hard.mode == TRUE} is used. In that case,
 #'   mean and sd calculation is conducted for hard mode based on result from \link{cal.metrics.vector}.
@@ -72,11 +78,14 @@ Assessment_via_cluster <- function(pred, meas, memb,
                                    total = TRUE,
                                    hard.mode= TRUE,
                                    cal.precision = FALSE,
+                                   valid.definition = list(negative=FALSE, percent = 0.6),
                                    na.process = FALSE,
                                    plot.col = FALSE){
   
   pred <- as.data.frame(pred)
   meas <- as.data.frame(meas)
+  
+  c.value = mean(meas[,1], na.rm=TRUE)
   
   if(nrow(pred) != nrow(meas) | nrow(pred) != nrow(memb))
     stop('Rows of input are different!')
@@ -152,10 +161,24 @@ Assessment_via_cluster <- function(pred, meas, memb,
       num_raw <- length(x)
       
       if(na.process){
-        w_finite <- which(is.finite(y) & y > 0)
+        w_finite <- which(is.finite(y))
+        
+        # default valid.definition is set as 0.6 which is two times of meeting of GOSC
+        # If valid.threshold is set as NULL then it would pass this process
+        if(!is.null(valid.definition)) {
+          upper <- x * (1 + valid.definition$percent)
+          lower <- x * (1 - valid.definition$percent)
+          if(valid.definition$negative == FALSE) { # means the negative value is invalid
+            lower[lower < 0] <- 0
+          }
+          w_finite2 <- which(y > lower & y < upper)
+          num_new <- length(w_finite2)
+        }else {
+          num_new <- length(w_finite)
+        }
+        
         x <- x[w_finite]
         y <- y[w_finite]
-        num_new <- length(w_finite)
         if(num_new > num_raw)
           stop("Error! The subseted sample number is smaller the raw.")
       }
@@ -164,12 +187,23 @@ Assessment_via_cluster <- function(pred, meas, memb,
       if(cal.precision == TRUE){
       
         for(metric in metrics){
+          
+          if(metric == "RATIO") {
+            center.value = 1
+          }else {
+            center.value = 0
+          }
+          
           precision_name <- paste0(metric, '_p')
-          metric_value <- cal.metrics.vector(x,y,metric,log10=log10)
+          metric_value <- cal.metrics.vector(x, y, metric, 
+                                             log10 = log10, 
+                                             c.value = c.value)
           if(log10){
             x_ = log10(x)
+            y_ = log10(y)
           }else{
             x_ = x
+            y_ = y
           }
           # quant <- quantile(metric_value, c(0.001, 0.999))
           # metric_value_ = metric_value[metric_value > quant[1] & metric_value < quant[2]]
@@ -178,22 +212,26 @@ Assessment_via_cluster <- function(pred, meas, memb,
           if(length(metric_value) == 0){
             result[[precision_name]][cluster, model] <- NA
           }else{
-            if(median(metric_value, na.rm=TRUE) / median(x_, na.rm=TRUE) > 10){
-              # if the error are extremely biased, for instance, 10 fold than measurement,
-              #   the precision (standard deviation) will reduce since they are uncorrectly high.
-              #   Given that, the precision for this condition is assigned to NA values.
-              #   Same as total calculation.
-              result[[precision_name]][cluster, model] <- NA
-            }else{
-              result[[precision_name]][cluster, model] <- sd(metric_value_, na.rm=TRUE)
-            }
+            # if(median(y_, na.rm=TRUE) / median(x_, na.rm=TRUE) > 10){
+            #   # if the error are extremely biased, for instance, 10 fold than measurement,
+            #   #   the precision (standard deviation) will reduce since they are uncorrectly high.
+            #   #   Given that, the precision for this condition is assigned to NA values.
+            #   #   Same as total calculation.
+            #   result[[precision_name]][cluster, model] <- NA
+            # }else{
+            #   result[[precision_name]][cluster, model] <- sd(metric_value_, na.rm=TRUE)
+            # }
+            result[[precision_name]][cluster, model] <- sd(metric_value_, na.rm=TRUE) * 
+              abs(mean(metric_value_, na.rm=TRUE) - center.value)
           }
         }
            
       }else{ # no need for precision
         
         for(metric in metrics){
-          result[[metric]][cluster, model] <- cal.metrics(x,y,metric,log10=log10)
+          result[[metric]][cluster, model] <- cal.metrics(x, y, metric, 
+                                                          log10 = log10, 
+                                                          c.value = c.value)
         }
         
       }
@@ -211,9 +249,22 @@ Assessment_via_cluster <- function(pred, meas, memb,
       
       if(na.process){
         w_finite <- which(is.finite(y) & y > 0)
+        
+        if(!is.null(valid.definition)) {
+          upper <- x * (1 + valid.definition$percent)
+          lower <- x * (1 - valid.definition$percent)
+          if(valid.definition$negative == FALSE) { # means the negative value is invalid
+            lower[lower < 0] <- 0
+          }
+          w_finite2 <- which(y > lower & y < upper)
+          num_new <- length(w_finite2)
+        }else {
+          num_new <- length(w_finite)
+        }
+        
         x <- x[w_finite]
         y <- y[w_finite]
-        num_new <- length(w_finite)
+        
       }
       
       for(metric in metrics){
@@ -233,7 +284,16 @@ Assessment_via_cluster <- function(pred, meas, memb,
           }
           
           for(metric in metrics){
-            metric_value <- cal.metrics.vector(x,y,metric,log10=log10)
+            
+            if(metric == "RATIO") {
+              center.value = 1
+            }else {
+              center.value = 0
+            }
+            
+            metric_value <- cal.metrics.vector(x, y, metric, 
+                                               log10 = log10,
+                                               c.value = c.value)
             # Fot total calculation, it is unfair when outliers are included.
             # I add a quantile calculation to limit the statistic range which is betwene 0.1% and 99.9%
             quant <- quantile(metric_value, c(0.001, 0.999))
@@ -242,20 +302,25 @@ Assessment_via_cluster <- function(pred, meas, memb,
             precision_name <- paste0(metric, '_p')
             if(log10){
               x_ = log10(x)
+              y_ = log10(y)
             }else{
               x_ = x
+              y_ = y
             }
-            if(median(metric_value, na.rm=TRUE) / median(x_, na.rm=TRUE) > 10){
-              result[[precision_name]]['SUM', model] <- NA
-            }else{
-              result[[precision_name]]['SUM', model] <- sd(metric_value_, na.rm=TRUE)
-            }
-            
+            # if(median(y_, na.rm=TRUE) / median(x_, na.rm=TRUE) > 10){
+            #   result[[precision_name]]['SUM', model] <- NA
+            # }else{
+            #   result[[precision_name]]['SUM', model] <- sd(metric_value_, na.rm=TRUE)
+            # }
+            result[[precision_name]]['SUM', model] <- sd(metric_value_, na.rm=TRUE) * 
+              abs(mean(metric_value, na.rm=TRUE) - center.value)
           }
           
         }else{ # no need for precision  total
           
-          result[[metric]]['SUM', model] <- cal.metrics(x,y,metric,log10=log10)  
+          result[[metric]]['SUM', model] <- cal.metrics(x, y, metric, 
+                                                        log10 = log10,
+                                                        c.value = c.value)  
           
         }
         
@@ -300,7 +365,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
             if(dim(memb_)[1] != length(x))
               stop("The fuzzy metrics are calculated with different rows from memb and pred")
             
-            Er <- cal.metrics.vector(x,y,metric,log10)
+            Er <- cal.metrics.vector(x, y, metric, 
+                                     log10 = log10,
+                                     c.value = c.value)
+            
             result_fz[[metric]][i,j] <- sum(memb_[,i] * Er, na.rm=TRUE) / sum(memb_[,i], na.rm=TRUE)
             
           } # ENDIF
@@ -337,7 +405,8 @@ Assessment_via_cluster <- function(pred, meas, memb,
                  position="dodge") + 
         scale_fill_manual(values=cp) + 
         labs(y=metric) + 
-        theme_bw()
+        theme_bw() + 
+        theme(axis.text.x.bottom = element_text(angle = 90, hjust=1))
       
       res_plot[[metric]] <- p
       
@@ -366,6 +435,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
       scale_fill_manual(values=cp) + 
       labs(x=NULL, y=NULL) + 
       theme_bw() + 
+      theme(axis.text.x.bottom = element_text(angle = 90, hjust=1)) + 
       facet_wrap(~Metric, scales="free_y")
     
   }else{
@@ -578,7 +648,30 @@ Score_algorithms_sort <- function(x, decreasing = TRUE){
 
 }
 
-
+#' @rdname Score_algorithms_sort
+#' @param max.score The max.score for \code{scales::rescale}. The default is \code{100/8}.
+#' @export
+#' @return Results of \code{Score_algorithms_sort()} and \code{Score_algorithms_sort2()} are 
+#'   returned as a vector presenting score values.
+#' @importFrom scales rescale
+Score_algorithms_sort2 <- function(x, decreasing = TRUE, max.score = 100/8){
+  
+  x <- as.numeric(x)
+  
+  # decreasing == TRUE for smaller metrics that are better
+  if(decreasing == TRUE){
+    x_ <- -x
+  }else{
+    x_ <- x
+  }
+  
+  score <- scales::rescale(x_, to = c(0, max.score))
+  
+  score[is.na(score)] <- 0
+  
+  return(score)
+  
+}
 
 #' @name Sampling_via_cluster
 #' @title Stratified sampling by clusters or types
@@ -667,6 +760,12 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' @param pred Prediction matrix or data.frame
 #' @param meas Measured (actual) matrix or data.frame
 #' @param memb Membership matrix
+#' @param metrics_used The metric combination used in the function. Default is \code{1}.
+#' 
+#' If \code{metrics_used = 1} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
+#' 
+#' If \code{metrics_used = 2} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE", "RATIO")}
+#' 
 #' @param cluster Cluster vector. Could be calculated by the parameter \code{memb}. Will be deprecated later.
 #' @param seed Seed number for fixing the random process. See \code{help(set.seed)} for more details.
 #' @note The row number of \code{pred}, \code{meas}, \code{memb}, and \code{cluster} should be the same. 
@@ -713,8 +812,15 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' 
 Getting_Asses_results <- function(sample.size, replace = FALSE,
                                   pred, meas, memb,
+                                  metrics_used = 2,
                                   cluster = apply(memb, 1, which.max), 
                                   seed = NULL){
+  
+  if(metrics_used == 1) {
+    metrics = c("MAE", "CMAPE", "BIAS", "CMRPE")
+  }else if(metrics_used == 2) {
+    metrics = c("MAE", "CMAPE", "BIAS", "CMRPE", "RATIO")
+  }
   
   meas <- data.frame(meas)
   
@@ -742,7 +848,7 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
   Asses_fz <-  Assessment_via_cluster(pred=pred_,
                                       meas=meas_,
                                       memb=memb_,
-                                      metrics = c("MAE","CMAPE","BIAS",'CMRPE'),
+                                      metrics = metrics,
                                       log10 = TRUE,
                                       hard.mode = FALSE,
                                       na.process = TRUE,
@@ -751,7 +857,7 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
   Asses_p <-   Assessment_via_cluster(pred=pred_,
                                       meas=meas_,
                                       memb=memb_,
-                                      metrics = c("MAE","CMAPE","BIAS",'CMRPE'),
+                                      metrics = metrics,
                                       log10 = TRUE,
                                       hard.mode = FALSE,
                                       cal.precision = TRUE,
@@ -761,7 +867,8 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
   result <- list(
                   # Asses_hd=Asses_hd, 
                   Asses_fz = Asses_fz,
-                  Asses_p  = Asses_p 
+                  Asses_p  = Asses_p, 
+                  metrics = metrics
                   )
   
   return(result)
@@ -777,6 +884,8 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #'   \itemize{
 #'     \item \code{sort-based} (default) which is scored by the sort of accuracy and precision 
 #'       metrics (see more in \link{Score_algorithms_sort}). 
+#'     \item \code{sort-based2} which is scored by the sort of accuracy and precision 
+#'       metrics (see more in \code{Score_algorithms_sort2}). 
 #'     \item \code{interval-based} which is relatively scored by the interval of accuracy and 
 #'       precision (used by Brewin et al. (2015) and Neil et al. (2019)). 
 #'       See more in \link{Score_algorithms_interval}).
@@ -797,8 +906,8 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #'   \item \strong{Accuracy} Data.frame of \code{Accuracy} score with algorithm as column and cluster as row.
 #'   \item \strong{Precision} Data.frame of \code{Precision} score with algorithm as column and cluster as row.
 #'   \item \strong{Effectiveness} Data.frame of \code{Effectiveness} score with algorithm as column and cluster as row.
-#'   \item \strong{Accuracy.list} List including data.frames of used \code{Accuracy} metrics.
-#'   \item \strong{Precision.list} List including data.frames of used \code{Precision} metrics.
+#'   \item \strong{Accuracy_list} List including data.frames of used \code{Accuracy} metrics.
+#'   \item \strong{Precision_list} List including data.frames of used \code{Precision} metrics.
 #'   \item \strong{Total_score.melt} Melted data.frame of \strong{Total_score} for plotting.
 #'   \item \strong{Opt_algorithm} The optimal algorithm names for each cluster.
 #'   \item \strong{Inputs} Inputs of this function.
@@ -888,53 +997,84 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #' 
 Scoring_system <- function(Inputs, 
                            method = 'sort-based',
-                           param_sort = list(decreasing = TRUE),
+                           param_sort = list(decreasing = TRUE, max.score = NULL),
                            param_interval = list(trim=FALSE, reward.punishment=TRUE,
                                              decreasing=TRUE, hundred.percent=FALSE),
                            remove.negative = FALSE){
   
   Asses_fz <- Inputs$Asses_fz
   Asses_p  <- Inputs$Asses_p # If on precision, the mode is hard
+  n_metrics <- length(Inputs$metrics)
+  metrics <- Inputs$metrics
   
-  method = match.arg(method, c('sort-based', 'interval-based'))
-  if(method == 'sort-based'){
-    Score_algorithms <- function(x){
+  if(is.null(param_sort$max.score)) {
+    param_sort$max.score = 50/n_metrics  
+  }
+  
+  if("RATIO" %in% names(Inputs$Asses_fz)) {
+    Inputs$Asses_fz$RATIO = abs(Inputs$Asses_fz$RATIO - 1)
+  }
+  
+  # scoring method definition
+  method = match.arg(method, c('sort-based', 'sort-based2', 'interval-based'))
+  if(method == 'sort-based') {
+    Score_algorithms <- function(x) {
       return(Score_algorithms_sort(x, decreasing = param_sort$decreasing))
     }
-  }else if(method == 'interval-based'){
-    Score_algorithms <- function(x){
+  }else if(method == 'interval-based') {
+    Score_algorithms <- function(x) {
       a = param_interval
       r = Score_algorithms_interval(x, trim=a$trim, reward.punishment = a$reward.punishment,
                                 decreasing=a$decreasing, hundred.percent = a$hundred.percent)
       return(r$score)
     }
-  }else{
+  }else if(method == "sort-based2") {
+    Score_algorithms <- function(x) {
+      return(Score_algorithms_sort2(x, 
+                                    decreasing = param_sort$decreasing, 
+                                    max.score = param_sort$max.score))
+    }
+  }else {
     stop('Method selection error.')
   }
-
-  # Note 2020-03-06:
-
-  #
-  Accuracy_CMRPE <- Accuracy_BIAS <- Accuracy_MAE <- Accuracy_CMAPE <- Asses_fz$MAE * NA
-  for(i in 1:nrow(Accuracy_MAE)){
-    Accuracy_MAE[i,]   <- Score_algorithms(Asses_fz$MAE[i,])
-    Accuracy_BIAS[i,]  <- Score_algorithms(abs(Asses_fz$BIAS[i,]))
-    Accuracy_CMAPE[i,] <- Score_algorithms(Asses_fz$CMAPE[i,])
-    Accuracy_CMRPE[i,] <- Score_algorithms(abs(Asses_fz$CMRPE[i,]))
-  }
-  Accuracy <- Accuracy_MAE + Accuracy_BIAS + Accuracy_CMRPE + Accuracy_CMAPE
   
+  # Accuracy part
+  Accuracy_list <- list()
+  for(j in 1:n_metrics) {
+    metric_name <- metrics[j]
+    tmp <- Asses_fz[[metric_name]]
+    tmp_score <- tmp * NA
+    for(i in 1:nrow(tmp)) {
+      tmp_score[i, ] <- Score_algorithms(abs(tmp[i, ]))
+    }
+    Accuracy_list[[j]] <- tmp_score
+    names(Accuracy_list[j]) <- metric_name
+    rm(tmp, tmp_score)
+  }
+  Accuracy <- Accuracy_list[[1]] * 0
+  for(i in 1:length(Accuracy_list)) {
+    Accuracy <- Accuracy + Accuracy_list[[i]]
+  }
   
   # Precision part
-  Precision_CMRPE <- Precision_BIAS <- Precision_MAE <- Precision_CMAPE <- Asses_p$MAE_p * NA
-  for(i in 1:nrow(Precision_MAE)){
-    Precision_MAE[i,]   <- Score_algorithms(Asses_p$MAE_p[i,])
-    Precision_BIAS[i,]  <- Score_algorithms(abs(Asses_p$BIAS_p[i,]))
-    Precision_CMAPE[i,] <- Score_algorithms(Asses_p$CMAPE_p[i,])
-    Precision_CMRPE[i,] <- Score_algorithms(abs(Asses_p$CMRPE_p[i,]))
+  Precision_list <- list()
+  for(j in 1:n_metrics) {
+    metric_name <- sprintf("%s_p",metrics[j])
+    tmp <- Asses_p[[metric_name]]
+    tmp_score <- tmp * NA
+    for(i in 1:nrow(tmp)) {
+      tmp_score[i, ] <- Score_algorithms(abs(tmp[i, ]))
+    }
+    Precision_list[[j]] <- tmp_score
+    names(Precision_list[j]) <- metrics[j]
+    rm(tmp, tmp_score)
   }
-  Precision <- Precision_MAE + Precision_BIAS + Precision_CMRPE + Precision_CMAPE
-  
+  Precision <- Precision_list[[1]] * 0
+  for(i in 1:length(Precision_list)) {
+    Precision <- Precision + Precision_list[[i]]
+  }
+ 
+  # total score  
   Total_score <- (Accuracy + Precision) * Asses_fz$Valid_percent / 100
   
   if(remove.negative == TRUE){
@@ -962,14 +1102,8 @@ Scoring_system <- function(Inputs,
                  Accuarcy              = Accuracy,
                  Precision             = Precision,
                  Effectiveness         = Asses_fz$Valid_percent,
-                 Accuracy.list         = list(Accuracy_MAE = Accuracy_MAE,
-                                              Accuracy_CMAPE = Accuracy_CMAPE,
-                                              Accuracy_BIAS = Accuracy_BIAS,
-                                              Accuracy_CMRPE = Accuracy_CMRPE),
-                 Precision.list        = list(Precision_MAE = Precision_MAE,
-                                              Precision_CMAPE = Precision_CMAPE,
-                                              Precision_BIAS = Precision_BIAS,
-                                              Precision_CMRPE = Precision_CMRPE),
+                 Accuracy_list         = Accuracy_list,
+                 Precision_list        = Precision_list,
                  Total_score.melt      = Total_score.melt,
                  Opt_algorithm         = opt_algorithm,
                  Inputs                = Inputs
@@ -983,6 +1117,12 @@ Scoring_system <- function(Inputs,
 
 #' @export
 #' @rdname Scoring_system
+#' @param metrics_used The metric combination used in the function. Default is \code{1}.
+#' 
+#' If \code{metrics_used = 1} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
+#' 
+#' If \code{metrics_used = 2} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE", "RATIO")}
+#' 
 #' @return The result of \code{Scoring_system_bootstrap} are including:
 #' \itemize{
 #'   \item \strong{Times} The times of bootstrap running.
@@ -1002,6 +1142,7 @@ Scoring_system <- function(Inputs,
 #'   \item \strong{dt_Chla} Data.frame with combination of candidate algortihms and blended results.
 #'   \item \strong{Chla_blend} The blended Chla concentration by score results.
 #'   \item \strong{Results_of_scoring_system} A list including all results of \link{Scoring_system} function.
+#'   \item \strong{metric_results} A result of \link{Assessment_via_cluster} which includes the Chla blend results.
 #' } 
 #' 
 #' @importFrom stats aggregate
@@ -1010,7 +1151,8 @@ Scoring_system <- function(Inputs,
 Scoring_system_bootstrap <- function(Times = 1000, 
                                      Inputs, replace = TRUE, 
                                      method = 'sort-based',
-                                     param_sort = list(decreasing = TRUE),
+                                     metrics_used = 2,
+                                     param_sort = list(decreasing = TRUE, max.score = NULL),
                                      param_interval = list(trim=FALSE, reward.punishment=TRUE,
                                                            decreasing=TRUE, hundred.percent=FALSE),
                                      remove.negative = FALSE){
@@ -1022,6 +1164,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
   memb = round(Inputs$Asses_fz$input$memb, 4)
   cluster = apply(memb, 1, which.max)
   K = ncol(memb)
+  metrics = Inputs$metrics
   
   Score_list <- NULL
   Opt_algorithm_list <- NULL
@@ -1031,12 +1174,13 @@ Scoring_system_bootstrap <- function(Times = 1000,
     
     cat(i, "/", Times, "\n")
     Asses_list <- Getting_Asses_results(sample.size= nrow(memb),
+                                        metrics_used = metrics_used,
                                         pred, meas, memb, replace = replace)
     Score <- Scoring_system(Inputs = Asses_list,
-                           method = method,
-                           param_sort = param_sort,
-                           param_interval = param_interval,
-                           remove.negative = remove.negative)
+                            method = method,
+                            param_sort = param_sort,
+                            param_interval = param_interval,
+                            remove.negative = remove.negative)
     
     Results_of_scoring_system[[i]] <- Score
     
@@ -1260,6 +1404,17 @@ Scoring_system_bootstrap <- function(Times = 1000,
           text = element_text(size=13)) + 
     guides(col = guide_legend(ncol=1))
   
+  metric_results <- Assessment_via_cluster(
+    pred = cbind(dt_Chla[, c(unique(Opt_algorithm))], Chla_blend = Chla_blend),
+    meas = dt_Chla$Chla_true,
+    memb = memb,
+    metrics = metrics,
+    log10 = TRUE,
+    total = TRUE,
+    hard.mode = TRUE,
+    na.process = TRUE
+  )
+  
   # return outputs
   result = list(
     Times              = Times,
@@ -1275,7 +1430,8 @@ Scoring_system_bootstrap <- function(Times = 1000,
     Blend_result       = Blend_result, 
     dt_Chla            = Chla_plots,
     Chla_blend         = Chla_blend,
-    Results_of_scoring_system = Results_of_scoring_system
+    Results_of_scoring_system = Results_of_scoring_system,
+    metric_results     = metric_results
   )
   
   return(result)

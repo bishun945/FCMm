@@ -8,7 +8,7 @@
 Scoring_system(
   Inputs,
   method = "sort-based",
-  param_sort = list(decreasing = TRUE),
+  param_sort = list(decreasing = TRUE, max.score = NULL),
   param_interval = list(trim = FALSE, reward.punishment = TRUE, decreasing = TRUE,
     hundred.percent = FALSE),
   remove.negative = FALSE
@@ -19,7 +19,8 @@ Scoring_system_bootstrap(
   Inputs,
   replace = TRUE,
   method = "sort-based",
-  param_sort = list(decreasing = TRUE),
+  metrics_used = 2,
+  param_sort = list(decreasing = TRUE, max.score = NULL),
   param_interval = list(trim = FALSE, reward.punishment = TRUE, decreasing = TRUE,
     hundred.percent = FALSE),
   remove.negative = FALSE
@@ -32,6 +33,8 @@ Scoring_system_bootstrap(
 \itemize{
   \item \code{sort-based} (default) which is scored by the sort of accuracy and precision 
     metrics (see more in \link{Score_algorithms_sort}). 
+  \item \code{sort-based2} which is scored by the sort of accuracy and precision 
+    metrics (see more in \code{Score_algorithms_sort2}). 
   \item \code{interval-based} which is relatively scored by the interval of accuracy and 
     precision (used by Brewin et al. (2015) and Neil et al. (2019)). 
     See more in \link{Score_algorithms_interval}).
@@ -48,6 +51,12 @@ Scoring_system_bootstrap(
 
 \item{replace}{Parameter of \code{Scoring_system_bootstrap}. The sample method for bootstrap running.
 Default as \code{TRUE}. See more details in \link{sample}.}
+
+\item{metrics_used}{The metric combination used in the function. Default is \code{1}.
+
+If \code{metrics_used = 1} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
+
+If \code{metrics_used = 2} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE", "RATIO")}}
 }
 \value{
 The result of \code{Scoring_system} are including:
@@ -56,8 +65,8 @@ The result of \code{Scoring_system} are including:
   \item \strong{Accuracy} Data.frame of \code{Accuracy} score with algorithm as column and cluster as row.
   \item \strong{Precision} Data.frame of \code{Precision} score with algorithm as column and cluster as row.
   \item \strong{Effectiveness} Data.frame of \code{Effectiveness} score with algorithm as column and cluster as row.
-  \item \strong{Accuracy.list} List including data.frames of used \code{Accuracy} metrics.
-  \item \strong{Precision.list} List including data.frames of used \code{Precision} metrics.
+  \item \strong{Accuracy_list} List including data.frames of used \code{Accuracy} metrics.
+  \item \strong{Precision_list} List including data.frames of used \code{Precision} metrics.
   \item \strong{Total_score.melt} Melted data.frame of \strong{Total_score} for plotting.
   \item \strong{Opt_algorithm} The optimal algorithm names for each cluster.
   \item \strong{Inputs} Inputs of this function.
@@ -82,6 +91,7 @@ The result of \code{Scoring_system_bootstrap} are including:
   \item \strong{dt_Chla} Data.frame with combination of candidate algortihms and blended results.
   \item \strong{Chla_blend} The blended Chla concentration by score results.
   \item \strong{Results_of_scoring_system} A list including all results of \link{Scoring_system} function.
+  \item \strong{metric_results} A result of \link{Assessment_via_cluster} which includes the Chla blend results.
 }
 }
 \description{

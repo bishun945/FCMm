@@ -2,9 +2,12 @@
 % Please edit documentation in R/Algorithms_assessment.R
 \name{Score_algorithms_sort}
 \alias{Score_algorithms_sort}
+\alias{Score_algorithms_sort2}
 \title{Score a vector of error metrics for algorithms by the sort}
 \usage{
 Score_algorithms_sort(x, decreasing = TRUE)
+
+Score_algorithms_sort2(x, decreasing = TRUE, max.score = 100/8)
 }
 \arguments{
 \item{x}{Input vector of error metrics (NA values are allowed)}
@@ -13,9 +16,14 @@ Score_algorithms_sort(x, decreasing = TRUE)
 \code{decreasing = TRUE} (Default) since the algorithm performs better when MAE becomes smaller. 
 However, when comes to \code{Rsquare} from linear regression (maximum is 1), it should be
 \code{FALSE}}
+
+\item{max.score}{The max.score for \code{scales::rescale}. The default is \code{100/8}.}
 }
 \value{
 Results of \code{Score_algorithms_sort()} are returned as a vector presenting score values.
+
+Results of \code{Score_algorithms_sort()} and \code{Score_algorithms_sort2()} are 
+  returned as a vector presenting score values.
 }
 \description{
 Score a vector of error metrics for algorithms by the sort

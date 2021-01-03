@@ -4,21 +4,24 @@
 #' @param y Estimated value OR Predict value
 #' @param name The name of metrics
 #' @param log10 Logical. Whether the input x and y should be log10-transformed
+#' @param c.value Compensated value for CMAPE and CMRPE. Default is the mean of x.
 #' @export
 #' @return Result of \code{cal.metrics} is a list of selected metric values.
 #' @family Utils
 #' @note (2020-02-09) All functions used log10 transformation was assigned to the 
 #'   Key parameter `log10`.
 #' @examples 
-#' set.seed(1234)
 #' x = runif(20)
 #' y = runif(20)
 #' result = cal.metrics(x, y)
-#' print(result)
+#' str(result)
 #' @importFrom stats cor cor.test median na.omit sd
 #' @importFrom stats confint cov lm qt var
 #' @importFrom magrittr %>% %<>%
-cal.metrics <- function(x, y, name = "all", log10 = FALSE){
+cal.metrics <- function(x, y, 
+                        name = "all", 
+                        log10 = FALSE, 
+                        c.value = mean(x, na.rm=TRUE)){
 
   name <- match.arg(name, cal.metrics.names())
   
@@ -60,19 +63,19 @@ cal.metrics <- function(x, y, name = "all", log10 = FALSE){
   
   ## Compensated series
   .cal.cmape <- function(x,y){
-    return(mean(       abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=TRUE)))       , na.rm=TRUE)*100)
+    return(mean(       abs(2*(y-x))/(abs(x) + abs(c.value))       , na.rm=TRUE)*100)
   }
   
   .cal.cmdape <- function(x,y){
-    return(median(       abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=TRUE)))       , na.rm=TRUE)*100)
+    return(median(       abs(2*(y-x))/(abs(x) + abs(c.value))       , na.rm=TRUE)*100)
   }
   
   .cal.cmrpe <- function(x,y){
-    return(mean(       (2*(y-x))/((x)+(mean(x, na.rm=TRUE)))       , na.rm=TRUE)*100)
+    return(mean(       2*(y-x)/(x+c.value)       , na.rm=TRUE)*100)
   }
   
   .cal.cmdrpe <- function(x,y){
-    return(median(       (2*(y-x))/((x)+(mean(x, na.rm=TRUE)))       , na.rm=TRUE)*100)
+    return(median(       2*(y-x)/(x+c.value)      , na.rm=TRUE)*100)
   }
   
   ## Symmetric series
@@ -330,17 +333,19 @@ cal.metrics.names <- function(){
 #' @param y Estimated value OR Predict value
 #' @param name The name of metrics
 #' @param log10 Logical. Whether the input x and y should be log10-transformed
+#' @param c.value Compensated value for CMAPE and CMRPE. Default is the mean of x.
 #' @export
 #' @return Result of \code{cal.metrics.vector} is a list of selected metric values.
 #' @importFrom stats cor cor.test median na.omit sd
 #' @family Utils
 #' @examples 
-#' set.seed(1234)
 #' x = runif(100)
 #' y = runif(100)
 #' result = cal.metrics.vector(x,y)
 #' 
-cal.metrics.vector <- function(x, y, name = "all", log10 = FALSE){
+cal.metrics.vector <- function(x, y, 
+                               name = "all", log10 = FALSE,
+                               c.value = mean(x, na.rm=TRUE)){
 
   name <- match.arg(name, cal.metrics.vector.names())
   
@@ -372,11 +377,11 @@ cal.metrics.vector <- function(x, y, name = "all", log10 = FALSE){
   
   ## Compensated sereis
   .cal.cmape <- function(x,y){
-    return(abs(2*(y-x))/(abs(x)+abs(mean(x, na.rm=TRUE)))*100)
+    return(abs(2*(y-x))/(abs(x)+abs(c.value))*100)
   }
   
   .cal.cmrpe <- function(x,y){
-    return((2*(y-x))/((x)+(mean(x, na.rm=TRUE)))*100)
+    return((2*(y-x))/((x)+(c.value))*100)
   }
   
   .cal.nmape<-function(x,y){

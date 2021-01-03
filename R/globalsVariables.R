@@ -45,5 +45,6 @@ utils::globalVariables(c('.',
                          "id",
                          "group_f",
                          "n",
-                         "rgb"
+                         "rgb",
+                         "dt_Chla"
                          ))

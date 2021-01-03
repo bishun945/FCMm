@@ -13,6 +13,7 @@ Assessment_via_cluster(
   total = TRUE,
   hard.mode = TRUE,
   cal.precision = FALSE,
+  valid.definition = list(negative = FALSE, percent = 0.6),
   na.process = FALSE,
   plot.col = FALSE
 )
@@ -34,9 +35,15 @@ Assessment_via_cluster(
 
 \item{cal.precision}{Whether to calculate precision (only support for vectorized metrics), default as \code{FALSE}}
 
-\item{na.process}{na.process and choose to statistic na value percent}
+\item{valid.definition}{The definition of valid prediction, default as \code{list(negative=FALSE, percent = 0.6)}.
+  The invalid prediction will not be removed to calculate error metrics.
 
-\item{plot.col}{option to plot col result for chosed metrics (default as \code{FALSE})}
+\code{negative=FALSE} means the negative values are considered as invalid predictions while \code{percent} means
+  the tolerance of error-percentage that only the predictions between \code{(y-y*percent), y+y*percent)} are valid.}
+
+\item{na.process}{na.process and choose to statistic NA value percent}
+
+\item{plot.col}{option to plot col result for selected metrics (default as \code{FALSE})}
 }
 \value{
 Results of \code{Assessment_via_cluster} are returned as a list including:

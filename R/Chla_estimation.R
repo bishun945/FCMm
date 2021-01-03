@@ -393,6 +393,32 @@ SCI_Shen10 <- function(Rrs560, Rrs620, Rrs665, Rrs681){
 }
 
 
+#' @noRd
+MPH_Mat14 <- function(Rrs620, Rrs665, Rrs681, Rrs709, Rrs754, Rrs885) {
+  
+  dt_MPH <- data.frame(Rrs665, Rrs681, Rrs709, Rrs754, Rrs885) %>%
+    setNames(., c(665, 681, 709, 754, 885))
+  IND_MPH <- apply(dt_MPH, 1, function(x) {
+    tmp <- x[c("681", "709", "754")]
+    w_max <- which.max(x[c("681", "709", "754")])
+    lamb_max <- as.numeric(names(tmp)[w_max])
+    Rrs_max  <- as.numeric(tmp[w_max])
+    ind <- Rrs_max - x["665"] - ((x["885"]-x["665"])*(lamb_max-665)/(885-665))
+    return(ind)
+  })
+  SICF_peak <- Rrs681 - Rrs665 - ((Rrs709-Rrs665)*(681-665)/(709-665))
+  SIPAF_peak <- Rrs665 - Rrs620 - ((Rrs681-Rrs620)*(665-620)/(681-620))
+  cyano_flag <- rep(FALSE, length(SICF_peak))  
+  cyano_flag[SICF_peak < 0 & SIPAF_peak > 0] <- TRUE
+  return(list(
+    IND_MPH = IND_MPH,
+    SICF_peak = SICF_peak,
+    SIPAF_peak = SIPAF_peak,
+    cyano_flag = cyano_flag
+  ))
+}
+
+
 
 #' @name Gons08
 #' @title Gons algorithm by Gons et al. (2008)
@@ -460,6 +486,7 @@ Smith18 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665, Rrs709) {
   )
   return(result)
 }
+
 
 
 

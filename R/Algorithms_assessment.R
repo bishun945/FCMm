@@ -1146,7 +1146,7 @@ Scoring_system <- function(Inputs,
 #' } 
 #' 
 #' @importFrom stats aggregate
-#' @importFrom stringr str_split
+#' @importFrom stringr str_split str_extract_all
 #' 
 Scoring_system_bootstrap <- function(Times = 1000, 
                                      Inputs, replace = TRUE, 
@@ -1213,12 +1213,19 @@ Scoring_system_bootstrap <- function(Times = 1000,
                      sig_arr  = sig_arr) %>% level_to_variable
   Score_all_clusters = res_Score[res_Score$x == "SUM", -1]
   res_Score = res_Score[!(res_Score$x %in% 'SUM'),]
-  res_Score$x_f = factor(res_Score$x, levels = paste("Cluster", (1:ncol(memb))))
+  x_nums <- names(table(res_Score$x)) %>%
+    stringr::str_extract_all("[:digit:]+", simplify = TRUE) %>%
+    as.vector()
+  x_prefix <- names(table(res_Score$x)) %>%
+    stringr::str_extract_all("[:letter:]+", simplify = TRUE) %>% 
+    table() %>% .[which.max(.)] %>% names()
+  x_levels <- paste0(x_prefix, sort(as.numeric(x_nums)))
+  res_Score$x_f = factor(res_Score$x, levels = x_levels)
   
   # The optimal algorithm defined by maximum scores per cluster
   tmpdt = stats::aggregate(res_Score$value, list(res_Score$x), which.max)
   tmpdt = tmpdt[tmpdt$Group.1 != "SUM",]
-  Opt_algorithm = rep("", K) %>% setNames(., paste("Cluster", 1:K))
+  Opt_algorithm = rep("", K) %>% setNames(., x_levels)
   for(i in 1:K){
     tmptmp = res_Score[which(res_Score$x == names(Opt_algorithm)[i]),]
     Opt_algorithm[i] <- tmptmp$variable[which.max(tmptmp$value)]
@@ -1261,6 +1268,8 @@ Scoring_system_bootstrap <- function(Times = 1000,
   w_box <- which(res_Score$variable %in% Opt_algorithm)
   res_Score$box[w_box] <- res_Score$value[w_box]
   
+  # add levels to res_Score$variable as the sort of colnames(pred)
+  res_Score$variable <- factor(res_Score$variable, levels = colnames(pred))
   
   # plot Score_list
   num.model <- Score_list$variable %>% unique %>% length
@@ -1287,21 +1296,28 @@ Scoring_system_bootstrap <- function(Times = 1000,
     ggplot() +
     geom_col(data=res_Score, 
              aes(x=x_f, y=value, group=variable, fill=variable),
-             alpha=0.75, position=dodge) + 
+             alpha=0.5, position=dodge) + 
     geom_col(data=res_Score, 
-             aes(x=x_f, y=box, group=variable, fill=variable), color="gray20",
+             aes(x=x_f, y=box, group=variable, fill=variable), color="gray20", 
              position=dodge) +
     geom_errorbar(data=res_Score, 
                   aes(x=x_f, ymin=value-sig_arr, ymax=value+sig_arr, group=variable),
                   position=dodge, width=0.6, alpha=1) + 
     geom_point(data=res_Score, 
-               aes(x=x_f, y=pos_opt, group=variable),
-               position=dodge, color="green", fill=NA, shape="diamond", stroke = 0.5, size=2) + 
+               aes(x=x_f, 
+                   # y=pos_opt, 
+                   y= pos_opt*0-4,
+                   group=variable),
+               position=dodge, color="darkgreen", fill="darkgreen", shape=23, stroke = 0.5, size=2.5) + 
     geom_point(data=res_Score, 
-               aes(x=x_f, y=pos_removed, group=variable),
-               position=dodge, color="red", fill=NA, shape="cross", stroke = 1) + 
+               aes(x=x_f, 
+                   # y=pos_removed, 
+                   y=pos_removed*0-5, 
+                   group=variable),
+               position=dodge, color="darkred", fill="darkred", shape=24, stroke = 0.5, size=2) + 
     scale_fill_manual(values=Spectral(num.model)[ind]) +
-    scale_y_continuous(limits=c(0, NA)) + 
+    scale_y_continuous(expand = expansion(0.03)) + 
+    scale_x_discrete(expand = expansion(add = 0.5)) + 
     labs(y='Score', fill='Algorithm', x=NULL)+
     facet_wrap(~x_f, scales='free_x', nrow=3) + 
     theme_bw() + 
@@ -1363,7 +1379,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
     geom_rug(data=dt_Chla_, 
              aes(x=Chla_true, y=value, color=cluster), alpha=0.2, show.legend = F) + 
     scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) +
-    labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='Cluster', fill="Cluster") + 
+    labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='OWT', fill="OWT") + 
     scale_color_manual(values=cp) +
     scale_fill_manual(values=cp) + 
     theme_bw() + 
@@ -1392,7 +1408,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
     geom_rug(data=dt_Chla_sub, 
              aes(x=Chla_true, y=value, color=cluster), alpha=0.2, show.legend = F) + 
     scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) +
-    labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='Cluster', fill="Cluster") + 
+    labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='OWT', fill="OWT") + 
     scale_color_manual(values=cp) +
     scale_fill_manual(values=cp) + 
     theme_bw() + 

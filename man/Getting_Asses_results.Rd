@@ -10,7 +10,7 @@ Getting_Asses_results(
   pred,
   meas,
   memb,
-  metrics_used = 2,
+  metrics_used = 1,
   cluster = apply(memb, 1, which.max),
   seed = NULL
 )

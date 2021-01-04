@@ -85,7 +85,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
   pred <- as.data.frame(pred)
   meas <- as.data.frame(meas)
   
-  c.value = mean(meas[,1], na.rm=TRUE)
+  c.value = ifelse(log10, mean(log10(meas[,1]), na.rm=TRUE), mean(meas[,1], na.rm=TRUE))
   
   if(nrow(pred) != nrow(meas) | nrow(pred) != nrow(memb))
     stop('Rows of input are different!')
@@ -151,7 +151,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
     result[["Valid_percent"]] <- validation
   }
   
-  # strat loop via model and cluster
+  #Hard model####
   for(model in 1:ncol(pred)){
     for(cluster in 1:ncol(memb)){
       
@@ -161,31 +161,17 @@ Assessment_via_cluster <- function(pred, meas, memb,
       num_raw <- length(x)
       
       if(na.process){
-        w_finite <- which(is.finite(y))
         
-        # if(model == 15 & cluster == 17) {
-        #   print(model)
-        # }
+        #item-valid####
+        w_finite <- which(is.finite(y))
         
         # default valid.definition is set as 0.6 which is two times of meeting of GOSC
         # If valid.threshold is set as NULL then it would pass this process
         if(!is.null(valid.definition)) {
-          if(!log10) {
-            lower <- x - x * valid.definition$percent
-            upper <- x + x * valid.definition$percent
-          }else {
-            lgx <- log10(x) 
-            lower  <- 10^lgx / 10^(lgx*valid.definition$percent)
-            upper  <- 10^lgx * 10^(lgx*valid.definition$percent)
-          }
-          if(valid.definition$negative == FALSE) { # means the negative value is invalid
-            if(!log10) {
-              lower[lower < 0] <- 0
-            }
-          }
-          w_finite2 <- which(y > lower & y < upper)
+          w_finite2 <- def_validation(x, y, valid.definition, log10)
           num_new <- length(w_finite2)
         }else {
+          w_finite2 <- w_finite
           num_new <- length(w_finite)
         }
         
@@ -235,8 +221,9 @@ Assessment_via_cluster <- function(pred, meas, memb,
             # }else{
             #   result[[precision_name]][cluster, model] <- sd(metric_value_, na.rm=TRUE)
             # }
+            #item-precision####
             result[[precision_name]][cluster, model] <- 
-              sd(metric_value_, na.rm=TRUE) + abs(mean(metric_value_, na.rm=TRUE) - center.value) / 2
+              cal_precision(metric_value_, center.value, w_finite2, x_=x_)
           }
         }
            
@@ -262,23 +249,14 @@ Assessment_via_cluster <- function(pred, meas, memb,
       num_raw <- length(x)
       
       if(na.process){
+        #total-valid####
         w_finite <- which(is.finite(y) & y > 0)
         
         if(!is.null(valid.definition)) {
-          if(!log10) {
-            lower <- x - x * valid.definition$percent
-            upper <- x + x * valid.definition$percent
-          }else {
-            lgx <- log10(x) 
-            lower  <- 10^lgx / 10^(lgx*valid.definition$percent)
-            upper  <- 10^lgx * 10^(lgx*valid.definition$percent)
-          }
-          if(valid.definition$negative == FALSE) { # means the negative value is invalid
-            lower[lower < 0] <- 0
-          }
-          w_finite2 <- which(y > lower & y < upper)
+          w_finite2 <- def_validation(x, y, valid.definition, log10)
           num_new <- length(w_finite2)
         }else {
+          w_finite2 <- w_finite
           num_new <- length(w_finite)
         }
         
@@ -332,8 +310,9 @@ Assessment_via_cluster <- function(pred, meas, memb,
             # }else{
             #   result[[precision_name]]['SUM', model] <- sd(metric_value_, na.rm=TRUE)
             # }
+            #total-precision####
             result[[precision_name]]['SUM', model] <- 
-              sd(metric_value_, na.rm=TRUE) + abs(mean(metric_value, na.rm=TRUE) - center.value) / 2
+              cal_precision(metric_value_, center.value, w_finite2, x_=x_)
           }
           
         }else{ # no need for precision  total
@@ -355,7 +334,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
   
   
   
-  # Fuzzy mode
+  #Fuzzy mode####
   if(hard.mode == FALSE){
     
     result_fz <- result
@@ -388,7 +367,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
             Er <- cal.metrics.vector(x, y, metric, 
                                      log10 = log10,
                                      c.value = c.value)
-            
+
             result_fz[[metric]][i,j] <- sum(memb_[,i] * Er, na.rm=TRUE) / sum(memb_[,i], na.rm=TRUE)
             
           } # ENDIF
@@ -483,6 +462,147 @@ Assessment_via_cluster <- function(pred, meas, memb,
   return(result)
   
 }
+
+#' @noRd
+#' @param metric_value_ metric_value_ of x and y. It is a vector
+#' @param center.value the center value of metric. For instance, the value of BIAS is 0
+#'   but the RATIO is 1
+#' @param w_finite2 the index of valid value based on function \code{def_validation}
+#' @param coef coefficient in calculating precision. Default is 2.
+#' @param x_ Actual value
+cal_precision <- function(metric_value_, center.value, w_finite2, coef = 2, x_) {
+  
+  # if(length(na.omit(metric_value_)) <= 2) {
+  #   result <- sd(metric_value_, na.rm=TRUE) + abs(mean(metric_value_, na.rm=TRUE) - center.value) / coef
+  # }else {
+  #   result <- {density(metric_value_, na.rm = TRUE) %$% x[which.max(y)]}
+  #   result <- abs(result) / coef + sd(metric_value_, na.rm=TRUE)
+  # }
+  
+  # result <- sd(metric_value_, na.rm=TRUE) + abs(mean(metric_value_, na.rm=TRUE) - center.value) / 3
+  # result <- sd(metric_value_[w_finite2], na.rm = TRUE)
+  result <- sd(metric_value_, na.rm=TRUE) * abs(mean(metric_value_, na.rm=TRUE) - center.value) / diff(range(x_, na.rm=TRUE))
+  
+  return(result)
+}
+
+#' @noRd
+#' @param x actual value
+#' @param y predicted value
+#' @param valid.definition list of definition
+#' @param log10 log10
+def_validation <- function(x, y, valid.definition, log10) {
+  
+  if(!log10) {
+    lower <- x - x * valid.definition$percent
+    upper <- x + x * valid.definition$percent
+  }else {
+    lgx <- log10(x) 
+    lower  <- 10^lgx / 10^(lgx*valid.definition$percent)
+    upper  <- 10^lgx * 10^(lgx*valid.definition$percent)
+  }
+  if(valid.definition$negative == FALSE) { # means the negative value is invalid
+    if(!log10) {
+      lower[lower < 0] <- 0
+    }
+  }
+  w_finite2 <- which(y > lower & y < upper)
+  
+  return(w_finite2)
+  
+}
+
+
+Assessment_via_cluster2 <- function(pred, meas, memb, 
+                                    log10 = TRUE, total = TRUE,
+                                    valid.definition = list(negative = FALSE, percent = 0.6)) {
+  
+  cluster <- apply(memb, 1, which.max)
+  cluster_names <- colnames(memb)
+  cluster <- cluster_names[cluster]
+  model_names <- colnames(pred)
+  
+  if(log10) {
+    pred <- log10(pred)
+    meas <- log10(meas)
+  }
+  
+  if(total) {
+    
+    result <- matrix(NA, ncol=ncol(pred), nrow = ncol(memb) + 1)
+    colnames(result) <- model_names
+    rownames(result) <- c(cluster_names, "SUM")
+      
+  }else {
+    
+    result <- matrix(NA, col=ncol(pred), nrow = ncol(memb))
+    colnames(result) <- model_names
+    rownames(result) <- c(cluster_names)
+    
+  }
+  
+  result_bias <- result_crpe <- result
+  
+  c.value <- mean(meas)
+  
+  for(i in rownames(result)) {
+    
+    for(j in colnames(result)) {
+      
+      if(i == "SUM") {
+        w_sel <- 1:nrow(pred)
+      }else {
+        w_sel <- which(cluster %in% i)
+      }
+      
+      x <- meas[w_sel]
+      y <- pred[w_sel, j]
+      
+      lower <- x * (1 - valid.definition$percent)
+      upper <- x * (1 + valid.definition$percent)
+      
+      w_valid <- which( y > lower & y < upper)
+      
+      Valid_percent <- length(w_valid) / length(x)
+      
+      bias <- x - y
+      crpe <- 2 * (x - y) / (x + c.value) * 100
+      
+      result_bias[i, j] <- (sd(bias, na.rm=TRUE) + mean(abs(bias), na.rm = TRUE)) / Valid_percent
+      result_crpe[i, j] <- (sd(crpe, na.rm=TRUE) + mean(abs(crpe), na.rm = TRUE)) / Valid_percent
+      
+      if(is.infinite(result_bias[i, j])) result_bias[i, j] <- NA
+      if(is.infinite(result_crpe[i, j])) result_crpe[i, j] <- NA
+      
+    }
+    
+  }
+  
+  score_bias <- apply(result_bias, 1, function(x) Score_algorithms_sort2(x, max.score = 50)) %>% t
+  score_crpe <- apply(result_crpe, 1, function(x) Score_algorithms_sort2(x, max.score = 50)) %>% t
+  score_total <- score_bias + score_crpe
+  colnames(score_total) <- model_names
+  if(total) score_total <- score_total[-nrow(score_total), ] 
+  
+  Opt_algorihtm <- apply(score_total, 1, function(x) names(which.max(x)))
+  
+  return(list(
+    result_bias = result_bias,
+    result_crpe = result_crpe,
+    score_bias  = score_bias,
+    score_crpe  = score_crpe,
+    score_total = score_total,
+    Opt_algorihtm = Opt_algorihtm
+  ))
+  
+}
+
+
+
+
+
+
+
 
 
 
@@ -879,7 +999,7 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
                                       memb=memb_,
                                       metrics = metrics,
                                       log10 = TRUE,
-                                      hard.mode = FALSE,
+                                      hard.mode = TRUE,
                                       cal.precision = TRUE,
                                       na.process = TRUE,
                                       plot.col = FALSE)
@@ -1256,11 +1376,12 @@ Scoring_system_bootstrap <- function(Times = 1000,
   res_Score$x_f = factor(res_Score$x, levels = x_levels)
   
   # The optimal algorithm defined by maximum scores per cluster
-  Opt_algorithm = rep("", K) %>% setNames(., x_levels)
-  for(i in x_levels) {
-    Opt_algorithm[i] <- res_Score[res_Score$x == i, c("x", "variable", "value")] %$%
-      variable[which.max(value)]
-  }
+  # Opt_algorithm = rep("", K) %>% setNames(., x_levels)
+  # for(i in x_levels) {
+  #   Opt_algorithm[i] <- res_Score[res_Score$x == i, c("x", "variable", "value")] %$%
+  #     variable[which.max(value)]
+  # }
+  Opt_algorithm <- apply(Opt_algorithm_list[,-1], 2, function(x) table(x) %>% which.max() %>% names() )
 
   ## To-do: 
   ## In some extents, the optimal could not return finite value especially for image rasters,

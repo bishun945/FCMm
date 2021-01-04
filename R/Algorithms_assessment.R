@@ -163,13 +163,25 @@ Assessment_via_cluster <- function(pred, meas, memb,
       if(na.process){
         w_finite <- which(is.finite(y))
         
+        # if(model == 15 & cluster == 17) {
+        #   print(model)
+        # }
+        
         # default valid.definition is set as 0.6 which is two times of meeting of GOSC
         # If valid.threshold is set as NULL then it would pass this process
         if(!is.null(valid.definition)) {
-          upper <- x * (1 + valid.definition$percent)
-          lower <- x * (1 - valid.definition$percent)
+          if(!log10) {
+            lower <- x - x * valid.definition$percent
+            upper <- x + x * valid.definition$percent
+          }else {
+            lgx <- log10(x) 
+            lower  <- 10^lgx / 10^(lgx*valid.definition$percent)
+            upper  <- 10^lgx * 10^(lgx*valid.definition$percent)
+          }
           if(valid.definition$negative == FALSE) { # means the negative value is invalid
-            lower[lower < 0] <- 0
+            if(!log10) {
+              lower[lower < 0] <- 0
+            }
           }
           w_finite2 <- which(y > lower & y < upper)
           num_new <- length(w_finite2)
@@ -183,7 +195,9 @@ Assessment_via_cluster <- function(pred, meas, memb,
           stop("Error! The subseted sample number is smaller the raw.")
       }
       
-      # calculate precision
+      #---------------------# 
+      # calculate precision #
+      #---------------------#
       if(cal.precision == TRUE){
       
         for(metric in metrics){
@@ -221,8 +235,8 @@ Assessment_via_cluster <- function(pred, meas, memb,
             # }else{
             #   result[[precision_name]][cluster, model] <- sd(metric_value_, na.rm=TRUE)
             # }
-            result[[precision_name]][cluster, model] <- sd(metric_value_, na.rm=TRUE) * 
-              abs(mean(metric_value_, na.rm=TRUE) - center.value)
+            result[[precision_name]][cluster, model] <- 
+              sd(metric_value_, na.rm=TRUE) + abs(mean(metric_value_, na.rm=TRUE) - center.value) / 2
           }
         }
            
@@ -251,8 +265,14 @@ Assessment_via_cluster <- function(pred, meas, memb,
         w_finite <- which(is.finite(y) & y > 0)
         
         if(!is.null(valid.definition)) {
-          upper <- x * (1 + valid.definition$percent)
-          lower <- x * (1 - valid.definition$percent)
+          if(!log10) {
+            lower <- x - x * valid.definition$percent
+            upper <- x + x * valid.definition$percent
+          }else {
+            lgx <- log10(x) 
+            lower  <- 10^lgx / 10^(lgx*valid.definition$percent)
+            upper  <- 10^lgx * 10^(lgx*valid.definition$percent)
+          }
           if(valid.definition$negative == FALSE) { # means the negative value is invalid
             lower[lower < 0] <- 0
           }
@@ -312,8 +332,8 @@ Assessment_via_cluster <- function(pred, meas, memb,
             # }else{
             #   result[[precision_name]]['SUM', model] <- sd(metric_value_, na.rm=TRUE)
             # }
-            result[[precision_name]]['SUM', model] <- sd(metric_value_, na.rm=TRUE) * 
-              abs(mean(metric_value, na.rm=TRUE) - center.value)
+            result[[precision_name]]['SUM', model] <- 
+              sd(metric_value_, na.rm=TRUE) + abs(mean(metric_value, na.rm=TRUE) - center.value) / 2
           }
           
         }else{ # no need for precision  total
@@ -812,7 +832,7 @@ Sampling_via_cluster <- function(x, num, replace=FALSE){
 #' 
 Getting_Asses_results <- function(sample.size, replace = FALSE,
                                   pred, meas, memb,
-                                  metrics_used = 2,
+                                  metrics_used = 1,
                                   cluster = apply(memb, 1, which.max), 
                                   seed = NULL){
   
@@ -1008,7 +1028,7 @@ Scoring_system <- function(Inputs,
   metrics <- Inputs$metrics
   
   if(is.null(param_sort$max.score)) {
-    param_sort$max.score = 50/n_metrics  
+    param_sort$max.score = 100/n_metrics  
   }
   
   if("RATIO" %in% names(Inputs$Asses_fz)) {
@@ -1038,43 +1058,54 @@ Scoring_system <- function(Inputs,
     stop('Method selection error.')
   }
   
-  # Accuracy part
+  #---------------# 
+  # Accuracy part #
+  #---------------#
   Accuracy_list <- list()
-  for(j in 1:n_metrics) {
-    metric_name <- metrics[j]
-    tmp <- Asses_fz[[metric_name]]
+  a.metric <- Inputs$metrics[Inputs$metrics %in% c("MAE", "CMAPE")]
+  j = 1
+  for(metric in a.metric) {
+    tmp <- Asses_fz[[metric]]
     tmp_score <- tmp * NA
     for(i in 1:nrow(tmp)) {
-      tmp_score[i, ] <- Score_algorithms(abs(tmp[i, ]))
+      tmp_score[i, ] <- Score_algorithms(tmp[i, ])
     }
     Accuracy_list[[j]] <- tmp_score
-    names(Accuracy_list[j]) <- metric_name
+    names(Accuracy_list[j]) <- metric
     rm(tmp, tmp_score)
+    j = j + 1
   }
   Accuracy <- Accuracy_list[[1]] * 0
   for(i in 1:length(Accuracy_list)) {
     Accuracy <- Accuracy + Accuracy_list[[i]]
   }
   
-  # Precision part
+  #----------------#
+  # Precision part #
+  #----------------#
   Precision_list <- list()
-  for(j in 1:n_metrics) {
-    metric_name <- sprintf("%s_p",metrics[j])
+  r.metric <- Inputs$metrics[Inputs$metrics %in% c("BIAS", "CMRPE")]
+  j = 1
+  for(metric in r.metric) {
+    metric_name <- sprintf("%s_p",metric)
     tmp <- Asses_p[[metric_name]]
     tmp_score <- tmp * NA
     for(i in 1:nrow(tmp)) {
       tmp_score[i, ] <- Score_algorithms(abs(tmp[i, ]))
     }
     Precision_list[[j]] <- tmp_score
-    names(Precision_list[j]) <- metrics[j]
+    names(Precision_list[j]) <- metric
     rm(tmp, tmp_score)
+    j = j + 1
   }
   Precision <- Precision_list[[1]] * 0
   for(i in 1:length(Precision_list)) {
     Precision <- Precision + Precision_list[[i]]
   }
- 
-  # total score  
+  
+  #-------------#
+  # total score # 
+  #-------------#
   Total_score <- (Accuracy + Precision) * Asses_fz$Valid_percent / 100
   
   if(remove.negative == TRUE){
@@ -1090,10 +1121,10 @@ Scoring_system <- function(Inputs,
   }
   
   # output optimal algorithm names
-  opt_algorithm <- Total_score %>% apply(., 1, which.max) %>% 
+  Opt_algorithm <- Total_score[-nrow(Total_score), ] %>% 
+    apply(., 1, which.max) %>% 
     names(Total_score)[.] %>% 
-    setNames(., rownames(Total_score)) %>%
-    .[-length(.)]
+    setNames(., rownames(Total_score)[-nrow(Total_score)]) 
   
   Total_score.melt <- melt(cbind(x=rownames(Total_score), Total_score), id='x')
   
@@ -1105,7 +1136,7 @@ Scoring_system <- function(Inputs,
                  Accuracy_list         = Accuracy_list,
                  Precision_list        = Precision_list,
                  Total_score.melt      = Total_score.melt,
-                 Opt_algorithm         = opt_algorithm,
+                 Opt_algorithm         = Opt_algorithm,
                  Inputs                = Inputs
                 )
   
@@ -1146,12 +1177,12 @@ Scoring_system <- function(Inputs,
 #' } 
 #' 
 #' @importFrom stats aggregate
-#' @importFrom stringr str_split str_extract_all
+#' @importFrom stringr str_split str_extract_all str_detect
 #' 
 Scoring_system_bootstrap <- function(Times = 1000, 
                                      Inputs, replace = TRUE, 
                                      method = 'sort-based',
-                                     metrics_used = 2,
+                                     metrics_used = 1,
                                      param_sort = list(decreasing = TRUE, max.score = NULL),
                                      param_interval = list(trim=FALSE, reward.punishment=TRUE,
                                                            decreasing=TRUE, hundred.percent=FALSE),
@@ -1167,7 +1198,6 @@ Scoring_system_bootstrap <- function(Times = 1000,
   metrics = Inputs$metrics
   
   Score_list <- NULL
-  Opt_algorithm_list <- NULL
   Results_of_scoring_system <- list()
   
   for(i in 1:Times){
@@ -1187,19 +1217,19 @@ Scoring_system_bootstrap <- function(Times = 1000,
     if(i == 1){
       Score_list <- Score$Total_score.melt
       names(Score_list)[ncol(Score_list)] <- i
+      Opt_algorithm_list <- Score$Opt_algorithm
     }else{
       Score_list <- cbind(Score_list, Score$Total_score.melt[,3])
       names(Score_list)[ncol(Score_list)] <- i
+      Opt_algorithm_list <- rbind(Opt_algorithm_list, Score$Opt_algorithm)
     }
-    
-    Opt_algorithm_list <- rbind(Opt_algorithm_list, Score$opt_algorithm)
-    
+  
   }
   
   # Opt algorithms for each time
   Opt_algorithm_list <- cbind(seq(1, Times), Opt_algorithm_list)
   Opt_algorithm_list <- data.frame(Opt_algorithm_list, stringsAsFactors = FALSE)
-  colnames(Opt_algorithm_list) <- c("Times", names(Score$opt_algorithm))
+  colnames(Opt_algorithm_list) <- c("Times", names(Score$Opt_algorithm))
   
 
   # Calculate the score statistic information
@@ -1219,18 +1249,19 @@ Scoring_system_bootstrap <- function(Times = 1000,
   x_prefix <- names(table(res_Score$x)) %>%
     stringr::str_extract_all("[:letter:]+", simplify = TRUE) %>% 
     table() %>% .[which.max(.)] %>% names()
-  x_levels <- paste0(x_prefix, sort(as.numeric(x_nums)))
+  x_space <- names(table(res_Score$x)) %>%
+    stringr::str_detect("[:blank:]") %>% all()
+  x_space <- ifelse(x_space, " ", "")
+  x_levels <- paste0(x_prefix, x_space, sort(as.numeric(x_nums)))
   res_Score$x_f = factor(res_Score$x, levels = x_levels)
   
   # The optimal algorithm defined by maximum scores per cluster
-  tmpdt = stats::aggregate(res_Score$value, list(res_Score$x), which.max)
-  tmpdt = tmpdt[tmpdt$Group.1 != "SUM",]
   Opt_algorithm = rep("", K) %>% setNames(., x_levels)
-  for(i in 1:K){
-    tmptmp = res_Score[which(res_Score$x == names(Opt_algorithm)[i]),]
-    Opt_algorithm[i] <- tmptmp$variable[which.max(tmptmp$value)]
+  for(i in x_levels) {
+    Opt_algorithm[i] <- res_Score[res_Score$x == i, c("x", "variable", "value")] %$%
+      variable[which.max(value)]
   }
-  
+
   ## To-do: 
   ## In some extents, the optimal could not return finite value especially for image rasters,
   ##   mostly because of inappropriate atmospheric correction. Given that, it is necessary to select 
@@ -1351,12 +1382,14 @@ Scoring_system_bootstrap <- function(Times = 1000,
   # draw a scatter plot colored by clusters
   Chla_limits <- (range(meas) * c(0.9, 1.1)) %>% round(4)
   if(Chla_limits[1] <= 0) Chla_limits[1] = 0.1
-  Chla_plots <- data.frame(Chla_true=meas, cluster = cluster, pred, Chla_blend)
-  Chla_plots$cluster <- factor(as.character(Chla_plots$cluster), levels = 1:K, ordered = TRUE)
+  Chla_plots <- data.frame(Chla_true=meas, 
+                           cluster = paste0(x_prefix, x_space, cluster), 
+                           pred, Chla_blend)
+  Chla_plots$cluster <- factor(Chla_plots$cluster, levels = x_levels, ordered = TRUE)
   names(Chla_plots)[1] <- "Chla_true"
   dt_Chla_ <- reshape2::melt(Chla_plots, id=c("Chla_true", "cluster"))
   dt_Chla_$value_opt <- NA
-  for(i in 1:K){
+  for(i in x_levels){
     w = which(dt_Chla_$cluster == i & dt_Chla_$variable == Opt_algorithm[i])
     dt_Chla_$value_opt[w] <- dt_Chla_$value[w]
   }
@@ -1364,7 +1397,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
   dt_Chla_$value_opt[w] <- dt_Chla_$value[w]
   
   cp = RdYlBu(K)
-  names(cp) <- levels(dt_Chla_$cluster)
+  names(cp) <- x_levels
   plot_scatter <- 
     ggplot() + 
     geom_abline(intercept=0, slope=1, linetype=2) + 
@@ -1416,7 +1449,9 @@ Scoring_system_bootstrap <- function(Times = 1000,
     facet_grid(variable~cluster) +
     theme(legend.position = "right",
           strip.background = element_rect(fill='white', color='white'),
-          strip.text = element_text(face='bold'),
+          strip.text.x = element_text(face='bold', angle = 0),
+          strip.text.y = element_text(face='bold', angle = 45, hjust=1),
+          axis.text.x.bottom = element_text(angle = 45),
           text = element_text(size=13)) + 
     guides(col = guide_legend(ncol=1))
   

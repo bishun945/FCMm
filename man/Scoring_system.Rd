@@ -19,7 +19,7 @@ Scoring_system_bootstrap(
   Inputs,
   replace = TRUE,
   method = "sort-based",
-  metrics_used = 2,
+  metrics_used = 1,
   param_sort = list(decreasing = TRUE, max.score = NULL),
   param_interval = list(trim = FALSE, reward.punishment = TRUE, decreasing = TRUE,
     hundred.percent = FALSE),

@@ -1444,6 +1444,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
   #         strip.text = element_text(face='bold'),
   #         text = element_text(size=13),
   #         legend.position = "right")
+  #plot column for score####
   plot_col <- 
     ggplot() +
     geom_col(data=res_Score, 
@@ -1492,7 +1493,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
   
   #-----------------------#
   #                       #
-  #     Blending work     #
+  ######Blending work######
   #                       #
   #-----------------------#
   
@@ -1519,6 +1520,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
   
   cp = RdYlBu(K)
   names(cp) <- x_levels
+  #plot scatter for all####
   plot_scatter <- 
     ggplot() + 
     geom_abline(intercept=0, slope=1, linetype=2) + 
@@ -1548,6 +1550,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
   dt_Chla_sub <- dt_Chla_[dt_Chla_$variable %in% c(
     "Chla_blend", unique(Opt_algorithm)
   ),]
+  #plot scatter for optimals####
   plot_scatter_opt <- 
     ggplot() + 
     geom_abline(intercept=0, slope=1, linetype=2) + 

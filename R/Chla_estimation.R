@@ -800,7 +800,7 @@ Chla_algorithms_name <- function(){
 
 
 #' @name Blend_Smith18
-#' @title Smith algorithm by Smith et al. (2018)
+#' @title Blending algorithm by Smith et al. (2018)
 #' @param Rrs443 Rrs443
 #' @param Rrs490 Rrs490
 #' @param Rrs510 Rrs510
@@ -813,7 +813,7 @@ Chla_algorithms_name <- function(){
 #' @family Algorithms: Chla concentration
 #' @examples 
 #' data(WaterSpec35)
-#' res = Smith18(WaterSpec35$`442.5`, WaterSpec35$`490`, WaterSpec35$`510`, 
+#' res = Blend_Smith18(WaterSpec35$`442.5`, WaterSpec35$`490`, WaterSpec35$`510`, 
 #' WaterSpec35$`560`, WaterSpec35$`665`, WaterSpec35$`708.75`)
 #' @references Smith M E, Lain L R, Bernard S. An optimized chlorophyll a switching 
 #'   algorithm for MERIS and OLCI in phytoplankton-dominated waters[J]. 
@@ -841,6 +841,7 @@ Blend_Smith18 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665, Rrs709) {
 }
 
 #' @name Blend_Jac17
+#' @title Algorithm blending framework by Jackson et al. (2017)
 #' @param Rrs Rrs data.frame input for matching centroids and calculating Chla
 #' @param wv_range Number that used to define the range of wavelength to capture
 #'   the center wavelength of required band
@@ -970,6 +971,7 @@ Blend_Jac17 <- function(Rrs, wv_range = 5, ...) {
 
 
 #' @name Blend_Moo14
+#' @title Algorithm blending framework by Moore et al. (2014)
 #' @param Rrs Rrs data.frame input for matching centroids and calculating Chla
 #' @param wv_range Number that used to define the range of wavelength to capture
 #'   the center wavelength of required band

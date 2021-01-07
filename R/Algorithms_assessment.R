@@ -1705,3 +1705,33 @@ Chla_algorithms_blend <- function(dt_Chla_opt, memb, Opt_algorithm, Remove_algor
   
 }  
   
+
+def_remove_algorithm <- function(res_Score, Opt_algorithm, remove_ratio = 1/2) {
+  
+  # Score$Score_list_melt <=+> res_Score
+  
+  # The removed algorithms defined by the lower half res_Score per cluster
+  # remove_ratio = 1/2
+  if(remove_ratio > 1) stop("The remove ratio should be between zero and one!")
+  for(i in levels(res_Score$x_f)){
+    tmpdt = res_Score[res_Score$x == i, ]
+    tmpdt = tmpdt[tmpdt$variable %in% Opt_algorithm, ]
+    num_removed = floor(length(unique(tmpdt$variable)) * remove_ratio)
+    w_removed = which(res_Score$x == i & res_Score$value <= sort(tmpdt$value)[num_removed])
+    res_Score$pos_removed[w_removed] = res_Score$value[w_removed]
+  }
+  ws_removed <- which(!is.na(res_Score$pos_removed))
+  w_cancel <- which(!(res_Score$variable[ws_removed] %in% Opt_algorithm))
+  res_Score$pos_removed[ws_removed][w_cancel] <- NA
+  
+  # For these algorithms, they are not taken into account when blending
+  Remove_algorithm <- list()
+  for(i in 1:length(unique(res_Score$x))){
+    Remove_algorithm[[i]] <- 
+      res_Score$variable[which(!is.na(res_Score$pos_removed) & 
+                                 res_Score$x == unique(res_Score$x)[i])]
+  }
+  
+}
+
+

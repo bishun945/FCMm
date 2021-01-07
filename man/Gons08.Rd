@@ -30,17 +30,19 @@ Gons H J, Auer M T, Effler S W. MERIS satellite chlorophyll mapping of
 }
 \seealso{
 Other Algorithms: Chla concentration: 
+\code{\link{Blend_Jac17}()},
+\code{\link{Blend_Moo14}()},
+\code{\link{Blend_Smith18}()},
 \code{\link{Bloom}()},
 \code{\link{C6}()},
 \code{\link{Chla_FBA}},
 \code{\link{Chla_Gil10_Git11}},
-\code{\link{Chla_OC_OLCI}},
+\code{\link{Chla_OCx_OLCI}},
 \code{\link{FCM_m_Chla_estimation}()},
 \code{\link{NDCI_Mi12}()},
 \code{\link{OCI_Hu12}()},
 \code{\link{QAA_v5}()},
 \code{\link{SCI_Shen10}()},
-\code{\link{Smith18}()},
 \code{\link{TC2}()},
 \code{\link{run_all_Chla_algorithms}()}
 }

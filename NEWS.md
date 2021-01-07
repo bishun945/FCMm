@@ -1,3 +1,10 @@
+## FCMm 0.10.2 (2021-01-07)
+
+1. Add two centroids from Jackson et al. (2017) and Moore et al. (2014) with the format csv.
+2. OC-serie algorithms are renamed as `CHla_OCx_OLCI`.
+3. Add the new function `OC3_OLCI`.
+4. Add three new functions to blend Chla estimations namely `Blend_Simith`, `Blend_Jac17`, and `Blend_Moo14`.
+
 ## FCMm 0.10.1 (2021-01-03)
 
 1. `cal.metrics` and `cal.metrics.vector` add new parameter `c.value` which is the compensated value for CAPE and CRPE series metrics. This could be useful when user wants to fix the compensated value.

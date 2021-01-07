@@ -85,7 +85,7 @@ FCM_m_Chla_estimation <- function(Rrs, U){
   return(bind.Chla)
 }
 
-
+#BR TBA approach####
 
 #' @name Chla_Gil10_Git11
 #' @title Band-Ratio and Three-bands Chla algorithm by Gilerson et al. (2010) and Gitelson et al. (2011)
@@ -191,7 +191,7 @@ Bloom <- function(Rrs665, Rrs754){
 
 
 
-#' @name Chla_OC_OLCI
+#' @name Chla_OCx_OLCI
 #' @title NASA standard ocean color algorithm (version 4, 5, and 6) for the Ocean and Land 
 #'   Color Instrument (OLCI) bands
 #' @param Rrs412 Rrs412
@@ -224,7 +224,7 @@ OC4_OLCI <- function(Rrs443, Rrs490, Rrs510, Rrs560){
   return(result)
 }
 
-#' @rdname Chla_OC_OLCI
+#' @rdname Chla_OCx_OLCI
 #' @export
 OC5_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560){
   X <- apply(cbind(Rrs412,Rrs443,Rrs490,Rrs510),1,max)/Rrs560
@@ -235,7 +235,7 @@ OC5_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560){
   return(result)
 }
 
-#' @rdname Chla_OC_OLCI
+#' @rdname Chla_OCx_OLCI
 #' @export
 OC6_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
   X <- apply(cbind(Rrs412,Rrs443,Rrs490,Rrs510),1,max)/apply(cbind(Rrs560,Rrs665),1,mean)
@@ -245,6 +245,18 @@ OC6_OLCI <- function(Rrs412, Rrs443, Rrs490, Rrs510, Rrs560, Rrs665){
                  Chla=Chla)
   return(result)
 }
+
+#' @rdname Chla_OCx_OLCI
+#' @export
+OC3_OLCI <- function(Rrs443, Rrs490, Rrs560) {
+  X <- apply(cbind(Rrs443, Rrs490),1,max)/Rrs560
+  X <- log10(X)
+  Chla <- 10^(0.41712 - 2.56402*X + 1.22219*X^2 + 1.02751*X^3 - 1.56804*X^4)
+  result <- list(X=X,
+                 Chla = Chla)
+  return(result)
+}
+
 
 #' @name OCI_Hu12
 #' @title Ocean Color Index (OCI) algorithm by Hu et al. (2012)
@@ -315,7 +327,7 @@ NDCI_Mi12 <- function(Rrs665, Rrs709){
   return(result)
 }
 
-
+#Four band approach####
 
 #' @name Chla_FBA
 #' @title Four-bands Chla algorithm by Yang et al. (2010) and Le et al. (2013)
@@ -358,7 +370,7 @@ FBA_Yang10 <- function(Rrs665, Rrs709, Rrs754){
   return(result)
 }
 
-
+#Baseline approach####
 
 #' @name SCI_Shen10
 #' @title Synthetic Chlorophyll Index (SCI) algorithm by Shen et al. (2010)
@@ -418,7 +430,7 @@ MPH_Mat14 <- function(Rrs620, Rrs665, Rrs681, Rrs709, Rrs754, Rrs885) {
   ))
 }
 
-
+#Quasi-Analytical apprach####
 
 #' @name Gons08
 #' @title Gons algorithm by Gons et al. (2008)
@@ -444,48 +456,6 @@ Gons08 <- function(Rrs665, Rrs709, Rrs779){
   return(result)
 }
 
-
-
-#' @name Smith18
-#' @title Smith algorithm by Smith et al. (2018)
-#' @param Rrs443 Rrs443
-#' @param Rrs490 Rrs490
-#' @param Rrs510 Rrs510
-#' @param Rrs560 Rrs560
-#' @param Rrs665 Rrs665
-#' @param Rrs709 Rrs709
-#' @export
-#' @return A list including the algorithm estimated CHL_G2B, CHL_OCI, 
-#'   CHL_BLEND concentration. PHI index. a1 and a2 coefficients.
-#' @family Algorithms: Chla concentration
-#' @examples 
-#' data(WaterSpec35)
-#' res = Smith18(WaterSpec35$`442.5`, WaterSpec35$`490`, WaterSpec35$`510`, 
-#' WaterSpec35$`560`, WaterSpec35$`665`, WaterSpec35$`708.75`)
-#' @references Smith M E, Lain L R, Bernard S. An optimized chlorophyll a switching 
-#'   algorithm for MERIS and OLCI in phytoplankton-dominated waters[J]. 
-#'   Remote Sensing of Environment, 2018, 215: 217-227.
-Smith18 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665, Rrs709) {
-  CHL_G2B = BR_Gil10(Rrs665, Rrs709)$Chla
-  CHL_OCI = OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)$Chl_OCI
-  r   = Rrs709 / Rrs665
-  PHI = r * NA
-  PHI[r < 0.75] = 0.75
-  PHI[r > 1.15] = 1.15
-  PHI[r <= 1.15 & r >= 0.75] = r[r <= 1.15 & r >= 0.75]
-  a1 = (PHI - 0.75) / (1.15 - 0.75)
-  a2 = abs(a1 - 1)
-  CHL_BLEND <- a1 * CHL_G2B + a2 * CHL_OCI
-  result <- list(
-    CHL_G2B   = CHL_G2B,
-    CHL_OCI   = CHL_OCI,
-    CHL_BLEND = CHL_BLEND,
-    PHI = PHI,
-    a1  = a1,
-    a2  = a2
-  )
-  return(result)
-}
 
 
 
@@ -748,6 +718,7 @@ QAA_v5 <- function(wv, Rrs,
 }
 
 
+#Run candidates####
 
 #' @name run_all_Chla_algorithms
 #' @title Run all Chla algorithms
@@ -824,5 +795,305 @@ Chla_algorithms_name <- function(){
            'TC2', 'TC2_turbid', 'TC2_clean',
            'QAA_v5'))
 }
+
+#Blend algorithms####
+
+
+#' @name Blend_Smith18
+#' @title Smith algorithm by Smith et al. (2018)
+#' @param Rrs443 Rrs443
+#' @param Rrs490 Rrs490
+#' @param Rrs510 Rrs510
+#' @param Rrs560 Rrs560
+#' @param Rrs665 Rrs665
+#' @param Rrs709 Rrs709
+#' @export
+#' @return A list including the algorithm estimated CHL_G2B, CHL_OCI, 
+#'   CHL_BLEND concentration. PHI index. a1 and a2 coefficients.
+#' @family Algorithms: Chla concentration
+#' @examples 
+#' data(WaterSpec35)
+#' res = Smith18(WaterSpec35$`442.5`, WaterSpec35$`490`, WaterSpec35$`510`, 
+#' WaterSpec35$`560`, WaterSpec35$`665`, WaterSpec35$`708.75`)
+#' @references Smith M E, Lain L R, Bernard S. An optimized chlorophyll a switching 
+#'   algorithm for MERIS and OLCI in phytoplankton-dominated waters[J]. 
+#'   Remote Sensing of Environment, 2018, 215: 217-227.
+Blend_Smith18 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665, Rrs709) {
+  CHL_G2B = BR_Gil10(Rrs665, Rrs709)$Chla
+  CHL_OCI = OCI_Hu12(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665)$Chl_OCI
+  r   = Rrs709 / Rrs665
+  PHI = r * NA
+  PHI[r < 0.75] = 0.75
+  PHI[r > 1.15] = 1.15
+  PHI[r <= 1.15 & r >= 0.75] = r[r <= 1.15 & r >= 0.75]
+  a1 = (PHI - 0.75) / (1.15 - 0.75)
+  a2 = abs(a1 - 1)
+  CHL_BLEND <- a1 * CHL_G2B + a2 * CHL_OCI
+  result <- list(
+    CHL_G2B   = CHL_G2B,
+    CHL_OCI   = CHL_OCI,
+    Chla_blend = CHL_BLEND,
+    PHI = PHI,
+    a1  = a1,
+    a2  = a2
+  )
+  return(result)
+}
+
+#' @name Blend_Jac17
+#' @param Rrs Rrs data.frame input for matching centroids and calculating Chla
+#' @param wv_range Number that used to define the range of wavelength to capture
+#'   the center wavelength of required band
+#' @param ... parameters of \link{apply_FCM_m}
+#' @return A list includes \code{Chla_blend}, \code{Rrs}, \code{res_FCM} (the return of \link{apply_FCM_m}),
+#'   and estimates from optimal algorithms.
+#' @family Algorithms: Chla concentration
+#' @examples 
+#' library(FCMm)
+#' data(WaterSpec35)
+#' res = Blend_Jac17(WaterSpec35)
+#' @references 
+#' 
+#' Jackson T, Sathyendranath S, Mélin F. An improved optical classification scheme for the Ocean 
+#'   Colour Essential Climate Variable and its applications[J]. Remote Sensing of Environment, 2017, 
+#'   203: 152-161.
+#'   
+#' Moore T S, Dowell M D, Bradt S, et al. An optical water type framework for 
+#'   selecting and blending retrievals from bio-optical algorithms in lakes and coastal waters[J]. 
+#'   Remote sensing of environment, 2014, 143: 97-111.
+#' 
+#' @export
+#' 
+Blend_Jac17 <- function(Rrs, wv_range = 5, ...) {
+  
+  # load Jackson centroids
+  Jac17_cen <- system.file("Jac17_centroids_Rrs.csv", package = "FCMm") %>%
+    read.csv(., comment.char = "#") %>%
+    setNames(., gsub("X", "", colnames(.))) %>%
+    magrittr::set_rownames(., .[,1]) %>%
+    .[,-1]
+  
+  # select the required bands in the param Rrs
+  wv <- stringr::str_subset(names(Rrs), '\\d') %>% as.numeric()
+  wv_need <- colnames(Jac17_cen) %>% as.numeric()
+  Rrs_need <- matrix(NA, ncol = ncol(Jac17_cen), nrow = nrow(Rrs)) %>% 
+    as.data.frame() %>% setNames(., wv_need)
+  
+  for(i in 1:ncol(Rrs_need)){
+    w = which.min(abs(wv-wv_need[i]))
+    if(length(w) == 0){
+      stop(sprintf("%s nm can not found from the input data.frame!", wv_need[i]))
+    }else if(length(w) > 1){
+      stop(paste0("Bands ", 
+                  paste0(wv_need[w], collapse = ", "),
+                  " duplicate in the input data.frame!"))
+    }else {
+      
+      Rrs_need[, i] <- Rrs[, as.character(wv)][, w]
+      
+    }
+  }
+  
+  if(!exists("m_used")) {
+    
+    res_FCM <- apply_FCM_m(
+      Rrs = Rrs_need,
+      wavelength = as.numeric(colnames(Rrs_need)),
+      Rrs_clusters = Jac17_cen,
+      do.stand = TRUE,
+      default.cluster = FALSE,
+      m_used = 1.5,
+      ...
+    )
+    
+  }else {
+    
+    res_FCM <- apply_FCM_m(
+      Rrs = Rrs_need,
+      wavelength = as.numeric(colnames(Rrs_need)),
+      Rrs_clusters = Jac17_cen,
+      do.stand = TRUE,
+      default.cluster = FALSE,
+      ...
+    )
+    
+  }
+  
+  # OWT1-7 OCI
+  Chl_OCI <- OCI_Hu12(
+    Rrs443 = Rrs_need$`443`,
+    Rrs490 = Rrs_need$`490`,
+    Rrs510 = Rrs_need$`510`,
+    Rrs560 = Rrs_need$`555`,
+    Rrs665 = Rrs_need$`670`
+  )$Chl_OCI
+  
+  # OWT13-14 OC3
+  Chl_OC3 <- OC3_OLCI(
+    Rrs443 = Rrs_need$`443`,
+    Rrs490 = Rrs_need$`490`,
+    Rrs560 = Rrs_need$`555`
+  )$Chla
+  
+  # OWT8-12 OC5
+  Chl_OC5 <- OC5_OLCI(
+    Rrs412 = Rrs_need$`412`,
+    Rrs443 = Rrs_need$`443`,
+    Rrs490 = Rrs_need$`490`,
+    Rrs510 = Rrs_need$`510`,
+    Rrs560 = Rrs_need$`555`
+  )$Chla
+  
+  # blend result
+  Chl_opt <- matrix(NA, 
+                    ncol = ncol(res_FCM$u),
+                    nrow = nrow(res_FCM$u))
+  
+  Chl_opt[, 1:7] <- Chl_OCI
+  Chl_opt[, 8:12] <- Chl_OC5
+  Chl_opt[, 13:14] <- Chl_OC3
+
+  Chl_opt[Chl_opt < 0] <- 0
+  
+  Chla_blend <- apply(Chl_opt * res_FCM$u, 1, sum)
+  
+  return(list(
+    Chla_blend = Chla_blend,
+    Rrs = Rrs_need,
+    res_FCM = res_FCM,
+    Chl_OC3 = Chl_OC3,
+    Chl_OC5 = Chl_OC5,
+    Chl_OCI = Chl_OCI
+  ))
+  
+}
+
+
+#' @name Blend_Moo14
+#' @param Rrs Rrs data.frame input for matching centroids and calculating Chla
+#' @param wv_range Number that used to define the range of wavelength to capture
+#'   the center wavelength of required band
+#' @param ... parameters of \link{apply_FCM_m}
+#' @return A list includes \code{Chla_blend}, \code{Rrs}, \code{res_FCM} (the return of \link{apply_FCM_m}),
+#'   and estimates from optimal algorithms.
+#' @importFrom magrittr %>% set_rownames
+#' @importFrom utils read.csv
+#' @importFrom stats setNames
+#' @importFrom stringr str_subset
+#' @family Algorithms: Chla concentration
+#' @examples 
+#' library(FCMm)
+#' data(WaterSpec35)
+#' res = Blend_Moo14(WaterSpec35)
+#' @references Moore T S, Dowell M D, Bradt S, et al. An optical water type framework for 
+#'   selecting and blending retrievals from bio-optical algorithms in lakes and coastal waters[J]. 
+#'   Remote sensing of environment, 2014, 143: 97-111.
+#' @export
+#' 
+Blend_Moo14 <- function(Rrs, wv_range = 3, ...) {
+  
+  # load Moore centroids
+  Moo14_cen <- system.file("Moo14_centroids_Rrs0-.csv", package = "FCMm") %>%
+    read.csv(., comment.char = "#") %>%
+    setNames(., gsub("X", "", colnames(.))) %>%
+    magrittr::set_rownames(., .[,1]) %>%
+    .[,-1] %>%
+    {0.52 / (1/. - 1.7)} # convert Rrs0- to Rrs0+
+  
+  # select the required bands in the param Rrs
+  wv <- stringr::str_subset(names(Rrs), '\\d') %>% as.numeric()
+  wv_need <- colnames(Moo14_cen) %>% as.numeric()
+  Rrs_need <- matrix(NA, ncol = ncol(Moo14_cen), nrow = nrow(Rrs)) %>% 
+    as.data.frame() %>% setNames(., wv_need)
+    
+  for(i in 1:ncol(Rrs_need)){
+    w = which.min(abs(wv-wv_need[i]))
+    if(length(w) == 0){
+      stop(sprintf("%s nm can not found from the input data.frame!", wv_need[i]))
+    }else if(length(w) > 1){
+      stop(paste0("Bands ", 
+                     paste0(wv_need[w], collapse = ", "),
+                     " duplicate in the input data.frame!"))
+    }else {
+      
+      Rrs_need[, i] <- Rrs[, as.character(wv)][, w]
+      
+    }
+  }
+  
+  if(!exists("m_used")) {
+    
+    res_FCM <- apply_FCM_m(
+      Rrs = Rrs_need,
+      wavelength = as.numeric(colnames(Rrs_need)),
+      Rrs_clusters = Moo14_cen,
+      do.stand = TRUE,
+      default.cluster = FALSE,
+      m_used = 1.5,
+      ...
+    )
+    
+  }else {
+    
+    res_FCM <- apply_FCM_m(
+      Rrs = Rrs_need,
+      wavelength = as.numeric(colnames(Rrs_need)),
+      Rrs_clusters = Moo14_cen,
+      do.stand = TRUE,
+      default.cluster = FALSE,
+      ...
+    )
+    
+  }
+
+  
+  # OWT 1 2 3 6
+  Chl_OC4 <- OC4_OLCI(
+    Rrs443 = Rrs_need$`443`,
+    Rrs490 = Rrs_need$`490`,
+    Rrs510 = Rrs_need$`510`,
+    Rrs560 = Rrs_need$`560`
+  )$Chla
+  
+  # OWT 4 5 7
+  Chl_Git11 <- TBA_Git11(
+    Rrs665 = Rrs_need$`665`,
+    Rrs709 = Rrs_need$`709`,
+    Rrs754 = Rrs_need$`753`
+  )$Chla
+  
+  # blend result
+  Chl_opt <- matrix(NA, 
+                    ncol = ncol(res_FCM$u),
+                    nrow = nrow(res_FCM$u))
+  
+  Chl_opt[, c(1, 2, 3, 6)] <- Chl_OC4
+  Chl_opt[, c(4, 5, 7)] <- Chl_Git11
+  
+  Chl_opt[Chl_opt < 0] <- 0
+  
+  Chla_blend <- apply(Chl_opt * res_FCM$u, 1, sum)
+  
+  return(list(
+    Chla_blend = Chla_blend,
+    Rrs = Rrs_need,
+    res_FCM = res_FCM,
+    Chl_Git11 = Chl_Git11,
+    Chl_OC4 = Chl_OC4
+  ))
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chla_estimation.R
 \name{Blend_Smith18}
 \alias{Blend_Smith18}
-\title{Smith algorithm by Smith et al. (2018)}
+\title{Blending algorithm by Smith et al. (2018)}
 \usage{
 Blend_Smith18(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665, Rrs709)
 }
@@ -24,11 +24,11 @@ A list including the algorithm estimated CHL_G2B, CHL_OCI,
   CHL_BLEND concentration. PHI index. a1 and a2 coefficients.
 }
 \description{
-Smith algorithm by Smith et al. (2018)
+Blending algorithm by Smith et al. (2018)
 }
 \examples{
 data(WaterSpec35)
-res = Smith18(WaterSpec35$`442.5`, WaterSpec35$`490`, WaterSpec35$`510`, 
+res = Blend_Smith18(WaterSpec35$`442.5`, WaterSpec35$`490`, WaterSpec35$`510`, 
 WaterSpec35$`560`, WaterSpec35$`665`, WaterSpec35$`708.75`)
 }
 \references{

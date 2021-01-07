@@ -535,7 +535,7 @@ Assessment_via_cluster2 <- function(pred, meas, memb,
       
   }else {
     
-    result <- matrix(NA, col=ncol(pred), nrow = ncol(memb))
+    result <- matrix(NA, ncol=ncol(pred), nrow = ncol(memb))
     colnames(result) <- model_names
     rownames(result) <- c(cluster_names)
     

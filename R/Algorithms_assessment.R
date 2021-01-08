@@ -1704,33 +1704,119 @@ Chla_algorithms_blend <- function(dt_Chla_opt, memb, Opt_algorithm, Remove_algor
   )
   
 }  
-  
 
+#' @name Chla_algorithms_blend2
+#' @noRd
+Chla_algorithms_blend2 <- function(dt_Chla_opt, memb,
+                                   Opt_algorithm,
+                                   Remove_algorithm,
+                                   verbose = FALSE) {
+  
+  # dt_memb -> memb
+  # dt_Chla[, Opt_algorithm] -> dt_Chla_opt
+  # Remove_algorithm <- def_remove_algorithm(res_Score, Opt_algorithm, remove_ratio = 1/4)
+  
+  if(!all.equal(
+    length(Opt_algorithm),
+    ncol(dt_Chla_opt),
+    ncol(memb)
+  )){
+    stop("The input dt_Chla_opt, memb, and Opt_algorithm should have same length or column number!")
+  }
+  
+  if(nrow(dt_Chla_opt) != nrow(memb)) 
+    stop("The row number of dt_Chla_opt and memb should be equal!")
+  
+  # if(all(Opt_algorithm %in% names(dt_Chla_opt))){
+  #   stop("The Opt_algorithm should be parts of dt_Chla_opt colnames")
+  # }
+  
+  if(!(is.list(Remove_algorithm) | is.null(Remove_algorithm))){
+    stop("Remove_algorithm should be a list or NULL.")
+  }
+  
+  # modify the membership values
+  colnames(dt_Chla_opt) <- 
+    gsub(paste0(paste0("\\.", 1:17), collapse = "|"), "", colnames(dt_Chla_opt))
+  
+  dt_cluster <- apply(memb, 1, which.max)
+  dt_Chla_new <- dt_Chla_opt
+  memb_new    <- memb
+  
+  if(verbose)
+    cat("Membership value transformation: \n")
+  
+  for(clus in unique(dt_cluster)) {
+    
+    w_row <- which(as.vector(dt_cluster) == clus)
+    w_col_rm  <- which(Opt_algorithm %in% Remove_algorithm[[clus]])
+    
+    m_rm_sum <- apply(memb[w_row, w_col_rm], 1, sum)
+    
+    memb_new[w_row, w_col_rm] <- 0
+    memb_new[w_row, clus]     <- m_rm_sum + memb[w_row, clus]
+    
+    if(verbose) 
+      cat(sprintf("trans %s -> %s\n", paste0(w_col_rm, collapse = " "), clus))
+    
+  }
+  
+  w_na <- which(is.na(dt_Chla_opt) | dt_Chla_opt < 0, arr.ind = TRUE)
+  
+  w_na_col <- unique(w_na[,2])
+  
+  memb_new2 <- memb_new
+  
+  for(clus in unique(w_na_col)) {
+    
+    w_na_row <- w_na[ which(w_na[,2] == clus) ,1]
+    
+    m_rm_sum <- memb_new[w_na_row, clus]
+    
+    memb_new2[w_na_row, clus] <- 0
+    
+    tmp_cluster <- dt_cluster[w_na_row]
+    
+    for(clus_dom in unique(tmp_cluster)) {
+      
+      # memb_new2[w_na_row, clus_dom] <- 
+      
+    }
+    
+    
+  }
+  
+    
+}
+
+
+
+  
+#' @name def_remove_algorithm
+#' @title define the removed algorithms
+#' @param res_Score res_Score
+#' @param Opt_algorithm Opt_algorithm
+#' @param remove_ratio 1/2
+#' @return A list includes the algorithms to be removed
+#' @noRd
 def_remove_algorithm <- function(res_Score, Opt_algorithm, remove_ratio = 1/2) {
   
-  # Score$Score_list_melt <=+> res_Score
-  
+  # Score$Score_list_melt -> res_Score
+  # Score$Opt_algorithm -> Opt_algorithm
   # The removed algorithms defined by the lower half res_Score per cluster
   # remove_ratio = 1/2
+  Remove_algorithm <- list()
   if(remove_ratio > 1) stop("The remove ratio should be between zero and one!")
-  for(i in levels(res_Score$x_f)){
-    tmpdt = res_Score[res_Score$x == i, ]
+  for(i in 1:length(levels(res_Score$x_f))){
+    owt <- levels(res_Score$x_f)[i]
+    tmpdt = res_Score[res_Score$x == owt, ]
     tmpdt = tmpdt[tmpdt$variable %in% Opt_algorithm, ]
     num_removed = floor(length(unique(tmpdt$variable)) * remove_ratio)
-    w_removed = which(res_Score$x == i & res_Score$value <= sort(tmpdt$value)[num_removed])
-    res_Score$pos_removed[w_removed] = res_Score$value[w_removed]
+    w_removed = which(tmpdt$value <= sort(tmpdt$value)[num_removed])
+    Remove_algorithm[[i]] <- as.vector(tmpdt$variable[w_removed])
   }
-  ws_removed <- which(!is.na(res_Score$pos_removed))
-  w_cancel <- which(!(res_Score$variable[ws_removed] %in% Opt_algorithm))
-  res_Score$pos_removed[ws_removed][w_cancel] <- NA
   
-  # For these algorithms, they are not taken into account when blending
-  Remove_algorithm <- list()
-  for(i in 1:length(unique(res_Score$x))){
-    Remove_algorithm[[i]] <- 
-      res_Score$variable[which(!is.na(res_Score$pos_removed) & 
-                                 res_Score$x == unique(res_Score$x)[i])]
-  }
+  return(Remove_algorithm)
   
 }
 

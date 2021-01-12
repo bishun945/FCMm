@@ -1712,8 +1712,10 @@ Chla_algorithms_blend2 <- function(dt_Chla_opt, memb,
                                    Remove_algorithm,
                                    verbose = FALSE) {
   
+  # Opt_algorithm <- Score$Opt_algorithm
   # dt_memb -> memb
   # dt_Chla[, Opt_algorithm] -> dt_Chla_opt
+  # res_Score <- Score$Score_list_melt
   # Remove_algorithm <- def_remove_algorithm(res_Score, Opt_algorithm, remove_ratio = 1/4)
   
   if(!all.equal(
@@ -1743,6 +1745,8 @@ Chla_algorithms_blend2 <- function(dt_Chla_opt, memb,
   dt_Chla_new <- dt_Chla_opt
   memb_new    <- memb
   
+  # move membership values from Remove_algorithm to Opt_algorithm per row
+  
   if(verbose)
     cat("Membership value transformation: \n")
   
@@ -1761,32 +1765,26 @@ Chla_algorithms_blend2 <- function(dt_Chla_opt, memb,
     
   }
   
-  w_na <- which(is.na(dt_Chla_opt) | dt_Chla_opt < 0, arr.ind = TRUE)
-  
-  w_na_col <- unique(w_na[,2])
+  # move membership values from negative estimation to Opt_algorithm per row
   
   memb_new2 <- memb_new
+  w_na <- which(is.na(dt_Chla_opt) | dt_Chla_opt < 0, arr.ind = TRUE)
+  memb_new2[w_na] <- 0
   
-  for(clus in unique(w_na_col)) {
+  for(i in 1:ncol(memb)) {
     
-    w_na_row <- w_na[ which(w_na[,2] == clus) ,1]
-    
-    m_rm_sum <- memb_new[w_na_row, clus]
-    
-    memb_new2[w_na_row, clus] <- 0
-    
-    tmp_cluster <- dt_cluster[w_na_row]
-    
-    for(clus_dom in unique(tmp_cluster)) {
-      
-      # memb_new2[w_na_row, clus_dom] <- 
-      
-    }
-    
+    tmp <- memb_new2[dt_cluster == i, ] %>% rowSums()
+    memb_new2[dt_cluster ==i, i] <- memb_new2[dt_cluster ==i, i] + (1 - tmp) 
     
   }
   
-    
+  Chla_blend <- apply(dt_Chla_opt * memb_new2, 1, function(x) sum(x, na.rm=TRUE)) 
+  
+  return(list(
+    Chla_blend = Chla_blend,
+    new_memb   = memb_new2
+  ))
+  
 }
 
 

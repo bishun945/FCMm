@@ -23,7 +23,8 @@ Scoring_system_bootstrap(
   param_sort = list(decreasing = TRUE, max.score = NULL),
   param_interval = list(trim = FALSE, reward.punishment = TRUE, decreasing = TRUE,
     hundred.percent = FALSE),
-  remove.negative = FALSE
+  remove.negative = FALSE,
+  dont_blend = FALSE
 )
 }
 \arguments{
@@ -52,7 +53,10 @@ Scoring_system_bootstrap(
 \item{replace}{Parameter of \code{Scoring_system_bootstrap}. The sample method for bootstrap running.
 Default as \code{TRUE}. See more details in \link{sample}.}
 
-\item{metrics_used}{The metric combination used in the function. Default is \code{1}.
+\item{metrics_used}{The metric combination used in the function. Default is \code{1}.}
+
+\item{dont_blend}{Whether to runing the algorithm blending process. Default is \code{FALSE}.
+  This is useful when you just want to score the candidate algorithms.
 
 If \code{metrics_used = 1} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
 

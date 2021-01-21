@@ -1269,6 +1269,8 @@ Scoring_system <- function(Inputs,
 #' @export
 #' @rdname Scoring_system
 #' @param metrics_used The metric combination used in the function. Default is \code{1}.
+#' @param dont_blend Whether to runing the algorithm blending process. Default is \code{FALSE}.
+#'   This is useful when you just want to score the candidate algorithms.
 #' 
 #' If \code{metrics_used = 1} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
 #' 
@@ -1306,7 +1308,8 @@ Scoring_system_bootstrap <- function(Times = 1000,
                                      param_sort = list(decreasing = TRUE, max.score = NULL),
                                      param_interval = list(trim=FALSE, reward.punishment=TRUE,
                                                            decreasing=TRUE, hundred.percent=FALSE),
-                                     remove.negative = FALSE){
+                                     remove.negative = FALSE,
+                                     dont_blend = FALSE){
   
   if(Times <= 1) stop("Times should be larger than 1")
   
@@ -1497,100 +1500,114 @@ Scoring_system_bootstrap <- function(Times = 1000,
   #                       #
   #-----------------------#
   
-  dt_Chla_opt <- pred[, Opt_algorithm]
-  Blend_result <- Chla_algorithms_blend(dt_Chla_opt, memb, Opt_algorithm, Remove_algorithm)
-  Chla_blend <- Blend_result$Chla_blend
-  
-  # draw a scatter plot colored by clusters
-  Chla_limits <- (range(meas) * c(0.9, 1.1)) %>% round(4)
-  if(Chla_limits[1] <= 0) Chla_limits[1] = 0.1
-  Chla_plots <- data.frame(Chla_true=meas, 
-                           cluster = paste0(x_prefix, x_space, cluster), 
-                           pred, Chla_blend)
-  Chla_plots$cluster <- factor(Chla_plots$cluster, levels = x_levels, ordered = TRUE)
-  names(Chla_plots)[1] <- "Chla_true"
-  dt_Chla_ <- reshape2::melt(Chla_plots, id=c("Chla_true", "cluster"))
-  dt_Chla_$value_opt <- NA
-  for(i in x_levels){
-    w = which(dt_Chla_$cluster == i & dt_Chla_$variable == Opt_algorithm[i])
+  if(dont_blend) {
+    
+    Chla_blend <- NULL
+    plot_scatter <- NULL
+    plot_scatter_opt <- NULL
+    Blend_result <- NULL
+    metric_results <- NULL
+    Chla_plots <- NULL
+    
+  }else { # run blending
+    
+    dt_Chla_opt <- pred[, Opt_algorithm]
+    Blend_result <- Chla_algorithms_blend(dt_Chla_opt, memb, Opt_algorithm, Remove_algorithm)
+    Chla_blend <- Blend_result$Chla_blend
+    
+    # draw a scatter plot colored by clusters
+    Chla_limits <- (range(meas) * c(0.9, 1.1)) %>% round(4)
+    if(Chla_limits[1] <= 0) Chla_limits[1] = 0.1
+    Chla_plots <- data.frame(Chla_true=meas, 
+                             cluster = paste0(x_prefix, x_space, cluster), 
+                             pred, Chla_blend)
+    Chla_plots$cluster <- factor(Chla_plots$cluster, levels = x_levels, ordered = TRUE)
+    names(Chla_plots)[1] <- "Chla_true"
+    dt_Chla_ <- reshape2::melt(Chla_plots, id=c("Chla_true", "cluster"))
+    dt_Chla_$value_opt <- NA
+    for(i in x_levels){
+      w = which(dt_Chla_$cluster == i & dt_Chla_$variable == Opt_algorithm[i])
+      dt_Chla_$value_opt[w] <- dt_Chla_$value[w]
+    }
+    w = which(dt_Chla_$variable == "Chla_blend")
     dt_Chla_$value_opt[w] <- dt_Chla_$value[w]
-  }
-  w = which(dt_Chla_$variable == "Chla_blend")
-  dt_Chla_$value_opt[w] <- dt_Chla_$value[w]
+    
+    cp = RdYlBu(K)
+    names(cp) <- x_levels
+    #plot scatter for all####
+    plot_scatter <- 
+      ggplot() + 
+      geom_abline(intercept=0, slope=1, linetype=2) + 
+      geom_point(data=dt_Chla_, 
+                 aes(x=Chla_true, y=value, color=cluster), 
+                 # shape = "circle open", stroke = 1, 
+                 alpha=0.3) + 
+      geom_point(data=dt_Chla_, 
+                 aes(x=Chla_true, y=value_opt, fill=cluster), 
+                 shape = "circle filled", color = "black",
+                 alpha=1) + 
+      geom_rug(data=dt_Chla_, 
+               aes(x=Chla_true, y=value, color=cluster), alpha=0.2, show.legend = F) + 
+      scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) +
+      labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='OWT', fill="OWT") + 
+      scale_color_manual(values=cp) +
+      scale_fill_manual(values=cp) + 
+      theme_bw() + 
+      facet_wrap(~variable) +
+      # facet_grid(variable~cluster) + 
+      theme(legend.position = "right",
+            strip.background = element_rect(fill='white', color='white'),
+            strip.text = element_text(face='bold'),
+            text = element_text(size=13)) + 
+      guides(col = guide_legend(ncol=1))
+    
+    dt_Chla_sub <- dt_Chla_[dt_Chla_$variable %in% c(
+      "Chla_blend", unique(Opt_algorithm)
+    ),]
+    #plot scatter for optimals####
+    plot_scatter_opt <- 
+      ggplot() + 
+      geom_abline(intercept=0, slope=1, linetype=2) + 
+      geom_point(data=dt_Chla_sub, 
+                 aes(x=Chla_true, y=value, color=cluster), 
+                 # shape = "circle open", stroke = 1, 
+                 alpha=0.3) + 
+      geom_point(data=dt_Chla_sub, 
+                 aes(x=Chla_true, y=value_opt, fill=cluster), 
+                 shape = "circle filled", color = "black",
+                 alpha=1) + 
+      geom_rug(data=dt_Chla_sub, 
+               aes(x=Chla_true, y=value, color=cluster), alpha=0.2, show.legend = F) + 
+      scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) +
+      labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='OWT', fill="OWT") + 
+      scale_color_manual(values=cp) +
+      scale_fill_manual(values=cp) + 
+      theme_bw() + 
+      # facet_wrap(~variable) +
+      facet_grid(variable~cluster) +
+      theme(legend.position = "right",
+            strip.background = element_rect(fill='white', color='white'),
+            strip.text.x = element_text(face='bold', angle = 0),
+            strip.text.y = element_text(face='bold', angle = 45, hjust=1),
+            axis.text.x.bottom = element_text(angle = 45),
+            text = element_text(size=13)) + 
+      guides(col = guide_legend(ncol=1))
+    
+    metric_results <- Assessment_via_cluster(
+      pred = cbind(dt_Chla[, c(unique(Opt_algorithm))], Chla_blend = Chla_blend),
+      meas = dt_Chla$Chla_true,
+      memb = memb,
+      metrics = metrics,
+      log10 = TRUE,
+      total = TRUE,
+      hard.mode = TRUE,
+      na.process = TRUE
+    )
+    
+  } # run blending
   
-  cp = RdYlBu(K)
-  names(cp) <- x_levels
-  #plot scatter for all####
-  plot_scatter <- 
-    ggplot() + 
-    geom_abline(intercept=0, slope=1, linetype=2) + 
-    geom_point(data=dt_Chla_, 
-               aes(x=Chla_true, y=value, color=cluster), 
-               # shape = "circle open", stroke = 1, 
-               alpha=0.3) + 
-    geom_point(data=dt_Chla_, 
-               aes(x=Chla_true, y=value_opt, fill=cluster), 
-               shape = "circle filled", color = "black",
-               alpha=1) + 
-    geom_rug(data=dt_Chla_, 
-             aes(x=Chla_true, y=value, color=cluster), alpha=0.2, show.legend = F) + 
-    scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) +
-    labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='OWT', fill="OWT") + 
-    scale_color_manual(values=cp) +
-    scale_fill_manual(values=cp) + 
-    theme_bw() + 
-    facet_wrap(~variable) +
-    # facet_grid(variable~cluster) + 
-    theme(legend.position = "right",
-          strip.background = element_rect(fill='white', color='white'),
-          strip.text = element_text(face='bold'),
-          text = element_text(size=13)) + 
-    guides(col = guide_legend(ncol=1))
   
-  dt_Chla_sub <- dt_Chla_[dt_Chla_$variable %in% c(
-    "Chla_blend", unique(Opt_algorithm)
-  ),]
-  #plot scatter for optimals####
-  plot_scatter_opt <- 
-    ggplot() + 
-    geom_abline(intercept=0, slope=1, linetype=2) + 
-    geom_point(data=dt_Chla_sub, 
-               aes(x=Chla_true, y=value, color=cluster), 
-               # shape = "circle open", stroke = 1, 
-               alpha=0.3) + 
-    geom_point(data=dt_Chla_sub, 
-               aes(x=Chla_true, y=value_opt, fill=cluster), 
-               shape = "circle filled", color = "black",
-               alpha=1) + 
-    geom_rug(data=dt_Chla_sub, 
-             aes(x=Chla_true, y=value, color=cluster), alpha=0.2, show.legend = F) + 
-    scale_x_log10(limits=Chla_limits) + scale_y_log10(limits=Chla_limits) +
-    labs(x='Measured Chla [ug/L]', y='Predicted Chla [ug/L]', color='OWT', fill="OWT") + 
-    scale_color_manual(values=cp) +
-    scale_fill_manual(values=cp) + 
-    theme_bw() + 
-    # facet_wrap(~variable) +
-    facet_grid(variable~cluster) +
-    theme(legend.position = "right",
-          strip.background = element_rect(fill='white', color='white'),
-          strip.text.x = element_text(face='bold', angle = 0),
-          strip.text.y = element_text(face='bold', angle = 45, hjust=1),
-          axis.text.x.bottom = element_text(angle = 45),
-          text = element_text(size=13)) + 
-    guides(col = guide_legend(ncol=1))
-  
-  metric_results <- Assessment_via_cluster(
-    pred = cbind(dt_Chla[, c(unique(Opt_algorithm))], Chla_blend = Chla_blend),
-    meas = dt_Chla$Chla_true,
-    memb = memb,
-    metrics = metrics,
-    log10 = TRUE,
-    total = TRUE,
-    hard.mode = TRUE,
-    na.process = TRUE
-  )
-  
-  # return outputs
+  #####return outputs#####
   result = list(
     Times              = Times,
     Score_all_clusters = Score_all_clusters,

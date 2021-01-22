@@ -116,6 +116,8 @@ Sampling_each_cluster_num <- function(x, num) {
 #' x <- stats::rlnorm(N)
 #' ind1 <- Sampling_by_sort(x, N/2)
 #' ind2 <- sample.int(length(x), N/2)
+#' 
+#' library(ggplot2)
 #' ggplot() + 
 #' geom_density(aes(x = x, color = "Total")) + 
 #' geom_density(aes(x = x[ind1], color = "ind1"), alpha = 0.8) + 
@@ -130,37 +132,45 @@ Sampling_by_sort <- function(x,
                              n_group = 3, 
                              replace = TRUE) {
   
+  xlen   <- length(x)
   
   if(log10) {
     x <- log10(x)
   } 
   
-  if(num > length(x)) {
+  if(num > xlen) {
     
     stop("The sample select number is greater than the x length!")
     
   }
   
-  if(length(x) <= n_group) {
+  if(xlen <= n_group) {
     
     warning(sprintf("The length of `x` = %s is less than that of `n_group` = %s",
-                    length(x), n_group))
+                    xlen, n_group))
     
-    return(sample.int(length(x), num, replace = replace))
+    return(sample.int(xlen, num, replace = replace))
     
   } else {
     
     z_sort <- sort.int(x, index.return = TRUE)
     group  <- ggplot2::cut_number(z_sort$x, n_group)
     
-    xlen   <- length(x)
+    while( all(as.numeric(table(group)) / xlen * num < 1) ) {
+      if(n_group == 1) break
+      n_group <- n_group - 1
+    }
+      
+    group <- ggplot2::cut_number(z_sort$x, n_group)
+    
+    
     w_res  <- stats::aggregate(z_sort$ix, list(group), function(x) {
       sample.int(length(x), floor(num*length(x)/xlen), replace = replace)
     }, simplify = FALSE) %>% .[, 2] #%>% unlist() %>% as.vector() %>% sort()
     
     result <- NULL
     for(i in 1:length(levels(group))) {
-      result <- c(result, (1:length(x))[group %in% levels(group)[i]][w_res[[i]]])
+      result <- c(result, (1:xlen)[group %in% levels(group)[i]][w_res[[i]]])
     }
     
     return(result)

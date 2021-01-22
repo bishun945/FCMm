@@ -52,8 +52,20 @@ w_sampled = Sampling_via_cluster(x, 20)
 table(x[w_sampled])
 
 
-x   <- stats::rnorm(100)
-ind <- Sampling_by_sort(x)
+set.seed(1)
+N <- 100
+x <- stats::rlnorm(N)
+ind1 <- Sampling_by_sort(x, N/2)
+ind2 <- sample.int(length(x), N/2)
+
+library(ggplot2)
+ggplot() + 
+geom_density(aes(x = x, color = "Total")) + 
+geom_density(aes(x = x[ind1], color = "ind1"), alpha = 0.8) + 
+geom_density(aes(x = x[ind2], color = "ind2"), alpha = 0.6) +
+scale_x_log10()
+
+
 
 }
 \seealso{

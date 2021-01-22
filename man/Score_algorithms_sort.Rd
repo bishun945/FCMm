@@ -5,9 +5,9 @@
 \alias{Score_algorithms_sort2}
 \title{Score a vector of error metrics for algorithms by the sort}
 \usage{
-Score_algorithms_sort(x, decreasing = TRUE)
+Score_algorithms_sort(x, decreasing = TRUE, max.score = 100/4)
 
-Score_algorithms_sort2(x, decreasing = TRUE, max.score = 100/8)
+Score_algorithms_sort2(x, decreasing = TRUE, max.score = 100/4)
 }
 \arguments{
 \item{x}{Input vector of error metrics (NA values are allowed)}
@@ -17,7 +17,7 @@ Score_algorithms_sort2(x, decreasing = TRUE, max.score = 100/8)
 However, when comes to \code{Rsquare} from linear regression (maximum is 1), it should be
 \code{FALSE}}
 
-\item{max.score}{The max.score for \code{scales::rescale}. The default is \code{100/8}.}
+\item{max.score}{The max.score for \code{scales::rescale}. The default is \code{100/4}.}
 }
 \value{
 Results of \code{Score_algorithms_sort()} are returned as a vector presenting score values.

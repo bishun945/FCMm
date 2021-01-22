@@ -24,7 +24,8 @@ Scoring_system_bootstrap(
   param_interval = list(trim = FALSE, reward.punishment = TRUE, decreasing = TRUE,
     hundred.percent = FALSE),
   remove.negative = FALSE,
-  dont_blend = FALSE
+  dont_blend = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -35,7 +36,7 @@ Scoring_system_bootstrap(
   \item \code{sort-based} (default) which is scored by the sort of accuracy and precision 
     metrics (see more in \link{Score_algorithms_sort}). 
   \item \code{sort-based2} which is scored by the sort of accuracy and precision 
-    metrics (see more in \code{Score_algorithms_sort2}). 
+    metrics (see more in \link{Score_algorithms_sort}). 
   \item \code{interval-based} which is relatively scored by the interval of accuracy and 
     precision (used by Brewin et al. (2015) and Neil et al. (2019)). 
     See more in \link{Score_algorithms_interval}).
@@ -53,14 +54,18 @@ Scoring_system_bootstrap(
 \item{replace}{Parameter of \code{Scoring_system_bootstrap}. The sample method for bootstrap running.
 Default as \code{TRUE}. See more details in \link{sample}.}
 
-\item{metrics_used}{The metric combination used in the function. Default is \code{1}.}
+\item{metrics_used}{The metric combination used in the function. Default is \code{1}.
+
+If \code{metrics_used = 1} then the used metrics 
+  are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
+
+If \code{metrics_used = 2} (dont use this) then the used metrics 
+  are \code{c("MAE", "CMAPE", "BIAS", "CMRPE", "RATIO")}}
 
 \item{dont_blend}{Whether to runing the algorithm blending process. Default is \code{FALSE}.
-  This is useful when you just want to score the candidate algorithms.
+This is useful when you just want to score the candidate algorithms.}
 
-If \code{metrics_used = 1} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
-
-If \code{metrics_used = 2} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE", "RATIO")}}
+\item{verbose}{Show the iteration message.}
 }
 \value{
 The result of \code{Scoring_system} are including:
@@ -136,19 +141,19 @@ data("Nechad2015")
 x <- Nechad2015[,3:11]
 wv <- gsub("X","",names(x)) \%>\% as.numeric
 set.seed(1234)
-w <- sample(1:nrow(x), 100)
+w <- sample.int(nrow(x))
 x <- x[w, ]
 names(x) <- wv
 nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 set.seed(1234)
-FD <- FuzzifierDetermination(x, wv, stand = FALSE)
+FD <- FuzzifierDetermination(x, wv, do.stand=TRUE)
 result <- FCM.new(FD, nb, fast.mode = TRUE)
-p.spec <- plot_spec(result, show.stand = TRUE, show.ribbon = TRUE)
+p.spec <- plot_spec(result, show.stand=TRUE)
 print(p.spec$p.cluster.spec)
 Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 Chla[Chla >= 999] <- NA
 dt_Chla <- run_all_Chla_algorithms(x) \%>\% as.data.frame
-dt_Chla <- data.frame(Chla_true = Chla, 
+dt_Chla <- data.frame(Chla_true = Chla,
 BR_Gil10 = dt_Chla$BR_Gil10, 
 OC4_OLCI = dt_Chla$OC4_OLCI, 
 OCI_Hu12 = dt_Chla$OCI_Hu12, 
@@ -157,9 +162,32 @@ w = which(!is.na(dt_Chla$Chla_true))
 dt_Chla = dt_Chla[w,]
 memb = result$res.FCM$u[w,] \%>\% round(4)
 cluster =  result$res.FCM$cluster[w]
-Asses_results <- Getting_Asses_results(sample.size=20, pred = dt_Chla[,-1], 
-meas = data.frame(dt_Chla[,1]), memb = memb)
+Asses_results <- Getting_Asses_results(sample.size=length(cluster), 
+pred = dt_Chla[,-1], meas = data.frame(dt_Chla[,1]), memb = memb, 
+cluster = cluster)
 Score = Scoring_system(Asses_results)
+# show the total score table
+knitr::kable(round(Score$Total_score, 2))
+
+# Examples of `Scoring_system_bootstrap`
+
+set.seed(1234)
+Score_boo <- Scoring_system_bootstrap(Times = 3, Asses_results) 
+# try to set large `Times` when using your own data
+
+# Show the bar plot of scores
+Score_boo$plot_col
+
+# Show the scatter plot of measure-estimation pairs
+Score_boo$plot_scatter
+
+# Show error metrics
+knitr::kable(round(Score_boo$metric_results$MAE, 2), caption = "MAE")
+knitr::kable(round(Score_boo$metric_results$CMAPE, 2), caption = "CAPE")
+knitr::kable(round(Score_boo$metric_results$BIAS, 2), caption = "BIAS")
+knitr::kable(round(Score_boo$metric_results$CMRPE, 2), caption = "CRPE")
+
+# you would see the blending estimations outperform than other candidates
 
 }
 \references{

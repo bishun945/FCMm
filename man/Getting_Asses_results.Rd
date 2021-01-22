@@ -12,7 +12,8 @@ Getting_Asses_results(
   memb,
   metrics_used = 1,
   cluster = apply(memb, 1, which.max),
-  seed = NULL
+  seed = NULL,
+  log10 = TRUE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ If \code{metrics_used = 2} then the used metrics are \code{c("MAE", "CMAPE", "BI
 \item{cluster}{Cluster vector. Could be calculated by the parameter \code{memb}. Will be deprecated later.}
 
 \item{seed}{Seed number for fixing the random process. See \code{help(set.seed)} for more details.}
+
+\item{log10}{pass to \link{Sampling_by_sort}.}
 }
 \value{
 A list containing fuzzy and hard results from \link{Assessment_via_cluster}
@@ -62,12 +65,12 @@ data("Nechad2015")
 x <- Nechad2015[,3:11]
 wv <- gsub("X","",names(x)) \%>\% as.numeric
 set.seed(1234)
-w <- sample(1:nrow(x), 100)
+w <- sample.int(nrow(x), 300)
 x <- x[w, ]
 names(x) <- wv
 nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 set.seed(1234)
-FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+FD <- FuzzifierDetermination(x, wv, do.stand=TRUE)
 result <- FCM.new(FD, nb, fast.mode = TRUE)
 p.spec <- plot_spec(result, show.stand=TRUE)
 print(p.spec$p.cluster.spec)
@@ -83,7 +86,7 @@ w = which(!is.na(dt_Chla$Chla_true))
 dt_Chla = dt_Chla[w,]
 memb = result$res.FCM$u[w,] \%>\% round(4)
 cluster =  result$res.FCM$cluster[w]
-Asses_results <- Getting_Asses_results(sample.size=20, 
+Asses_results <- Getting_Asses_results(sample.size=length(cluster), 
 pred = dt_Chla[,-1], meas = data.frame(dt_Chla[,1]), memb = memb, 
 cluster = cluster)
 

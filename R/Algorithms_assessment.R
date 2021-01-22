@@ -481,7 +481,9 @@ cal_precision <- function(metric_value_, center.value, w_finite2, coef = 2, x_) 
   
   # result <- sd(metric_value_, na.rm=TRUE) + abs(mean(metric_value_, na.rm=TRUE) - center.value) / 3
   # result <- sd(metric_value_[w_finite2], na.rm = TRUE)
-  result <- sd(metric_value_, na.rm=TRUE) * abs(mean(metric_value_, na.rm=TRUE) - center.value) / diff(range(x_, na.rm=TRUE))
+  result <- sd( metric_value_, na.rm=TRUE ) * 
+    abs( mean(metric_value_, na.rm=TRUE) - center.value ) /
+    diff( range(x_, na.rm=TRUE) )
   
   return(result)
 }
@@ -761,7 +763,7 @@ Score_algorithms_interval <- function(x, trim=FALSE, reward.punishment=TRUE,
 #' set.seed(1234)
 #' x = runif(10)
 #' result = Score_algorithms_sort(x)
-Score_algorithms_sort <- function(x, decreasing = TRUE){
+Score_algorithms_sort <- function(x, decreasing = TRUE, max.score = 100/4){
   
   x <- as.numeric(x)
   
@@ -784,17 +786,19 @@ Score_algorithms_sort <- function(x, decreasing = TRUE){
     }
   }
   
+  score <- scales::rescale(score, to = c(0, max.score))
+  
   return(score)
 
 }
 
 #' @rdname Score_algorithms_sort
-#' @param max.score The max.score for \code{scales::rescale}. The default is \code{100/8}.
+#' @param max.score The max.score for \code{scales::rescale}. The default is \code{100/4}.
 #' @export
 #' @return Results of \code{Score_algorithms_sort()} and \code{Score_algorithms_sort2()} are 
 #'   returned as a vector presenting score values.
 #' @importFrom scales rescale
-Score_algorithms_sort2 <- function(x, decreasing = TRUE, max.score = 100/8){
+Score_algorithms_sort2 <- function(x, decreasing = TRUE, max.score = 100/4){
   
   x <- as.numeric(x)
   
@@ -835,6 +839,7 @@ Score_algorithms_sort2 <- function(x, decreasing = TRUE, max.score = 100/8){
 #' 
 #' @param cluster Cluster vector. Could be calculated by the parameter \code{memb}. Will be deprecated later.
 #' @param seed Seed number for fixing the random process. See \code{help(set.seed)} for more details.
+#' @param log10 pass to \link{Sampling_by_sort}.
 #' @note The row number of \code{pred}, \code{meas}, \code{memb}, and \code{cluster} should be the same. 
 #'   This function is designed for bootstrapping process to get Chla algorithms assessment. Therefore, 
 #'   parameters of \link{Assessment_via_cluster} is set as fixed such as \code{log10 = TRUE}, 
@@ -852,12 +857,12 @@ Score_algorithms_sort2 <- function(x, decreasing = TRUE, max.score = 100/8){
 #' x <- Nechad2015[,3:11]
 #' wv <- gsub("X","",names(x)) %>% as.numeric
 #' set.seed(1234)
-#' w <- sample(1:nrow(x), 100)
+#' w <- sample.int(nrow(x), 300)
 #' x <- x[w, ]
 #' names(x) <- wv
 #' nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 #' set.seed(1234)
-#' FD <- FuzzifierDetermination(x, wv, stand=FALSE)
+#' FD <- FuzzifierDetermination(x, wv, do.stand=TRUE)
 #' result <- FCM.new(FD, nb, fast.mode = TRUE)
 #' p.spec <- plot_spec(result, show.stand=TRUE)
 #' print(p.spec$p.cluster.spec)
@@ -873,7 +878,7 @@ Score_algorithms_sort2 <- function(x, decreasing = TRUE, max.score = 100/8){
 #' dt_Chla = dt_Chla[w,]
 #' memb = result$res.FCM$u[w,] %>% round(4)
 #' cluster =  result$res.FCM$cluster[w]
-#' Asses_results <- Getting_Asses_results(sample.size=20, 
+#' Asses_results <- Getting_Asses_results(sample.size=length(cluster), 
 #' pred = dt_Chla[,-1], meas = data.frame(dt_Chla[,1]), memb = memb, 
 #' cluster = cluster)
 #' 
@@ -881,7 +886,7 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
                                   pred, meas, memb,
                                   metrics_used = 1,
                                   cluster = apply(memb, 1, which.max), 
-                                  seed = NULL){
+                                  seed = NULL, log10 = TRUE){
   
   if(metrics_used == 1) {
     metrics = c("MAE", "CMAPE", "BIAS", "CMRPE")
@@ -896,13 +901,15 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
   
   if(var(c(nrow(pred), nrow(meas), nrow(memb), nrow(cluster))) != 0)
     stop("Row numbers of pred, meas, and memb are different.")
-  
+
   # Stratified sampling by cluster
   if(is.null(seed)){
-    w <- Sampling_via_cluster(cluster, num=sample.size, replace=replace)
+    w <- Sampling_via_cluster(cluster, num=sample.size, log10 = log10,
+                              replace=replace, order.value = unlist(meas))
   }else{
     set.seed(as.numeric(seed))
-    w <- Sampling_via_cluster(cluster, num=sample.size, replace=replace)
+    w <- Sampling_via_cluster(cluster, num=sample.size, log10 = log10,
+                              replace=replace, order.value = unlist(meas))
   }
   
   w <- sort(w)
@@ -952,7 +959,7 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #'     \item \code{sort-based} (default) which is scored by the sort of accuracy and precision 
 #'       metrics (see more in \link{Score_algorithms_sort}). 
 #'     \item \code{sort-based2} which is scored by the sort of accuracy and precision 
-#'       metrics (see more in \code{Score_algorithms_sort2}). 
+#'       metrics (see more in \link{Score_algorithms_sort}). 
 #'     \item \code{interval-based} which is relatively scored by the interval of accuracy and 
 #'       precision (used by Brewin et al. (2015) and Neil et al. (2019)). 
 #'       See more in \link{Score_algorithms_interval}).
@@ -1037,19 +1044,19 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #' x <- Nechad2015[,3:11]
 #' wv <- gsub("X","",names(x)) %>% as.numeric
 #' set.seed(1234)
-#' w <- sample(1:nrow(x), 100)
+#' w <- sample.int(nrow(x))
 #' x <- x[w, ]
 #' names(x) <- wv
 #' nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
 #' set.seed(1234)
-#' FD <- FuzzifierDetermination(x, wv, stand = FALSE)
+#' FD <- FuzzifierDetermination(x, wv, do.stand=TRUE)
 #' result <- FCM.new(FD, nb, fast.mode = TRUE)
-#' p.spec <- plot_spec(result, show.stand = TRUE, show.ribbon = TRUE)
+#' p.spec <- plot_spec(result, show.stand=TRUE)
 #' print(p.spec$p.cluster.spec)
 #' Chla <- Nechad2015$X.Chl_a..ug.L.[w]
 #' Chla[Chla >= 999] <- NA
 #' dt_Chla <- run_all_Chla_algorithms(x) %>% as.data.frame
-#' dt_Chla <- data.frame(Chla_true = Chla, 
+#' dt_Chla <- data.frame(Chla_true = Chla,
 #' BR_Gil10 = dt_Chla$BR_Gil10, 
 #' OC4_OLCI = dt_Chla$OC4_OLCI, 
 #' OCI_Hu12 = dt_Chla$OCI_Hu12, 
@@ -1058,9 +1065,12 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #' dt_Chla = dt_Chla[w,]
 #' memb = result$res.FCM$u[w,] %>% round(4)
 #' cluster =  result$res.FCM$cluster[w]
-#' Asses_results <- Getting_Asses_results(sample.size=20, pred = dt_Chla[,-1], 
-#' meas = data.frame(dt_Chla[,1]), memb = memb)
+#' Asses_results <- Getting_Asses_results(sample.size=length(cluster), 
+#' pred = dt_Chla[,-1], meas = data.frame(dt_Chla[,1]), memb = memb, 
+#' cluster = cluster)
 #' Score = Scoring_system(Asses_results)
+#' # show the total score table
+#' knitr::kable(round(Score$Total_score, 2))
 #' 
 Scoring_system <- function(Inputs, 
                            method = 'sort-based',
@@ -1086,13 +1096,18 @@ Scoring_system <- function(Inputs,
   method = match.arg(method, c('sort-based', 'sort-based2', 'interval-based'))
   if(method == 'sort-based') {
     Score_algorithms <- function(x) {
-      return(Score_algorithms_sort(x, decreasing = param_sort$decreasing))
+      return(Score_algorithms_sort(x, 
+                                   decreasing = param_sort$decreasing,
+                                   max.score = param_sort$max.score))
     }
   }else if(method == 'interval-based') {
     Score_algorithms <- function(x) {
       a = param_interval
-      r = Score_algorithms_interval(x, trim=a$trim, reward.punishment = a$reward.punishment,
-                                decreasing=a$decreasing, hundred.percent = a$hundred.percent)
+      r = Score_algorithms_interval(x, 
+                                    trim=a$trim, 
+                                    reward.punishment = a$reward.punishment,
+                                    decreasing=a$decreasing, 
+                                    hundred.percent = a$hundred.percent)
       return(r$score)
     }
   }else if(method == "sort-based2") {
@@ -1196,12 +1211,17 @@ Scoring_system <- function(Inputs,
 #' @export
 #' @rdname Scoring_system
 #' @param metrics_used The metric combination used in the function. Default is \code{1}.
+#' 
+#' If \code{metrics_used = 1} then the used metrics 
+#'   are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
+#' 
+#' If \code{metrics_used = 2} (dont use this) then the used metrics 
+#'   are \code{c("MAE", "CMAPE", "BIAS", "CMRPE", "RATIO")}
+#' 
 #' @param dont_blend Whether to runing the algorithm blending process. Default is \code{FALSE}.
 #'   This is useful when you just want to score the candidate algorithms.
-#' 
-#' If \code{metrics_used = 1} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE")}
-#' 
-#' If \code{metrics_used = 2} then the used metrics are \code{c("MAE", "CMAPE", "BIAS", "CMRPE", "RATIO")}
+#'   
+#' @param verbose Show the iteration message.
 #' 
 #' @return The result of \code{Scoring_system_bootstrap} are including:
 #' \itemize{
@@ -1228,6 +1248,27 @@ Scoring_system <- function(Inputs,
 #' @importFrom stats aggregate
 #' @importFrom stringr str_split str_extract_all str_detect
 #' 
+#' @examples 
+#' # Examples of `Scoring_system_bootstrap`
+#' 
+#' set.seed(1234)
+#' Score_boo <- Scoring_system_bootstrap(Times = 3, Asses_results) 
+#' # try to set large `Times` when using your own data
+#' 
+#' # Show the bar plot of scores
+#' Score_boo$plot_col
+#' 
+#' # Show the scatter plot of measure-estimation pairs
+#' Score_boo$plot_scatter
+#' 
+#' # Show error metrics
+#' knitr::kable(round(Score_boo$metric_results$MAE, 2), caption = "MAE")
+#' knitr::kable(round(Score_boo$metric_results$CMAPE, 2), caption = "CAPE")
+#' knitr::kable(round(Score_boo$metric_results$BIAS, 2), caption = "BIAS")
+#' knitr::kable(round(Score_boo$metric_results$CMRPE, 2), caption = "CRPE")
+#' 
+#' # you would see the blending estimations outperform than other candidates
+#' 
 Scoring_system_bootstrap <- function(Times = 1000, 
                                      Inputs, replace = TRUE, 
                                      method = 'sort-based',
@@ -1236,7 +1277,8 @@ Scoring_system_bootstrap <- function(Times = 1000,
                                      param_interval = list(trim=FALSE, reward.punishment=TRUE,
                                                            decreasing=TRUE, hundred.percent=FALSE),
                                      remove.negative = FALSE,
-                                     dont_blend = FALSE){
+                                     dont_blend = FALSE,
+                                     verbose = TRUE){
   
   if(Times <= 1) stop("Times should be larger than 1")
   
@@ -1252,7 +1294,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
   
   for(i in 1:Times){
     
-    cat(i, "/", Times, "\n")
+    if(verbose) cat(i, "/", Times, "\n")
     Asses_list <- Getting_Asses_results(sample.size= nrow(memb),
                                         metrics_used = metrics_used,
                                         pred, meas, memb, replace = replace)
@@ -1483,7 +1525,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
       facet_wrap(~variable) +
       # facet_grid(variable~cluster) + 
       theme(legend.position = "right",
-            strip.background = element_rect(fill='white', color='white'),
+            strip.background = element_rect(fill='white', color='black'),
             strip.text = element_text(face='bold'),
             text = element_text(size=13)) + 
       guides(col = guide_legend(ncol=1))
@@ -1743,8 +1785,8 @@ Chla_algorithms_blend2 <- function(dt_Chla_opt, memb,
 #' @noRd
 def_remove_algorithm <- function(res_Score, Opt_algorithm, remove_ratio = 1/2) {
   
-  # Score$Score_list_melt -> res_Score
-  # Score$Opt_algorithm -> Opt_algorithm
+  # Score_boo$Score_list_melt -> res_Score
+  # Score_boo$Opt_algorithm -> Opt_algorithm
   # The removed algorithms defined by the lower half res_Score per cluster
   # remove_ratio = 1/2
   Remove_algorithm <- list()

@@ -356,6 +356,7 @@ trapz2 <- function(x){
 #' @param fast.mode Logical, \code{FALSE} (default)
 #' @param do.stand Whether to use standarized data for FCM. Default as \code{TRUE}
 #' @param stand Deprecated; Now \code{stand = !do.stand}
+#' @param ... Parameters pass to \link{ppclust::fcm}
 #'
 #' @return A \code{list} of FCM:
 #'   \itemize{
@@ -404,7 +405,7 @@ trapz2 <- function(x){
 #' @importFrom magrittr %>%
 #' 
 FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = FALSE, 
-                    plot.jitter=TRUE, fast.mode=FALSE, do.stand = TRUE, stand=NULL){
+                    plot.jitter=TRUE, fast.mode=FALSE, do.stand = TRUE, stand=NULL, ...){
   # K is the cluster number
   if(missing(FDlist)){
     warning("Have your run the function `FuzzifierDetermination` sucessfully?")
@@ -440,9 +441,9 @@ FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = F
   u <- imembrand(nrow(x), k=K)$u
   
   if(fast.mode==FALSE){
-    res <- fcm(x, centers=v, memberships=u, m=FDlist$m.used, stand=FALSE)
+    res <- fcm(x, centers=v, memberships=u, m=FDlist$m.used, stand=FALSE, ...)
   }else if(fast.mode==TRUE){
-    res <- fcm(x, centers=v, memberships=u, m=FDlist$m.used, stand=FALSE, con.val=1e-4)
+    res <- fcm(x, centers=v, memberships=u, m=FDlist$m.used, stand=FALSE, con.val=1e-4, ...)
     message("The fast mode is used. Pay attention to the convergence of the obj. fun. and results!")
   }
   res$u <- .cal.new.membership(res)

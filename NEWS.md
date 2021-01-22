@@ -1,3 +1,8 @@
+## FCMm 0.10.3 (2021-01-22)
+
+1. Add a new function `Sampling_by_sort` which returns the index of random samples by the sort.
+2. Add a new param `order.value` to `Sampling_via_cluster`.
+
 ## FCMm 0.10.2 (2021-01-07)
 
 1. Add two centroids from Jackson et al. (2017) and Moore et al. (2014) with the format csv.

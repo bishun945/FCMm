@@ -813,79 +813,6 @@ Score_algorithms_sort2 <- function(x, decreasing = TRUE, max.score = 100/8){
   
 }
 
-#' @name Sampling_via_cluster
-#' @title Stratified sampling by clusters or types
-#' @param x A vector represents the cluster or type, only support numeric value now.
-#' @param num The number of sampling.
-#' @param replace The way of sampling. See \code{help(sample)} for more details.
-#' @export
-#' @return Result of \code{Sampling_via_cluster} is the index of sampled 
-#'   items from the input \code{x}.
-#' @family Algorithm assessment
-#' @examples 
-#' set.seed(1234)
-#' x = round(runif(100,1,10))
-#' table(x)
-#' w_sampled = Sampling_via_cluster(x, 20)
-#' table(x[w_sampled])
-#' 
-Sampling_via_cluster <- function(x, num, replace=FALSE){
-  
-  if(num > length(x))
-    stop("Sample size is larger than input size.")
-  
-  if(anyNA(x))
-    stop("NA values in input variable.")
-  
-  x <- as.numeric(x) 
-  
-  # Define the number of each cluster
-  types <- sort(unique(x))
-  raw_num <- as.numeric(table(x))
-  types_num <- as.numeric(table(x)) / length(x) * num
-  types_num <- floor(types_num)
-  resi <- num - sum(types_num)
-  
-  if(resi < 0){
-    
-    stop('Stratifed sampling total number is greater than the sample number.')
-    
-  }else if(resi == 0){
-    
-    types_num_final <- types_num
-    
-  }else if(resi > 0){
-    
-    resi_ <- resi
-    types_num_final <- types_num
-    condition1 = !all(types_num_final <= raw_num) | sum(types_num_final) < num
-    while(condition1){
-      w_candidate <- which(types_num_final < raw_num)
-      rand_select <- sample(w_candidate, 1, replace=TRUE)
-      if(types_num_final[rand_select] < raw_num[rand_select]){
-        types_num_final[rand_select] <- types_num_final[rand_select] + 1
-      }
-      condition1 = !all(types_num_final <= raw_num) | sum(types_num_final) < num
-    }
-  }
-  
-  # Start to sample
-  ind <- seq(length(x))
-  
-  result <- NULL
-  
-  for(i in 1:length(types_num_final)){
-    
-    x_type <- ind[which(x == types[i])]
-    tmp_sample <- sample(x_type, types_num_final[i], replace=replace)
-    result <- c(result, tmp_sample)
-    
-  }
-  
-  return(result)
-  
-}
-
 
 #' @name Getting_Asses_results
 #' @title Get the result of function Assessment_via_cluster
@@ -1594,8 +1521,8 @@ Scoring_system_bootstrap <- function(Times = 1000,
       guides(col = guide_legend(ncol=1))
     
     metric_results <- Assessment_via_cluster(
-      pred = cbind(dt_Chla[, c(unique(Opt_algorithm))], Chla_blend = Chla_blend),
-      meas = dt_Chla$Chla_true,
+      pred = cbind(Chla_plots[, c(unique(Opt_algorithm))], Chla_blend = Chla_blend),
+      meas = Chla_plots$Chla_true,
       memb = memb,
       metrics = metrics,
       log10 = TRUE,

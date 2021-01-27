@@ -11,7 +11,9 @@ Scoring_system(
   param_sort = list(decreasing = TRUE, max.score = NULL),
   param_interval = list(trim = FALSE, reward.punishment = TRUE, decreasing = TRUE,
     hundred.percent = FALSE),
-  remove.negative = FALSE
+  remove.negative = FALSE,
+  accuracy.metrics = c("MAE", "CMAPE"),
+  precision.metrics = c("BIAS", "CMRPE")
 )
 
 Scoring_system_bootstrap(

@@ -154,6 +154,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
   #Hard model####
   for(model in 1:ncol(pred)){
     for(cluster in 1:ncol(memb)){
+
+      # if(colnames(pred)[model] == "Chla_blend" & cluster == 1){
+      #   print(model)
+      # }
       
       w <- which(cluster_crisp == cluster)
       x <- meas[w,] # true
@@ -163,7 +167,7 @@ Assessment_via_cluster <- function(pred, meas, memb,
       if(na.process){
         
         #item-valid####
-        w_finite <- which(is.finite(y))
+        w_finite <- which(is.finite(y) & y>0)
         
         # default valid.definition is set as 0.6 which is two times of meeting of GOSC
         # If valid.threshold is set as NULL then it would pass this process
@@ -230,6 +234,11 @@ Assessment_via_cluster <- function(pred, meas, memb,
       }else{ # no need for precision
         
         for(metric in metrics){
+          
+          # if(colnames(pred)[model] == "Chla_blend"){
+          #   print(model)
+          # }
+          
           result[[metric]][cluster, model] <- cal.metrics(x, y, metric, 
                                                           log10 = log10, 
                                                           c.value = c.value)
@@ -479,9 +488,15 @@ cal_precision <- function(metric_value_, center.value, w_finite2, coef = 2, x_) 
   #   result <- abs(result) / coef + sd(metric_value_, na.rm=TRUE)
   # }
   
-  # result <- sd(metric_value_, na.rm=TRUE) + abs(mean(metric_value_, na.rm=TRUE) - center.value) / 3
+  ## just sd
   # result <- sd(metric_value_[w_finite2], na.rm = TRUE)
-  result <- sd( metric_value_, na.rm=TRUE ) * 
+  
+  ## sd plus abs of the average of decentralized er over a fixed value
+  # result <- sd(metric_value_, na.rm=TRUE) + 
+  #   abs(mean(metric_value_, na.rm=TRUE) - center.value) / 3
+  
+  ## sd plus abs of the average of decentralized er over the range of the true value
+  result <- sd( metric_value_, na.rm=TRUE ) *
     abs( mean(metric_value_, na.rm=TRUE) - center.value ) /
     diff( range(x_, na.rm=TRUE) )
   
@@ -788,6 +803,9 @@ Score_algorithms_sort <- function(x, decreasing = TRUE, max.score = 100/4){
   
   score <- scales::rescale(score, to = c(0, max.score))
   
+  # plot(density(x, na.rm=TRUE))
+  # plot(density(score, na.rm=TRUE))
+  
   return(score)
 
 }
@@ -1077,7 +1095,9 @@ Scoring_system <- function(Inputs,
                            param_sort = list(decreasing = TRUE, max.score = NULL),
                            param_interval = list(trim=FALSE, reward.punishment=TRUE,
                                              decreasing=TRUE, hundred.percent=FALSE),
-                           remove.negative = FALSE){
+                           remove.negative = FALSE,
+                           accuracy.metrics = c( "MAE", "CMAPE" ),
+                           precision.metrics = c( "BIAS", "CMRPE" )){
   
   Asses_fz <- Inputs$Asses_fz
   Asses_p  <- Inputs$Asses_p # If on precision, the mode is hard
@@ -1124,7 +1144,7 @@ Scoring_system <- function(Inputs,
   # Accuracy part #
   #---------------#
   Accuracy_list <- list()
-  a.metric <- Inputs$metrics[Inputs$metrics %in% c("MAE", "CMAPE")]
+  a.metric <- Inputs$metrics[Inputs$metrics %in% accuracy.metrics]
   j = 1
   for(metric in a.metric) {
     tmp <- Asses_fz[[metric]]
@@ -1146,9 +1166,9 @@ Scoring_system <- function(Inputs,
   # Precision part #
   #----------------#
   Precision_list <- list()
-  r.metric <- Inputs$metrics[Inputs$metrics %in% c("BIAS", "CMRPE")]
+  p.metric <- Inputs$metrics[Inputs$metrics %in% precision.metrics]
   j = 1
-  for(metric in r.metric) {
+  for(metric in p.metric) {
     metric_name <- sprintf("%s_p",metric)
     tmp <- Asses_p[[metric_name]]
     tmp_score <- tmp * NA
@@ -1294,7 +1314,15 @@ Scoring_system_bootstrap <- function(Times = 1000,
   
   for(i in 1:Times){
     
-    if(verbose) cat(i, "/", Times, "\n")
+    # if(verbose) cat(i, "/", Times, "\n")
+    
+    if(verbose) {
+      
+      cat(".")
+      if(i %% 20 == 0) cat(i, "[", Times,"]\n") 
+      if(i == Times) cat("\n")
+    }
+    
     Asses_list <- Getting_Asses_results(sample.size= nrow(memb),
                                         metrics_used = metrics_used,
                                         pred, meas, memb, replace = replace)

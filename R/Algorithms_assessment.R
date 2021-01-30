@@ -181,6 +181,10 @@ Assessment_via_cluster <- function(pred, meas, memb,
         
         x <- x[w_finite]
         y <- y[w_finite]
+        
+        # x <- x[w_finite2]
+        # y <- y[w_finite2]
+        
         if(num_new > num_raw)
           stop("Error! The subseted sample number is smaller the raw.")
       }
@@ -271,6 +275,9 @@ Assessment_via_cluster <- function(pred, meas, memb,
         
         x <- x[w_finite]
         y <- y[w_finite]
+        
+        # x <- x[w_finite2]
+        # y <- y[w_finite2]
         
       }
       
@@ -489,16 +496,16 @@ cal_precision <- function(metric_value_, center.value, w_finite2, coef = 2, x_) 
   # }
   
   ## just sd
-  # result <- sd(metric_value_[w_finite2], na.rm = TRUE)
+  result <- sd(metric_value_[w_finite2], na.rm = TRUE)
   
   ## sd plus abs of the average of decentralized er over a fixed value
   # result <- sd(metric_value_, na.rm=TRUE) + 
   #   abs(mean(metric_value_, na.rm=TRUE) - center.value) / 3
   
   ## sd plus abs of the average of decentralized er over the range of the true value
-  result <- sd( metric_value_, na.rm=TRUE ) *
-    abs( mean(metric_value_, na.rm=TRUE) - center.value ) /
-    diff( range(x_, na.rm=TRUE) )
+  # result <- sd( metric_value_, na.rm=TRUE ) *
+  #   abs( mean(metric_value_, na.rm=TRUE) - center.value ) /
+  #   diff( range(x_, na.rm=TRUE) )
   
   return(result)
 }
@@ -508,7 +515,9 @@ cal_precision <- function(metric_value_, center.value, w_finite2, coef = 2, x_) 
 #' @param y predicted value
 #' @param valid.definition list of definition
 #' @param log10 log10
-def_validation <- function(x, y, valid.definition, log10) {
+def_validation <- function(x, y, 
+                           valid.definition = list(negative=FALSE, percent = 0.6), 
+                           log10) {
   
   if(!log10) {
     lower <- x - x * valid.definition$percent

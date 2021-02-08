@@ -496,16 +496,16 @@ cal_precision <- function(metric_value_, center.value, w_finite2, coef = 2, x_) 
   # }
   
   ## just sd
-  result <- sd(metric_value_[w_finite2], na.rm = TRUE)
+  # result <- sd(metric_value_[w_finite2], na.rm = TRUE)
   
   ## sd plus abs of the average of decentralized er over a fixed value
   # result <- sd(metric_value_, na.rm=TRUE) + 
   #   abs(mean(metric_value_, na.rm=TRUE) - center.value) / 3
   
   ## sd plus abs of the average of decentralized er over the range of the true value
-  # result <- sd( metric_value_, na.rm=TRUE ) *
-  #   abs( mean(metric_value_, na.rm=TRUE) - center.value ) /
-  #   diff( range(x_, na.rm=TRUE) )
+  result <- sd( metric_value_, na.rm=TRUE ) *
+    abs( mean(metric_value_, na.rm=TRUE) - center.value ) /
+    diff( range(x_, na.rm=TRUE) )
   
   return(result)
 }
@@ -513,7 +513,7 @@ cal_precision <- function(metric_value_, center.value, w_finite2, coef = 2, x_) 
 #' @noRd
 #' @param x actual value
 #' @param y predicted value
-#' @param valid.definition list of definition
+#' @param valid.definition list of definition \code{list(negative=FALSE, percent = 0.6)}
 #' @param log10 log10
 def_validation <- function(x, y, 
                            valid.definition = list(negative=FALSE, percent = 0.6), 
@@ -1217,6 +1217,11 @@ Scoring_system <- function(Inputs,
     names(Total_score)[.] %>% 
     setNames(., rownames(Total_score)[-nrow(Total_score)]) 
   
+  Opt_algorithm.sec <- Total_score[-nrow(Total_score), ] %>% 
+    apply(., 1, which.max.sec) %>% 
+    names(Total_score)[.] %>% 
+    setNames(., rownames(Total_score)[-nrow(Total_score)]) 
+  
   Total_score.melt <- melt(cbind(x=rownames(Total_score), Total_score), id='x')
   
   result <- list(
@@ -1228,6 +1233,7 @@ Scoring_system <- function(Inputs,
                  Precision_list        = Precision_list,
                  Total_score.melt      = Total_score.melt,
                  Opt_algorithm         = Opt_algorithm,
+                 Opt_algorithm.sec     = Opt_algorithm.sec,
                  Inputs                = Inputs
                 )
   
@@ -1347,10 +1353,12 @@ Scoring_system_bootstrap <- function(Times = 1000,
       Score_list <- Score$Total_score.melt
       names(Score_list)[ncol(Score_list)] <- i
       Opt_algorithm_list <- Score$Opt_algorithm
+      Opt_algorithm.sec_list <- Score$Opt_algorithm.sec
     }else{
       Score_list <- cbind(Score_list, Score$Total_score.melt[,3])
       names(Score_list)[ncol(Score_list)] <- i
       Opt_algorithm_list <- rbind(Opt_algorithm_list, Score$Opt_algorithm)
+      Opt_algorithm.sec_list <- rbind(Opt_algorithm.sec_list, Score$Opt_algorithm.sec)
     }
   
   }
@@ -1359,6 +1367,10 @@ Scoring_system_bootstrap <- function(Times = 1000,
   Opt_algorithm_list <- cbind(seq(1, Times), Opt_algorithm_list)
   Opt_algorithm_list <- data.frame(Opt_algorithm_list, stringsAsFactors = FALSE)
   colnames(Opt_algorithm_list) <- c("Times", names(Score$Opt_algorithm))
+  
+  Opt_algorithm.sec_list <- cbind(seq(1, Times), Opt_algorithm.sec_list)
+  Opt_algorithm.sec_list <- data.frame(Opt_algorithm.sec_list, stringsAsFactors = FALSE)
+  colnames(Opt_algorithm.sec_list) <- c("Times", names(Score$Opt_algorithm))
   
 
   # Calculate the score statistic information
@@ -1391,6 +1403,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
   #     variable[which.max(value)]
   # }
   Opt_algorithm <- apply(Opt_algorithm_list[,-1], 2, function(x) table(x) %>% which.max() %>% names() )
+  Opt_algorithm.sec <- apply(Opt_algorithm.sec_list[,-1], 2, function(x) table(x) %>% which.max() %>% names() )
 
   ## To-do: 
   ## In some extents, the optimal could not return finite value especially for image rasters,
@@ -1398,10 +1411,14 @@ Scoring_system_bootstrap <- function(Times = 1000,
   ##   several (two or more) substitutes as a reinforcement.
   
   # define the position of optimal and removed algorithms
-  res_Score$pos_opt <- res_Score$pos_removed <- res_Score$sig_arr * NA
+  res_Score$pos_opt.sec <- res_Score$pos_opt <- res_Score$pos_removed <- res_Score$sig_arr * NA
   for(i in 1:length(Opt_algorithm)){
     w = which(res_Score$x == names(Opt_algorithm)[i] & res_Score$variable == Opt_algorithm[i])
     res_Score$pos_opt[w] = res_Score$value[w]
+  }
+  for(i in 1:length(Opt_algorithm.sec)){
+    w = which(res_Score$x == names(Opt_algorithm.sec)[i] & res_Score$variable == Opt_algorithm.sec[i])
+    res_Score$pos_opt.sec[w] = res_Score$value[w]
   }
   
   # The removed algorithms defined by the lower half res_Score per cluster
@@ -1621,6 +1638,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
     Score_list_melt    = res_Score,
     Opt_algorithm_list = Opt_algorithm_list,
     Opt_algorithm      = Opt_algorithm,
+    Opt_algorithm.sec  = Opt_algorithm.sec, 
     Remove_algorithm   = Remove_algorithm,
     plot_col           = plot_col,
     plot_scatter       = plot_scatter,

@@ -404,7 +404,7 @@ Blend_Bi21 <- function(Rrs, wv_range = 3, ...) {
 #' @examples 
 #' library(FCMm)
 #' data(WaterSpec35)
-#' res = Blend_FCMm(WaterSpec35[, -c(1,2)])
+#' # res = Blend_FCMm(WaterSpec35[, -c(1,2)])
 #' @export
 #' 
 Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {

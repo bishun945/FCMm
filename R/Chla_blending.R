@@ -368,7 +368,7 @@ Blend_Bi21 <- function(Rrs, wv_range = 3, ...) {
   res_Chla$Bloom <- res_Chla$C6
   res_Chla$C6 <- NULL
   
-  load(system.file("LUT_OPT_BI2021.rda", package = "FCMm"))
+  source(system.file("LUT_OPT_BI2021.R", package = "FCMm"))
   
   # blending
   res_Chla_opt <- res_Chla[, LUT_OPT$Opt_algorithm]
@@ -466,7 +466,7 @@ Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
   res_Chla$Bloom <- res_Chla$C6
   res_Chla$C6 <- NULL
   
-  load(system.file("LUT_OPT_BIPHD.rda", package = "FCMm"))
+  source(system.file("LUT_OPT_BIPHD.R", package = "FCMm"))
   
   # blending
   res_Chla_opt <- res_Chla[, LUT_OPT$Opt_algorithm]

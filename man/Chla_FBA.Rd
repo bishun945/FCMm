@@ -42,6 +42,8 @@ res_Y = FBA_Yang10(WaterSpec35$`665`, WaterSpec35$`708.75`, WaterSpec35$`753.75`
 }
 \seealso{
 Other Algorithms: Chla concentration: 
+\code{\link{Blend_Bi21}()},
+\code{\link{Blend_FCMm}()},
 \code{\link{Blend_Jac17}()},
 \code{\link{Blend_Moo14}()},
 \code{\link{Blend_Smith18}()},

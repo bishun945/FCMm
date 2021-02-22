@@ -13,7 +13,8 @@ Getting_Asses_results(
   metrics_used = 1,
   cluster = apply(memb, 1, which.max),
   seed = NULL,
-  log10 = TRUE
+  log10 = TRUE,
+  valid.definition = list(negative = FALSE, percent = 0.6)
 )
 }
 \arguments{
@@ -40,6 +41,12 @@ If \code{metrics_used = 2} then the used metrics are \code{c("MAE", "CMAPE", "BI
 \item{seed}{Seed number for fixing the random process. See \code{help(set.seed)} for more details.}
 
 \item{log10}{pass to \link{Sampling_by_sort}.}
+
+\item{valid.definition}{The definition of valid prediction, default as \code{list(negative=FALSE, percent = 0.6)}.
+  The invalid prediction will not be removed to calculate error metrics.
+
+\code{negative=FALSE} means the negative values are considered as invalid predictions while \code{percent} means
+  the tolerance of error-percentage that only the predictions between \code{(y-y*percent), y+y*percent)} are valid.}
 }
 \value{
 A list containing fuzzy and hard results from \link{Assessment_via_cluster}

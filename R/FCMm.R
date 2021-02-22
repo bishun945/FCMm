@@ -964,7 +964,8 @@ plot_spec_group <- function(x, group, palette = RdYlBu, facet = TRUE, group_num 
 #' @importFrom magrittr %>% %<>%
 plot_spec <- function(res, 
                       show.stand = NULL, show.ribbon = FALSE, 
-                      color_palette = RdYlBu(res$K)){
+                      color_palette = RdYlBu(res$K),
+                      prefix = "Cluster "){
   
   if(is.null(show.stand)) show.stand = !res$FD$do.stand
   
@@ -977,10 +978,10 @@ plot_spec <- function(res,
                                        color_palette = color_palette)
   p.group.spec.1 <- .plot.group.spec(res, 
                                      show.stand = show.stand, mem.crisp = TRUE,
-                                     color_palette = color_palette)
+                                     color_palette = color_palette, prefix = prefix)
   p.group.spec.2 <- .plot.group.spec(res, 
                                      show.stand = show.stand, mem.crisp = FALSE,
-                                     color_palette = color_palette)
+                                     color_palette = color_palette, prefix = prefix)
   
   result = list()
   result$p.all.spec = p.all.spec
@@ -1122,7 +1123,7 @@ plot_spec <- function(res,
 #' @noRd
 #' 
 .plot.group.spec <- function(res, show.stand = NULL,
-                             mem.crisp=TRUE, mem.threshold=NULL, 
+                             mem.crisp=TRUE, mem.threshold=NULL, prefix = "Cluster ",
                              color_palette = RdYlBu(res$K)){
   
   if(is.null(show.stand)) show.stand = !res$FD$stand
@@ -1146,10 +1147,14 @@ plot_spec <- function(res,
     y.lable <- "Normalized Rrs"
   }
   
+  levels_text <- paste0(prefix, 1:res$K)
+  
   Rrs.number <- stats::aggregate(Rrs_[,1], list(res$res.FCM$cluster), length) %>%
     setNames(., c("cluster","number"))
-  Rrs.number$cluster_f <- paste("Cluster",Rrs.number$cluster) %>%
-    factor(., levels=paste("Cluster", 1:res$K), ordered = TRUE)
+  Rrs.number$cluster_f <- paste0(prefix, Rrs.number$cluster) %>%
+    factor(., levels = levels_text, ordered = TRUE)
+  Rrs.number$x <- min(as.numeric(colnames(Rrs_)))
+  Rrs.number$y <- max(Rrs_)
   
   Rrs.cluster <- stats::aggregate(Rrs_, list(res$res.FCM$cluster), mean) %>% 
     melt(., id = 1) %>% level_to_variable() %>% 
@@ -1166,10 +1171,10 @@ plot_spec <- function(res,
   Rrs.group[,3] %<>% as.numeric
   
   # re-factor
-  Rrs.cluster$cluster_f <- paste("Cluster", Rrs.cluster$cluster) %>% 
-    factor(., levels=paste("Cluster", 1:res$K), ordered = TRUE)
-  Rrs.group$cluster_f <- paste("Cluster", Rrs.group$cluster) %>%
-    factor(., levels=paste("Cluster", 1:res$K), ordered = TRUE)
+  Rrs.cluster$cluster_f <- paste0(prefix, Rrs.cluster$cluster) %>% 
+    factor(., levels = levels_text, ordered = TRUE)
+  Rrs.group$cluster_f <- paste0(prefix, Rrs.group$cluster) %>%
+    factor(., levels = levels_text, ordered = TRUE)
   
   
   # Rrs.ribbon <- data.frame(stringsAsFactors = FALSE,
@@ -1190,8 +1195,8 @@ plot_spec <- function(res,
       melt(., id=c("cluster","ids")) %>% level_to_variable() %>%
       setNames(., c("cluster", "ids", "band", "value"))
     Rrs.group_[,3] %<>% as.numeric
-    Rrs.group_$cluster_f <- paste("Cluster", Rrs.group_$cluster) %>%
-      factor(., levels=paste("Cluster", 1:res$K), ordered = TRUE)
+    Rrs.group_$cluster_f <- paste0(prefix, Rrs.group_$cluster) %>%
+      factor(., levels = levels_text, ordered = TRUE)
     
     p <- ggplot() + 
       geom_path(data = Rrs.group, 
@@ -1201,7 +1206,7 @@ plot_spec <- function(res,
       geom_path(data = Rrs.cluster, 
                 aes(x=band, y=value, group= cluster, color = cluster), alpha = 1.5, size=1.5) + 
       geom_text(data = Rrs.number,
-                aes(x=-Inf, y=Inf, label = sprintf("N=%s",number)), vjust=1.8, hjust = -0.2) + 
+                aes(x=x, y=y, label = sprintf("N=%s",number)), vjust=1, hjust = 0) + 
       scale_color_manual(values = color_palette, breaks = seq(1,res$K)) +
       facet_wrap(~cluster_f) + 
       labs(x = "Wavelength [nm]", y = y.lable, color = "Cluster") + 
@@ -1222,7 +1227,7 @@ plot_spec <- function(res,
                 aes(x=band, y=value, group= cluster, color = cluster),
                 size = 1.5) + 
       geom_text(data = Rrs.number,
-                aes(x=-Inf, y=Inf, label = sprintf("N=%s",number)), vjust=1.8, hjust = -0.2) + 
+                aes(x=x, y=y, label = sprintf("N=%s",number)), vjust=1, hjust = 0) + 
       scale_color_manual(values = color_palette, breaks = seq(1,res$K)) +
       labs(x = "Wavelength [nm]", y = y.lable, color = "Cluster") + 
       facet_wrap(~cluster_f) + 

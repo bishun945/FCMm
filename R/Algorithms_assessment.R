@@ -520,13 +520,26 @@ def_validation <- function(x, y,
                            log10) {
   
   if(!log10) {
-    lower <- x - x * valid.definition$percent
-    upper <- x + x * valid.definition$percent
+    tmp <- cbind(
+      lower = x - x * valid.definition$percent,
+      upper = x + x * valid.definition$percent
+    )
+    bounds <- apply(tmp, 1, sort)
+    lower <- bounds[1, ]
+    upper <- bounds[2, ]
   }else {
     lgx <- log10(x) 
-    lower  <- 10^lgx / 10^(lgx*valid.definition$percent)
-    upper  <- 10^lgx * 10^(lgx*valid.definition$percent)
+    # lower  <- 10^lgx / 10^(lgx*valid.definition$percent)
+    # upper  <- 10^lgx * 10^(lgx*valid.definition$percent)
+    tmp <- cbind(
+      lower = lgx - lgx * valid.definition$percent,
+      upper = lgx + lgx * valid.definition$percent
+    )
+    bounds <- 10^apply(tmp, 1, sort)
+    lower <- bounds[1, ]
+    upper <- bounds[2, ]
   }
+  
   if(valid.definition$negative == FALSE) { # means the negative value is invalid
     if(!log10) {
       lower[lower < 0] <- 0
@@ -867,6 +880,12 @@ Score_algorithms_sort2 <- function(x, decreasing = TRUE, max.score = 100/4){
 #' @param cluster Cluster vector. Could be calculated by the parameter \code{memb}. Will be deprecated later.
 #' @param seed Seed number for fixing the random process. See \code{help(set.seed)} for more details.
 #' @param log10 pass to \link{Sampling_by_sort}.
+#' @param valid.definition The definition of valid prediction, default as \code{list(negative=FALSE, percent = 0.6)}.
+#'   The invalid prediction will not be removed to calculate error metrics.
+#' 
+#' \code{negative=FALSE} means the negative values are considered as invalid predictions while \code{percent} means
+#'   the tolerance of error-percentage that only the predictions between \code{(y-y*percent), y+y*percent)} are valid.
+#'   
 #' @note The row number of \code{pred}, \code{meas}, \code{memb}, and \code{cluster} should be the same. 
 #'   This function is designed for bootstrapping process to get Chla algorithms assessment. Therefore, 
 #'   parameters of \link{Assessment_via_cluster} is set as fixed such as \code{log10 = TRUE}, 
@@ -913,7 +932,8 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
                                   pred, meas, memb,
                                   metrics_used = 1,
                                   cluster = apply(memb, 1, which.max), 
-                                  seed = NULL, log10 = TRUE){
+                                  seed = NULL, log10 = TRUE,
+                                  valid.definition = list(negative=FALSE, percent = 0.6)){
   
   if(metrics_used == 1) {
     metrics = c("MAE", "CMAPE", "BIAS", "CMRPE")
@@ -953,7 +973,8 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
                                       log10 = TRUE,
                                       hard.mode = FALSE,
                                       na.process = TRUE,
-                                      plot.col = FALSE)
+                                      plot.col = FALSE,
+                                      valid.definition = valid.definition)
   
   Asses_p <-   Assessment_via_cluster(pred=pred_,
                                       meas=meas_,
@@ -963,13 +984,15 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
                                       hard.mode = TRUE,
                                       cal.precision = TRUE,
                                       na.process = TRUE,
-                                      plot.col = FALSE)
+                                      plot.col = FALSE,
+                                      valid.definition = valid.definition)
   
   result <- list(
                   # Asses_hd=Asses_hd, 
                   Asses_fz = Asses_fz,
                   Asses_p  = Asses_p, 
-                  metrics = metrics
+                  metrics = metrics,
+                  valid.definition = valid.definition
                   )
   
   return(result)
@@ -1099,7 +1122,7 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #' # show the total score table
 #' knitr::kable(round(Score$Total_score, 2))
 #' 
-Scoring_system <- function(Inputs, 
+Scoring_system <- function(Inputs, # return of Getting_Asses_results
                            method = 'sort-based',
                            param_sort = list(decreasing = TRUE, max.score = NULL),
                            param_interval = list(trim=FALSE, reward.punishment=TRUE,
@@ -1110,6 +1133,7 @@ Scoring_system <- function(Inputs,
   
   Asses_fz <- Inputs$Asses_fz
   Asses_p  <- Inputs$Asses_p # If on precision, the mode is hard
+  valid.definition <- Inputs$valid.definition
   n_metrics <- length(Inputs$metrics)
   metrics <- Inputs$metrics
   
@@ -1234,7 +1258,8 @@ Scoring_system <- function(Inputs,
                  Total_score.melt      = Total_score.melt,
                  Opt_algorithm         = Opt_algorithm,
                  Opt_algorithm.sec     = Opt_algorithm.sec,
-                 Inputs                = Inputs
+                 Inputs                = Inputs,
+                 valid.definition      = valid.definition
                 )
   
   return(result)
@@ -1324,6 +1349,8 @@ Scoring_system_bootstrap <- function(Times = 1000,
   K = ncol(memb)
   metrics = Inputs$metrics
   
+  valid.definition = Inputs$valid.definition
+  
   Score_list <- NULL
   Results_of_scoring_system <- list()
   
@@ -1340,7 +1367,8 @@ Scoring_system_bootstrap <- function(Times = 1000,
     
     Asses_list <- Getting_Asses_results(sample.size= nrow(memb),
                                         metrics_used = metrics_used,
-                                        pred, meas, memb, replace = replace)
+                                        pred, meas, memb, replace = replace,
+                                        valid.definition = valid.definition)
     Score <- Scoring_system(Inputs = Asses_list,
                             method = method,
                             param_sort = param_sort,
@@ -1502,8 +1530,9 @@ Scoring_system_bootstrap <- function(Times = 1000,
     theme_bw() + 
     theme(axis.text.x.bottom = element_blank(),
           axis.ticks.x.bottom = element_blank(),
-          panel.grid.major.x = element_blank(),
-          strip.background = element_rect(fill='white', color='white'),
+          # panel.grid.major.x = element_blank(),
+          # strip.background = element_rect(fill='white', color='white'),
+          strip.background = element_blank(), 
           strip.text = element_text(face='bold'),
           panel.spacing.y = unit(0.5, "lines"),
           text = element_text(size=13),
@@ -1545,18 +1574,22 @@ Scoring_system_bootstrap <- function(Times = 1000,
                              cluster = paste0(x_prefix, x_space, cluster), 
                              pred, Chla_blend)
     Chla_plots$cluster <- factor(Chla_plots$cluster, levels = x_levels, ordered = TRUE)
+    levels(Chla_plots$cluster) <- x_nums
     names(Chla_plots)[1] <- "Chla_true"
     dt_Chla_ <- reshape2::melt(Chla_plots, id=c("Chla_true", "cluster"))
     dt_Chla_$value_opt <- NA
-    for(i in x_levels){
-      w = which(dt_Chla_$cluster == i & dt_Chla_$variable == Opt_algorithm[i])
+    for(i in x_nums){
+      w = which(dt_Chla_$cluster == i & dt_Chla_$variable == Opt_algorithm[x_levels[as.numeric(i)]])
       dt_Chla_$value_opt[w] <- dt_Chla_$value[w]
     }
     w = which(dt_Chla_$variable == "Chla_blend")
     dt_Chla_$value_opt[w] <- dt_Chla_$value[w]
     
     cp = RdYlBu(K)
-    names(cp) <- x_levels
+    names(cp) <- x_nums
+    
+    levels(dt_Chla_$variable) %<>% gsub("Chla_blend", "Blend_FCMm", .)
+    
     #plot scatter for all####
     plot_scatter <- 
       ggplot() + 
@@ -1585,7 +1618,7 @@ Scoring_system_bootstrap <- function(Times = 1000,
       guides(col = guide_legend(ncol=1))
     
     dt_Chla_sub <- dt_Chla_[dt_Chla_$variable %in% c(
-      "Chla_blend", unique(Opt_algorithm)
+      "Blend_FCMm", unique(Opt_algorithm)
     ),]
     #plot scatter for optimals####
     plot_scatter_opt <- 
@@ -1624,7 +1657,8 @@ Scoring_system_bootstrap <- function(Times = 1000,
       log10 = TRUE,
       total = TRUE,
       hard.mode = TRUE,
-      na.process = TRUE
+      na.process = TRUE,
+      valid.definition = valid.definition
     )
     
   } # run blending
@@ -1647,7 +1681,11 @@ Scoring_system_bootstrap <- function(Times = 1000,
     dt_Chla            = Chla_plots,
     Chla_blend         = Chla_blend,
     Results_of_scoring_system = Results_of_scoring_system,
-    metric_results     = metric_results
+    metric_results     = metric_results,
+    misc_scatter       = list(dt_Chla_ = dt_Chla_, 
+                              dt_Chla_sub = dt_Chla_sub, 
+                              Chla_limits = Chla_limits,
+                              cp = cp)
   )
   
   return(result)
@@ -1780,7 +1818,7 @@ Chla_algorithms_blend2 <- function(dt_Chla_opt, memb,
   
   # modify the membership values
   colnames(dt_Chla_opt) <- 
-    gsub(paste0(paste0("\\.", 1:17), collapse = "|"), "", colnames(dt_Chla_opt))
+    gsub(paste0(paste0("\\.", 1:length(Opt_algorithm)), collapse = "|"), "", colnames(dt_Chla_opt))
   
   dt_cluster <- apply(memb, 1, which.max)
   dt_Chla_new <- dt_Chla_opt
@@ -1796,7 +1834,11 @@ Chla_algorithms_blend2 <- function(dt_Chla_opt, memb,
     w_row <- which(as.vector(dt_cluster) == clus)
     w_col_rm  <- which(Opt_algorithm %in% Remove_algorithm[[clus]])
     
-    m_rm_sum <- apply(memb[w_row, w_col_rm], 1, sum)
+    if(length(w_row) == 1) {
+      m_rm_sum <- sum(memb[w_row, w_col_rm])
+    } else {
+      m_rm_sum <- apply(memb[w_row, w_col_rm], 1, sum)
+    }
     
     memb_new[w_row, w_col_rm] <- 0
     memb_new[w_row, clus]     <- m_rm_sum + memb[w_row, clus]
@@ -1814,11 +1856,17 @@ Chla_algorithms_blend2 <- function(dt_Chla_opt, memb,
   
   for(i in 1:ncol(memb)) {
     
-    tmp <- memb_new2[dt_cluster == i, ] %>% rowSums()
+    if(length(which(dt_cluster == i)) == 1) {
+      tmp <- sum(memb_new2[dt_cluster == i, ])
+    } else {
+      tmp <- rowSums(memb_new2[dt_cluster == i, ])  
+    }
+    
     memb_new2[dt_cluster ==i, i] <- memb_new2[dt_cluster ==i, i] + (1 - tmp) 
     
   }
   
+  dt_Chla_opt[dt_Chla_opt <= 0] <- NA
   Chla_blend <- apply(dt_Chla_opt * memb_new2, 1, function(x) sum(x, na.rm=TRUE)) 
   
   return(list(

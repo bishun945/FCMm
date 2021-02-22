@@ -1,3 +1,16 @@
+## FCMm 0.11.1 (2021-02-22)
+
+**Critical Updates!**
+
+1. Add published Chla blending frameworks including Moore 2014, Jackson 2017, Bi 2021, and Bi thesis paper. The corresponding centroids have been attached in `/inst` folder. Names of these functions are `Blend_Moo14`, `Blend_Jac17`, `Blend_Moo14`, `Blend_Bi21`, and `Blend_FCMm`.
+2. Fix bugs in plotting ggplot2 objects. As strips background use some new features by using the updated `ggplot2`.
+3. Revise some of variable names in functions. Such as Chla_blend -> Blend_FCMm.
+4. Fix bugs in some non-exported functions such as blending jobs.
+5. Blending functions are moved to a new `R` file named `Chla_blending.R`. The following blending frameworks will be latterly added in this function.
+6. It is a pity that in previous version the calculation form of some error metrics are in the wrong position of actual and predicted values. Anyway, the effect is only on `relative` metrics, for instance, some `absolute` metrics (like `AE`) is okay for that. The change in this version only switch the sign of `relative` metrics. Don't worry it too much!
+7. In FCM-related functions, a new parameter `prefix` was added. So you can choose which prefix should be set before cluster number, such as "OWT", "Cluster", "Type", or whatever you like.
+8. Update my old README.Rmd. :/
+
 ## FCMm 0.10.3 (2021-01-22)
 
 1. Add a new function `Sampling_by_sort` which returns the index of random samples by the sort.

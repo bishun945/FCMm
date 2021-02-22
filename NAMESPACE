@@ -3,6 +3,8 @@
 export(Assessment_via_cluster)
 export(BR_Gil10)
 export(BR_Git11)
+export(Blend_Bi21)
+export(Blend_FCMm)
 export(Blend_Jac17)
 export(Blend_Moo14)
 export(Blend_Smith18)

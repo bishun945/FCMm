@@ -79,7 +79,7 @@ plot(result$p.group + theme(text=element_text(size=13)))
 # plot(result$p.group+facet_wrap(~cluster, ncol=2))
 ```
 
-### 2. Algorithms blending via membership values from FCMm
+### 2. Algorithms blending via membership values from FCMm (version of Bi et al., 2019)
 ```{r fig.height=3, fig.width=4, message=FALSE, warning=FALSE, fig.align='center'}
 library(magrittr)
 dt_Chla <- FCM_m_Chla_estimation(Rrs=data.frame(Rrs665=Rrs$`665`,
@@ -134,6 +134,53 @@ Assess_soft <- Assessment_via_cluster(pred = pred,
 Assess_soft$res_plot_facet
 knitr::kable(Assess_soft$MAE %>% round(3))
 knitr::kable(Assess_soft$MAPE %>% round(2))
+```
+
+### 4. Algorithms blending frameworks (updated in Feb 22, 2021)
+
+```{r}
+data(WaterSpec35)
+res_Jac17 = Blend_Jac17(WaterSpec35[, -c(1, 2)])
+res_Moo14 = Blend_Moo14(WaterSpec35[, -c(1, 2)])
+res_Bi21  = Blend_Bi21(WaterSpec35[, -c(1, 2)])
+res_BiPHD = Blend_FCMm(WaterSpec35[, -c(1, 2)])
+
+dt_compare <- data.frame(
+  Chla_true = WaterSpec35$Chla,
+  Jac17  = res_Jac17$Chla_blend,
+  Moo14  = res_Moo14$Chla_blend,
+  Bi21   = res_Bi21$Chla_blend,
+  BIPHD  = res_BiPHD$Chla_blend,
+  BIPHD2 = res_BiPHD$Chla_reparam
+) %>% reshape2::melt(., id = "Chla_true")
+
+er_agg <- function(x) {
+  stats::aggregate(x, list(dt_compare$variable), mean)[, 2]
+}
+dt_compare$er1 <- dt_compare$Chla_true - dt_compare$value
+dt_compare$er2 <- (dt_compare$Chla_true - dt_compare$value) / dt_compare$Chla_true * 100
+
+er_df <- data.frame(
+  BIAS = er_agg(dt_compare$er1),
+  MAE  = er_agg(abs(dt_compare$er1)),
+  MRPE = er_agg(dt_compare$er2),
+  MAPE = er_agg(abs(dt_compare$er2))
+) %>% cbind(variable = levels(dt_compare$variable), .)
+er_df$label <- sprintf("BIAS=%.3f\nMAE=%.3f\nMRPE=%.2f%%\nMAPE=%.2f%%", 
+                       er_df$BIAS, er_df$MAE, er_df$MRPE, er_df$MAPE)
+
+ggplot(dt_compare) + 
+  geom_point(aes(x = Chla_true, y = value, fill = variable),
+             size = 2.5, alpha = 0.8, color = "black", 
+             shape = "circle filled") +
+  geom_abline(slope = 1, intercept = 0, linetype = 2) + 
+  geom_text(inherit.aes = FALSE, data = er_df,
+            aes(x = min(dt_compare$Chla_true), y=max(dt_compare$Chla_true),
+                label = label), vjust = 1, hjust = 0) + 
+  facet_wrap(~variable) + 
+  labs(y="predictions") + 
+  scale_x_log10() + 
+  scale_y_log10()
 ```
 
 ## Getting help

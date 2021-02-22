@@ -30,6 +30,8 @@ Gons H J, Auer M T, Effler S W. MERIS satellite chlorophyll mapping of
 }
 \seealso{
 Other Algorithms: Chla concentration: 
+\code{\link{Blend_Bi21}()},
+\code{\link{Blend_FCMm}()},
 \code{\link{Blend_Jac17}()},
 \code{\link{Blend_Moo14}()},
 \code{\link{Blend_Smith18}()},

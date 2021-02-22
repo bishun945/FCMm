@@ -153,117 +153,117 @@ cal.metrics <- function(x, y,
 # MAE Series (Mean absolute error)
 #' @noRd
 .cal.mae<-function(x,y){
-  return(mean(abs(y-x), na.rm=TRUE))
+  return(mean(abs(x-y), na.rm=TRUE))
 }
 
 #' @noRd
 .cal.mdae<-function(x,y){
-  return(median(abs(y-x), na.rm=TRUE))
+  return(median(abs(x-y), na.rm=TRUE))
 }
 
 #' @noRd
 .cal.nmae_sd <- function(x,y){
-  return(mean(abs(y-x), na.rm=TRUE)/sd(y, na.rm=TRUE))
+  return(mean(abs(x-y), na.rm=TRUE)/sd(y, na.rm=TRUE))
 }
 
 #' @noRd
 .cal.nmdae_sd <- function(x,y){
-  return(median(abs(y-x), na.rm=TRUE)/sd(y, na.rm=TRUE))
+  return(median(abs(x-y), na.rm=TRUE)/sd(y, na.rm=TRUE))
 }
 
 # MAPE Series (Mean absolute percent error)
 #' @noRd
 .cal.mape<-function(x, y){
-  return(mean(abs((y-x)/x), na.rm=TRUE)*100)
+  return(mean(abs((x-y)/x), na.rm=TRUE)*100)
 }
 
 ## Compensated series
 #' @noRd
 .cal.cmape <- function(x, y, c.value){
-  return(mean(       abs(2*(y-x))/(abs(x) + abs(c.value))       , na.rm=TRUE)*100)
+  return(mean(       abs(2*(x-y))/(abs(x) + abs(c.value))       , na.rm=TRUE)*100)
 }
 
 #' @noRd
 .cal.cmdape <- function(x, y, c.value){
-  return(median(       abs(2*(y-x))/(abs(x) + abs(c.value))       , na.rm=TRUE)*100)
+  return(median(       abs(2*(x-y))/(abs(x) + abs(c.value))       , na.rm=TRUE)*100)
 }
 
 #' @noRd
 .cal.cmrpe <- function(x, y, c.value){
-  return(mean(       2*(y-x)/(x+c.value)       , na.rm=TRUE)*100)
+  return(mean(       2*(x-y)/(x+c.value)       , na.rm=TRUE)*100)
 }
 
 #' @noRd
 .cal.cmdrpe <- function(x, y, c.value){
-  return(median(       2*(y-x)/(x+c.value)      , na.rm=TRUE)*100)
+  return(median(       2*(x-y)/(x+c.value)      , na.rm=TRUE)*100)
 }
 
 ## Symmetric series
 #' @noRd
 .cal.smape <- function(x, y){
-  return(mean(       abs(2*(y-x))/(abs(x)+abs(y))       , na.rm=TRUE)*100)
+  return(mean(       abs(2*(x-y))/(abs(x)+abs(y))       , na.rm=TRUE)*100)
 }
 
 #' @noRd
 .cal.smdape <- function(x,y){
-  return(median(       abs(2*(y-x))/(abs(x)+abs(y))       , na.rm=TRUE)*100)
+  return(median(       abs(2*(x-y))/(abs(x)+abs(y))       , na.rm=TRUE)*100)
 }
 
 #' @noRd
 .cal.smrpe <- function(x,y){
-  return(mean(       (2*(y-x))/(x+y)       , na.rm=TRUE)*100)
+  return(mean(       (2*(x-y))/(x+y)       , na.rm=TRUE)*100)
 }
 
 #' @noRd
 .cal.smdrpe <- function(x,y){
-  return(median(       (2*(y-x))/(x+y)       , na.rm=TRUE)*100)
+  return(median(       (2*(x-y))/(x+y)       , na.rm=TRUE)*100)
 }
 
 ## 
 #' @noRd
 .cal.mdape<-function(x,y){
-  return(median(abs((y-x)/x), na.rm=TRUE)*100)
+  return(median(abs((x-y)/x), na.rm=TRUE)*100)
 }
 
 #' @noRd
 .cal.mrpe<-function(x,y){
-  return(mean((y-x)/x, na.rm=TRUE)*100)
+  return(mean((x-y)/x, na.rm=TRUE)*100)
 }
 
 #' @noRd
 .cal.mdrpe<-function(x,y){
-  return(median((y-x)/x, na.rm=TRUE)*100)
+  return(median((x-y)/x, na.rm=TRUE)*100)
 }
 
 #' @noRd
 .cal.umrpe <- function(x,y){
-  return(mean((y-x)/(0.5*x+0.5*y)*100, na.rm=TRUE))
+  return(mean((x-y)/(0.5*x+0.5*y)*100, na.rm=TRUE))
 }
 
 #' @noRd
 .cal.umdrpe <- function(x,y){
-  return(median((y-x)/(0.5*x+0.5*y)*100, na.rm=TRUE))
+  return(median((x-y)/(0.5*x+0.5*y)*100, na.rm=TRUE))
 }
 
 # Bias Series
 #' @noRd
 .cal.bias<-function(x,y){
-  return(mean((y-x), na.rm=TRUE))
+  return(mean((x-y), na.rm=TRUE))
 }
 
 #' @noRd
 .cal.md_bias<-function(x,y){
-  return(median((y-x), na.rm=TRUE))
+  return(median((x-y), na.rm=TRUE))
 }
 
 #' @noRd
 .cal.ratio <- function(x,y){
-  return(mean(y/x, na.rm=TRUE))
+  return(mean(x/y, na.rm=TRUE))
 }
 
 #' @noRd
 .cal.md_ratio <- function(x,y){
-  return(median(y/x, na.rm=TRUE))
+  return(median(x/y, na.rm=TRUE))
 }
 
 #' @noRd

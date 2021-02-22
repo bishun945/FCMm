@@ -8,7 +8,8 @@ plot_spec(
   res,
   show.stand = NULL,
   show.ribbon = FALSE,
-  color_palette = RdYlBu(res$K)
+  color_palette = RdYlBu(res$K),
+  prefix = "Cluster "
 )
 }
 \arguments{

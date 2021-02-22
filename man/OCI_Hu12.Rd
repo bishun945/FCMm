@@ -35,6 +35,8 @@ Hu C, Lee Z, Franz B. Chlorophyll a algorithms for oligotrophic oceans:
 }
 \seealso{
 Other Algorithms: Chla concentration: 
+\code{\link{Blend_Bi21}()},
+\code{\link{Blend_FCMm}()},
 \code{\link{Blend_Jac17}()},
 \code{\link{Blend_Moo14}()},
 \code{\link{Blend_Smith18}()},

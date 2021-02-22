@@ -81,69 +81,69 @@ cal.metrics.vector <- function(x, y,
 
 #' @noRd
 .cal.mae.v <- function(x,y){
-  return(abs(y-x))
+  return(abs(x-y))
 }
 
 #' @noRd
 .cal.nmae.v <- function(x,y){
-  return(abs(y-x) / sd(y, na.rm=TRUE))
+  return(abs(x-y) / sd(y, na.rm=TRUE))
 }
 
 #' @noRd
 .cal.mape.v <- function(x,y){
-  return(abs((y-x)/x)*100)
+  return(abs((x-y)/x)*100)
 }
 
 ## Symmetric sereis
 #' @noRd
 .cal.smape.v <- function(x,y){
-  return(abs(2*(y-x))/(abs(x)+abs(y))*100)
+  return(abs(2*(x-y))/(abs(x)+abs(y))*100)
 }
 
 #' @noRd
 .cal.smrpe.v <- function(x,y){
-  return((2*(y-x))/((x)+(y))*100)
+  return((2*(x-y))/((x)+(y))*100)
 }
 
 ## Compensated sereis
 #' @noRd
 .cal.cmape.v <- function(x, y, c.value){
-  return(abs(2*(y-x))/(abs(x)+abs(c.value))*100)
+  return(abs(2*(x-y))/(abs(x)+abs(c.value))*100)
 }
 
 #' @noRd
 .cal.cmrpe.v <- function(x, y, c.value){
-  return((2*(y-x))/((x)+(c.value))*100)
+  return((2*(x-y))/((x)+(c.value))*100)
 }
 
 #' @noRd
 .cal.nmape.v <- function(x,y){
-  return(abs((y-x)/x) / sd(y, na.rm=TRUE) *100)
+  return(abs((x-y)/x) / sd(y, na.rm=TRUE) *100)
 }
 
 #' @noRd
 .cal.mrpe.v <- function(x,y){
-  return((y-x)/x*100)
+  return((x-y)/x*100)
 }
 
 #' @noRd
 .cal.nmrpe.v <- function(x,y){
-  return((y-x)/x / sd(y, na.rm=TRUE) *100)
+  return((x-y)/x / sd(y, na.rm=TRUE) *100)
 }
 
 #' @noRd
 .cal.umrpe.v <- function(x,y){
-  return((y-x)/(0.5*x+0.5*y)*100)
+  return((x-y)/(0.5*x+0.5*y)*100)
 }
 
 #' @noRd
 .cal.bias.v <- function(x,y){
-  return(y-x)
+  return(x-y)
 }
 
 #' @noRd
 .cal.ratio.v <- function(x,y){
-  return(y/x)
+  return(x/y)
 }
 
 

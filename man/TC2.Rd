@@ -36,6 +36,8 @@ Liu G, Li L, Song K, et al. An OLCI-based algorithm for semi-empirically
 }
 \seealso{
 Other Algorithms: Chla concentration: 
+\code{\link{Blend_Bi21}()},
+\code{\link{Blend_FCMm}()},
 \code{\link{Blend_Jac17}()},
 \code{\link{Blend_Moo14}()},
 \code{\link{Blend_Smith18}()},

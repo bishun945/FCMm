@@ -45,7 +45,6 @@ library(magrittr)
 data("Nechad2015")
 x <- Nechad2015[,3:11]
 wv <- gsub("X","",names(x)) \%>\% as.numeric
-set.seed(1234)
 w <- sample(1:nrow(x), 100) 
 x <- x[w, ]
 names(x) <- wv

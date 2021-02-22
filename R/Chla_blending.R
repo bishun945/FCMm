@@ -368,7 +368,7 @@ Blend_Bi21 <- function(Rrs, wv_range = 3, ...) {
   res_Chla$Bloom <- res_Chla$C6
   res_Chla$C6 <- NULL
   
-  load(system.file("LUT_OPT_BI2021.rData", package = "FCMm"))
+  load(system.file("LUT_OPT_BI2021.rda", package = "FCMm"))
   
   # blending
   res_Chla_opt <- res_Chla[, LUT_OPT$Opt_algorithm]
@@ -466,7 +466,7 @@ Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
   res_Chla$Bloom <- res_Chla$C6
   res_Chla$C6 <- NULL
   
-  load(system.file("LUT_OPT_BIPHD.rData", package = "FCMm"))
+  load(system.file("LUT_OPT_BIPHD.rda", package = "FCMm"))
   
   # blending
   res_Chla_opt <- res_Chla[, LUT_OPT$Opt_algorithm]
@@ -475,7 +475,7 @@ Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
   
   if(reparam) {
     
-    load(system.file("blend_coef_BIPHD.rData", package = "FCMm")) # blend_coef
+    blend_coef <- read.csv(system.file("blend_coef_BIPHD.csv", package = "FCMm"))
     
     tmp <- data.frame(
       lgP  = log10(res_blend$Chla_blend),

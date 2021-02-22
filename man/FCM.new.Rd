@@ -60,12 +60,10 @@ library(stringr)
 data("Nechad2015")
 x <- Nechad2015[,3:11]
 wv <- gsub("X","",names(x)) \%>\% as.numeric
-set.seed(1234)
 w <- sample(1:nrow(x), 100) 
 x <- x[w, ]
 names(x) <- wv
 nb = 4 # Obtained from the vignette "Cluster a new dataset by FCMm"
-set.seed(1234)
 FD <- FuzzifierDetermination(x, wv, stand=FALSE)
 result <- FCM.new(FD, nb, fast.mode = TRUE)
 

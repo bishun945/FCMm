@@ -26,7 +26,7 @@ Algorithm blending framework by Bi theses
 \examples{
 library(FCMm)
 data(WaterSpec35)
-res = Blend_FCMm(WaterSpec35[, -c(1,2)])
+# res = Blend_FCMm(WaterSpec35[, -c(1,2)])
 }
 \seealso{
 Other Algorithms: Chla concentration: 

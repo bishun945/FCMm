@@ -1021,6 +1021,8 @@ Getting_Asses_results <- function(sample.size, replace = FALSE,
 #'   \code{Scoring_system} (default as \code{1000})
 #' @param replace Parameter of \code{Scoring_system_bootstrap}. The sample method for bootstrap running.
 #'   Default as \code{TRUE}. See more details in \link{sample}.
+#' @param accuracy.metrics accuracy used metrics, default as \code{c("MAE", "CMAPE")}
+#' @param precision.metrics precision used metrics, default as \code{c("BIAS", "CMRPE")}
 #' 
 #' @export
 #' 

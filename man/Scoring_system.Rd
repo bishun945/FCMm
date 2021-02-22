@@ -50,6 +50,10 @@ Scoring_system_bootstrap(
 
 \item{remove.negative}{Option to replace the negative score as zero (default as \code{FALSE})}
 
+\item{accuracy.metrics}{accuracy used metrics, default as \code{c("MAE", "CMAPE")}}
+
+\item{precision.metrics}{precision used metrics, default as \code{c("BIAS", "CMRPE")}}
+
 \item{Times}{Parameter of \code{Scoring_system_bootstrap}. The bootstrap time for running 
 \code{Scoring_system} (default as \code{1000})}
 

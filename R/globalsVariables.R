@@ -46,5 +46,7 @@ utils::globalVariables(c('.',
                          "group_f",
                          "n",
                          "rgb",
-                         "dt_Chla"
+                         "dt_Chla",
+                         "LUT_OPT",
+                         "blend_coef"
                          ))

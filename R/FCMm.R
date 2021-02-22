@@ -356,7 +356,7 @@ trapz2 <- function(x){
 #' @param fast.mode Logical, \code{FALSE} (default)
 #' @param do.stand Whether to use standarized data for FCM. Default as \code{TRUE}
 #' @param stand Deprecated; Now \code{stand = !do.stand}
-#' @param ... Parameters pass to \link{ppclust::fcm}
+#' @param ... Parameters pass to \link{fcm}
 #'
 #' @return A \code{list} of FCM:
 #'   \itemize{
@@ -924,6 +924,7 @@ plot_spec_group <- function(x, group, palette = RdYlBu, facet = TRUE, group_num 
 #' @param color_palette The palette of cluster color. Default as \code{RdYlBu(res$K)}.
 #'   In \code{FCMm}, it could be \link{RdYlBu}, \link{Spectral}, \link{HUE} or other color values
 #'   with same length of cluster number.
+#' @param prefix Prefix of cluster name, default as \code{"Cluster "}
 #' 
 #' @return The result of \code{plot_spec} is a list including:
 #'   \itemize{

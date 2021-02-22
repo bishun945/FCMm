@@ -35,7 +35,7 @@ to large values.}
 
 \item{stand}{Deprecated; Now \code{stand = !do.stand}}
 
-\item{...}{Parameters pass to \link{ppclust::fcm}}
+\item{...}{Parameters pass to \link{fcm}}
 }
 \value{
 A \code{list} of FCM:

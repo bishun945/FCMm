@@ -24,6 +24,8 @@ in each cluster (default as \code{FALSE}).}
 \item{color_palette}{The palette of cluster color. Default as \code{RdYlBu(res$K)}.
 In \code{FCMm}, it could be \link{RdYlBu}, \link{Spectral}, \link{HUE} or other color values
 with same length of cluster number.}
+
+\item{prefix}{Prefix of cluster name, default as \code{"Cluster "}}
 }
 \value{
 The result of \code{plot_spec} is a list including:

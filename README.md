@@ -21,7 +21,7 @@ binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun9
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2021-02-22  
+**Date**: 2021-02-24  
 **Version**: 0.11.1  
 **E-mail**: <bishun1994@foxmail.com>
 
@@ -132,7 +132,7 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
   facet_wrap(~variable, nrow=2) + 
   theme_bw() + 
   theme(axis.text.x.bottom = element_text(hjust=1),
-        strip.background = element_rect(color="white", fill="white"))
+        strip.background = element_blank())
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" />

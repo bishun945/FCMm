@@ -12,3 +12,6 @@
 ^CRAN-RELEASE$
 ^LICENSE\.md$
 ^test$
+^hexSticker_FCMm.R$
+^_pkgdown\.yml$
+^docs$

@@ -106,7 +106,7 @@ subset(dt_Chla, select=c('cluster','Chla_true','BR','TBA','Bloom','conc.Blend'))
   facet_wrap(~variable, nrow=2) + 
   theme_bw() + 
   theme(axis.text.x.bottom = element_text(hjust=1),
-        strip.background = element_rect(color="white", fill="white"))
+        strip.background = element_blank())
 
 # on.exit(options(oldoptions))
 ```

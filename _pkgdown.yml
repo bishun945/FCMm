@@ -1,0 +1,96 @@
+navbar:
+  structure:
+    left:
+    - home
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right: github
+  components:
+    home:
+      icon: fas fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    news:
+      text: Changelog
+      href: news/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/bishun945/FCMm/
+    articles:
+      text: Articles
+      menu:
+      - text: Algorithms assessment via cluster
+        href: articles/Assessment.html
+      - text: Usage of the built in centroids by FCMm
+        href: articles/Builtin_centrodis.html
+      - text: Cluster a new dataset by FCMm
+        href: articles/Cluster_new_data.html
+        
+reference:
+- title: All functions
+  contents:
+  - '`AeronetOC2019`'
+  - '`apply_FCM_m`'
+  - '`apply_to_image`'
+  - '`Assessment_via_cluster`'
+  - '`Blend_Bi21`'
+  - '`Blend_FCMm`'
+  - '`Blend_Jac17`'
+  - '`Blend_Moo14`'
+  - '`Blend_Smith18`'
+  - '`Bloom`'
+  - '`C6`'
+  - '`cal.metrics`'
+  - '`cal.metrics.vector`'
+  - '`cal_memb`'
+  - '`Chla_FBA`'
+  - '`Chla_Gil10_Git11`'
+  - '`Chla_OCx_OLCI`'
+  - '`Color_plattes`'
+  - '`dt_water`'
+  - '`FCM.new`'
+  - '`FCMm`'
+  - '`FCM_m_Chla_estimation`'
+  - '`FuzzifierDetermination`'
+  - '`FuzzifierDetermination2`'
+  - '`generate_param`'
+  - '`Getting_Asses_results`'
+  - '`Gons08`'
+  - '`level_to_variable`'
+  - '`NDCI_Mi12`'
+  - '`Nechad2015`'
+  - '`OCI_Hu12`'
+  - '`OLCI_TH`'
+  - '`plot_spec`'
+  - '`plot_spec_from_df`'
+  - '`plot_spec_group`'
+  - '`QAA_v5`'
+  - '`Rrs_clusters.default`'
+  - '`run_all_Chla_algorithms`'
+  - '`Sampling_via_cluster`'
+  - '`SCI_Shen10`'
+  - '`Score_algorithms_interval`'
+  - '`Score_algorithms_sort`'
+  - '`Scoring_system`'
+  - '`SRF_LIST`'
+  - '`SRF_simulate`'
+  - '`TC2`'
+  - '`trapz`'
+  - '`trim_sd`'
+  - '`Valente2019`'
+  - '`WaterSpec35`'
+  - '`wavelength.default`'
+
+articles:
+- title: All vignettes
+  desc: ~
+  contents:
+  - '`Assessment`'
+  - '`Builtin_centrodis`'
+  - '`Cluster_new_data`'
+

@@ -1,5 +1,5 @@
 
-# FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="139" /></a>
+# FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.svg' align='right' height="220" /></a>
 
 <!-- badges: start -->
 

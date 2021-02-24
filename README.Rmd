@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 # options(tibble.print_min=5, tibble.print_max=5)
 ```
 
-# FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="139" /></a>
+# FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.svg' align='right' height="220" /></a>
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/FCMm)](https://CRAN.R-project.org/package=FCMm)

@@ -1,0 +1,12 @@
+pandoc: 2.11.2
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  Assessment: Assessment.html
+  Builtin_centrodis: Builtin_centrodis.html
+  Cluster_new_data: Cluster_new_data.html
+last_built: 2021-02-24T07:26Z
+urls:
+  reference: https://github.com/bishun945/FCMm/reference
+  article: https://github.com/bishun945/FCMm/articles
+

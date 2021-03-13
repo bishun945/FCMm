@@ -71,7 +71,7 @@ sticker(p,
 )
 
 
-
-
+# add this if you get proxy issue when rendering `README.Rmd`
+Sys.setenv(http_proxy="http://127.0.0.1:7890")
 
 

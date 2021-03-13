@@ -37,8 +37,9 @@ Imports:
 Suggests:
     fclust,
     knitr,
-    cowplot (>= 1.0.0), 
-    rmarkdown
+    cowplot (>= 1.0.0),
+    rmarkdown,
+    covr
 Language: en-US
 Encoding: UTF-8
 LazyData: yes

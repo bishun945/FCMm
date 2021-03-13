@@ -1,27 +1,21 @@
 
-# FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.svg' align='right' height="220" /></a>
+# FCMm <a href='https://github.com/bishun945/FCMm'><img src='man/figures/logo.png' align='right' height="220" /></a>
 
 <!-- badges: start -->
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/FCMm)](https://CRAN.R-project.org/package=FCMm)
 [![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
-[![Project Status: Active – The project has reached a stable, usable
-state and is being actively
-developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Travis build
-status](https://travis-ci.org/bishun945/FCMm.svg?branch=master)](https://travis-ci.org/bishun945/FCMm)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/bishun945/FCMm?branch=master&svg=true)](https://ci.appveyor.com/project/bishun945/FCMm)
-[![CircleCI build
-status](https://circleci.com/gh/bishun945/FCMm.svg?style=svg)](https://circleci.com/gh/bishun945/FCMm)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![Launch
-binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun945/FCMm/master?urlpath=https://mybinder.org/v2/gh/bishun945/FCMm/master)
+binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bishun945/FCMm/master)
+[![R-CMD-check](https://github.com/bishun945/FCMm/workflows/R-CMD-check/badge.svg)](https://github.com/bishun945/FCMm/actions)
+<!-- [![Codecov test coverage](https://codecov.io/gh/bishun945/FCMm/branch/master/graph/badge.svg)](https://codecov.io/gh/bishun945/FCMm?branch=master) -->
+
 <!-- badges: end -->
 
 **Author**: Shun Bi  
-**Date**: 2021-02-24  
+**Date**: 2021-03-13  
 **Version**: 0.11.1  
 **E-mail**: <bishun1994@foxmail.com>
 

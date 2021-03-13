@@ -15,3 +15,7 @@
 ^hexSticker_FCMm.R$
 ^_pkgdown\.yml$
 ^docs$
+^logo\.png$
+^logo\.svg$
+^codecov\.yml$
+^\.github$

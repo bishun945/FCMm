@@ -235,7 +235,11 @@ FuzzifierDetermination2 <- function(x, iter.max = 300, m_ini_method = 2){
     m_used <- 1 + m_ub / 10
   }
   
-  return(list(m_ub=m_ub, m_used=m_used))
+  return(list(m.ub=m_ub, 
+              m.used=m_used, 
+              wv = as.numeric(colnames(x)),
+              x.stand = x,
+              x = x))
   
 }
 

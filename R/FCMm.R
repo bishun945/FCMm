@@ -711,12 +711,9 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   
   m <- m_used
   
-  for(j in 1:ncol(d)) {
-    for(i in 1:nrow(d)) {
-      u[i, j] <- 1/(sum( (d[i,j]/d[i,])^(1/(m-1)) ))
-    }
-  }
-  
+  mexp <- 2 / (m - 1)
+  u <- 1/d^mexp / rowSums(1/d^mexp)
+    
   cluster <- as.numeric(apply(u,1,which.max))
   
   if(quality_check == TRUE){

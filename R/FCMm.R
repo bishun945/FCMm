@@ -460,11 +460,13 @@ FCM.new <- function(FDlist, K, sort.pos = length(FDlist$wv), sort.decreasing = F
     }
     u_new <- res$u[, new_ind]
     d_new <- res$d[, new_ind]
+    v_new <- res$v[new_ind, ]
     colnames(d_new) <- colnames(u_new) <- paste("Cluster", 1:K)
     
     res$cluster = cluster_new
     res$u       = u_new
     res$d       = d_new
+    res$v       = v_new
   }
   
   # plot jitter

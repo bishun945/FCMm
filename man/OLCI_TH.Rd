@@ -34,8 +34,8 @@ The dataset should be only used in this package test. If any want
 \seealso{
 Other Datasets: 
 \code{\link{Nechad2015}},
-\code{\link{Rrs_clusters.default}},
 \code{\link{SRF_LIST}},
+\code{\link{Spectra.Centroids}},
 \code{\link{Valente2019}},
 \code{\link{WaterSpec35}},
 \code{\link{dt_water}},

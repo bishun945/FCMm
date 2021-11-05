@@ -11,7 +11,7 @@ apply_FCM_m(
   m_used = 1.36,
   do.stand = FALSE,
   stand = NULL,
-  default.cluster = TRUE,
+  default.cluster = "B2021_norm",
   quality_check = FALSE,
   option.plot = FALSE,
   color_palette = NULL
@@ -68,15 +68,33 @@ Application of the improved Fuzzy Cluster Method (FCMm) for new Rrs data based o
 }
 \examples{
 library(FCMm)
-data("WaterSpec35")
-data("Bi_clusters")
 Rrs <- WaterSpec35[,3:17]
-result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
+# you have to make sure the training set and cluster are in the same manner
+#   which means if cluster is on the normalized scale the the input should
+#   be normalized before running it.
+nRrs <- Rrs / trapz2(Rrs)
+apply_FCM_m(nRrs, default.cluster = "B2021_norm", option.plot=TRUE)$p.group.facet
+apply_FCM_m(nRrs, default.cluster = "BPHD_norm", option.plot=TRUE)$p.group.facet
+apply_FCM_m(nRrs, default.cluster = "B2019_norm", option.plot=TRUE)$p.group.facet
 
 }
 \references{
-Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
-  an improved Fuzzy C-Means method[J]. Optics Express, 2019, 27(24): 34838-34856.
+Bi, S., Li, Y., Liu, G., Song, K., Xu, J., Dong, X., Cai, X., Mu, M., Miao, S., & Lyu, H. (2021). 
+  Assessment of Algorithms for Estimating Chlorophyll-a Concentration in Inland Waters: 
+  A Round-Robin Scoring Method Based on the Optically Fuzzy Clustering. IEEE Transactions on 
+  Geoscience and Remote Sensing.
+
+Bi, S., Li, Y., Xu, J., Liu, G., Song, K., Mu, M., Lyu, H., Miao, S., & Xu, J. (2019). 
+  Optical classification of inland waters based on an improved Fuzzy C-Means method. 
+  Optics Express, 27(24), 34838–34856.
+
+Jackson, T., Sathyendranath, S., & Mélin, F. (2017). An improved optical classification 
+  scheme for the Ocean Colour Essential Climate Variable and its applications. Remote 
+  Sensing of Environment, 203, 152–161.
+
+Moore, T. S., Dowell, M. D., Bradt, S., & Verdu, A. R. (2014). An optical water type 
+  framework for selecting and blending retrievals from bio-optical algorithms in
+  lakes and coastal waters. Remote Sensing of Environment, 143, 97–111.
 }
 \seealso{
 Other Fuzzy cluster functions: 

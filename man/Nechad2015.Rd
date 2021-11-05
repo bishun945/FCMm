@@ -30,8 +30,8 @@ B. Nechad, K. Ruddick, T. Schroeder, K. Oubelkheir, D. Blondeau-Patissier, N. Ch
 \seealso{
 Other Datasets: 
 \code{\link{OLCI_TH}},
-\code{\link{Rrs_clusters.default}},
 \code{\link{SRF_LIST}},
+\code{\link{Spectra.Centroids}},
 \code{\link{Valente2019}},
 \code{\link{WaterSpec35}},
 \code{\link{dt_water}},

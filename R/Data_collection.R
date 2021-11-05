@@ -47,8 +47,6 @@ NULL
 #'   
 #'   This OLCI image onboard Sentinel-3A (ESA) in Lake Taihu was scened on 17 August, 2018
 #'   
-#'   
-#'   
 #' @references 
 #' * Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
 #'   an improved Fuzzy C-Means method[J]. Optics Express, 2019, 27(24): 34838-34856.
@@ -150,32 +148,6 @@ NULL
 #' @details The wavelength is from 340 nm to 900 nm.
 #' @note Will add later.
 #' @references Will add later.
-#' @family Datasets
-NULL
-
-
-
-#' @name Rrs_clusters.default
-#' @title Seven built-in clusters
-#' @description A dataframe contains the water optical clusters produced by Bi et al. (2019)
-#' @docType data
-#' @keywords datasets
-#' @usage Rrs_clusters.default
-#' @format dataframe with 7 rows by 15 cols
-#' @note You have to take a look at the description of this built-in cluster (water type) such as
-#'   their corresponding water color parameters in Bi et al. (2019).
-#' @family Datasets
-NULL
-
-
-
-#' @name wavelength.default
-#' @title Wavelength of built-in clusters
-#' @description A vector contains the wavelength of water optical clusters produced by Bi et al. (2019)
-#' @docType data
-#' @keywords datasets
-#' @usage wavelength.default
-#' @format a vector with 15 elements
 #' @family Datasets
 NULL
 

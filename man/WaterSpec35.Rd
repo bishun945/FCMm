@@ -32,8 +32,8 @@ Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
 Other Datasets: 
 \code{\link{Nechad2015}},
 \code{\link{OLCI_TH}},
-\code{\link{Rrs_clusters.default}},
 \code{\link{SRF_LIST}},
+\code{\link{Spectra.Centroids}},
 \code{\link{Valente2019}},
 \code{\link{dt_water}},
 \code{\link{wavelength.default}}

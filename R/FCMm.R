@@ -615,25 +615,46 @@ cal_memb <- function(x, v, m=2) {
 #' 
 #' @examples
 #' library(FCMm)
-#' data("WaterSpec35")
-#' data("Bi_clusters")
 #' Rrs <- WaterSpec35[,3:17]
-#' result <- apply_FCM_m(Rrs=Rrs, option.plot=TRUE)
+#' # you have to make sure the training set and cluster are in the same manner
+#' #   which means if cluster is on the normalized scale the the input should
+#' #   be normalized before running it.
+#' nRrs <- Rrs / trapz2(Rrs)
+#' apply_FCM_m(nRrs, default.cluster = "B2021_norm", option.plot=TRUE)$p.group.facet
+#' apply_FCM_m(nRrs, default.cluster = "BPHD_norm", option.plot=TRUE)$p.group.facet
+#' apply_FCM_m(nRrs, default.cluster = "B2019_norm", option.plot=TRUE)$p.group.facet
 #' 
 #' @references 
-#' Bi S, Li Y, Xu J, et al. Optical classification of inland waters based on
-#'   an improved Fuzzy C-Means method[J]. Optics Express, 2019, 27(24): 34838-34856.
+#' 
+#' Bi, S., Li, Y., Liu, G., Song, K., Xu, J., Dong, X., Cai, X., Mu, M., Miao, S., & Lyu, H. (2021). 
+#'   Assessment of Algorithms for Estimating Chlorophyll-a Concentration in Inland Waters: 
+#'   A Round-Robin Scoring Method Based on the Optically Fuzzy Clustering. IEEE Transactions on 
+#'   Geoscience and Remote Sensing.
+#' 
+#' Bi, S., Li, Y., Xu, J., Liu, G., Song, K., Mu, M., Lyu, H., Miao, S., & Xu, J. (2019). 
+#'   Optical classification of inland waters based on an improved Fuzzy C-Means method. 
+#'   Optics Express, 27(24), 34838–34856.
+#' 
+#' Jackson, T., Sathyendranath, S., & Mélin, F. (2017). An improved optical classification 
+#'   scheme for the Ocean Colour Essential Climate Variable and its applications. Remote 
+#'   Sensing of Environment, 203, 152–161.
+#' 
+#' Moore, T. S., Dowell, M. D., Bradt, S., & Verdu, A. R. (2014). An optical water type 
+#'   framework for selecting and blending retrievals from bio-optical algorithms in
+#'   lakes and coastal waters. Remote Sensing of Environment, 143, 97–111.
 #' 
 #' @family Fuzzy cluster functions
 #' 
 #' @import ggplot2
 #' @importFrom magrittr %>% %<>%
 #' @importFrom reshape2 melt
-apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
+apply_FCM_m <- function(Rrs, 
+                        wavelength = NULL, 
+                        Rrs_clusters = NULL,
                         m_used = 1.36,
                         do.stand = FALSE,
                         stand = NULL,
-                        default.cluster = TRUE,
+                        default.cluster = "B2021_norm",
                         quality_check = FALSE,
                         option.plot = FALSE,
                         color_palette = NULL){
@@ -648,26 +669,64 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
     stand = !do.stand
   }
   
-  if(default.cluster){
-    v <- Rrs_clusters.default
-    wavelength <- wavelength.default
-  }else{
-    v <- Rrs_clusters
+  # if(default.cluster){
+  #   v <- Rrs_clusters.default
+  #   wavelength <- wavelength.default
+  # }else{
+  #   v <- Rrs_clusters
+  # }
+  
+  # see if the default cluster is used
+  if(default.cluster %in% aowt()) {
+   
+    # pass the builtin clusters to `v` 
+    eval(parse(text = sprintf("v <- %s[,-1]", default.cluster)))
+    
+  } else {
+    
+    if(is.null(Rrs_clusters)) 
+      stop("Neither built-in cluster nor user defined one are found. Try default.cluster = ", 
+           paste(aowt(), collapse = ", "))
+    
+    # user defined clusters
+    v <- Rrs_clusters[, -1]
+    
+  }
+  
+  if(is.null(wavelength)) {
+    
+    wavelength <- as.numeric(names(v))
+        
   }
   
   if(!is.data.frame(Rrs))
     stop('The input param Rrs should be a data.frame!')
   if(!is.data.frame(v))
-    stop('The input param Rrs_clusters should be a data.frame!')
+    stop('The input param Rrs_clusters shodo.standuld be a data.frame!')
   if(!is.numeric(wavelength))
     stop('The input param wavelength should be numeric!')
   
   if(length(wavelength) != ncol(v))
     stop("The number of wavelength is different from the col of Rrs_clusters, please check them!")
-  if(length(wavelength) != ncol(Rrs))
-    stop("The col of input Rrs dataframe is different from the number of wavelength, please check!")
+  # if(length(wavelength) != ncol(Rrs))
+  #   stop("The col of input Rrs dataframe is different from the number of wavelength, please check!")
   
-  v <- as.matrix(v)
+  wv.new <- lapply(as.list(names(Rrs)), function(x) {
+    x = as.numeric(x)
+    d = abs(x - wavelength)
+    w = which.min(d)
+    if(d[w]>=5) {
+      return(NA)
+    } else {
+      return(wavelength[w])
+    }
+    }) %>% unlist()
+  
+  wv.use <- which(!is.na(wv.new))
+  
+  Rrs <- Rrs[, wv.use] %>% setNames(., as.vector(na.omit(wv.new)))
+  
+  v <- as.matrix(v[, as.character(na.omit(wv.new))])
   
   k <- nrow(v)
   
@@ -676,33 +735,42 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
     names(cp) <- paste("Cluster", 1:k)
   }else{
     if(length(color_palette) != k){
-      stop("The length of color_palette shoud be same with cluster number!")
+      stop("The length of color_palette shdo.standoud be same with cluster number!")
     }
     cp = color_palette
   }
   
   x <- as.matrix(Rrs)
-  # Area_x <- trapz(wavelength, x)
-  Area_x <- trapz2(x)
-  x.stand <- x
-  # for(i in 1:ncol(x)){x.stand[,i] <- x[,i]/Area_x}
-  x.stand = x / Area_x
   
-  # Area_v <- trapz(wavelength, v)
-  Area_v <- trapz2(v)
-  v.stand <- v
-  # for(i in 1:ncol(v)){v.stand[,i] <- v[,i]/Area_v}
-  v.stand <- v / Area_v
+  # I have to comment these stupid ideas. Users should keep in mind themselves
+  #   whether the input cluster and training data are in the same manner
+  #   normalized or raw scale?
   
-  if(stand==FALSE){
-    x_ <- x.stand
-    v_ <- v.stand
-    y.lab <- "Normalized Rrs"
-  }else{
-    x_ <- x
-    v_ <- v
-    y.lab <- expression(Rrs~group("[",sr^-1,"]"))
-  }
+  # # Area_x <- trapz(wavelength, x)
+  # Area_x <- trapz2(x)
+  # x.stand <- x
+  # # for(i in 1:ncol(x)){x.stand[,i] <- x[,i]/Area_x}
+  # x.stand = x / Area_x
+  # 
+  # # Area_v <- trapz(wavelength, v)
+  # Area_v <- trapz2(v)
+  # v.stand <- v
+  # # for(i in 1:ncol(v)){v.stand[,i] <- v[,i]/Area_v}
+  # v.stand <- v / Area_v
+  
+  # if(do.stand){ # normalized is need to do
+  #   x_ <- x.stand
+  #   v_ <- v.stand
+  #   y.lab <- "Normalized Rrs"
+  # }else{
+  #   x_ <- x
+  #   v_ <- v
+  #   y.lab <- expression(Rrs~group("[",sr^-1,"]"))
+  # }
+  
+  x_ <- x
+  v_ <- v
+  y.lab <- "Use `labs(y='what you want')` to add a y-aixs title"
   
   # Build distance and membership matrix
   u <- d <- matrix(ncol=nrow(v_), nrow=nrow(x_))
@@ -718,10 +786,10 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   mexp <- 2 / (m - 1)
   u <- 1/d^mexp / rowSums(1/d^mexp)
     
-  cluster <- as.numeric(apply(u,1,which.max))
+  cluster <- as.numeric(apply(u, 1, which.max))
   
-  if(quality_check == TRUE){
-    quality <- rep('Dubious',nrow(x_))
+  if(quality_check){
+    quality <- rep('Suspicious',nrow(x_))
     w <- which( (u %>% apply(.,1,max)) >= (k-1)/k)
     quality[w] <- 'Believable'
   }else{
@@ -730,10 +798,10 @@ apply_FCM_m <- function(Rrs, wavelength = NULL, Rrs_clusters = NULL,
   
   result <- list()
   result$x <- Rrs
-  result$x.stand <- x.stand
+  # result$x.stand <- x.stand
   result$d <- d
   result$u <- u
-  result$Area <- Area_x
+  # result$Area <- Area_x
   result$cluster <- cluster
   result$quality <- quality
   result$m_used <- m_used

@@ -689,7 +689,7 @@ apply_FCM_m <- function(Rrs,
            paste(aowt(), collapse = ", "))
     
     # user defined clusters
-    v <- Rrs_clusters[, -1]
+    v <- Rrs_clusters #[, -1]
     
   }
   
@@ -702,7 +702,7 @@ apply_FCM_m <- function(Rrs,
   if(!is.data.frame(Rrs))
     stop('The input param Rrs should be a data.frame!')
   if(!is.data.frame(v))
-    stop('The input param Rrs_clusters shodo.standuld be a data.frame!')
+    stop('The input param Rrs_clusters should be a data.frame!')
   if(!is.numeric(wavelength))
     stop('The input param wavelength should be numeric!')
   

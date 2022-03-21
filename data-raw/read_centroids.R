@@ -43,7 +43,9 @@ B2019_norm[, -1] <- B2019_raw[,-1] / trapz2(B2019_raw[,-1])
 save(B2019_norm, file = "./data/B2019_norm.rda", compression_level = 9)
 
 
+H2017_lgnorm <- read.csv("./inst/ONNS_lg_centroids.csv",
+                         comment.char = "#", check.names = FALSE,
+                         stringsAsFactors = FALSE)
 
-
-
+save(H2017_lgnorm, file = "./data/H2017_lgnorm.rda", compression_level = 9)
 

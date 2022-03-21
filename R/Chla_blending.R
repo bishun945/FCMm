@@ -103,7 +103,7 @@ Blend_Jac17 <- function(Rrs, wv_range = 5, ...) {
       Rrs = Rrs_need,
       wavelength = as.numeric(colnames(Rrs_need)),
       Rrs_clusters = Jac17_cen,
-      do.stand = TRUE,
+      do.stand = FALSE,
       default.cluster = FALSE,
       m_used = 1.5,
       ...
@@ -115,7 +115,7 @@ Blend_Jac17 <- function(Rrs, wv_range = 5, ...) {
       Rrs = Rrs_need,
       wavelength = as.numeric(colnames(Rrs_need)),
       Rrs_clusters = Jac17_cen,
-      do.stand = TRUE,
+      do.stand = FALSE,
       default.cluster = FALSE,
       ...
     )
@@ -231,7 +231,7 @@ Blend_Moo14 <- function(Rrs, wv_range = 3, ...) {
       Rrs = Rrs_need,
       wavelength = as.numeric(colnames(Rrs_need)),
       Rrs_clusters = Moo14_cen,
-      do.stand = TRUE,
+      do.stand = FALSE,
       default.cluster = FALSE,
       m_used = 1.5,
       ...
@@ -243,7 +243,7 @@ Blend_Moo14 <- function(Rrs, wv_range = 3, ...) {
       Rrs = Rrs_need,
       wavelength = as.numeric(colnames(Rrs_need)),
       Rrs_clusters = Moo14_cen,
-      do.stand = TRUE,
+      do.stand = FALSE,
       default.cluster = FALSE,
       ...
     )
@@ -312,16 +312,17 @@ Blend_Moo14 <- function(Rrs, wv_range = 3, ...) {
 Blend_Bi21 <- function(Rrs, wv_range = 3, ...) {
   
   # load Bi21 centroids
-  Bi21_cen <- system.file("Bi21_centroids_Rrs_norm.csv", package = "FCMm") %>%
-    read.csv(., comment.char = "#") %>%
-    setNames(., gsub("X", "", colnames(.))) %>%
-    magrittr::set_rownames(., .[,1]) %>%
-    .[,-1]
+  # Bi21_cen <- system.file("Bi21_centroids_Rrs_norm.csv", package = "FCMm") %>%
+  #   read.csv(., comment.char = "#") %>%
+  #   setNames(., gsub("X", "", colnames(.))) %>%
+  #   magrittr::set_rownames(., .[,1]) %>%
+  #   .[,-1]
+  B2021_norm <- B2021_norm[,-1]
   
   # select the required bands in the param Rrs
   wv <- stringr::str_subset(names(Rrs), '\\d') %>% as.numeric()
-  wv_need <- colnames(Bi21_cen) %>% as.numeric()
-  Rrs_need <- matrix(NA, ncol = ncol(Bi21_cen), nrow = nrow(Rrs)) %>% 
+  wv_need <- colnames(B2021_norm) %>% as.numeric()
+  Rrs_need <- matrix(NA, ncol = ncol(B2021_norm), nrow = nrow(Rrs)) %>% 
     as.data.frame() %>% setNames(., wv_need)
   
   for(i in 1:ncol(Rrs_need)){
@@ -344,7 +345,7 @@ Blend_Bi21 <- function(Rrs, wv_range = 3, ...) {
     res_FCM <- apply_FCM_m(
       Rrs = Rrs_need,
       wavelength = as.numeric(colnames(Rrs_need)),
-      Rrs_clusters = Bi21_cen,
+      Rrs_clusters = B2021_norm,
       do.stand = TRUE,
       default.cluster = FALSE,
       m_used = 1.5,
@@ -356,7 +357,7 @@ Blend_Bi21 <- function(Rrs, wv_range = 3, ...) {
     res_FCM <- apply_FCM_m(
       Rrs = Rrs_need,
       wavelength = as.numeric(colnames(Rrs_need)),
-      Rrs_clusters = Bi21_cen,
+      Rrs_clusters = B2021_norm,
       do.stand = TRUE,
       default.cluster = FALSE,
       ...
@@ -410,16 +411,17 @@ Blend_Bi21 <- function(Rrs, wv_range = 3, ...) {
 Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
   
   # load BIPHD centroids
-  BIPHD_cen <- system.file("BiPHD_centroids_Rrs_norm.csv", package = "FCMm") %>%
-    read.csv(., comment.char = "#") %>%
-    setNames(., gsub("X", "", colnames(.))) %>%
-    magrittr::set_rownames(., .[,1]) %>%
-    .[,-1]
+  # BIPHD_cen <- system.file("BiPHD_centroids_Rrs_norm.csv", package = "FCMm") %>%
+  #   read.csv(., comment.char = "#") %>%
+  #   setNames(., gsub("X", "", colnames(.))) %>%
+  #   magrittr::set_rownames(., .[,1]) %>%
+  #   .[,-1]
+  BPHD_norm <- BPHD_norm[,-1]
   
   # select the required bands in the param Rrs
   wv <- stringr::str_subset(names(Rrs), '\\d') %>% as.numeric()
-  wv_need <- colnames(BIPHD_cen) %>% as.numeric()
-  Rrs_need <- matrix(NA, ncol = ncol(BIPHD_cen), nrow = nrow(Rrs)) %>% 
+  wv_need <- colnames(BPHD_norm) %>% as.numeric()
+  Rrs_need <- matrix(NA, ncol = ncol(BPHD_norm), nrow = nrow(Rrs)) %>% 
     as.data.frame() %>% setNames(., wv_need)
   
   for(i in 1:ncol(Rrs_need)){
@@ -437,13 +439,16 @@ Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
     }
   }
   
+  Area <- trapz2(Rrs_need)
+  Rrs_need_norm <- Rrs_need / Area
+  
   if(!exists("m_used")) {
     
     res_FCM <- apply_FCM_m(
-      Rrs = Rrs_need,
+      Rrs = Rrs_need_norm,
       wavelength = as.numeric(colnames(Rrs_need)),
-      Rrs_clusters = BIPHD_cen,
-      do.stand = TRUE,
+      Rrs_clusters = BPHD_norm,
+      do.stand = FALSE,
       default.cluster = FALSE,
       m_used = 1.5,
       ...
@@ -452,10 +457,10 @@ Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
   }else {
     
     res_FCM <- apply_FCM_m(
-      Rrs = Rrs_need,
+      Rrs = Rrs_need_norm,
       wavelength = as.numeric(colnames(Rrs_need)),
-      Rrs_clusters = BIPHD_cen,
-      do.stand = TRUE,
+      Rrs_clusters = BPHD_norm,
+      do.stand = FALSE,
       default.cluster = FALSE,
       ...
     )

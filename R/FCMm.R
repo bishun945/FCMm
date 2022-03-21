@@ -768,8 +768,17 @@ apply_FCM_m <- function(Rrs,
   #   y.lab <- expression(Rrs~group("[",sr^-1,"]"))
   # }
   
-  x_ <- x
-  v_ <- v
+  
+  if(do.stand) {
+    Area_x <- trapz2(x)
+    Area_v <- trapz2(v)
+    x_ <- x / Area_x
+    v_ <- v / Area_v
+  } else {
+    x_ <- x
+    v_ <- v  
+  }
+  
   y.lab <- "Use `labs(y='what you want')` to add a y-aixs title"
   
   # Build distance and membership matrix
@@ -894,6 +903,9 @@ apply_FCM_m <- function(Rrs,
 #' @importFrom magrittr %>% %<>%
 #' @importFrom stringr str_detect str_extract_all str_c
 plot_spec_from_df <- function(df){
+  
+  if("data.table" %in% class(df)) df <- as.data.frame(df)
+  if("matrix" %in% class(df)) df <- data.frame(df, check.names = FALSE)
   
   wv = colnames(df)
   w  = str_detect(wv, "[:digit:]|\\.")

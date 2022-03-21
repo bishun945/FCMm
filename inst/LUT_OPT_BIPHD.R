@@ -24,7 +24,9 @@ Remove_algorithm <- list(
   c('BR_Git11', 'OCI_Hu12', 'Gons08', 'TC2_turbid')
 )
 
-LUT_OPT <- list(
+LUT_OPT_BIPHD <- list(
   Opt_algorithm = Opt_algorithm,
   Remove_algorithm = Remove_algorithm
 )
+
+save(LUT_OPT_BIPHD, file = "./data/LUT_OPT_BIPHD.rda", compression_level = 9)

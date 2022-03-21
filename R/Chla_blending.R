@@ -471,7 +471,8 @@ Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
   res_Chla$Bloom <- res_Chla$C6
   res_Chla$C6 <- NULL
   
-  source(system.file("LUT_OPT_BIPHD.R", package = "FCMm"))
+  # source(system.file("LUT_OPT_BIPHD.R", package = "FCMm"))
+  LUT_OPT <- LUT_OPT_BIPHD
   
   # blending
   res_Chla_opt <- res_Chla[, LUT_OPT$Opt_algorithm]
@@ -480,7 +481,8 @@ Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
   
   if(reparam) {
     
-    blend_coef <- read.csv(system.file("blend_coef_BIPHD.csv", package = "FCMm"))
+    # blend_coef <- read.csv(system.file("blend_coef_BIPHD.csv", package = "FCMm"))
+    blend_coef <- blend_coef_BIHPD
     
     tmp <- data.frame(
       lgP  = log10(res_blend$Chla_blend),

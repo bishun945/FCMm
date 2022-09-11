@@ -4,7 +4,7 @@
 \alias{Blend_Jac17}
 \title{Algorithm blending framework by Jackson et al. (2017)}
 \usage{
-Blend_Jac17(Rrs, wv_range = 5, ...)
+Blend_Jac17(Rrs, wv_range = 5, m_used = 1.5, ...)
 }
 \arguments{
 \item{Rrs}{Rrs data.frame input for matching centroids and calculating Chla}

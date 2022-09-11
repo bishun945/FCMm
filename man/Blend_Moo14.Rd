@@ -4,7 +4,7 @@
 \alias{Blend_Moo14}
 \title{Algorithm blending framework by Moore et al. (2014)}
 \usage{
-Blend_Moo14(Rrs, wv_range = 3, ...)
+Blend_Moo14(Rrs, wv_range = 3, m_used = 1.5, ...)
 }
 \arguments{
 \item{Rrs}{Rrs data.frame input for matching centroids and calculating Chla}

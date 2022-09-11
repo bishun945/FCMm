@@ -67,7 +67,7 @@ Blend_Smith18 <- function(Rrs443, Rrs490, Rrs510, Rrs560, Rrs665, Rrs709) {
 #' 
 #' @export
 #' 
-Blend_Jac17 <- function(Rrs, wv_range = 5, ...) {
+Blend_Jac17 <- function(Rrs, wv_range = 5, m_used = 1.5, ...) {
   
   # load Jackson centroids
   Jac17_cen <- system.file("Jac17_centroids_Rrs.csv", package = "FCMm") %>%
@@ -97,7 +97,7 @@ Blend_Jac17 <- function(Rrs, wv_range = 5, ...) {
     }
   }
   
-  if(!exists("m_used")) {
+  # if(!exists("m_used")) {
     
     res_FCM <- apply_FCM_m(
       Rrs = Rrs_need,
@@ -105,22 +105,22 @@ Blend_Jac17 <- function(Rrs, wv_range = 5, ...) {
       Rrs_clusters = Jac17_cen,
       do.stand = FALSE,
       default.cluster = FALSE,
-      m_used = 1.5,
+      m_used = m_used,
       ...
     )
     
-  }else {
+  # }else {
     
-    res_FCM <- apply_FCM_m(
-      Rrs = Rrs_need,
-      wavelength = as.numeric(colnames(Rrs_need)),
-      Rrs_clusters = Jac17_cen,
-      do.stand = FALSE,
-      default.cluster = FALSE,
-      ...
-    )
+    # res_FCM <- apply_FCM_m(
+    #   Rrs = Rrs_need,
+    #   wavelength = as.numeric(colnames(Rrs_need)),
+    #   Rrs_clusters = Jac17_cen,
+    #   do.stand = FALSE,
+    #   default.cluster = FALSE,
+    #   ...
+    # )
     
-  }
+  # }
   
   # OWT1-7 OCI
   Chl_OCI <- OCI_Hu12(
@@ -194,7 +194,7 @@ Blend_Jac17 <- function(Rrs, wv_range = 5, ...) {
 #'   Remote sensing of environment, 2014, 143: 97-111.
 #' @export
 #' 
-Blend_Moo14 <- function(Rrs, wv_range = 3, ...) {
+Blend_Moo14 <- function(Rrs, wv_range = 3, m_used = 1.5, ...) {
   
   # load Moore centroids
   Moo14_cen <- system.file("Moo14_centroids_Rrs0-.csv", package = "FCMm") %>%
@@ -225,7 +225,7 @@ Blend_Moo14 <- function(Rrs, wv_range = 3, ...) {
     }
   }
   
-  if(!exists("m_used")) {
+  # if(!exists("m_used")) {
     
     res_FCM <- apply_FCM_m(
       Rrs = Rrs_need,
@@ -233,22 +233,22 @@ Blend_Moo14 <- function(Rrs, wv_range = 3, ...) {
       Rrs_clusters = Moo14_cen,
       do.stand = FALSE,
       default.cluster = FALSE,
-      m_used = 1.5,
+      m_used = m_used,
       ...
     )
     
-  }else {
+  # }else {
     
-    res_FCM <- apply_FCM_m(
-      Rrs = Rrs_need,
-      wavelength = as.numeric(colnames(Rrs_need)),
-      Rrs_clusters = Moo14_cen,
-      do.stand = FALSE,
-      default.cluster = FALSE,
-      ...
-    )
+    # res_FCM <- apply_FCM_m(
+    #   Rrs = Rrs_need,
+    #   wavelength = as.numeric(colnames(Rrs_need)),
+    #   Rrs_clusters = Moo14_cen,
+    #   do.stand = FALSE,
+    #   default.cluster = FALSE,
+    #   ...
+    # )
     
-  }
+  # }
   
   
   # OWT 1 2 3 6
@@ -408,7 +408,7 @@ Blend_Bi21 <- function(Rrs, wv_range = 3, ...) {
 #' # res = Blend_FCMm(WaterSpec35[, -c(1,2)])
 #' @export
 #' 
-Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
+Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, m_used = 1.5, ...) {
   
   # load BIPHD centroids
   # BIPHD_cen <- system.file("BiPHD_centroids_Rrs_norm.csv", package = "FCMm") %>%
@@ -442,7 +442,7 @@ Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
   Area <- trapz2(Rrs_need)
   Rrs_need_norm <- Rrs_need / Area
   
-  if(!exists("m_used")) {
+  # if(!exists("m_used")) {
     
     res_FCM <- apply_FCM_m(
       Rrs = Rrs_need_norm,
@@ -450,22 +450,22 @@ Blend_FCMm <- function(Rrs, wv_range = 3, reparam = TRUE, ...) {
       Rrs_clusters = BPHD_norm,
       do.stand = FALSE,
       default.cluster = FALSE,
-      m_used = 1.5,
+      m_used = m_used,
       ...
     )
     
-  }else {
+  # }else {
     
-    res_FCM <- apply_FCM_m(
-      Rrs = Rrs_need_norm,
-      wavelength = as.numeric(colnames(Rrs_need)),
-      Rrs_clusters = BPHD_norm,
-      do.stand = FALSE,
-      default.cluster = FALSE,
-      ...
-    )
+    # res_FCM <- apply_FCM_m(
+    #   Rrs = Rrs_need_norm,
+    #   wavelength = as.numeric(colnames(Rrs_need)),
+    #   Rrs_clusters = BPHD_norm,
+    #   do.stand = FALSE,
+    #   default.cluster = FALSE,
+    #   ...
+    # )
     
-  }
+  # }
   
   res_Chla <- run_all_Chla_algorithms(Rrs) %>% as.data.frame()
   res_Chla$Bloom <- res_Chla$C6

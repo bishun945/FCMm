@@ -4,7 +4,7 @@
 \alias{Blend_FCMm}
 \title{Algorithm blending framework by Bi theses}
 \usage{
-Blend_FCMm(Rrs, wv_range = 3, reparam = TRUE, ...)
+Blend_FCMm(Rrs, wv_range = 3, reparam = TRUE, m_used = 1.5, ...)
 }
 \arguments{
 \item{Rrs}{Rrs data.frame input for matching centroids and calculating Chla}
